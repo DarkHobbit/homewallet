@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>../img/64x64/homewallet_64x64.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Example: make-dmg-pkg 0.2.4
+DC_VER=$1
+
+BUILD_PATH=../../../build-homewallet
+QT_PATH=/Users/mac/Qt5.5.1/5.5/clang_64
+
+BUNDLE_MAC_PATH=${BUILD_PATH}/app/homewallet.app/Contents/MacOS
+TRANS_PATH=${BUNDLE_MAC_PATH}/../Translations
+DB_INIT_PATH=${BUNDLE_MAC_PATH}/../DataBaseInit
+mkdir -p ${TRANS_PATH}
+mkdir -p ${DB_INIT_PATH}
+# TODO docs
+
+cp ../../translations/*.qm ${TRANS_PATH}/
+cp ../../translations/iso639-1.utf8 ${TRANS_PATH}/
+cp ../../core/dbinit/* ${DB_INIT_PATH}/
+# TODO icns file, plist file
+# cp ./Info.plist ${BUILD_PATH}/app/homewallet.app/Contents/
+# ${QT_PATH}/bin/macdeployqt ${BUILD_PATH}/app/homewallet.app -dmg
+# mv ${BUILD_PATH}/app/doublecontact.dmg ${BUILD_PATH}/app/homewallet-${DC_VER}.dmg

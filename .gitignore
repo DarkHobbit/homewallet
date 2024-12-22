@@ -1,0 +1,6 @@
+*.pro.user*
+Makefile*
+*.qm
+*.moc
+*.obj
+qrc_*.cpp
