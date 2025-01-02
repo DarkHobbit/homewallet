@@ -14,9 +14,9 @@
 #ifndef EXPENSEMODEL_H
 #define EXPENSEMODEL_H
 
-#include <QSqlQueryModel>
+#include "filteredquerymodel.h"
 
-class ExpenseModel : public QSqlQueryModel
+class ExpenseModel : public FilteredQueryModel
 {
 public:
     ExpenseModel(QObject *parent);

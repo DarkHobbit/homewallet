@@ -48,11 +48,13 @@ private slots:
     void on_action_Import_triggered();
     void on_action_Settings_triggered();
 
-    void on_leExpFilter_textChanged(const QString&);
-
+    void on_leQuickFilter_textChanged(const QString&);
     void on_actionFilter_triggered();
-
-    void on_btn_Exp_Filter_Apply_clicked();
+    void on_btn_Quick_Filter_Apply_clicked();
+    void on_btn_Filter_Apply_clicked();
+    void on_btn_Filter_Reset_clicked();
+    void on_cbDateFrom_stateChanged(int);
+    void on_cbDateTo_stateChanged(int);
 
 private:
     Ui::MainWindow *ui;
@@ -65,6 +67,7 @@ private:
         atAccounts
     };
     void prepareModel(QAbstractItemModel* source, QSortFilterProxyModel *proxy, QTableView* view);
+    void updateOneView(QTableView* view);
     ActiveTab activeTab();
 };
 

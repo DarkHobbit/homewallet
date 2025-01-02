@@ -40,7 +40,9 @@ MainWindow::MainWindow(QWidget *parent) :
     mdlExpenses = new ExpenseModel(this);
     proxyExpenses  = new QSortFilterProxyModel(this);
     prepareModel(mdlExpenses, proxyExpenses, ui->tvExpenses);
-    ui->leExpFilter->installEventFilter(this);
+    ui->leQuickFilter->installEventFilter(this);
+    ui->dteDateFrom->installEventFilter(this);
+    ui->dteDateTo->installEventFilter(this);
     showMaximized(); // TODO to settings
     // Status bar
     lbCounts = new QLabel(0);
@@ -89,14 +91,18 @@ void MainWindow::openDb(const QString &path)
 
 void MainWindow::updateViews()
 {
+    // Filter
+    on_cbDateFrom_stateChanged(0);
+    on_cbDateTo_stateChanged(0);
+    // Expenses
+    mdlExpenses->setDates(
+        ui->cbDateFrom->isChecked() ? ui->dteDateFrom->date() : QDate(),
+        ui->cbDateTo->isChecked() ? ui->dteDateTo->date() : QDate());
     mdlExpenses->update();
-    // ui->tvExpenses->resizeRowsToContents(); // very slow
-    const int rH = 20;
-#if QT_VERSION >= 0x050200
-    ui->tvExpenses->verticalHeader()->setMaximumSectionSize(rH);
-#endif
-    for (int i=0; i<ui->tvExpenses->model()->rowCount(); i++) // M.b. slow on some computers!
-        ui->tvExpenses->setRowHeight(i, rH);
+    updateOneView(ui->tvExpenses);
+
+    // TODO other models
+
     // Status bar
     lbCounts->setText(tr("Expenses: %1").arg(mdlExpenses->rowCount()));
 }
@@ -123,8 +129,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent *kEv = static_cast<QKeyEvent *>(event);
         if (kEv->key()==Qt::Key_Enter || kEv->key()==Qt::Key_Return) {
-            if (focusWidget()==ui->leExpFilter)
-                on_btn_Exp_Filter_Apply_clicked();
+            if (focusWidget()==ui->leQuickFilter)
+                on_btn_Quick_Filter_Apply_clicked();
+            else if (focusWidget()->parentWidget()==ui->gbFilter)
+                on_btn_Filter_Apply_clicked();
         }
         else
             return false;
@@ -274,22 +282,16 @@ void MainWindow::on_action_Settings_triggered()
 }
 
 #include <iostream>
-void MainWindow::on_leExpFilter_textChanged(const QString&)
+void MainWindow::on_leQuickFilter_textChanged(const QString&)
 {
     if (false) // TODO to Settings
-        on_btn_Exp_Filter_Apply_clicked();
+        on_btn_Quick_Filter_Apply_clicked();
 }
 
 
 void MainWindow::on_actionFilter_triggered()
 {
-    switch (activeTab()) {
-    case atExpenses:
-        ui->leExpFilter->setFocus();
-        break;
-    default:
-        break;
-    }
+    ui->leQuickFilter->setFocus();
 }
 
 void MainWindow::prepareModel(QAbstractItemModel *source, QSortFilterProxyModel *proxy, QTableView *view)
@@ -304,6 +306,17 @@ void MainWindow::prepareModel(QAbstractItemModel *source, QSortFilterProxyModel 
     view->horizontalHeader()->setStretchLastSection(true);
 }
 
+void MainWindow::updateOneView(QTableView *view)
+{
+    // view->resizeRowsToContents(); // very slow, m.b. to settings
+    const int rH = 20;
+#if QT_VERSION >= 0x050200
+    view->verticalHeader()->setMaximumSectionSize(rH);
+#endif
+    for (int i=0; i<view->model()->rowCount(); i++) // M.b. slow on some computers!
+        view->setRowHeight(i, rH);
+}
+
 MainWindow::ActiveTab MainWindow::activeTab()
 {
     QTabWidget* t = ui->tabWidget;
@@ -316,12 +329,43 @@ MainWindow::ActiveTab MainWindow::activeTab()
         return atAccounts;
 }
 
-void MainWindow::on_btn_Exp_Filter_Apply_clicked()
+void MainWindow::on_btn_Quick_Filter_Apply_clicked()
 {
-    if (ui->leExpFilter->text().isEmpty())
-        proxyExpenses->setFilterWildcard("");
+    QSortFilterProxyModel* proxy;
+    switch (activeTab()) {
+    case atExpenses:
+        proxy = proxyExpenses;
+        break;
+    default:
+        proxy = 0;
+        break;
+    }
+    if (ui->leQuickFilter->text().isEmpty())
+        proxy->setFilterWildcard("");
     else
-        proxyExpenses->setFilterWildcard(ui->leExpFilter->text());
+        proxy->setFilterWildcard(ui->leQuickFilter->text());
     updateViews();
+}
+
+void MainWindow::on_btn_Filter_Apply_clicked()
+{
+    updateViews();
+}
+
+void MainWindow::on_btn_Filter_Reset_clicked()
+{
+    ui->cbDateFrom->setChecked(false);
+    ui->cbDateTo->setChecked(false);
+    updateViews();
+}
+
+void MainWindow::on_cbDateFrom_stateChanged(int)
+{
+    ui->dteDateFrom->setEnabled(ui->cbDateFrom->isChecked());
+}
+
+void MainWindow::on_cbDateTo_stateChanged(int)
+{
+    ui->dteDateTo->setEnabled(ui->cbDateTo->isChecked());
 }
 

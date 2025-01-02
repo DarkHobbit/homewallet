@@ -30,12 +30,10 @@ void ExpenseModel::update()
         " where e.id_esubcat=sc.id" \
         " and sc.id_ecat=c.id" \
         " and e.id_ac=a.id" \
+        " %1" \
         " order by op_date desc;";
     //sql = "select * from hw_ex_op order by op_date desc;";
-    QSqlQuery q(sql);
-    setQuery(q);
-    while (canFetchMore())
-        fetchMore();
+    updateFilter(sql, false);
 
     setHeaderData(0, Qt::Horizontal, tr("Date"));
     setHeaderData(1, Qt::Horizontal, tr("Category"));
