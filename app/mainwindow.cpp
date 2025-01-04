@@ -191,6 +191,11 @@ void MainWindow::on_action_Import_triggered()
         configManager.setLastImportedFile(path);
         XmlHbFile* impFile = new XmlHbFile(); // TODO move to FormatFactory, detect HK XML or HW XML (also gnucache, ledger, etc)
         if (!impFile->detect(path)) {
+            // TODO type separate messages for defined format or auto-detect
+            // And take different names for filters for HW and HK XML
+            if (!impFile->fatalError().isEmpty())
+                QMessageBox::critical(0, S_ERROR, impFile->fatalError());
+            // TODO what if not one detected? Type all, or?..
             delete impFile;
             return;            
         }
