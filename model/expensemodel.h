@@ -18,6 +18,7 @@
 
 class ExpenseModel : public FilteredQueryModel
 {
+    Q_OBJECT
 public:
     ExpenseModel(QObject *parent);
     void update();

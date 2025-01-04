@@ -19,6 +19,7 @@
 
 class FilteredQueryModel : public QSqlQueryModel
 {
+    Q_OBJECT
 public:
     explicit FilteredQueryModel(QObject *parent = nullptr);
     void setDates(const QDate& _dtFrom=QDate(), const QDate& _dtTo=QDate());
