@@ -349,7 +349,7 @@ Contact author.</source>
     <message>
         <location filename="../core/formats/xmlhbfile.cpp" line="319"/>
         <source>Money sum doesn&apos;t match: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Денежная сумма не соответствует шаблону: %1</translation>
     </message>
     <message>
         <location filename="../core/genericdatabase.cpp" line="53"/>
@@ -359,7 +359,7 @@ Contact author.</source>
     <message>
         <location filename="../core/genericdatabase.cpp" line="60"/>
         <source>Can&apos;t create path: </source>
-        <translation type="unfinished"></translation>
+        <translation>Не могу создать путь: </translation>
     </message>
     <message>
         <location filename="../core/hwdatabase.cpp" line="133"/>
@@ -368,12 +368,225 @@ Contact author.</source>
         <translation>Нет подкатегории</translation>
     </message>
     <message>
+        <location filename="../core/hwdatabase.h" line="20"/>
         <source>It seems you ran HomeWallet for the first time.</source>
-        <translation type="obsolete">Похоже, вы запустили Домашний кошелёк впервые.</translation>
+        <translation>Похоже, вы запустили Домашний кошелёк впервые.</translation>
     </message>
     <message>
+        <location filename="../core/hwdatabase.h" line="21"/>
         <source>Database will created in %1</source>
-        <translation type="obsolete">БД будет создана в %1</translation>
+        <translation>БД будет создана в %1</translation>
+    </message>
+    <message>
+        <location filename="../core/hwdatabase.h" line="22"/>
+        <source>Database is not HomeWallet format
+ in %1</source>
+        <translation>БД не в формате Домашнего кошелька
+в файле %1</translation>
+    </message>
+    <message>
+        <location filename="../core/hwdatabase.h" line="24"/>
+        <source>Database structure out of time
+ in %1(%2)
+ Upgrade it to actual state?</source>
+        <translation>Устаревшая структура БД
+в %1(%2)
+Обновить до актуального состояния</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.h" line="20"/>
+        <source>Ambiguous file type</source>
+        <translation>Неоднозначный тип файла</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.h" line="22"/>
+        <source>File contents can be %1.
+Category samples:
+%2
+Specify appropriate content type</source>
+        <translation>В файле могут находиться %1.
+Примеры категорий:
+%2
+Выберите правильный тип </translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.h" line="23"/>
+        <source>incomes or expenses</source>
+        <translation>доходы или расходы</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.h" line="24"/>
+        <source>debtors or creditors</source>
+        <translation>должники или кредиторы</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.h" line="25"/>
+        <source>income or expense plan</source>
+        <translation>планы доходов или расходов</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.h" line="27"/>
+        <source>Accounts in-detail file not supported because not contains key account data/
+Use Accounts in-brief file, if you have it</source>
+        <translation>Файл Счета подробно не поддерживается, поскольку в нём нет ключевых данных счетов.
+Используйте файл Счета кратко, если он у вас есть</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.h" line="29"/>
+        <source>Treat as incomes</source>
+        <translation>Это доходы</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.h" line="30"/>
+        <source>Treat as expenses</source>
+        <translation>Это расходы</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.h" line="31"/>
+        <source>Treat as debtors</source>
+        <translation>Это должники</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.h" line="32"/>
+        <source>Treat as creditors</source>
+        <translation>Это кредиторы</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.h" line="33"/>
+        <source>Treat as income planning</source>
+        <translation>Это планы доходов</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.h" line="34"/>
+        <source>Treat as expense planning</source>
+        <translation>Это планы расходов</translation>
+    </message>
+    <message>
+        <location filename="../core/genericdatabase.h" line="25"/>
+        <source>Cannot create database in %1:
+%2</source>
+        <translation>Не могу создать БД в %1:
+%2</translation>
+    </message>
+    <message>
+        <location filename="../core/genericdatabase.h" line="26"/>
+        <source>Cannot open database in %1:
+%2</source>
+        <translation>Не могу открыть БД в %1:
+%2</translation>
+    </message>
+    <message>
+        <location filename="../core/genericdatabase.h" line="27"/>
+        <source>Database create file is empty, contact author:
+%1</source>
+        <translation>Файл создания БД пуст, свяжитесь с автором:
+%1</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="25"/>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="26"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="27"/>
+        <source>Confirmation</source>
+        <translation>Подтверждение</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="28"/>
+        <source>Information</source>
+        <translation>Информация</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="30"/>
+        <source>All supported files (%1)</source>
+        <translation>Все поддерживаемые файлы (%1)</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="31"/>
+        <source>All files (*.*)</source>
+        <translation>Все файлы (*.*)</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="33"/>
+        <source>Can&apos;t read file
+%1</source>
+        <translation>Не могу прочитать файл
+%1</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="34"/>
+        <source>Can&apos;t write file
+%1</source>
+        <translation>Не могу записать файл
+%1</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="35"/>
+        <source>No records found in file
+%1</source>
+        <translation>В файле %1 записей не найдено</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="36"/>
+        <source>Can&apos;t create directory
+%1</source>
+        <translation>Не могу создать каталог
+%1</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="37"/>
+        <source>Can&apos;t seek to %1 in file
+%2</source>
+        <translation>Не могу перейти на позицию %1 в файле
+%2</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="38"/>
+        <source>Record not selected</source>
+        <translation>Выберите запись</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="39"/>
+        <source>Group operation not implemented, select one record</source>
+        <translation>Групповая операция не поддерживается, выберите одну запись</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="40"/>
+        <source>This format is read only</source>
+        <translation>Это формат только для чтения</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="42"/>
+        <source>Warning: record %1 has %2, not supported in this format.
+Data will be lost</source>
+        <translation>Предупреждение: у записи %1 есть %2, не поддерживается в этом формате.
+Данные будут потеряны</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="44"/>
+        <source>%1 %2 will be lost at record %3</source>
+        <translation>%1 %2 будет утерян у записи %3</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="46"/>
+        <source>Mode: </source>
+        <translation>Режим: </translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="47"/>
+        <source>sorted</source>
+        <translation>сорт.</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="48"/>
+        <source>not sorted</source>
+        <translation>не сорт.</translation>
     </message>
 </context>
 </TS>
