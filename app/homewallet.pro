@@ -63,3 +63,5 @@ exists( $$dirname(QMAKE_QMAKE)/lrelease-qt4 ) {
 QMAKE_EXTRA_TARGETS += tr
 POST_TARGETDEPS += tr
 
+RESOURCES += \
+    homewallet.qrc

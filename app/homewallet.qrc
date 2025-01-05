@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>../img/64x64/homewallet_64x64.png</file>
+        <file>../img/32x32/add_32x32.png</file>
+        <file>../img/32x32/edit_32x32.png</file>
+        <file>../img/32x32/remove_32x32.png</file>
     </qresource>
 </RCC>
