@@ -25,13 +25,15 @@ TEMPLATE = app
 
 SOURCES += \
     aboutdialog.cpp \
+    helpers.cpp \
     languageselectdialog.cpp \
     logwindow.cpp \
-    main.cpp\
+    main.cpp \
     mainwindow.cpp \
 
 HEADERS  += \
     aboutdialog.h \
+    helpers.h \
     languageselectdialog.h \
     logwindow.h \
     mainwindow.h \
