@@ -14,9 +14,9 @@
 #ifndef EXPENSEMODEL_H
 #define EXPENSEMODEL_H
 
-#include "filteredquerymodel.h"
+#include "categoriesbasedquerymodel.h"
 
-class ExpenseModel : public FilteredQueryModel
+class ExpenseModel : public CategoriesBasedQueryModel
 {
     Q_OBJECT
 public:

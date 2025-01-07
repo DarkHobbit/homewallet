@@ -56,6 +56,10 @@ private slots:
     void on_cbDateFrom_stateChanged(int);
     void on_cbDateTo_stateChanged(int);
 
+    void on_tabWidget_currentChanged(int);
+
+    void on_cbCategory_activated(int);
+
 private:
     Ui::MainWindow *ui;
     ExpenseModel* mdlExpenses;

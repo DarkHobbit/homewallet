@@ -48,6 +48,8 @@
 #define SS_SORT_OFF QObject::tr("not sorted")
 // Model item roles
 #define SortStringRole Qt::UserRole
+// Pseudo-name for all categories/subcategoried
+#define S_ALL_CAT QObject::tr("<All>")
 
 struct Account {
     QDate openDate;

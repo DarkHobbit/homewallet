@@ -1,6 +1,6 @@
 /* Home Wallet
  *
- * Module: Base class for filtered SQL modeld
+ * Module: Base class for filtered SQL models
  *
  * Copyright 2024 Mikhail Y. Zvyozdochkin aka DarkHobbit <pub@zvyozdochkin.ru>
  *
@@ -20,7 +20,7 @@ FilteredQueryModel::FilteredQueryModel(QObject *parent)
 {
 }
 
-void FilteredQueryModel::setDates(const QDate &_dtFrom, const QDate &_dtTo)
+void FilteredQueryModel::setFilterDates(const QDate &_dtFrom, const QDate &_dtTo)
 {
     dtFrom = _dtFrom;
     dtTo = _dtTo;

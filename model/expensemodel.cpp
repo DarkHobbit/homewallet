@@ -15,8 +15,8 @@
 #include "expensemodel.h"
 
 ExpenseModel::ExpenseModel(QObject *parent)
+    : CategoriesBasedQueryModel(parent)
 {
-
 }
 
 void ExpenseModel::update()
@@ -38,3 +38,4 @@ void ExpenseModel::update()
     setHeaderData(0, Qt::Horizontal, tr("Date"));
     setHeaderData(1, Qt::Horizontal, tr("Category"));
 }
+

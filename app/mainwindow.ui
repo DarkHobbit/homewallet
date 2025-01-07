@@ -148,7 +148,7 @@
           </widget>
          </item>
          <item row="1" column="3">
-          <widget class="QComboBox" name="cbSubategory">
+          <widget class="QComboBox" name="cbSubcategory">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -186,7 +186,7 @@
          <string>Add...</string>
         </property>
         <property name="icon">
-         <iconset resource="homewallet.qrc">                
+         <iconset resource="homewallet.qrc">
           <normaloff>:/img/32x32/add_32x32.png</normaloff>:/img/32x32/add_32x32.png</iconset>
         </property>
        </widget>
@@ -203,7 +203,7 @@
          <string>Edit...</string>
         </property>
         <property name="icon">
-         <iconset resource="homewallet.qrc">                
+         <iconset resource="homewallet.qrc">
           <normaloff>:/img/32x32/edit_32x32.png</normaloff>:/img/32x32/edit_32x32.png</iconset>
         </property>
        </widget>
@@ -321,6 +321,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="homewallet.qrc"/>
+ </resources>
  <connections/>
 </ui>

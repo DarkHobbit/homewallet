@@ -1,6 +1,6 @@
 /* Home Wallet
  *
- * Module: Base class for filtered SQL modeld
+ * Module: Base class for filtered SQL models
  *
  * Copyright 2024 Mikhail Y. Zvyozdochkin aka DarkHobbit <pub@zvyozdochkin.ru>
  *
@@ -22,13 +22,12 @@ class FilteredQueryModel : public QSqlQueryModel
     Q_OBJECT
 public:
     explicit FilteredQueryModel(QObject *parent = nullptr);
-    void setDates(const QDate& _dtFrom=QDate(), const QDate& _dtTo=QDate());
+    void setFilterDates(const QDate& _dtFrom=QDate(), const QDate& _dtTo=QDate());
 protected:
     QStringList filters;
-    void updateFilter(const QString& sql, bool insertWhere);
-private:
     QDate dtFrom, dtTo;
     virtual void makeFilter();
+    void updateFilter(const QString& sql, bool insertWhere);
 };
 
 #endif // FILTEREDQUERYMODEL_H

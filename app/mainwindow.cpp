@@ -23,8 +23,9 @@
 #include <QVBoxLayout>
 
 #include "aboutdialog.h"
-#include "globals.h"
 #include "configmanager.h"
+#include "globals.h"
+#include "helpers.h"
 #include "logwindow.h"
 #include "mainwindow.h"
 #include "testmanager.h"
@@ -86,6 +87,7 @@ void MainWindow::openDb(const QString &path)
         S_CANT_OPEN_DB.arg(path).arg(db.lastError()));
         return;
     }
+    on_tabWidget_currentChanged(0);
     updateViews();
 }
 
@@ -94,10 +96,13 @@ void MainWindow::updateViews()
     // Filter
     on_cbDateFrom_stateChanged(0);
     on_cbDateTo_stateChanged(0);
-    // Expenses
-    mdlExpenses->setDates(
+    // Expenses TODO m.b. here check activeTab?
+    mdlExpenses->setFilterDates(
         ui->cbDateFrom->isChecked() ? ui->dteDateFrom->date() : QDate(),
         ui->cbDateTo->isChecked() ? ui->dteDateTo->date() : QDate());
+    mdlExpenses->setFilterCategories(
+        getComboCurrentId(ui->cbCategory),
+        getComboCurrentId(ui->cbSubcategory));
     mdlExpenses->update();
     updateOneView(ui->tvExpenses);
 
@@ -361,6 +366,7 @@ void MainWindow::on_btn_Filter_Reset_clicked()
 {
     ui->cbDateFrom->setChecked(false);
     ui->cbDateTo->setChecked(false);
+    on_tabWidget_currentChanged(0);
     updateViews();
 }
 
@@ -372,5 +378,31 @@ void MainWindow::on_cbDateFrom_stateChanged(int)
 void MainWindow::on_cbDateTo_stateChanged(int)
 {
     ui->dteDateTo->setEnabled(ui->cbDateTo->isChecked());
+}
+
+
+void MainWindow::on_tabWidget_currentChanged(int)
+{
+    GenericDatabase::DictColl collCat;
+    switch (activeTab()) {
+    case atExpenses:
+        db.collectDict(collCat, "hw_ex_cat");
+        // TODO call collectSubDict if will be slow, but it's more complex
+        fillComboByDict(ui->cbCategory, collCat, true);
+        break;
+    default:
+        //
+        break;
+    }
+    on_cbCategory_activated(0);
+}
+
+
+void MainWindow::on_cbCategory_activated(int)
+{
+    GenericDatabase::DictColl collSubcat;
+    int idCat = getComboCurrentId(ui->cbCategory);
+    db.collectDict(collSubcat, "hw_ex_subcat", "name", "id", QString("where id_ecat=%1").arg(idCat));
+    fillComboByDict(ui->cbSubcategory, collSubcat, true);
 }
 
