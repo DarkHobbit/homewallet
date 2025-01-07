@@ -91,11 +91,11 @@ int GenericDatabase::queryRecCount(QSqlQuery &query)
 }
 
 bool GenericDatabase::collectDict(GenericDatabase::DictColl& coll, const QString &tableName,
-                             const QString &fieldName, const QString& idFieldName)
+    const QString &fieldName, const QString& idFieldName, const QString& where)
 {
     QSqlQuery sqlColl(sqlDb);
-    sqlColl.prepare(QString("select %1, %2 from %3 order by %2;")
-                        .arg(idFieldName).arg(fieldName).arg(tableName));
+    sqlColl.prepare(QString("select %1, %2 from %3 %4 order by %2;")
+                        .arg(idFieldName).arg(fieldName).arg(tableName).arg(where));
     if (!sqlColl.exec()) {
         _lastError = sqlColl.lastError().text();
         return false;
@@ -109,11 +109,14 @@ bool GenericDatabase::collectDict(GenericDatabase::DictColl& coll, const QString
 }
 
 bool GenericDatabase::collectSubDict(const DictColl &coll, SubDictColl &subColl,
-                                const QString &tableName, const QString &fieldName, const QString &idFieldName)
+    const QString &tableName, const QString &fieldName, const QString &idFieldName, const QString& upIdFieldName)
 {
-    for (const QString& parentItem : coll.keys())
-        if (!collectDict(subColl[parentItem], tableName, fieldName, idFieldName))
+    for (const QString& parentItem : coll.keys()) {
+        int idUp = coll[parentItem];
+        QString where = QString("where %1=%2").arg(upIdFieldName).arg(idUp);
+        if (!collectDict(subColl[parentItem], tableName, fieldName, idFieldName, where))
             return false;
+    }
     return true;
 }
 

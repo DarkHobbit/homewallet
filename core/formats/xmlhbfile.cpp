@@ -116,11 +116,11 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
     HwDatabase::SubDictColl subcats;
     if (_fileSubType==Incomes || _fileSubType==IncomePlan) {
         DB_CHK(db.collectDict(cats, "hw_in_cat"))
-        DB_CHK(db.collectSubDict(cats, subcats, "hw_in_subcat"))
+        DB_CHK(db.collectSubDict(cats, subcats, "hw_in_subcat", "name", "id", "id_icat"))
     }
     else if (_fileSubType==Expenses || _fileSubType==ExpensePlan) {
         DB_CHK(db.collectDict(cats, "hw_ex_cat"))
-        DB_CHK(db.collectSubDict(cats, subcats, "hw_ex_subcat"))
+        DB_CHK(db.collectSubDict(cats, subcats, "hw_ex_subcat", "name", "id", "id_ecat"))
     }
     std::cout << "ac_count " << accs.keys().count() <<std::endl; //===>
     std::cout << "cur_count " << currs.keys().count() <<std::endl; //===>

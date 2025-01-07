@@ -29,7 +29,7 @@
 class GenericDatabase
 {
 public:
-    typedef QMap<QString, int> DictColl; // key - id, value - dictionary item name
+    typedef QMap<QString, int> DictColl; // key - dictionary item name, value -  id
     typedef QMap<QString, DictColl> SubDictColl;
     GenericDatabase();
     ~GenericDatabase();
@@ -42,10 +42,11 @@ public:
     // Tools
     int queryRecCount(QSqlQuery& query);
     bool collectDict(DictColl& coll, const QString& tableName,
-                     const QString& fieldName = "name", const QString& idFieldName = "id");
-    bool collectSubDict(const DictColl& coll, SubDictColl& subColl,
-                        const QString& tableName,
-                        const QString& fieldName = "name", const QString& idFieldName = "id");
+        const QString& fieldName = "name", const QString& idFieldName = "id",
+        const QString& where = "");
+    bool collectSubDict(const DictColl& coll, SubDictColl& subColl, const QString& tableName,
+        const QString& fieldName = "name", const QString& idFieldName = "id",
+        const QString& upIdFieldName = "");
 
 protected:
     QSqlDatabase sqlDb;
