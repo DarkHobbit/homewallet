@@ -109,7 +109,7 @@ create table hw_in_op (
     id_ac integer not null,
     id_cur integer not null, -- only one currency, in hb - many
     id_isubcat integer not null,
-    id_un integer not null,
+    id_un integer null,
     attention integer not null, -- 1 if star setted, 0 if ordinary record
     descr char(256),
     constraint pk_iop primary key(id),
