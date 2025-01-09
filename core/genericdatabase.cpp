@@ -11,6 +11,7 @@
  *
  */
 
+#include <iostream>
 #include <QDir>
 #include <QFile>
 #include <QSqlError>
@@ -118,6 +119,15 @@ bool GenericDatabase::collectSubDict(const DictColl &coll, SubDictColl &subColl,
             return false;
     }
     return true;
+}
+
+bool GenericDatabase::isTableEmpty(const QString &tableName, const QString &fieldName, const QString &idFieldName)
+{
+    DictColl coll;
+    if (!collectDict(coll, tableName, fieldName, idFieldName))
+        std::cerr << "Error check table " << tableName.toUtf8().data()
+                  << lastError().toUtf8().data() << std::endl;
+    return coll.isEmpty();
 }
 
 bool GenericDatabase::loadSqlFile(const QString& filePath)

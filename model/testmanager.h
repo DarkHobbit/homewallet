@@ -18,12 +18,14 @@
 #include <QString>
 
 #include "genericdatabase.h"
+#include "hwdatabase.h"
 
 class TestManager
 {
 public:
     TestManager();
     static QSqlQueryModel* dbDebug(const QString& queryText, GenericDatabase& db);
+    static bool createTestData(HwDatabase& db);
 };
 
 #endif // TESTMANAGER_H

@@ -47,6 +47,8 @@ public:
     bool collectSubDict(const DictColl& coll, SubDictColl& subColl, const QString& tableName,
         const QString& fieldName = "name", const QString& idFieldName = "id",
         const QString& upIdFieldName = "");
+    bool isTableEmpty(const QString& tableName,
+        const QString& fieldName = "name", const QString& idFieldName = "id");
 
 protected:
     QSqlDatabase sqlDb;

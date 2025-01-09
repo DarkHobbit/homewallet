@@ -38,6 +38,7 @@ public:
     DBFileState test(const QString& dir);
     bool upgrade(const QString& dir);
     bool create(const QString& dir);
+    bool isEmpty();
     // Subject area
     virtual QString fileName();
     bool addAccount(const QString& name, const QString& descr,

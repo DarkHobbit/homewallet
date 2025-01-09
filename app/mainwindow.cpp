@@ -73,6 +73,20 @@ MainWindow::MainWindow(QWidget *parent) :
         break;
     }
     openDb(dbPath);
+    if (gd.debugDataMode) {
+        if (db.isEmpty()) {
+            if (TestManager::createTestData(db)) {
+                on_tabWidget_currentChanged(0);
+                updateViews();
+            }
+            else
+                QMessageBox::critical(0, S_ERROR,
+                    tr("Test data create error"));
+        }
+        else
+            QMessageBox::critical(0, S_ERROR,
+                tr("Database not empty for testing"));
+    }
 }
 
 MainWindow::~MainWindow()

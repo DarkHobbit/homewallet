@@ -71,6 +71,7 @@ struct GlobalConfig {
     // TODO
     // Session-specific data from command line
     bool fullScreenMode; // Maximize main window at startup
+    bool debugDataMode;  // Create debug data at startup
 } gd;
 
 #endif // GLOBALS_H

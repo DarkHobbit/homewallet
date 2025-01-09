@@ -67,6 +67,18 @@ bool HwDatabase::create(const QString &dir)
     return true;
 }
 
+bool HwDatabase::isEmpty()
+{
+    if (!isTableEmpty("hw_account"))
+        return false;
+    if (!isTableEmpty("hw_in_cat"))
+        return false;
+    if (!isTableEmpty("hw_ex_cat"))
+        return false;
+    // TODO other categories / non-account data
+    return true;
+}
+
 bool HwDatabase::addAccount(const QString &name, const QString &descr,
     int idCur, const QDateTime &foundation, bool hasStartBalance, int startBalance)
 {
