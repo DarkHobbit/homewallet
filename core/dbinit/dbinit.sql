@@ -110,6 +110,7 @@ create table hw_in_op (
     id_cur integer not null, -- only one currency, in hb - many
     id_isubcat integer not null,
     id_un integer not null,
+    attention integer not null, -- 1 if star setted, 0 if ordinary record
     descr char(256),
     constraint pk_iop primary key(id),
     constraint fk_inac foreign key(id_ac) references hw_account(id),
@@ -145,7 +146,7 @@ create table hw_ex_op (
     id_un integer null,
     id_rc integer null, -- expence may be separate, but may be contained in receipt
     discount integer, -- absolute value in low units (not percent)
-    attention integer not null, -- 1 if star setted, 0 if ordinar record
+    attention integer not null, -- 1 if star setted, 0 if ordinary record
     descr char(256),
     constraint pk_eop primary key(id),
     constraint fk_exac foreign key(id_ac) references hw_account(id),
