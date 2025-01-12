@@ -1,6 +1,6 @@
 /* Home Wallet
  *
- * Module: Base class for filtered SQL models
+ * Module: Base class for filtered SQL models with columns tuning
  *
  * Copyright 2024 Mikhail Y. Zvyozdochkin aka DarkHobbit <pub@zvyozdochkin.ru>
  *
@@ -20,10 +20,49 @@ FilteredQueryModel::FilteredQueryModel(QObject *parent)
 {
 }
 
+void FilteredQueryModel::updateVisibleColumns(const ModelColumnList& _visibleColumns)
+{
+    beginResetModel();
+    visibleColumns.clear();
+    for (const short col: _visibleColumns)
+        visibleColumns.push_back(col);
+    endResetModel();
+}
+
 void FilteredQueryModel::setFilterDates(const QDate &_dtFrom, const QDate &_dtTo)
 {
     dtFrom = _dtFrom;
     dtTo = _dtTo;
+}
+
+int FilteredQueryModel::columnCount(const QModelIndex &parent) const
+{
+    if (visibleColumns.isEmpty())
+        return QSqlQueryModel::columnCount(parent);
+    else
+        return visibleColumns.count()+1;
+}
+
+QVariant FilteredQueryModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if ((role == Qt::DisplayRole) && (orientation==Qt::Horizontal)) {
+        if (visibleColumns.isEmpty() || section==0)
+            return QSqlQueryModel::headerData(section, orientation, role);
+        else
+            return columnHeaders[visibleColumns[section-1]];
+    }
+    else
+        return QSqlQueryModel::headerData(section, orientation, role);
+}
+
+QVariant FilteredQueryModel::data(const QModelIndex &index, int role) const
+{
+    if (visibleColumns.isEmpty() || index.column()==0)
+        return QSqlQueryModel::data(index, role);
+    else {
+        QModelIndex ind = this->index(index.row(), visibleColumns[index.column()-1]);
+        return QSqlQueryModel::data(ind, role);
+    }
 }
 
 void FilteredQueryModel::updateFilter(const QString &sql, bool insertWhere)

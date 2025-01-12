@@ -22,20 +22,23 @@ ExpenseModel::ExpenseModel(QObject *parent)
 void ExpenseModel::update()
 {
     QString sql = \
-        "select e.op_date, c.name, sc.name, e.quantity, u.name, e.amount, a.name, e.descr" \
+        "select " \
+        "   e.id, e.op_date, c.name, sc.name, e.quantity, u.name," \
+        "   e.amount, cur.abbr, a.name, e.attention, e.descr" \
         " from " \
         "   hw_ex_op e " \
         "   left join hw_unit u on e.id_un=u.id," \
-        "   hw_ex_cat c, hw_ex_subcat sc, hw_account a" \
+        "   hw_ex_cat c, hw_ex_subcat sc, hw_account a, hw_currency cur" \
         " where e.id_esubcat=sc.id" \
         " and sc.id_ecat=c.id" \
         " and e.id_ac=a.id" \
+        " and e.id_cur=cur.id" \
         " %1" \
         " order by op_date desc;";
     //sql = "select * from hw_ex_op order by op_date desc;";
     updateFilter(sql, false);
 
-    setHeaderData(0, Qt::Horizontal, tr("Date"));
-    setHeaderData(1, Qt::Horizontal, tr("Category"));
+    setHeaderData(1, Qt::Horizontal, tr("Date"));
+    setHeaderData(2, Qt::Horizontal, tr("Category"));
 }
 

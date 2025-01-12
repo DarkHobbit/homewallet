@@ -134,11 +134,13 @@ void MainWindow::resizeEvent(QResizeEvent* e)
     if (cc) {
         int w1col = w/cc;
         for (int i=0; i<cc; i++)
-            if (i==3) // TODO tune it if column view can changed
+// TODO tune column numbers if column view can changed
+// m.b. move it into model and use Qt::SizeHintRole
+            if (i==4 || i==7 || i==9)
                 ui->tvExpenses->setColumnWidth(i, qMax(w1col/4, 30));
-            else if (i==5 || i==4)
+            else if (i==6 || i==5)
                 ui->tvExpenses->setColumnWidth(i, qMax(w1col/2, 60));
-            else
+            else if (i>0)
                 ui->tvExpenses->setColumnWidth(i, w1col);
     }
 }
@@ -332,6 +334,7 @@ void MainWindow::prepareModel(QAbstractItemModel *source, QSortFilterProxyModel 
 
 void MainWindow::updateOneView(QTableView *view)
 {
+    view->setColumnHidden(0, true);
     // view->resizeRowsToContents(); // very slow, m.b. to settings
     const int rH = 20;
 #if QT_VERSION >= 0x050200

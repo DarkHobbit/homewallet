@@ -1,6 +1,6 @@
 /* Home Wallet
  *
- * Module: Base class for filtered SQL models
+ * Module: Base class for filtered SQL models with columns tuning
  *
  * Copyright 2024 Mikhail Y. Zvyozdochkin aka DarkHobbit <pub@zvyozdochkin.ru>
  *
@@ -17,13 +17,28 @@
 #include <QSqlQueryModel>
 #include <QStringList>
 
+/* This model assume that all tables have integer one-field primary key (id);
+ * first column contains this id and is invisible!
+ */
+
+class ModelColumnList: public QList<short>
+{};
+
 class FilteredQueryModel : public QSqlQueryModel
 {
     Q_OBJECT
 public:
     explicit FilteredQueryModel(QObject *parent = nullptr);
+    void updateVisibleColumns(const ModelColumnList& _visibleColumns);
     void setFilterDates(const QDate& _dtFrom=QDate(), const QDate& _dtTo=QDate());
+    // Base model implementation methods
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    QVariant data(const QModelIndex &index, int role) const;
+    // TODO flags(), if needed
 protected:
+    ModelColumnList visibleColumns;
+    QStringList columnHeaders;
     QStringList filters;
     QDate dtFrom, dtTo;
     virtual void makeFilter();
