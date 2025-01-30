@@ -129,22 +129,9 @@ void MainWindow::updateViews()
 void MainWindow::resizeEvent(QResizeEvent* e)
 {
     QMainWindow::resizeEvent(e);
-    int w = ui->tvExpenses->width() - ui->tvExpenses->verticalHeader()->width() - 64;
-    int cc = ui->tvExpenses->model()->columnCount();
-    if (cc) {
-        int w1col = w/cc;
-        for (int i=0; i<cc; i++)
-// TODO tune column numbers if column view can changed
-// m.b. move it into model and use Qt::SizeHintRole
-            if (i==7 || i==9)
-                ui->tvExpenses->setColumnWidth(i, qMax(w1col/4, 30));
-            else if (i==4)
-                ui->tvExpenses->setColumnWidth(i, qMax(w1col/4, 60));
-            else if (i==6 || i==5)
-                ui->tvExpenses->setColumnWidth(i, qMax(w1col/2, 60));
-            else if (i>0)
-                ui->tvExpenses->setColumnWidth(i, w1col);
-    }
+    ui->tvExpenses->resizeColumnsToContents();
+    // Alternatives is ui->tvExpenses->setColumnWidth(), autoresized columns
+    // in some cases can be too big (subcategory)
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
