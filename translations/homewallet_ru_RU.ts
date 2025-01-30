@@ -57,14 +57,36 @@
 <context>
     <name>ExpenseModel</name>
     <message>
-        <location filename="../model/expensemodel.cpp" line="38"/>
+        <location filename="../model/expensemodel.cpp" line="25"/>
+        <location filename="../model/expensemodel.cpp" line="46"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="39"/>
+        <location filename="../model/expensemodel.cpp" line="25"/>
+        <location filename="../model/expensemodel.cpp" line="47"/>
         <source>Category</source>
         <translation>Категория</translation>
+    </message>
+    <message>
+        <location filename="../model/expensemodel.cpp" line="25"/>
+        <source>Subcategory</source>
+        <translation>Подкатегория</translation>
+    </message>
+    <message>
+        <location filename="../model/expensemodel.cpp" line="25"/>
+        <source>Qty.</source>
+        <translation>Кол-во</translation>
+    </message>
+    <message>
+        <location filename="../model/expensemodel.cpp" line="26"/>
+        <source>Unit</source>
+        <translation>Ед.</translation>
+    </message>
+    <message>
+        <location filename="../model/expensemodel.cpp" line="26"/>
+        <source>Sum</source>
+        <translation>Сумма</translation>
     </message>
 </context>
 <context>
@@ -104,13 +126,13 @@
     </message>
     <message>
         <location filename="../app/mainwindow.ui" line="25"/>
-        <location filename="../app/mainwindow.cpp" line="329"/>
+        <location filename="../app/mainwindow.cpp" line="351"/>
         <source>Expenses</source>
         <translation>Расходы</translation>
     </message>
     <message>
         <location filename="../app/mainwindow.ui" line="47"/>
-        <location filename="../app/mainwindow.cpp" line="331"/>
+        <location filename="../app/mainwindow.cpp" line="353"/>
         <source>Incomes</source>
         <translation>Доходы</translation>
     </message>
@@ -236,37 +258,47 @@
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="107"/>
+        <location filename="../app/mainwindow.cpp" line="84"/>
+        <source>Test data create error</source>
+        <translation>Ошибка создания тестовых данных</translation>
+    </message>
+    <message>
+        <location filename="../app/mainwindow.cpp" line="88"/>
+        <source>Database not empty for testing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/mainwindow.cpp" line="126"/>
         <source>Expenses: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="159"/>
+        <location filename="../app/mainwindow.cpp" line="180"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="159"/>
+        <location filename="../app/mainwindow.cpp" line="180"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="168"/>
+        <location filename="../app/mainwindow.cpp" line="189"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="186"/>
+        <location filename="../app/mainwindow.cpp" line="207"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="272"/>
+        <location filename="../app/mainwindow.cpp" line="293"/>
         <source>Unknown import error</source>
         <translation>Неизвестная ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="274"/>
+        <location filename="../app/mainwindow.cpp" line="295"/>
         <source>
 at record %1 from %2</source>
         <translation>
@@ -356,18 +388,18 @@ Contact author.</source>
         <translation>Денежная сумма не соответствует шаблону: %1</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="53"/>
+        <location filename="../core/genericdatabase.cpp" line="54"/>
         <source>Driver not available: </source>
         <translation>Драйвер недоступен: </translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="60"/>
+        <location filename="../core/genericdatabase.cpp" line="61"/>
         <source>Can&apos;t create path: </source>
         <translation>Не могу создать путь: </translation>
     </message>
     <message>
-        <location filename="../core/hwdatabase.cpp" line="133"/>
-        <location filename="../core/hwdatabase.cpp" line="180"/>
+        <location filename="../core/hwdatabase.cpp" line="145"/>
+        <location filename="../core/hwdatabase.cpp" line="192"/>
         <source>No subcategory</source>
         <translation>Нет подкатегории</translation>
     </message>

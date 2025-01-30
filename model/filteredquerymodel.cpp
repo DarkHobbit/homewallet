@@ -46,15 +46,18 @@ int FilteredQueryModel::columnCount(const QModelIndex &parent) const
 QVariant FilteredQueryModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if ((role == Qt::DisplayRole) && (orientation==Qt::Horizontal)) {
-        if (visibleColumns.isEmpty() || section==0)
+        if (section>columnHeaders.count() || section==0) // fallback
             return QSqlQueryModel::headerData(section, orientation, role);
-        else
+        else if (visibleColumns.isEmpty()) // first time
+            return columnHeaders[section-1];
+        else // main case
             return columnHeaders[visibleColumns[section-1]];
     }
     else
         return QSqlQueryModel::headerData(section, orientation, role);
 }
 
+/* TODO Restore if need custom formatting
 QVariant FilteredQueryModel::data(const QModelIndex &index, int role) const
 {
     if (visibleColumns.isEmpty() || index.column()==0)
@@ -64,16 +67,28 @@ QVariant FilteredQueryModel::data(const QModelIndex &index, int role) const
         return QSqlQueryModel::data(ind, role);
     }
 }
+*/
 
-void FilteredQueryModel::updateFilter(const QString &sql, bool insertWhere)
+void FilteredQueryModel::updateData(const QString &sql, bool insertWhere)
 {
+    // Fields
+    QString fields;
+    if (visibleColumns.isEmpty())
+        fields = visibleFieldNames.join(", ");
+    else {
+        fields = visibleFieldNames[visibleColumns.first()];
+        for (int i=1; i<visibleColumns.count(); i++)
+            fields += ", " + visibleFieldNames[visibleColumns[i]];
+    }
+    // Filter
     QString fAdd = "";
     makeFilter();
     if (!filters.isEmpty()) {
         fAdd = insertWhere ? "where " : "and ";
         fAdd += filters.join(" and ");
     }
-    QSqlQuery q(sql.arg(fAdd));
+    // All together
+    QSqlQuery q(sql.arg(fields).arg(fAdd));
     setQuery(q);
     while (canFetchMore())
         fetchMore();
