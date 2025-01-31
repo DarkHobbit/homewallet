@@ -58,13 +58,13 @@
     <name>ExpenseModel</name>
     <message>
         <location filename="../model/expensemodel.cpp" line="25"/>
-        <location filename="../model/expensemodel.cpp" line="46"/>
+        <location filename="../model/expensemodel.cpp" line="48"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
         <location filename="../model/expensemodel.cpp" line="25"/>
-        <location filename="../model/expensemodel.cpp" line="47"/>
+        <location filename="../model/expensemodel.cpp" line="49"/>
         <source>Category</source>
         <translation>Категория</translation>
     </message>
@@ -87,6 +87,26 @@
         <location filename="../model/expensemodel.cpp" line="26"/>
         <source>Sum</source>
         <translation>Сумма</translation>
+    </message>
+    <message>
+        <location filename="../model/expensemodel.cpp" line="26"/>
+        <source>Cur.</source>
+        <translation>В.</translation>
+    </message>
+    <message>
+        <location filename="../model/expensemodel.cpp" line="26"/>
+        <source>Account</source>
+        <translation>Счёт</translation>
+    </message>
+    <message>
+        <location filename="../model/expensemodel.cpp" line="27"/>
+        <source>At.</source>
+        <translation>★</translation>
+    </message>
+    <message>
+        <location filename="../model/expensemodel.cpp" line="27"/>
+        <source>Description</source>
+        <translation>Описание</translation>
     </message>
 </context>
 <context>
@@ -126,13 +146,13 @@
     </message>
     <message>
         <location filename="../app/mainwindow.ui" line="25"/>
-        <location filename="../app/mainwindow.cpp" line="351"/>
+        <location filename="../app/mainwindow.cpp" line="341"/>
         <source>Expenses</source>
         <translation>Расходы</translation>
     </message>
     <message>
         <location filename="../app/mainwindow.ui" line="47"/>
-        <location filename="../app/mainwindow.cpp" line="353"/>
+        <location filename="../app/mainwindow.cpp" line="343"/>
         <source>Incomes</source>
         <translation>Доходы</translation>
     </message>
@@ -273,32 +293,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="180"/>
+        <location filename="../app/mainwindow.cpp" line="169"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="180"/>
+        <location filename="../app/mainwindow.cpp" line="169"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="189"/>
+        <location filename="../app/mainwindow.cpp" line="178"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="207"/>
+        <location filename="../app/mainwindow.cpp" line="196"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="293"/>
+        <location filename="../app/mainwindow.cpp" line="282"/>
         <source>Unknown import error</source>
         <translation>Неизвестная ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="295"/>
+        <location filename="../app/mainwindow.cpp" line="284"/>
         <source>
 at record %1 from %2</source>
         <translation>

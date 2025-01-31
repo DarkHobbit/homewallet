@@ -318,6 +318,7 @@ void MainWindow::prepareModel(QAbstractItemModel *source, QSortFilterProxyModel 
     view->setModel(proxy);
     // TODO implement selection and checkSelection() and mapToSource for all cases, see DoubleContact's checkSelection()
     view->setSortingEnabled(true); // TODO to settings
+//    view->horizontalHeader()->setResizeContentsPrecision(64);
     view->horizontalHeader()->setStretchLastSection(true);
 }
 
