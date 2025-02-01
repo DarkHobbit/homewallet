@@ -14,97 +14,102 @@
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="../app/aboutdialog.ui" line="61"/>
+        <location filename="../app/aboutdialog.ui" line="60"/>
         <source>The Home Money software</source>
         <translation>Программа учёта личных финансов</translation>
     </message>
     <message>
-        <location filename="../app/aboutdialog.ui" line="104"/>
+        <location filename="../app/aboutdialog.ui" line="103"/>
         <source>Distributed under GPL v3 or above</source>
         <translation>Лицензируется согласно GPL v3 или более новой</translation>
     </message>
     <message>
-        <location filename="../app/aboutdialog.ui" line="132"/>
+        <location filename="../app/aboutdialog.ui" line="131"/>
         <source>Contributors</source>
         <translation>Участники</translation>
     </message>
     <message>
-        <location filename="../app/aboutdialog.ui" line="142"/>
+        <location filename="../app/aboutdialog.ui" line="141"/>
         <source>Additional</source>
         <translation>Дополнительно</translation>
     </message>
     <message>
-        <location filename="../app/aboutdialog.ui" line="148"/>
+        <location filename="../app/aboutdialog.ui" line="147"/>
         <source>Compiler:</source>
         <translation>Компилятор:</translation>
     </message>
     <message>
-        <location filename="../app/aboutdialog.ui" line="155"/>
+        <location filename="../app/aboutdialog.ui" line="154"/>
         <source>unknown compiler</source>
         <translation>неизвестный компилятор</translation>
     </message>
     <message>
-        <location filename="../app/aboutdialog.ui" line="162"/>
+        <location filename="../app/aboutdialog.ui" line="161"/>
         <source>Path to translations:</source>
         <translation>Путь к переводам:</translation>
     </message>
     <message>
-        <location filename="../app/aboutdialog.ui" line="169"/>
+        <location filename="../app/aboutdialog.ui" line="168"/>
         <source>unknown path</source>
         <translation>неизвестный путь</translation>
+    </message>
+    <message>
+        <location filename="../app/aboutdialog.ui" line="175"/>
+        <source>no info</source>
+        <translation>нет информации</translation>
     </message>
 </context>
 <context>
     <name>ExpenseModel</name>
     <message>
-        <location filename="../model/expensemodel.cpp" line="25"/>
-        <location filename="../model/expensemodel.cpp" line="48"/>
+        <location filename="../model/expensemodel.cpp" line="28"/>
+        <location filename="../model/expensemodel.cpp" line="53"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="25"/>
-        <location filename="../model/expensemodel.cpp" line="49"/>
+        <location filename="../model/expensemodel.cpp" line="29"/>
+        <location filename="../model/expensemodel.cpp" line="54"/>
         <source>Category</source>
         <translation>Категория</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="25"/>
+        <location filename="../model/expensemodel.cpp" line="29"/>
         <source>Subcategory</source>
         <translation>Подкатегория</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="25"/>
+        <location filename="../model/expensemodel.cpp" line="29"/>
         <source>Qty.</source>
         <translation>Кол-во</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="26"/>
+        <location filename="../model/expensemodel.cpp" line="29"/>
         <source>Unit</source>
         <translation>Ед.</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="26"/>
+        <location filename="../model/expensemodel.cpp" line="30"/>
         <source>Sum</source>
         <translation>Сумма</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="26"/>
+        <location filename="../model/expensemodel.cpp" line="31"/>
         <source>Cur.</source>
         <translation>В.</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="26"/>
+        <location filename="../model/expensemodel.cpp" line="31"/>
         <source>Account</source>
         <translation>Счёт</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="27"/>
+        <location filename="../model/expensemodel.cpp" line="32"/>
         <source>At.</source>
         <translation>★</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="27"/>
+        <location filename="../model/expensemodel.cpp" line="32"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
@@ -146,13 +151,13 @@
     </message>
     <message>
         <location filename="../app/mainwindow.ui" line="25"/>
-        <location filename="../app/mainwindow.cpp" line="341"/>
+        <location filename="../app/mainwindow.cpp" line="342"/>
         <source>Expenses</source>
         <translation>Расходы</translation>
     </message>
     <message>
         <location filename="../app/mainwindow.ui" line="47"/>
-        <location filename="../app/mainwindow.cpp" line="343"/>
+        <location filename="../app/mainwindow.cpp" line="344"/>
         <source>Incomes</source>
         <translation>Доходы</translation>
     </message>
@@ -293,32 +298,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="169"/>
+        <location filename="../app/mainwindow.cpp" line="170"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="169"/>
+        <location filename="../app/mainwindow.cpp" line="170"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="178"/>
+        <location filename="../app/mainwindow.cpp" line="179"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="196"/>
+        <location filename="../app/mainwindow.cpp" line="197"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="282"/>
+        <location filename="../app/mainwindow.cpp" line="283"/>
         <source>Unknown import error</source>
         <translation>Неизвестная ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="284"/>
+        <location filename="../app/mainwindow.cpp" line="285"/>
         <source>
 at record %1 from %2</source>
         <translation>
@@ -416,6 +421,11 @@ Contact author.</source>
         <location filename="../core/genericdatabase.cpp" line="61"/>
         <source>Can&apos;t create path: </source>
         <translation>Не могу создать путь: </translation>
+    </message>
+    <message>
+        <location filename="../core/genericdatabase.cpp" line="83"/>
+        <source>Driver: %1; database: %2</source>
+        <translation>Драйвер:%1; БД: %2</translation>
     </message>
     <message>
         <location filename="../core/hwdatabase.cpp" line="145"/>

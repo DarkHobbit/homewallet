@@ -78,6 +78,13 @@ bool GenericDatabase::isOpen()
     return sqlDb.isOpen();
 }
 
+QString GenericDatabase::dbInfo()
+{
+    return QObject::tr("Driver: %1; database: %2")
+        .arg(sqlDb.driverName())
+        .arg(sqlDb.databaseName());
+}
+
 int GenericDatabase::queryRecCount(QSqlQuery &query)
 {
     if (query.driver()->hasFeature(QSqlDriver::QuerySize))

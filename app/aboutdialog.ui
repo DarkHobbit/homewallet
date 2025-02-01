@@ -32,7 +32,7 @@
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap>:/img/64x64/homewallet_64x64.png</pixmap>
+            <pixmap resource="homewallet.qrc">:/img/64x64/homewallet_64x64.png</pixmap>
            </property>
           </widget>
          </item>
@@ -43,7 +43,6 @@
              <property name="font">
               <font>
                <pointsize>12</pointsize>
-               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -171,6 +170,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="lbDbInfo">
+         <property name="text">
+          <string>no info</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="spacerAdditional">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -202,7 +208,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="homewallet.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

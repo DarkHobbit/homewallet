@@ -153,7 +153,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 void MainWindow::on_action_About_triggered()
 {
-    AboutDialog* d = new AboutDialog(0);
+    AboutDialog* d = new AboutDialog(0, db.dbInfo());
     d->exec();
     delete d;
 }
@@ -161,6 +161,7 @@ void MainWindow::on_action_About_triggered()
 void MainWindow::on_actionAbout_Qt_triggered()
 {
     qApp->aboutQt();
+    QSqlDatabase sqlDb;
 }
 
 void MainWindow::on_action_DbDebug_triggered()

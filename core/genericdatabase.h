@@ -39,6 +39,7 @@ public:
     bool open(const QString& path);
     void close();
     bool isOpen();
+    QString dbInfo();
     // Tools
     int queryRecCount(QSqlQuery& query);
     bool collectDict(DictColl& coll, const QString& tableName,

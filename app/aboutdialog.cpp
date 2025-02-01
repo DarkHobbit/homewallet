@@ -16,7 +16,7 @@
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
 
-AboutDialog::AboutDialog(QWidget *parent) :
+AboutDialog::AboutDialog(QWidget *parent, const QString& dbInfo) :
     QDialog(parent),
     ui(new Ui::AboutDialog)
 {
@@ -48,6 +48,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     if (!compiler.isEmpty())
         ui->lbCompilerValue->setText(compiler);
     ui->lbTrasPathValue->setText(pathManager.transPath());
+    ui->lbDbInfo->setText(dbInfo);
 }
 
 AboutDialog::~AboutDialog()
