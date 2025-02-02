@@ -33,6 +33,19 @@ QString HwDatabase::fileName()
     return "homewallet.sqlite";
 }
 
+void HwDatabase::getCounts(int &totalInCount, int &totalExpCount)
+{
+    QSqlQuery q(sqlDb);
+    q.prepare("select count(id) from hw_in_op");
+    q.exec();
+    q.first();
+    totalInCount = q.value(0).toInt();
+    q.prepare("select count(id) from hw_ex_op");
+    q.exec();
+    q.first();
+    totalExpCount = q.value(0).toInt();
+}
+
 HwDatabase::DBFileState HwDatabase::test(const QString &dir)
 {
     if (!open(dir))

@@ -63,13 +63,11 @@
     <name>ExpenseModel</name>
     <message>
         <location filename="../model/expensemodel.cpp" line="28"/>
-        <location filename="../model/expensemodel.cpp" line="53"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
         <location filename="../model/expensemodel.cpp" line="29"/>
-        <location filename="../model/expensemodel.cpp" line="54"/>
         <source>Category</source>
         <translation>Категория</translation>
     </message>
@@ -151,13 +149,13 @@
     </message>
     <message>
         <location filename="../app/mainwindow.ui" line="25"/>
-        <location filename="../app/mainwindow.cpp" line="342"/>
+        <location filename="../app/mainwindow.cpp" line="367"/>
         <source>Expenses</source>
         <translation>Расходы</translation>
     </message>
     <message>
         <location filename="../app/mainwindow.ui" line="47"/>
-        <location filename="../app/mainwindow.cpp" line="344"/>
+        <location filename="../app/mainwindow.cpp" line="369"/>
         <source>Incomes</source>
         <translation>Доходы</translation>
     </message>
@@ -283,47 +281,47 @@
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="84"/>
+        <location filename="../app/mainwindow.cpp" line="88"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="88"/>
+        <location filename="../app/mainwindow.cpp" line="92"/>
         <source>Database not empty for testing</source>
-        <translation type="unfinished"></translation>
+        <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="126"/>
-        <source>Expenses: %1</source>
-        <translation type="unfinished"></translation>
+        <location filename="../app/mainwindow.cpp" line="133"/>
+        <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
+        <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="170"/>
+        <location filename="../app/mainwindow.cpp" line="182"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="170"/>
+        <location filename="../app/mainwindow.cpp" line="182"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="179"/>
+        <location filename="../app/mainwindow.cpp" line="191"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="197"/>
+        <location filename="../app/mainwindow.cpp" line="209"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="283"/>
+        <location filename="../app/mainwindow.cpp" line="295"/>
         <source>Unknown import error</source>
         <translation>Неизвестная ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="285"/>
+        <location filename="../app/mainwindow.cpp" line="297"/>
         <source>
 at record %1 from %2</source>
         <translation>
@@ -428,8 +426,8 @@ Contact author.</source>
         <translation>Драйвер:%1; БД: %2</translation>
     </message>
     <message>
-        <location filename="../core/hwdatabase.cpp" line="145"/>
-        <location filename="../core/hwdatabase.cpp" line="192"/>
+        <location filename="../core/hwdatabase.cpp" line="158"/>
+        <location filename="../core/hwdatabase.cpp" line="205"/>
         <source>No subcategory</source>
         <translation>Нет подкатегории</translation>
     </message>

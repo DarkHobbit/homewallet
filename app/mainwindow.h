@@ -20,6 +20,7 @@
 
 #include "hwdatabase.h"
 #include "expensemodel.h"
+#include "incomemodel.h"
 
 namespace Ui {
 class MainWindow;
@@ -47,7 +48,6 @@ private slots:
     void on_actionE_xit_triggered();
     void on_action_Import_triggered();
     void on_action_Settings_triggered();
-
     void on_leQuickFilter_textChanged(const QString&);
     void on_actionFilter_triggered();
     void on_btn_Quick_Filter_Apply_clicked();
@@ -55,22 +55,23 @@ private slots:
     void on_btn_Filter_Reset_clicked();
     void on_cbDateFrom_stateChanged(int);
     void on_cbDateTo_stateChanged(int);
-
     void on_tabWidget_currentChanged(int);
-
     void on_cbCategory_activated(int);
+    void on_Model_Error(const QString& message);
 
 private:
     Ui::MainWindow *ui;
     ExpenseModel* mdlExpenses;
-    QSortFilterProxyModel *proxyExpenses;
+    IncomeModel* mdlIncomes;
+    QSortFilterProxyModel *proxyExpenses, *proxyIncomes;
     QLabel *lbCounts;
     enum ActiveTab {
         atExpenses,
         atIncomes,
         atAccounts
     };
-    void prepareModel(QAbstractItemModel* source, QSortFilterProxyModel *proxy, QTableView* view);
+    void prepareModel(FilteredQueryModel* source, QSortFilterProxyModel *proxy, QTableView* view);
+    void updateOneModel(CategoriesBasedQueryModel* source);
     void updateOneView(QTableView* view);
     ActiveTab activeTab();
 };

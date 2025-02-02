@@ -29,6 +29,7 @@ class FilteredQueryModel : public QSqlQueryModel
     Q_OBJECT
 public:
     explicit FilteredQueryModel(QObject *parent = nullptr);
+    virtual void update() = 0;
     void updateVisibleColumns(const ModelColumnList& _visibleColumns);
     void setFilterDates(const QDate& _dtFrom=QDate(), const QDate& _dtTo=QDate());
     // Base model implementation methods
@@ -44,6 +45,8 @@ protected:
     QDate dtFrom, dtTo;
     virtual void makeFilter();
     void updateData(const QString& sql, bool insertWhere);
+signals:
+    void modelError(const QString& message);
 };
 
 #endif // FILTEREDQUERYMODEL_H

@@ -41,6 +41,7 @@ public:
     bool isEmpty();
     // Subject area
     virtual QString fileName();
+    void getCounts(int& totalInCount, int& totalExpCount);
     bool addAccount(const QString& name, const QString& descr,
         int idCur=-1, const QDateTime& foundation=QDateTime(), bool hasStartBalance=false, int startBalance=0);
     int accountId(const QString& name);

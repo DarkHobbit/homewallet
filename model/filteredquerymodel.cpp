@@ -11,6 +11,7 @@
  *
  */
 
+#include <QSqlError>
 #include <QSqlQuery>
 #include "filteredquerymodel.h"
 
@@ -90,8 +91,13 @@ void FilteredQueryModel::updateData(const QString &sql, bool insertWhere)
     // All together
     QSqlQuery q(sql.arg(fields).arg(fAdd));
     setQuery(q);
-    while (canFetchMore())
-        fetchMore();
+    QString qe = q.lastError().text();
+    if (qe.isEmpty()) {
+        while (canFetchMore())
+            fetchMore();
+    }
+    else
+        emit modelError(qe);
 }
 
 void FilteredQueryModel::makeFilter()

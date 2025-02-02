@@ -41,6 +41,10 @@ MainWindow::MainWindow(QWidget *parent) :
     mdlExpenses = new ExpenseModel(this);
     proxyExpenses  = new QSortFilterProxyModel(this);
     prepareModel(mdlExpenses, proxyExpenses, ui->tvExpenses);
+    mdlIncomes = new IncomeModel(this);
+    proxyIncomes = new QSortFilterProxyModel(this);
+    prepareModel(mdlIncomes, proxyIncomes, ui->tvIncomes);
+
     ui->leQuickFilter->installEventFilter(this);
     ui->dteDateFrom->installEventFilter(this);
     ui->dteDateTo->installEventFilter(this);
@@ -110,26 +114,34 @@ void MainWindow::updateViews()
     // Filter
     on_cbDateFrom_stateChanged(0);
     on_cbDateTo_stateChanged(0);
-    // Expenses TODO m.b. here check activeTab?
-    mdlExpenses->setFilterDates(
-        ui->cbDateFrom->isChecked() ? ui->dteDateFrom->date() : QDate(),
-        ui->cbDateTo->isChecked() ? ui->dteDateTo->date() : QDate());
-    mdlExpenses->setFilterCategories(
-        getComboCurrentId(ui->cbCategory),
-        getComboCurrentId(ui->cbSubcategory));
-    mdlExpenses->update();
-    updateOneView(ui->tvExpenses);
-
-    // TODO other models
-
+    switch (activeTab()) {
+    case atExpenses:
+        updateOneModel(mdlExpenses);
+        updateOneView(ui->tvExpenses);
+        break;
+    // TODO unify all models with datefilters
+    case atIncomes:
+        updateOneModel(mdlIncomes);
+        updateOneView(ui->tvIncomes);
+        break;
+    default:
+        break;
+    }
     // Status bar
-    lbCounts->setText(tr("Expenses: %1").arg(mdlExpenses->rowCount()));
+    int totalInCount, totalExpCount;
+    db.getCounts(totalInCount, totalExpCount);
+    lbCounts->setText(tr("Expenses: %1 (%2) Incomes: %3 (%4)")
+        .arg(mdlExpenses->rowCount())
+        .arg(totalExpCount)
+        .arg(mdlIncomes->rowCount())
+        .arg(totalInCount));
 }
 
 void MainWindow::resizeEvent(QResizeEvent* e)
 {
     QMainWindow::resizeEvent(e);
     ui->tvExpenses->resizeColumnsToContents();
+    ui->tvIncomes->resizeColumnsToContents();
     // Alternatives is ui->tvExpenses->setColumnWidth(), autoresized columns
     // in some cases can be too big (subcategory)
 }
@@ -310,7 +322,7 @@ void MainWindow::on_actionFilter_triggered()
     ui->leQuickFilter->setFocus();
 }
 
-void MainWindow::prepareModel(QAbstractItemModel *source, QSortFilterProxyModel *proxy, QTableView *view)
+void MainWindow::prepareModel(FilteredQueryModel *source, QSortFilterProxyModel *proxy, QTableView *view)
 {
     proxy->setSourceModel(source);
     proxy->setFilterKeyColumn(-1);
@@ -321,6 +333,19 @@ void MainWindow::prepareModel(QAbstractItemModel *source, QSortFilterProxyModel 
     view->setSortingEnabled(true); // TODO to settings
 //    view->horizontalHeader()->setResizeContentsPrecision(64);
     view->horizontalHeader()->setStretchLastSection(true);
+    // Error handling
+    connect(source, SIGNAL(modelError(QString)), this, SLOT(on_Model_Error(QString)));
+}
+
+void MainWindow::updateOneModel(CategoriesBasedQueryModel *source)
+{
+    source->setFilterDates(
+        ui->cbDateFrom->isChecked() ? ui->dteDateFrom->date() : QDate(),
+        ui->cbDateTo->isChecked() ? ui->dteDateTo->date() : QDate());
+    source->setFilterCategories(
+        getComboCurrentId(ui->cbCategory),
+        getComboCurrentId(ui->cbSubcategory));
+    source->update();
 }
 
 void MainWindow::updateOneView(QTableView *view)
@@ -353,6 +378,9 @@ void MainWindow::on_btn_Quick_Filter_Apply_clicked()
     switch (activeTab()) {
     case atExpenses:
         proxy = proxyExpenses;
+        break;
+    case atIncomes:
+        proxy = proxyIncomes;
         break;
     default:
         proxy = 0;
@@ -388,14 +416,18 @@ void MainWindow::on_cbDateTo_stateChanged(int)
     ui->dteDateTo->setEnabled(ui->cbDateTo->isChecked());
 }
 
-
 void MainWindow::on_tabWidget_currentChanged(int)
 {
     GenericDatabase::DictColl collCat;
+    // TODO here save combo indexes and restore it
     switch (activeTab()) {
     case atExpenses:
         db.collectDict(collCat, "hw_ex_cat");
         // TODO call collectSubDict if will be slow, but it's more complex
+        fillComboByDict(ui->cbCategory, collCat, true);
+        break;
+    case atIncomes:
+        db.collectDict(collCat, "hw_in_cat");
         fillComboByDict(ui->cbCategory, collCat, true);
         break;
     default:
@@ -403,8 +435,8 @@ void MainWindow::on_tabWidget_currentChanged(int)
         break;
     }
     on_cbCategory_activated(0);
+    updateViews();
 }
-
 
 void MainWindow::on_cbCategory_activated(int)
 {
@@ -412,5 +444,10 @@ void MainWindow::on_cbCategory_activated(int)
     int idCat = getComboCurrentId(ui->cbCategory);
     db.collectDict(collSubcat, "hw_ex_subcat", "name", "id", QString("where id_ecat=%1").arg(idCat));
     fillComboByDict(ui->cbSubcategory, collSubcat, true);
+}
+
+void MainWindow::on_Model_Error(const QString &message)
+{
+    QMessageBox::critical(0, S_ERROR, message);
 }
 

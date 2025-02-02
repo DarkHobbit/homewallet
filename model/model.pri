@@ -9,6 +9,7 @@ HEADERS	+= \
     $$PWD/configmanager.h \
     $$PWD/expensemodel.h \
     $$PWD/filteredquerymodel.h \
+    $$PWD/incomemodel.h \
     $$PWD/testmanager.h
 
 SOURCES	+= \
@@ -16,5 +17,6 @@ SOURCES	+= \
     $$PWD/configmanager.cpp \
     $$PWD/expensemodel.cpp \
     $$PWD/filteredquerymodel.cpp \
+    $$PWD/incomemodel.cpp \
     $$PWD/testmanager.cpp
 
