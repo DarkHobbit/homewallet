@@ -22,6 +22,8 @@
 #define S_ALIEN_DB QObject::tr("Database is not HomeWallet format\n in %1")
 #define S_NEED_UPGRADE \
  QObject::tr("Database structure out of time\n in %1\(%2)\n Upgrade it to actual state?")
+#define S_REPEAT_IMPORT \
+QObject::tr("File was already imported:\n%1\n Repeat it?")
 
 class HwDatabase: public GenericDatabase
 {
@@ -39,6 +41,9 @@ public:
     bool upgrade(const QString& dir);
     bool create(const QString& dir);
     bool isEmpty();
+    // Export & Import
+    int addImportFile(const QString& fileName, const QString& fileType);
+    int findImportFile(const QString& fileName);
     // Subject area
     virtual QString fileName();
     void getCounts(int& totalInCount, int& totalExpCount);
@@ -60,10 +65,10 @@ public:
     // Inc/Exp
     bool addIncomeOp(const QDateTime& opDT, double quantity,
         int amount, int idAcc, int idCur, int idSubcat, int idUnit,
-        bool attention, const QString& descr);
+        bool attention, const QString& descr, int idImp=-1, const QString& uid="");
     bool addExpenseOp(const QDateTime& opDT, double quantity,
         int amount, int idAcc, int idCur, int idSubcat, int idUnit, int idReceipt,
-        int discount, bool attention, const QString& descr);
+        int discount, bool attention, const QString& descr, int idImp=-1, const QString& uid="");
 
 };
 

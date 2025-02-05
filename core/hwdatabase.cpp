@@ -91,6 +91,29 @@ bool HwDatabase::isEmpty()
     // TODO other categories / non-account data
     return true;
 }
+#include <iostream>
+int HwDatabase::addImportFile(const QString &fileName, const QString &fileType)
+{
+    QSqlQuery sqlIns(sqlDb);
+    sqlIns.prepare(
+        "insert into hw_imp_file (imp_date, filename, filetype) values (:imp_date, :filename, :filetype)");
+    sqlIns.bindValue(":imp_date", QDateTime::currentDateTime());
+    sqlIns.bindValue(":filename", fileName);
+    sqlIns.bindValue(":filetype", fileType);
+    if (!execQuery(sqlIns)) {
+        std::cerr << " uu " << sqlIns.lastError().text().toUtf8().data() << std::endl;
+        return -1;
+    }
+    return findImportFile(fileName);
+}
+
+int HwDatabase::findImportFile(const QString &fileName)
+{
+    QSqlQuery sqlSel(sqlDb);
+    sqlSel.prepare("select id from hw_imp_file where name=:name");
+    sqlSel.bindValue(":filename", fileName);
+    return dictId(sqlSel);
+}
 
 bool HwDatabase::addAccount(const QString &name, const QString &descr,
     int idCur, const QDateTime &foundation, bool hasStartBalance, int startBalance)
@@ -239,12 +262,13 @@ int HwDatabase::expenseSubCategoryId(int idParentCat, const QString &name)
 }
 
 bool HwDatabase::addIncomeOp(const QDateTime &opDT, double quantity, int amount, int idAcc, int idCur, int idSubCat, int idUnit,
-     bool attention, const QString &descr)
+     bool attention, const QString &descr,
+     int idImp, const QString& uid)
 {
     QSqlQuery sqlIns(sqlDb);
     sqlIns.prepare(
-        "insert into hw_in_op(op_date, quantity, amount, id_ac, id_cur, id_isubcat, id_un, attention, descr) " \
-        "values (:op_date, :quantity, :amount, :id_ac, :id_cur, :id_isubcat, :id_un, :attention, :descr)");
+        "insert into hw_in_op(op_date, quantity, amount, id_ac, id_cur, id_isubcat, id_un, attention, descr, id_imp, uid_imp) " \
+        "values (:op_date, :quantity, :amount, :id_ac, :id_cur, :id_isubcat, :id_un, :attention, :descr, :id_imp, :uid_imp)");
     sqlIns.bindValue(":op_date", opDT);
     // TODO Проверить ornull с нулевыми значениями!!!
     sqlIns.bindValue(":quantity", quantity);
@@ -255,17 +279,20 @@ bool HwDatabase::addIncomeOp(const QDateTime &opDT, double quantity, int amount,
     sqlIns.bindValue(":id_un", idOrNull(idUnit));
     sqlIns.bindValue(":attention", attention); // проверить отдельно
     sqlIns.bindValue(":descr", strOrNull(descr));
+    sqlIns.bindValue(":id_imp", idOrNull(idImp));
+    sqlIns.bindValue(":uid_imp", strOrNull(uid));
     return execQuery(sqlIns);
 }
 
 bool HwDatabase::addExpenseOp(const QDateTime &opDT, double quantity, int amount,
     int idAcc, int idCur, int idSubCat, int idUnit,
-    int idReceipt, int discount, bool attention, const QString &descr)
+    int idReceipt, int discount, bool attention, const QString &descr,
+    int idImp, const QString& uid)
 {
     QSqlQuery sqlIns(sqlDb);
     sqlIns.prepare(
-        "insert into hw_ex_op(op_date, quantity, amount, id_ac, id_cur, id_esubcat, id_un, id_rc, discount, attention, descr) " \
-        "values (:op_date, :quantity, :amount, :id_ac, :id_cur, :id_esubcat, :id_un, :id_rc, :discount, :attention, :descr)");
+        "insert into hw_ex_op(op_date, quantity, amount, id_ac, id_cur, id_esubcat, id_un, id_rc, discount, attention, descr, id_imp, uid_imp) " \
+        "values (:op_date, :quantity, :amount, :id_ac, :id_cur, :id_esubcat, :id_un, :id_rc, :discount, :attention, :descr, :id_imp, :uid_imp)");
     sqlIns.bindValue(":op_date", opDT);
     // TODO Проверить ornull с нулевыми значениями!!!
     sqlIns.bindValue(":quantity", quantity);
@@ -278,6 +305,8 @@ bool HwDatabase::addExpenseOp(const QDateTime &opDT, double quantity, int amount
     sqlIns.bindValue(":discount", intOrNull(discount, discount!=0));
     sqlIns.bindValue(":attention", attention); // проверить отдельно
     sqlIns.bindValue(":descr", strOrNull(descr));
+    sqlIns.bindValue(":id_imp", idOrNull(idImp));
+    sqlIns.bindValue(":uid_imp", strOrNull(uid));
     return execQuery(sqlIns);
 }
 

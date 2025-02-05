@@ -54,6 +54,7 @@ public:
     };
     XmlHbFile();
     virtual bool detect(const QString &path);
+    virtual QString formatAbbr();
     virtual bool importRecords(const QString &path, HwDatabase& db);
     SubType fileSubType();
     void setFileSubType(SubType subType);

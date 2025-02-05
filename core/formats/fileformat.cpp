@@ -23,6 +23,11 @@ FileFormat::FileFormat()
 FileFormat::~FileFormat()
 {}
 
+void FileFormat::setIdImp(int idImp)
+{
+    _idImp = idImp;
+}
+
 QStringList FileFormat::errors()
 {
     return _errors;

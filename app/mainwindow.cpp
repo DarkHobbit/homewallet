@@ -212,7 +212,7 @@ void MainWindow::on_action_Import_triggered()
         &selectedFilter);
     if (!path.isEmpty()) {
         configManager.setLastImportedFile(path);
-        XmlHbFile* impFile = new XmlHbFile(); // TODO move to FormatFactory, detect HK XML or HW XML (also gnucache, ledger, etc)
+        FileFormat* impFile = new XmlHbFile(); // TODO move to FormatFactory, detect HK XML or HW XML (also gnucache, ledger, etc)
         if (!impFile->detect(path)) {
             // TODO type separate messages for defined format or auto-detect
             // And take different names for filters for HW and HK XML
@@ -281,6 +281,17 @@ void MainWindow::on_action_Import_triggered()
                 return;
             }
         }
+        // Check if already
+        QFileInfo fi(path);
+        int idImp = db.findImportFile(fi.fileName());
+        if (idImp>-1) {
+            if (QMessageBox::question(0, S_CONFIRM, S_REPEAT_IMPORT.arg(fi.fileName()))!=QMessageBox::Yes)
+                return;
+        }
+        else
+            idImp = db.addImportFile(fi.fileName(), impFile->formatAbbr());
+        impFile->setIdImp(idImp);
+
         // Actually, import
         bool res = impFile->importRecords(path, db);
         QString fatalError = impFile->fatalError();

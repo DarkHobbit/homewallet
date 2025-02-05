@@ -97,9 +97,31 @@ create table hw_unit (
     constraint uk_un2 unique(short_name)
     );
 
+-- Import & audit
+create table hw_imp_file (
+    id integer not null,
+    imp_date date not null,
+    filename char(128) not null,
+    filetype char(8) not null, -- XMHWA, XMHBK, JSFNS, XLS, TXT, QIF...
+    descr char(256),
+    constraint pk_imp primary key(id),
+    constraint uk_imp unique(filename)
+);
+
+create table hw_alias (
+    id integer not null,
+    -- ONE of next ids will be not null
+    id_isubcat integer null,
+    id_esubcat integer null,
+    id_tt integer null,
+    pattern char(64) not null,
+    to_descr char(64) not null,
+    constraint pk_ali primary key(id),
+    constraint uk_ali unique(pattern)
+);
+
 -- Incomes
 create table hw_in_op (
--- TODO source id (see json, for txt - maybe date + line after date, maybe filename and source type)
     id integer not null,
     op_date date not null,
     quantity double,
@@ -112,28 +134,32 @@ create table hw_in_op (
     id_un integer null,
     attention integer not null, -- 1 if star setted, 0 if ordinary record
     descr char(256),
+    id_imp integer null,
+    uid_imp char(64), -- _id for JSON, line after date for TXT...
     constraint pk_iop primary key(id),
     constraint fk_inac foreign key(id_ac) references hw_account(id),
     constraint fk_incur foreign key(id_cur) references hw_currency(id),
     constraint fk_insub foreign key(id_isubcat) references hw_in_subcat(id),
-    constraint fk_inun foreign key(id_un) references hw_units(id)
+    constraint fk_inun foreign key(id_un) references hw_units(id),
+    constraint fk_inimp foreign key(id_imp) references hw_imp_file(id)
 );
 
 -- Expenses
 create table hw_receipt ( -- in shop, rus. чек
--- TODO source id
     id integer not null,
     note char(32),
     total_amount integer not null, -- in low units, on all ex_op in receipt
     id_ac integer not null,
     id_cur integer not null,
+    id_imp integer null,
+    uid_imp char(64), -- _id for JSON, line after date for TXT...
     constraint pk_rc primary key(id),
     constraint fk_rcac foreign key(id_ac) references hw_account(id),
-    constraint fk_rccur foreign key(id_cur) references hw_currency(id)
+    constraint fk_rccur foreign key(id_cur) references hw_currency(id),
+    constraint fk_rcimp foreign key(id_imp) references hw_imp_file(id)
 );
 
 create table hw_ex_op (
--- TODO source id
     id integer not null,
     op_date date not null,
     quantity double,
@@ -148,12 +174,15 @@ create table hw_ex_op (
     discount integer, -- absolute value in low units (not percent)
     attention integer not null, -- 1 if star setted, 0 if ordinary record
     descr char(256),
+    id_imp integer null,
+    uid_imp char(64), -- _id for JSON, line after date for TXT...
     constraint pk_eop primary key(id),
     constraint fk_exac foreign key(id_ac) references hw_account(id),
     constraint fk_excur foreign key(id_cur) references hw_currency(id),
     constraint fk_exsub foreign key(id_esubcat) references hw_ex_subcat(id),
     constraint fk_exun foreign key(id_un) references hw_units(id),
-    constraint fk_exrc foreign key(id_rc) references hw_receipt(id)
+    constraint fk_exrc foreign key(id_rc) references hw_receipt(id),
+    constraint fk_eximp foreign key(id_imp) references hw_imp_file(id)
 );
 
 -- Transfer
@@ -174,10 +203,13 @@ create table hw_transfer (
     id_ac_out integer not null,
     id_tt integer not null,
     descr char(256),
+    id_imp integer null,
+    uid_imp char(64), -- _id for JSON, line after date for TXT...
     constraint pk_tr primary key(id),
     constraint fk_trac_in foreign key(id_ac_in) references hw_account(id),
     constraint fk_trac_out foreign key(id_ac_out) references hw_account(id),
     constraint fk_trac_tt foreign key(id_tt) references hw_transfer_type(id)
+    constraint fk_trimp foreign key(id_imp) references hw_imp_file(id)
 );
 
 -- Debtors, Creditors, their names

@@ -11,6 +11,8 @@
  *
  */
 
+#include <iostream>
+
 #include "commonexpimpdef.h"
 #include "xmlhbfile.h"
 
@@ -82,7 +84,12 @@ bool XmlHbFile::detect(const QString &path)
         _fileSubType = Transfer;
     return _fileSubType != Unknown;
 }
-#include <iostream>
+
+QString XmlHbFile::formatAbbr()
+{
+    return "XMHBK";
+}
+
 bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
 {
     _fatalError = "";
@@ -122,6 +129,7 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
         DB_CHK(db.collectDict(cats, "hw_ex_cat"))
         DB_CHK(db.collectSubDict(cats, subcats, "hw_ex_subcat", "name", "id", "id_ecat"))
     }
+    /*
     std::cout << "ac_count " << accs.keys().count() <<std::endl; //===>
     std::cout << "cur_count " << currs.keys().count() <<std::endl; //===>
     std::cout << "cat_count " << cats.keys().count() <<std::endl; //===>
@@ -129,6 +137,7 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
     for (const QString& catname : cats.keys())
         std::cout << subcats[catname].count() << " " <<std::endl; //===>
     std::cout << std::endl; //===>
+*/
     // Import records
     QDomNodeList records = elementsByTagName("RECORD");
     _totalRecordsCount = records.count();
@@ -138,6 +147,7 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
         if (i%500==0)
             std::cout << "Rec " << i << " from " << records.count() << std::endl;
         QDomElement elRow = records.at(i).firstChildElement("ROW");
+        QString sLine = QString::number(elRow.lineNumber());
         switch (_fileSubType) {
         case AccountsInBrief: {
             QString accName = elRow.attribute("Account");
@@ -242,9 +252,12 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             // Insert!
             bool ok;
             if (isExp)
-                ok = db.addExpenseOp(dt, quantity, money.values().first(), idAcc, idCur, idSubCat, idUnit, -1, 0, false, elRow.attribute("Note"));
+                ok = db.addExpenseOp(dt, quantity, money.values().first(),
+                    idAcc, idCur, idSubCat, idUnit, -1, 0, false, elRow.attribute("Note"),
+                    _idImp, sLine);
             else
-                ok = db.addIncomeOp(dt, quantity, money.values().first(), idAcc, idCur, idSubCat, idUnit, false, elRow.attribute("Note"));
+                ok = db.addIncomeOp(dt, quantity, money.values().first(), idAcc, idCur, idSubCat, idUnit, false, elRow.attribute("Note"),
+                    _idImp, sLine);
             DB_CHK(ok);
             break;
         }

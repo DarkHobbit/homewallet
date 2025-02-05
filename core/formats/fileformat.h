@@ -24,7 +24,9 @@ public:
     FileFormat();
     virtual ~FileFormat();
     virtual bool detect(const QString &path)=0;
+    virtual QString formatAbbr()=0;
     virtual bool importRecords(const QString &path, HwDatabase& db)=0;
+    void setIdImp(int idImp);
     QStringList errors();
     QString fatalError();
     int importedRecordsCount();
@@ -34,6 +36,7 @@ public:
     static void lossData(QStringList& errors, const QString& recName,
         const QString& fieldName, const QString& field);
 protected:
+    int _idImp;
     QFile file;
     QStringList _errors;
     QString _fatalError;
