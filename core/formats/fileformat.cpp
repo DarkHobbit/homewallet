@@ -1,4 +1,4 @@
-/* Double Contact
+/* Home wallet
  *
  * Module: Abstract class for file export/import format
  *
@@ -22,6 +22,11 @@ FileFormat::FileFormat()
 
 FileFormat::~FileFormat()
 {}
+
+bool FileFormat::postImport(HwDatabase&)
+{
+    return true; // by default, postImport() not needed, if isDialogRequired()==false
+}
 
 void FileFormat::setIdImp(int idImp)
 {

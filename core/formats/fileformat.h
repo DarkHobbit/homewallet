@@ -1,4 +1,4 @@
-/* Double Contact
+/* Home wallet
  *
  * Module: Abstract class for file export/import format
  *
@@ -25,7 +25,9 @@ public:
     virtual ~FileFormat();
     virtual bool detect(const QString &path)=0;
     virtual QString formatAbbr()=0;
+    virtual bool isDialogRequired()=0;
     virtual bool importRecords(const QString &path, HwDatabase& db)=0;
+    virtual bool postImport(HwDatabase&);
     void setIdImp(int idImp);
     QStringList errors();
     QString fatalError();

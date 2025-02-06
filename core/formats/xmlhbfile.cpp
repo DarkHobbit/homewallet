@@ -90,6 +90,11 @@ QString XmlHbFile::formatAbbr()
     return "XMHBK";
 }
 
+bool XmlHbFile::isDialogRequired()
+{
+    return false;
+}
+
 bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
 {
     _fatalError = "";
