@@ -40,16 +40,15 @@ bool InteractiveFormat::postImport(HwDatabase& db)
     for (const ImpRecCandidate&c: candidates) {
         if (c.state!=ImpRecCandidate::ReadyToImport)
             return false;
+        int idCurActual = (c.idCur==-1) ? candidates.idCurDefault : c.idCur;
         switch (c.type) {
         case ImpRecCandidate::Expense:
-            if (!db.addExpenseOp(c.opDT, c.quantity, c.amount, c.idAcc,
-                    -1,  // TODO default currency or from file!
+            if (!db.addExpenseOp(c.opDT, c.quantity, c.amount, c.idAcc, idCurActual,
                     c.idSubcat, c.idUnit, -1, 0, false, c.descr, _idImp, c.uid))
                 return false;
             break;
         case ImpRecCandidate::Income:
-            if (!db.addIncomeOp(c.opDT, c.quantity, c.amount, c.idAcc,
-                    -1,  // TODO default currency or from file!
+            if (!db.addIncomeOp(c.opDT, c.quantity, c.amount, c.idAcc, idCurActual,
                     c.idSubcat, c.idUnit, false, c.descr, _idImp, c.uid))
                 return false;
             break;

@@ -45,17 +45,18 @@ struct ImpRecCandidate
     } type;
     // Parsed info
     QDateTime &opDT;
-    int idAcc, idCat, idSubcat, idUnit;
+    int idAcc, idCat, idSubcat, idCur, idUnit;
     int idAccTo; // for transfers
     int amount;
     double quantity;
-    QString catName, subcatName, descr;
+    QString catName, subcatName, curName, descr;
     ImpCandidates* children; // for receipts
 };
 
-class ImpCandidates: public QList<ImpRecCandidate>
+struct ImpCandidates: public QList<ImpRecCandidate>
 {
-public:
+    int idCurDefault;
+    QString defaultCurName;
     bool readyToImport();
 };
 
