@@ -20,6 +20,9 @@ class TxtCompactFile : public InteractiveFormat
 {
 public:
     TxtCompactFile();
+    virtual QStringList supportedExtensions();
+    virtual QStringList supportedFilters();
+    virtual QIODevice::OpenMode supportedModes();
     virtual bool detect(const QString &path);
     virtual QString formatAbbr();
     virtual bool importRecords(const QString &path, HwDatabase& db);

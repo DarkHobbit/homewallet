@@ -18,6 +18,7 @@
 #include <QSortFilterProxyModel>
 #include <QTableView>
 
+#include "formats/formatfactory.h"
 #include "hwdatabase.h"
 #include "expensemodel.h"
 #include "incomemodel.h"
@@ -36,6 +37,7 @@ public:
     void openDb(const QString& path);
     void updateViews();
     HwDatabase db;
+    FormatFactory factory;
 
 protected:
     void resizeEvent(QResizeEvent* e);

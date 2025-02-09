@@ -53,6 +53,8 @@ public:
         IncomeOrExpensePlan // ambiguous, must be replaced on PlanIncomes or PlanExpenses by caller
     };
     XmlHbFile();
+    virtual QIODevice::OpenMode supportedModes();
+    virtual QStringList supportedFilters();
     virtual bool detect(const QString &path);
     virtual QString formatAbbr();
     virtual bool isDialogRequired();

@@ -33,6 +33,16 @@ XmlHbFile::XmlHbFile()
 {
 }
 
+QIODevice::OpenMode XmlHbFile::supportedModes()
+{
+    return QIODevice::ReadOnly;
+}
+
+QStringList XmlHbFile::supportedFilters()
+{
+    return QStringList() << QObject::tr("Home Bookkeeping XML (*.xml *.XML)");
+}
+
 bool XmlHbFile::detect(const QString &path)
 {
     _fileSubType = Unknown;

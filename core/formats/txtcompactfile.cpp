@@ -21,6 +21,21 @@ QObject::tr("First non-empty string in file must be full (yyyyMMdd) date.\nFound
 
 TxtCompactFile::TxtCompactFile() {}
 
+QStringList TxtCompactFile::supportedExtensions()
+{
+    return (QStringList() << "txt" << "TXT");
+}
+
+QStringList TxtCompactFile::supportedFilters()
+{
+    return (QStringList() << QObject::tr("Compact text file (*.txt *.TXT)"));
+}
+
+QIODevice::OpenMode TxtCompactFile::supportedModes()
+{
+    return QIODevice::ReadOnly;
+}
+
 bool TxtCompactFile::detect(const QString &path)
 {
     if (!openFile(path, QIODevice::ReadOnly))

@@ -24,6 +24,9 @@ public:
     FileFormat();
     virtual ~FileFormat();
     virtual bool detect(const QString &path)=0;
+    virtual QIODevice::OpenMode supportedModes()=0;
+    virtual QStringList supportedExtensions()=0;
+    virtual QStringList supportedFilters()=0;
     virtual QString formatAbbr()=0;
     virtual bool isDialogRequired()=0;
     virtual bool importRecords(const QString &path, HwDatabase& db)=0;

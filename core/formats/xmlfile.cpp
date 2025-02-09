@@ -1,6 +1,6 @@
 /* Home wallet
  *
- * Module: Generic class for XML-base file formats export/import
+ * Module: Generic abstract class for XML-base file formats export/import
  *
  * Copyright 2023 Mikhail Y. Zvyozdochkin aka DarkHobbit <pub@zvyozdochkin.ru>
  *
@@ -17,6 +17,11 @@
 XmlFile::XmlFile()
     :FileFormat(), QDomDocument()
 {}
+
+QStringList XmlFile::supportedExtensions()
+{
+    return (QStringList() << "xml" << "XML");
+}
 
 bool XmlFile::readFromFile(const QString &path)
 {
