@@ -11,6 +11,7 @@
  *
  */
 
+#include "globals.h"
 #include "incomemodel.h"
 
 IncomeModel::IncomeModel(QObject *parent)
@@ -24,11 +25,11 @@ IncomeModel::IncomeModel(QObject *parent)
         << "case i.attention when 1 then '*' else '' end"
         << "i.descr";
     columnHeaders
-        << tr("Date")
-        << tr("Category") << tr("Subcategory") << tr("Qty.") << tr("Unit")
-        << tr("Sum")
-        << tr("Cur.") << tr("Account")
-        << tr("At.")  << tr("Description");
+        << S_COL_DATE
+        << S_COL_CATEGORY << S_COL_SUBCATEGORY << S_COL_QUANTITY <<S_COL_UNIT
+        << S_COL_SUM
+        << S_COL_CURRENCY << S_COL_ACCOUNT
+        << S_COL_ATTENTION << S_COL_DESCRIPTION;
     // visibleColumns << 2 << 3 << 0; // demo
 }
 

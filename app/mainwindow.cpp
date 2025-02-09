@@ -204,12 +204,11 @@ void MainWindow::on_actionE_xit_triggered()
 
 void MainWindow::on_action_Import_triggered()
 {
-    QString supportedFiltersForRead = "XML (*.xml *.XML)"; // TODO move to FormatFactory
     //QString supportedFiltersForWrite = ;
     QString selectedFilter;
     QString path = QFileDialog::getOpenFileName(0, tr("Open file for import"),
         configManager.lastImportedFile(),
-        supportedFiltersForRead,
+        factory.supportedFilters(QIODevice::ReadOnly, false).join(";;"),
         &selectedFilter);
     if (!path.isEmpty()) {
         configManager.setLastImportedFile(path);
@@ -445,11 +444,13 @@ void MainWindow::on_tabWidget_currentChanged(int)
     // TODO here save combo indexes and restore it
     switch (activeTab()) {
     case atExpenses:
+        ui->tvExpenses->resizeColumnsToContents();
         db.collectDict(collCat, "hw_ex_cat");
         // TODO call collectSubDict if will be slow, but it's more complex
         fillComboByDict(ui->cbCategory, collCat, true);
         break;
     case atIncomes:
+        ui->tvIncomes->resizeColumnsToContents();
         db.collectDict(collCat, "hw_in_cat");
         fillComboByDict(ui->cbCategory, collCat, true);
         break;

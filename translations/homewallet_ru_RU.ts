@@ -62,54 +62,44 @@
 <context>
     <name>ExpenseModel</name>
     <message>
-        <location filename="../model/expensemodel.cpp" line="28"/>
         <source>Date</source>
-        <translation>Дата</translation>
+        <translation type="obsolete">Дата</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="29"/>
         <source>Category</source>
-        <translation>Категория</translation>
+        <translation type="obsolete">Категория</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="29"/>
         <source>Subcategory</source>
-        <translation>Подкатегория</translation>
+        <translation type="obsolete">Подкатегория</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="29"/>
         <source>Qty.</source>
-        <translation>Кол-во</translation>
+        <translation type="obsolete">Кол-во</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="29"/>
         <source>Unit</source>
-        <translation>Ед.</translation>
+        <translation type="obsolete">Ед.</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="30"/>
         <source>Sum</source>
-        <translation>Сумма</translation>
+        <translation type="obsolete">Сумма</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="31"/>
         <source>Cur.</source>
-        <translation>В.</translation>
+        <translation type="obsolete">В.</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="31"/>
         <source>Account</source>
-        <translation>Счёт</translation>
+        <translation type="obsolete">Счёт</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="32"/>
         <source>At.</source>
-        <translation>★</translation>
+        <translation type="obsolete">★</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="32"/>
         <source>Description</source>
-        <translation>Описание</translation>
+        <translation type="obsolete">Описание</translation>
     </message>
 </context>
 <context>
@@ -149,13 +139,13 @@
     </message>
     <message>
         <location filename="../app/mainwindow.ui" line="25"/>
-        <location filename="../app/mainwindow.cpp" line="367"/>
+        <location filename="../app/mainwindow.cpp" line="390"/>
         <source>Expenses</source>
         <translation>Расходы</translation>
     </message>
     <message>
         <location filename="../app/mainwindow.ui" line="47"/>
-        <location filename="../app/mainwindow.cpp" line="369"/>
+        <location filename="../app/mainwindow.cpp" line="392"/>
         <source>Incomes</source>
         <translation>Доходы</translation>
     </message>
@@ -281,47 +271,47 @@
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="88"/>
+        <location filename="../app/mainwindow.cpp" line="89"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="92"/>
+        <location filename="../app/mainwindow.cpp" line="93"/>
         <source>Database not empty for testing</source>
         <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="133"/>
+        <location filename="../app/mainwindow.cpp" line="134"/>
         <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="182"/>
+        <location filename="../app/mainwindow.cpp" line="183"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="182"/>
+        <location filename="../app/mainwindow.cpp" line="183"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="191"/>
+        <location filename="../app/mainwindow.cpp" line="192"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="209"/>
+        <location filename="../app/mainwindow.cpp" line="210"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="295"/>
+        <location filename="../app/mainwindow.cpp" line="308"/>
         <source>Unknown import error</source>
         <translation>Неизвестная ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="297"/>
+        <location filename="../app/mainwindow.cpp" line="310"/>
         <source>
 at record %1 from %2</source>
         <translation>
@@ -351,7 +341,7 @@ at record %1 from %2</source>
         <translation>Валюта не найдена: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlfile.cpp" line="28"/>
+        <location filename="../core/formats/xmlfile.cpp" line="33"/>
         <source>Can&apos;t read content from file %1
 %2
 line %3, col %4
@@ -362,51 +352,56 @@ line %3, col %4
 </translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="44"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="43"/>
+        <source>Home Bookkeeping XML (*.xml *.XML)</source>
+        <translation>XML Домашней Бухгалтерии (*.xml *.XML)</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.cpp" line="56"/>
         <source>Metadata not found. Probably it isn&apos;t Home Bookkeeping file</source>
         <translation>Метаданные не найдены. Возможно, это не файл Домашней бухгалтерии</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="51"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="63"/>
         <source>Metadata is empty. Probably it isn&apos;t Home Bookkeeping file</source>
         <translation>Метаданные пусты. Возможно, это не файл Домашней бухгалтерии</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="95"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="117"/>
         <source>Unknown Home Bookkeeping file subtype.
 Contact author.</source>
         <translation>Неизвестный подтип файла Домашней бухгалтерии.
 Свяжитесь с автором.</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="100"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="122"/>
         <source>Ambiguous Home Bookkeeping file subtype wasn&apos;t resolved.
 Contact author.</source>
         <translation>Неоднозначность подтипа файла Домашней бухгалтерии не разрешена.
 Свяжитесь с автором.</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="177"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="202"/>
         <source>Account %1 not found, inserted automatically</source>
         <translation>Счёт %1 не найден, добавлен автоматически</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="184"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="209"/>
         <source>Income or expense amount can&apos;t be equal to 0. Date: %1</source>
         <translation>Сумма дохода или расхода не может быть нулевой. Дата: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="189"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="214"/>
         <source>This version of HomeWallet not support multi-currency incomes and expenses, item from %1, currencies: %2</source>
         <translation>Эта версия Домашнего кошелька не поддерживает мультивалютных доходов и расходов, позиция с %1, валюты: %2</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="276"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="304"/>
         <source>Skipped %1 records</source>
         <translation>Пропущено записей: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="319"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="347"/>
         <source>Money sum doesn&apos;t match: %1</source>
         <translation>Денежная сумма не соответствует шаблону: %1</translation>
     </message>
@@ -426,8 +421,8 @@ Contact author.</source>
         <translation>Драйвер:%1; БД: %2</translation>
     </message>
     <message>
-        <location filename="../core/hwdatabase.cpp" line="158"/>
-        <location filename="../core/hwdatabase.cpp" line="205"/>
+        <location filename="../core/hwdatabase.cpp" line="181"/>
+        <location filename="../core/hwdatabase.cpp" line="228"/>
         <source>No subcategory</source>
         <translation>Нет подкатегории</translation>
     </message>
@@ -456,6 +451,15 @@ Contact author.</source>
         <translation>Устаревшая структура БД
 в %1(%2)
 Обновить до актуального состояния</translation>
+    </message>
+    <message>
+        <location filename="../core/hwdatabase.h" line="26"/>
+        <source>File was already imported:
+%1
+ Repeat it?</source>
+        <translation>Файл уже импортирован:
+%1
+ Повторить импорт?</translation>
     </message>
     <message>
         <location filename="../core/formats/xmlhbfile.h" line="20"/>
@@ -654,8 +658,92 @@ Data will be lost</source>
     </message>
     <message>
         <location filename="../core/globals.h" line="52"/>
+        <source>Date</source>
+        <translation>Дата</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="53"/>
+        <source>Category</source>
+        <translation>Категория</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="54"/>
+        <source>Subcategory</source>
+        <translation>Подкатегория</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="55"/>
+        <source>Qty.</source>
+        <translation>Кол-во</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="56"/>
+        <source>Unit</source>
+        <translation>Ед.</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="57"/>
+        <source>Sum</source>
+        <translation>Сумма</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="58"/>
+        <source>Cur.</source>
+        <translation>В.</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="59"/>
+        <source>Account</source>
+        <translation>Счёт</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="60"/>
+        <source>At.</source>
+        <translation>★</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="61"/>
+        <source>Description</source>
+        <translation>Описание</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="63"/>
         <source>&lt;All&gt;</source>
         <translation>&lt;Все&gt;</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/formatfactory.cpp" line="55"/>
+        <source>Empty file name</source>
+        <translation>Пустое имя файла</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/formatfactory.cpp" line="63"/>
+        <source>Unknown file format:
+%1</source>
+        <translation>Неизвестный формат файла:
+%1</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/txtcompactfile.cpp" line="19"/>
+        <source>First non-empty string in file must be full (yyMMdd) date.
+Found: %1</source>
+        <translation>Первая непустая строка файла должна содержать полную (ггММдд) дату.
+Имеем: %1</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/txtcompactfile.cpp" line="31"/>
+        <source>Compact text file (*.txt *.TXT)</source>
+        <translation>Компактный текстовый формат (*.txt *.TXT)</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/txtcompactfile.cpp" line="79"/>
+        <source>Invalid date: %1</source>
+        <translation>Неверная дата: %1</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/txtcompactfile.cpp" line="93"/>
+        <source>Invalid day for this month: %1, last date was %2</source>
+        <translation>Неверный день для этого месяца: %1. Последняя дата: %2</translation>
     </message>
 </context>
 </TS>

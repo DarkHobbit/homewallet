@@ -16,7 +16,7 @@
 #include "txtcompactfile.h"
 
 #define S_ERR_FIRST_DATE \
-QObject::tr("First non-empty string in file must be full (yyyyMMdd) date.\nFound: %1")
+QObject::tr("First non-empty string in file must be full (yyMMdd) date.\nFound: %1")
 
 
 TxtCompactFile::TxtCompactFile() {}
@@ -82,7 +82,7 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
             }
             continue;
         }
-        if (reOnlyDay.exactMatch(s)) {
+        else if (reOnlyDay.exactMatch(s)) {
             if (lastDate.isNull()) {
                 _fatalError = S_ERR_FIRST_DATE.arg(s);
                 closeFile();

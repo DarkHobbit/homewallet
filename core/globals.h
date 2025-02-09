@@ -48,6 +48,17 @@
 #define SS_SORT_OFF QObject::tr("not sorted")
 // Model item roles
 #define SortStringRole Qt::UserRole
+// Model common column names
+#define S_COL_DATE QObject::tr("Date")
+#define S_COL_CATEGORY QObject::tr("Category")
+#define S_COL_SUBCATEGORY QObject::tr("Subcategory")
+#define S_COL_QUANTITY QObject::tr("Qty.")
+#define S_COL_UNIT QObject::tr("Unit")
+#define S_COL_SUM QObject::tr("Sum")
+#define S_COL_CURRENCY QObject::tr("Cur.")
+#define S_COL_ACCOUNT QObject::tr("Account")
+#define S_COL_ATTENTION QObject::tr("At.")
+#define S_COL_DESCRIPTION QObject::tr("Description")
 // Pseudo-name for all categories/subcategoried
 #define S_ALL_CAT QObject::tr("<All>")
 
