@@ -30,6 +30,7 @@
 #include "mainwindow.h"
 #include "testmanager.h"
 #include "ui_mainwindow.h"
+#include "formats/interactiveformat.h"
 #include "formats/xmlhbfile.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -309,6 +310,17 @@ void MainWindow::on_action_Import_triggered()
                 .arg(impFile->importedRecordsCount())
                 .arg(impFile->totalRecordsCount());
             QMessageBox::critical(0, S_ERROR, fatalError);
+        }
+        if (impFile->isDialogRequired()) {
+            InteractiveFormat* intFile = dynamic_cast<InteractiveFormat*>(impFile);
+            if (intFile) {
+                QDialog* d = new QDialog(0); // TODO PostImportDialog!
+                //d->setData(intFile->candidates);
+                d->exec();
+                if (d->result()==QDialog::Accepted)
+                    impFile->postImport(db);
+                delete d;
+            }
         }
         delete impFile;
         updateViews();

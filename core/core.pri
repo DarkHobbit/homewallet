@@ -8,6 +8,7 @@ HEADERS	+= \
     $$PWD/corehelpers.h \
     $$PWD/formats/commonexpimpdef.h \
     $$PWD/formats/interactiveformat.h \
+    $$PWD/formats/txtcompactfile.h \
     $$PWD/formats/xmlfile.h \
     $$PWD/genericdatabase.h \
     $$PWD/globals.h \
@@ -21,6 +22,7 @@ SOURCES	+= \
     $$PWD/corehelpers.cpp \
     $$PWD/formats/commonexpimpdef.cpp \
     $$PWD/formats/interactiveformat.cpp \
+    $$PWD/formats/txtcompactfile.cpp \
     $$PWD/formats/xmlfile.cpp \
     $$PWD/genericdatabase.cpp \
     $$PWD/globals.cpp \

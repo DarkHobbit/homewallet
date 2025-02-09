@@ -102,7 +102,7 @@ create table hw_imp_file (
     id integer not null,
     imp_date date not null,
     filename char(128) not null,
-    filetype char(8) not null, -- XMHWA, XMHBK, JSFNS, XLS, TXT, QIF...
+    filetype char(8) not null, -- XMHWA, XMHBK, JSFNS, XLS, TXTCF, QIF...
     descr char(256),
     constraint pk_imp primary key(id),
     constraint uk_imp unique(filename)
