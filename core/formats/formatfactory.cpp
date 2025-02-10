@@ -56,9 +56,11 @@ FileFormat *FormatFactory::createObject(const QString &url, QIODevice::OpenModeF
         return 0;
     }    
     for (FileFormat* ff: formats)
-        if (ff->supportedModes().testFlag(mode))
+        if (ff->supportedModes().testFlag(mode)) {
+            ff->clear();
             if (ff->detect(url))
                 return ff;
+        }
     // Sad but true
     error = QObject::tr("Unknown file format:\n%1").arg(url);
     return 0;

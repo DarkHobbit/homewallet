@@ -110,7 +110,7 @@ int HwDatabase::addImportFile(const QString &fileName, const QString &fileType)
 int HwDatabase::findImportFile(const QString &fileName)
 {
     QSqlQuery sqlSel(sqlDb);
-    sqlSel.prepare("select id from hw_imp_file where name=:name");
+    sqlSel.prepare("select id from hw_imp_file where filename=:filename");
     sqlSel.bindValue(":filename", fileName);
     return dictId(sqlSel);
 }

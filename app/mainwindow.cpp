@@ -311,7 +311,7 @@ void MainWindow::on_action_Import_triggered()
                 .arg(impFile->totalRecordsCount());
             QMessageBox::critical(0, S_ERROR, fatalError);
         }
-        if (impFile->isDialogRequired()) {
+        else if (impFile->isDialogRequired()) {
             InteractiveFormat* intFile = dynamic_cast<InteractiveFormat*>(impFile);
             if (intFile) {
                 QDialog* d = new QDialog(0); // TODO PostImportDialog!

@@ -63,8 +63,8 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
     QTextStream ss(&file);
     QString s;
     QDate lastDate;
-    QRegExp reFullDate(":\d\d\d\d\d\d:");
-    QRegExp reOnlyDay(":(\d\d):");
+    QRegExp reFullDate(":\\d\\d\\d\\d\\d\\d:");
+    QRegExp reOnlyDay(":(\\d\\d?):");
     // Тип, СумЦел, СумДроб, Источ, Кат+Подкат,  КолЦел, КолДроб, Хвост
     QRegExp reIncExp("(\\+?)(\\d+)(?:,|.?)(\\d*)(@\\S+)?(?:\\s+)(\\D+)(?:\\s+)(\\d+)(?:,|.?)(\\d*)(.*)?");
     // TODO try add currency in common regexp
@@ -88,15 +88,17 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
                 closeFile();
                 return false;
             }
-            lastDate = QDate(lastDate.year(), lastDate.month(), reOnlyDay.cap().toInt());
+            lastDate = QDate(lastDate.year(), lastDate.month(), reOnlyDay.cap(1).toInt());
             if (!lastDate.isValid()) {
                 _fatalError = QObject::tr("Invalid day for this month: %1, last date was %2")
-                    .arg(s).arg(lastDate.toString());
+                    .arg(reOnlyDay.cap(1)).arg(lastDate.toString());
                 closeFile();
                 return false;
             }
             continue;
         }
+        else
+
         // Before money lines, at least one FULL date must be
         if (lastDate.isNull()) {
             _fatalError = S_ERR_FIRST_DATE.arg(s);

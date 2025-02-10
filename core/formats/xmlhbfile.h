@@ -55,6 +55,7 @@ public:
     XmlHbFile();
     virtual QIODevice::OpenMode supportedModes();
     virtual QStringList supportedFilters();
+    virtual void clear();
     virtual bool detect(const QString &path);
     virtual QString formatAbbr();
     virtual bool isDialogRequired();

@@ -64,6 +64,7 @@ class InteractiveFormat : public FileFormat
 {
 public:
     InteractiveFormat();
+    virtual void clear();
     virtual bool isDialogRequired();
     virtual bool postImport(HwDatabase& db);
 public:

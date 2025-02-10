@@ -43,10 +43,15 @@ QStringList XmlHbFile::supportedFilters()
     return QStringList() << QObject::tr("Home Bookkeeping XML (*.xml *.XML)");
 }
 
-bool XmlHbFile::detect(const QString &path)
+void XmlHbFile::clear()
 {
+    QDomDocument::clear();
     _fileSubType = Unknown;
     _categorySamples = "";
+}
+
+bool XmlHbFile::detect(const QString &path)
+{
     // Read XML
     if (!readFromFile(path))
         return false;
@@ -107,7 +112,7 @@ bool XmlHbFile::isDialogRequired()
 
 bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
 {
-    _fatalError = "";
+    QDomDocument::clear();
     if (!hbMoneySum.isValid()) {
         _fatalError = hbMoneySum.errorString();
         return false;
@@ -123,7 +128,6 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
         return false;
     }
     // Read XML
-    clear();
     if (!readFromFile(path))
         return false;
     // Prepare dictionaries

@@ -23,6 +23,12 @@ FileFormat::FileFormat()
 FileFormat::~FileFormat()
 {}
 
+void FileFormat::clear()
+{
+    _errors.clear();
+    _fatalError.clear();
+}
+
 bool FileFormat::postImport(HwDatabase&)
 {
     return true; // by default, postImport() not needed, if isDialogRequired()==false

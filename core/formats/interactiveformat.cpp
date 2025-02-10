@@ -28,6 +28,12 @@ InteractiveFormat::InteractiveFormat()
     :FileFormat()
 {}
 
+void InteractiveFormat::clear()
+{
+    FileFormat::clear();
+    candidates.clear();
+}
+
 bool InteractiveFormat::isDialogRequired()
 {
     return !candidates.readyToImport();

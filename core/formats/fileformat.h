@@ -23,6 +23,7 @@ class FileFormat
 public:
     FileFormat();
     virtual ~FileFormat();
+    virtual void clear();
     virtual bool detect(const QString &path)=0;
     virtual QIODevice::OpenMode supportedModes()=0;
     virtual QStringList supportedExtensions()=0;
