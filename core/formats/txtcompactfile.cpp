@@ -55,6 +55,7 @@ QString TxtCompactFile::formatAbbr()
     return "TXTCF";
 }
 
+#include <iostream>
 bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
 {
     if (!openFile(path, QIODevice::ReadOnly))
@@ -66,8 +67,9 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
     QRegExp reFullDate(":\\d\\d\\d\\d\\d\\d:");
     QRegExp reOnlyDay(":(\\d\\d?):");
     // Тип, СумЦел, СумДроб, Источ, Кат+Подкат,  КолЦел, КолДроб, Хвост
-    QRegExp reIncExp("(\\+?)(\\d+)(?:,|.?)(\\d*)(@\\S+)?(?:\\s+)(\\D+)(?:\\s+)(\\d+)(?:,|.?)(\\d*)(.*)?");
-    // TODO try add currency in common regexp
+    // QRegExp reIncExp("(\\+?)(\\d+)(?:,|\\.?)(\\d*)(@\\S+)?(?:\\s+)(\\D+)(?:\\s+)(\\d+)(?:,|.?)(\\d*)(.*)?");
+    // Тип, СумЦел, СумДроб, Валюта, Источ, Кат+Подкат,  КолЦел, КолДроб, Хвост
+    QRegExp reIncExp("(\\+?)(\\d+)(?:,|\\.?)(\\d*)(\\:\\S+)?(@\\S+)?(?:\\s+)(\\D+)(?:\\s+)(\\d+)(?:,|.?)(\\d*)(.*)?");
     do {
         s = ss.readLine().trimmed();
         if (s.isEmpty() || s.startsWith("#"))
@@ -105,15 +107,62 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
             closeFile();
             return false;
         }
+        ImpRecCandidate c;
+        c.source = s;
+        QString sNum;
+        bool ok;
         // Expense or income without currency
+        if (reIncExp.exactMatch(s)) {
+            std::cout << reIncExp.cap(1).toUtf8().data() << "||"
+                      << reIncExp.cap(2).toUtf8().data() << "||"
+                      << reIncExp.cap(3).toUtf8().data() << "||"
+                      << reIncExp.cap(4).toUtf8().data() << "||"
+                      << reIncExp.cap(5).toUtf8().data() << "||"
+                      << reIncExp.cap(6).toUtf8().data() << "||"
+                      << reIncExp.cap(7).toUtf8().data() << "||"
+                      << reIncExp.cap(8).toUtf8().data()
+                      << std::endl;
+            c.type = (reIncExp.cap(3)=="+")
+                ? ImpRecCandidate::Income : ImpRecCandidate::Expense;
+            sNum = reIncExp.cap(3); // process 35 and 35,3 and 35,45
+            switch (sNum.length()) {  // Align to integer in low units (cent, kopeck, pfennig etc.)
+            case 0:
+                sNum = "00";
+                break;
+            case 1:
+                sNum += "0";
+                break;
+            case 2:
+                break;
+            default:
+                sNum = sNum.left(2);
+                _errors << QObject::tr("Too long money sum fractional part: %1,%2")
+                    .arg(reIncExp.cap(2)).arg(reIncExp.cap(3));
+                break;
+            }
+            sNum = reIncExp.cap(2)+sNum;
+            c.amount = sNum.toInt(&ok);
+            if (!ok)
+                c.state = ImpRecCandidate::ParseError;
+            else {
+
+                // TODO
+                c.state = ImpRecCandidate::ReadyToImport; //==>
+            }
+        }
         // Expense or income with currency
         // Transfer
         // TODO Other item types
-
-        //
+        // Unrecognized line
+        else
+            c.state = ImpRecCandidate::ParseError;
+        candidates << c;
     } while (!ss.atEnd());
-
-    //
+    // Debug
+    for (const ImpRecCandidate& c: candidates)
+        std::cout << "[" << c.source.toUtf8().data() << "] st "
+                  << c.state << " sum " << c.amount << std::endl;
+    // Done
     closeFile();
     return true;
 }

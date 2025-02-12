@@ -78,7 +78,7 @@ create table hw_account (
     descr char(256),
     foundation date null,  -- may be null if imported from hb
     id_cur integer null, -- only one currency, in hb - many; may be null if imported from hb
-    init_sum integer null, -- in low units (cent, kopeck, pfenning etc.)
+    init_sum integer null, -- in low units (cent, kopeck, pfennig etc.)
     constraint pk_ac primary key(id),
     constraint uk_ac unique(name),
     constraint fk_accur foreign key(id_cur) references hw_currency(id)

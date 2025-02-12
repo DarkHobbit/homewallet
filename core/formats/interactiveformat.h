@@ -44,7 +44,7 @@ struct ImpRecCandidate
         ExpensePlan
     } type;
     // Parsed info
-    QDateTime &opDT;
+    QDateTime opDT;
     int idAcc, idCat, idSubcat, idCur, idUnit;
     int idAccTo; // for transfers
     int amount;
