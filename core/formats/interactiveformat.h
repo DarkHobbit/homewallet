@@ -49,7 +49,7 @@ struct ImpRecCandidate
     int idAccTo; // for transfers
     int amount;
     double quantity;
-    QString catName, subcatName, curName, descr;
+    QString alias, catName, subcatName, accName, unitName, currName, descr;
     ImpCandidates* children; // for receipts
 };
 
@@ -66,6 +66,7 @@ public:
     InteractiveFormat();
     virtual void clear();
     virtual bool isDialogRequired();
+    void analyzeCandidates();
     virtual bool postImport(HwDatabase& db);
 public:
     ImpCandidates candidates;

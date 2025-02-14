@@ -280,6 +280,9 @@
    <property name="text">
     <string>&amp;Import</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+I</string>
+   </property>
   </action>
   <action name="actionE_xit">
    <property name="text">

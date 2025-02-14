@@ -65,11 +65,10 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
     QString s;
     QDate lastDate;
     QRegExp reFullDate(":\\d\\d\\d\\d\\d\\d:");
+
     QRegExp reOnlyDay(":(\\d\\d?):");
     // Тип, СумЦел, СумДроб, Источ, Кат+Подкат,  КолЦел, КолДроб, Хвост
-    // QRegExp reIncExp("(\\+?)(\\d+)(?:,|\\.?)(\\d*)(@\\S+)?(?:\\s+)(\\D+)(?:\\s+)(\\d+)(?:,|.?)(\\d*)(.*)?");
-    // Тип, СумЦел, СумДроб, Валюта, Источ, Кат+Подкат,  КолЦел, КолДроб, Хвост
-    QRegExp reIncExp("(\\+?)(\\d+)(?:,|\\.?)(\\d*)(\\:\\S+)?(@\\S+)?(?:\\s+)(\\D+)(?:\\s+)(\\d+)(?:,|.?)(\\d*)(.*)?");
+    QRegExp reIncExp("(\\+?)(\\d+)(?:,|\\.?)(\\d*)(\\:[^@\\:\\s]+)?(@[^@\\s]+)?(?:\\s+)(\\D+)(?:\\s+)(\\d+)(?:,|.?)(\\d*)(\\S+)?(?:\\s+)?(.*)?");
     do {
         s = ss.readLine().trimmed();
         if (s.isEmpty() || s.startsWith("#"))
@@ -109,45 +108,39 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
         }
         ImpRecCandidate c;
         c.source = s;
-        QString sNum;
         bool ok;
         // Expense or income without currency
         if (reIncExp.exactMatch(s)) {
-            std::cout << reIncExp.cap(1).toUtf8().data() << "||"
-                      << reIncExp.cap(2).toUtf8().data() << "||"
-                      << reIncExp.cap(3).toUtf8().data() << "||"
-                      << reIncExp.cap(4).toUtf8().data() << "||"
-                      << reIncExp.cap(5).toUtf8().data() << "||"
-                      << reIncExp.cap(6).toUtf8().data() << "||"
-                      << reIncExp.cap(7).toUtf8().data() << "||"
-                      << reIncExp.cap(8).toUtf8().data()
-                      << std::endl;
-            c.type = (reIncExp.cap(3)=="+")
+/*
+            std::cout << reIncExp.capturedTexts()
+                .join("||").toUtf8().data() << std::endl;
+*/
+            c.type = (reIncExp.cap(1)=="+")
                 ? ImpRecCandidate::Income : ImpRecCandidate::Expense;
-            sNum = reIncExp.cap(3); // process 35 and 35,3 and 35,45
-            switch (sNum.length()) {  // Align to integer in low units (cent, kopeck, pfennig etc.)
-            case 0:
-                sNum = "00";
-                break;
-            case 1:
-                sNum += "0";
-                break;
-            case 2:
-                break;
-            default:
-                sNum = sNum.left(2);
-                _errors << QObject::tr("Too long money sum fractional part: %1,%2")
-                    .arg(reIncExp.cap(2)).arg(reIncExp.cap(3));
-                break;
-            }
-            sNum = reIncExp.cap(2)+sNum;
-            c.amount = sNum.toInt(&ok);
+            c.amount = captureMoneySum(reIncExp.cap(2), reIncExp.cap(3), ok);
             if (!ok)
                 c.state = ImpRecCandidate::ParseError;
             else {
-
-                // TODO
-                c.state = ImpRecCandidate::ReadyToImport; //==>
+                c.currName = reIncExp.cap(4);
+                c.currName.remove(':');
+                c.accName = reIncExp.cap(5);
+                c.currName.remove('@');
+                c.alias = reIncExp.cap(6);
+                int slashPos = c.alias.indexOf('/');
+                if (slashPos>-1) {
+                    c.catName = c.alias.left(slashPos);
+                    c.subcatName = c.alias.mid(slashPos+1);
+                    c.alias.clear();
+                }
+                c.quantity = captureDouble(reIncExp.cap(7), reIncExp.cap(8), ok);
+                if (!ok)
+                    c.state = ImpRecCandidate::ParseError;
+                else {
+                    c.unitName = reIncExp.cap(9);
+                    c.descr = reIncExp.cap(10).trimmed();
+                    c.state = c.alias.isEmpty()
+                        ? ImpRecCandidate::UnknownCategory : ImpRecCandidate::UnknownAlias;
+                }
             }
         }
         // Expense or income with currency
@@ -164,5 +157,33 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
                   << c.state << " sum " << c.amount << std::endl;
     // Done
     closeFile();
-    return true;
+    analyzeCandidates();
+    return !candidates.isEmpty();
+}
+
+int TxtCompactFile::captureMoneySum(const QString& highPart, const QString& lowPart, bool& ok)
+{
+    QString sNum = lowPart; // process 35 and 35,3 and 35,45
+    switch (sNum.length()) {  // Align to integer in low units (cent, kopeck, pfennig etc.)
+    case 0:
+        sNum = "00";
+        break;
+    case 1:
+        sNum += "0";
+        break;
+    case 2:
+        break;
+    default:
+        sNum = sNum.left(2);
+        _errors << QObject::tr("Too long money sum fractional part: %1,%2")
+                       .arg(highPart).arg(lowPart);
+        break;
+    }
+    sNum = highPart+sNum;
+    return sNum.toInt(&ok);
+}
+
+double TxtCompactFile::captureDouble(const QString &highPart, const QString &lowPart, bool &ok)
+{
+    return QString("%1.%2").arg(highPart).arg(lowPart).toDouble(&ok);
 }

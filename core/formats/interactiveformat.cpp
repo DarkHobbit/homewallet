@@ -39,6 +39,11 @@ bool InteractiveFormat::isDialogRequired()
     return !candidates.readyToImport();
 }
 
+void InteractiveFormat::analyzeCandidates()
+{
+    // TODO
+}
+
 bool InteractiveFormat::postImport(HwDatabase& db)
 {
     _totalRecordsCount = candidates.count();
