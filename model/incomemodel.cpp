@@ -20,7 +20,7 @@ IncomeModel::IncomeModel(QObject *parent)
     visibleFieldNames
         << "strftime('%d.%m.%Y', i.op_date)" // SQLite-ism!
         << "c.name" << "sc.name" << "i.quantity" << "u.name"
-        << "format('%.2f', i.amount/100.00)"
+        << lowUnitFunction("i.amount")
         << "cur.abbr" << "a.name"
         << "case i.attention when 1 then '*' else '' end"
         << "i.descr";

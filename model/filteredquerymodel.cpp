@@ -100,6 +100,14 @@ void FilteredQueryModel::updateData(const QString &sql, bool insertWhere)
         emit modelError(qe);
 }
 
+QString FilteredQueryModel::lowUnitFunction(const QString& fieldName)
+{
+    if (0) // SQLite 3.38+ and other databases
+        return QString("format('%.2f', ") + fieldName + "/100.00)";
+    else // old SQLite
+        return QString("printf('%.2f', ") + fieldName + "/100.00)";
+}
+
 void FilteredQueryModel::makeFilter()
 {
     // child classes can add field

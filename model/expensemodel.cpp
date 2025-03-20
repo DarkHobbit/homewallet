@@ -20,7 +20,7 @@ ExpenseModel::ExpenseModel(QObject *parent)
     visibleFieldNames
         << "strftime('%d.%m.%Y', e.op_date)" // SQLite-ism!
         << "c.name" << "sc.name" << "e.quantity" << "u.name"
-        << "format('%.2f', e.amount/100.00)"
+        << lowUnitFunction("e.amount")
         << "cur.abbr" << "a.name"
         << "case e.attention when 1 then '*' else '' end"
         << "e.descr";
