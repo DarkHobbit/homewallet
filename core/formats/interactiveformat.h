@@ -25,23 +25,26 @@ struct ImpRecCandidate
     QString source, uid;
     int lineNumber;
     enum State {
+        Initial,
         ParseError,
         UnknownAlias,
         UnknownCategory,   // or subcategory
         AmbiguousCategory, // or subcategory
+  // TODO состояния для неизв классификаторов
         PossiblyDup,
         ReadyToImport
     } state;
     enum Type {
-        Unknown, // if state==ParseError
+        Unknown, // if state==ParseError or Initial
         Income,
         Expense,
-        Receipt,
+        ReceiptStart,
+        ReceiptEnd,
         Transfer,
         Debtor,
-        Creditor,
+        Creditor/*,
         IncomePlan,
-        ExpensePlan
+        ExpensePlan*/
     } type;
     // Parsed info
     QDateTime opDT;
@@ -51,6 +54,8 @@ struct ImpRecCandidate
     double quantity;
     QString alias, catName, subcatName, accName, unitName, currName, descr;
     ImpCandidates* children; // for receipts
+    ImpRecCandidate* parent; // for receipt items
+    ImpRecCandidate(const QString& _source, const QString& _uid, int _lineNumber, const QDateTime& _opDT);
 };
 
 struct ImpCandidates: public QList<ImpRecCandidate>
@@ -66,7 +71,7 @@ public:
     InteractiveFormat();
     virtual void clear();
     virtual bool isDialogRequired();
-    void analyzeCandidates();
+    void analyzeCandidates(HwDatabase &db);
     virtual bool postImport(HwDatabase& db);
 public:
     ImpCandidates candidates;

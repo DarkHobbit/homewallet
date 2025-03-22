@@ -28,6 +28,7 @@
 #include "helpers.h"
 #include "logwindow.h"
 #include "mainwindow.h"
+#include "postimportdialog.h"
 #include "testmanager.h"
 #include "ui_mainwindow.h"
 #include "formats/interactiveformat.h"
@@ -314,8 +315,8 @@ void MainWindow::on_action_Import_triggered()
         else if (impFile->isDialogRequired()) {
             InteractiveFormat* intFile = dynamic_cast<InteractiveFormat*>(impFile);
             if (intFile) {
-                QDialog* d = new QDialog(0); // TODO PostImportDialog!
-                //d->setData(intFile->candidates);
+                PostImportDialog* d = new PostImportDialog(0);
+                d->setData(&intFile->candidates);
                 d->exec();
                 if (d->result()==QDialog::Accepted)
                     impFile->postImport(db);

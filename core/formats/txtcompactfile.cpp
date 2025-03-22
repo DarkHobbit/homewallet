@@ -69,7 +69,9 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
     QRegExp reOnlyDay(":(\\d\\d?):");
     // Тип, СумЦел, СумДроб, Источ, Кат+Подкат,  КолЦел, КолДроб, Хвост
     QRegExp reIncExp("(\\+?)(\\d+)(?:,|\\.?)(\\d*)(\\:[^@\\:\\s]+)?(@[^@\\s]+)?(?:\\s+)(\\D+)(?:\\s+)(\\d+)(?:,|.?)(\\d*)(\\S+)?(?:\\s+)?(.*)?");
+    int line = 0;
     do {
+        line++;
         s = ss.readLine().trimmed();
         if (s.isEmpty() || s.startsWith("#"))
             continue;
@@ -106,8 +108,9 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
             closeFile();
             return false;
         }
-        ImpRecCandidate c;
-        c.source = s;
+        ImpRecCandidate c(s,
+            QString::number(line), // TODO
+            line, QDateTime(lastDate.startOfDay()));
         bool ok;
         // Expense or income without currency
         if (reIncExp.exactMatch(s)) {
@@ -143,9 +146,11 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
                 }
             }
         }
-        // Expense or income with currency
+        // Expense or income with currency ??? m.b. already
+        // Receipt begin and receipt end
         // Transfer
         // TODO Other item types
+
         // Unrecognized line
         else
             c.state = ImpRecCandidate::ParseError;
@@ -157,7 +162,7 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
                   << c.state << " sum " << c.amount << std::endl;
     // Done
     closeFile();
-    analyzeCandidates();
+    analyzeCandidates(db);
     return !candidates.isEmpty();
 }
 

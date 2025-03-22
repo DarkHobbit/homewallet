@@ -39,8 +39,9 @@ bool InteractiveFormat::isDialogRequired()
     return !candidates.readyToImport();
 }
 
-void InteractiveFormat::analyzeCandidates()
+void InteractiveFormat::analyzeCandidates(HwDatabase &db)
 {
+  // TODO расширить State
     // TODO
 }
 
@@ -63,8 +64,11 @@ bool InteractiveFormat::postImport(HwDatabase& db)
                     c.idSubcat, c.idUnit, false, c.descr, _idImp, c.uid))
                 return false;
             break;
-        case ImpRecCandidate::Receipt:
+        case ImpRecCandidate::ReceiptStart:
             // TODO addReceipt, then for children
+            break;
+        case ImpRecCandidate::ReceiptEnd:
+            // TODO check anything?
             break;
         case ImpRecCandidate::Transfer:
             // TODO addTransfer
@@ -78,3 +82,16 @@ bool InteractiveFormat::postImport(HwDatabase& db)
     return true;
 }
 
+
+ImpRecCandidate::ImpRecCandidate(const QString &_source, const QString &_uid, int _lineNumber, const QDateTime& _opDT)
+    :source(_source), uid(_uid), lineNumber(_lineNumber), opDT(_opDT)
+{
+    children = 0;
+    parent = 0;
+    state = Initial;
+    type = Unknown;
+    idAcc = idAccTo = idCat = idSubcat = idCur = idUnit = 0;
+    amount = 0;
+    quantity = 0.0;
+    alias = catName = subcatName = accName = unitName = currName = descr = "";
+}
