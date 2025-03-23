@@ -97,6 +97,15 @@ bool XmlHbFile::detect(const QString &path)
     // 4. Transfer
     else if (fieldNames.contains("AccountIn") && fieldNames.contains("MoneyStr"))
         _fileSubType = Transfer;
+    // 5. Currency conversion (must be a last check)
+    else {
+        for(const QString& fldName: fieldNames) {
+            if (fldName.startsWith("MoneyIn") || fldName.startsWith("MoneyOut")) {
+                _fileSubType = CurrencyConversion;
+                break;
+            }
+        }
+    }
     return _fileSubType != Unknown;
 }
 
@@ -281,6 +290,10 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             break;
         }
         case Transfer:
+
+            // TODO
+            break;
+        case CurrencyConversion:
 
             // TODO
             break;

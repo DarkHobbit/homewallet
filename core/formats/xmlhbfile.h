@@ -45,6 +45,7 @@ public:
         Expenses,
         IncomesOrExpenses, // ambiguous, must be replaced on Incomes or Expenses by caller
         Transfer,
+        CurrencyConversion,
         Debtors, // TODO see, has database fio dictionary?
         Creditors, // TODO -"-
         DebtorsOrCreditors, // ambiguous, must be replaced on Debtors or Creditors by caller
