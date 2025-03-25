@@ -11,6 +11,7 @@
  *
  */
 
+#include "commonexpimpdef.h"
 #include "interactiveformat.h"
 
 bool ImpCandidates::readyToImport()
@@ -39,10 +40,72 @@ bool InteractiveFormat::isDialogRequired()
     return !candidates.readyToImport();
 }
 
-void InteractiveFormat::analyzeCandidates(HwDatabase &db)
+bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
 {
-  // TODO расширить State
-    // TODO
+    // Defaults
+    QString curDefault = QString::fromUtf8("₽");
+    // TODO default currency either from DB, or from lua script
+    QString accDefault = QString::fromUtf8("Наличные");
+    // TODO default account either from DB, or from lua script
+
+    candidates.idCurDefault = db.currencyIdByAbbr(curDefault);
+    if (candidates.idCurDefault == -1) {
+        _fatalError = S_ERR_CUR_NOT_FOUND.arg(curDefault);
+        return false;
+    }
+    candidates.idAccDefault = db.accountId(accDefault);
+    if (candidates.idAccDefault == -1) {
+        _fatalError = S_ERR_ACC_NOT_FOUND.arg(accDefault);
+        return false;
+    }
+
+    // See candidates
+    for (ImpRecCandidate c: candidates) {
+        switch(c.type) {
+        case ImpRecCandidate::Unknown:
+            continue;
+        case ImpRecCandidate::Expense:
+            if (!findAccount(db, c, c.accName, c.idAcc))
+                continue;
+            if (!findCurrency(db, c, c.currName, c.idCur))
+                continue;
+            if (!findUnit(db, c, c.unitName, c.idUnit))
+                continue;
+            if (!c.subcatName.isEmpty()) { // Full-qualified subcategory
+                // TODO to_upper in sql?
+                c.idCat = db.expenseCategoryId(c.catName);
+                if (c.idCat==-1) {
+                    c.state = ImpRecCandidate::UnknownCategory;
+                    continue;
+                }
+                c.idSubcat = db.expenseSubCategoryId(c.idCat, c.subcatName);
+                if (c.idSubcat==-1) {
+                    c.state = ImpRecCandidate::UnknownCategory;
+                    continue;
+                }
+            }
+            else { // alias
+                // TODO
+            }
+            c.state = ImpRecCandidate::ReadyToImport;
+            break;
+        case ImpRecCandidate::Income:
+            // TODO
+            break;
+        case ImpRecCandidate::Transfer:
+            if (!findAccount(db, c, c.accName, c.idAcc))
+                continue;
+            if (!findAccount(db, c, c.accToName, c.idAccTo))
+                continue;
+            // TODO
+            break;
+        default:
+            continue;
+        }
+
+        // TODO
+    }
+    return true;
 }
 
 bool InteractiveFormat::postImport(HwDatabase& db)
@@ -53,14 +116,15 @@ bool InteractiveFormat::postImport(HwDatabase& db)
         if (c.state!=ImpRecCandidate::ReadyToImport)
             return false;
         int idCurActual = (c.idCur==-1) ? candidates.idCurDefault : c.idCur;
+        int idAccActual = (c.idAcc==-1) ? candidates.idAccDefault : c.idAcc;
         switch (c.type) {
         case ImpRecCandidate::Expense:
-            if (!db.addExpenseOp(c.opDT, c.quantity, c.amount, c.idAcc, idCurActual,
+            if (!db.addExpenseOp(c.opDT, c.quantity, c.amount, idAccActual, idCurActual,
                     c.idSubcat, c.idUnit, -1, 0, false, c.descr, _idImp, c.uid))
                 return false;
             break;
         case ImpRecCandidate::Income:
-            if (!db.addIncomeOp(c.opDT, c.quantity, c.amount, c.idAcc, idCurActual,
+            if (!db.addIncomeOp(c.opDT, c.quantity, c.amount, idAccActual, idCurActual,
                     c.idSubcat, c.idUnit, false, c.descr, _idImp, c.uid))
                 return false;
             break;
@@ -82,6 +146,42 @@ bool InteractiveFormat::postImport(HwDatabase& db)
     return true;
 }
 
+bool InteractiveFormat::findAccount(HwDatabase &db, ImpRecCandidate& c, QString &accName, int &idAcc)
+{
+    if (accName.isEmpty())
+        return true;
+    idAcc = db.accountId(c.accName);
+    if (idAcc==-1) {
+        c.state = ImpRecCandidate::UnknownAccount;
+        return false;
+    }
+    return true;
+}
+
+bool InteractiveFormat::findCurrency(HwDatabase &db, ImpRecCandidate &c, QString &currAbbr, int &idCurr)
+{
+    if (currAbbr.isEmpty())
+        return true;
+    idCurr = db.currencyIdByAbbr(currAbbr);
+    if (idCurr==-1) {
+        c.state = ImpRecCandidate::UnknownCurrency;
+        return false;
+    }
+    return true;
+}
+
+bool InteractiveFormat::findUnit(HwDatabase &db, ImpRecCandidate &c, QString &name, int &idUn)
+{
+    if (name.isEmpty())
+        return true;
+    idUn = db.unitId(name);
+    if (idUn==-1) {
+        c.state = ImpRecCandidate::UnknownUnit;
+        return false;
+    }
+    return true;
+}
+
 
 ImpRecCandidate::ImpRecCandidate(const QString &_source, const QString &_uid, int _lineNumber, const QDateTime& _opDT)
     :source(_source), uid(_uid), lineNumber(_lineNumber), opDT(_opDT)
@@ -90,7 +190,7 @@ ImpRecCandidate::ImpRecCandidate(const QString &_source, const QString &_uid, in
     parent = 0;
     state = Initial;
     type = Unknown;
-    idAcc = idAccTo = idCat = idSubcat = idCur = idUnit = 0;
+    idAcc = idAccTo = idCat = idSubcat = idCur = idUnit = -1;
     amount = 0;
     quantity = 0.0;
     alias = catName = subcatName = accName = unitName = currName = descr = "";

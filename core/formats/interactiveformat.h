@@ -30,7 +30,9 @@ struct ImpRecCandidate
         UnknownAlias,
         UnknownCategory,   // or subcategory
         AmbiguousCategory, // or subcategory
-  // TODO состояния для неизв классификаторов
+        UnknownAccount,
+        UnknownUnit,
+        UnknownCurrency,
         PossiblyDup,
         ReadyToImport
     } state;
@@ -52,7 +54,7 @@ struct ImpRecCandidate
     int idAccTo; // for transfers
     int amount;
     double quantity;
-    QString alias, catName, subcatName, accName, unitName, currName, descr;
+    QString alias, catName, subcatName, accName, accToName, unitName, currName, descr;
     ImpCandidates* children; // for receipts
     ImpRecCandidate* parent; // for receipt items
     ImpRecCandidate(const QString& _source, const QString& _uid, int _lineNumber, const QDateTime& _opDT);
@@ -60,7 +62,7 @@ struct ImpRecCandidate
 
 struct ImpCandidates: public QList<ImpRecCandidate>
 {
-    int idCurDefault;
+    int idCurDefault, idAccDefault;
     QString defaultCurName;
     bool readyToImport();
 };
@@ -71,10 +73,14 @@ public:
     InteractiveFormat();
     virtual void clear();
     virtual bool isDialogRequired();
-    void analyzeCandidates(HwDatabase &db);
+    bool analyzeCandidates(HwDatabase &db);
     virtual bool postImport(HwDatabase& db);
 public:
     ImpCandidates candidates;
+private:
+    bool findAccount(HwDatabase &db, ImpRecCandidate& c, QString& accName, int& idAcc);
+    bool findCurrency(HwDatabase &db, ImpRecCandidate& c, QString& currAbbr, int& idCurr);
+    bool findUnit(HwDatabase &db, ImpRecCandidate& c, QString& name, int& idUn);
 };
 
 #endif // INTERACTIVEFORMAT_H

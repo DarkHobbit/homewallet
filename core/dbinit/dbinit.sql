@@ -31,6 +31,17 @@ create table hw_currency (
 );
 -- TODO currency rate
 
+-- Units (kg, liter, day, etc.)
+create table hw_unit (
+    id integer not null,
+    name char(64) not null,
+    short_name char(16) not null,
+    descr char(256),
+    constraint pk_un primary key(id),
+    constraint uk_un1 unique(name),
+    constraint uk_un2 unique(short_name)
+    );
+
 -- Incomes categories & subcategories
 create table hw_in_cat (
     id integer not null,
@@ -64,10 +75,11 @@ create table hw_ex_subcat (
     id_ecat integer not null,
     name char(64) not null,
     descr char(256),
-    -- TODO default unit
+    id_un_default integer null,
     constraint pk_escat primary key(id),
     constraint uk_escat unique(id_ecat, name),
-    constraint fk_escat foreign key(id_ecat) references hw_ex_cat(id)
+    constraint fk_escat foreign key(id_ecat) references hw_ex_cat(id),
+    constraint fk_esund foreign key(id_un_default) references hw_unit(id)
 );
 
 -- Accounts (various cards, hard cash, etc.)
@@ -85,17 +97,6 @@ create table hw_account (
     );
 -- TODO init sums in separate table
 -- TODO account history
-
--- Units (kg, liter, day, etc.)
-create table hw_unit (
-    id integer not null,
-    name char(64) not null,
-    short_name char(16) not null,
-    descr char(256),
-    constraint pk_un primary key(id),
-    constraint uk_un1 unique(name),
-    constraint uk_un2 unique(short_name)
-    );
 
 -- Import & audit
 create table hw_imp_file (

@@ -22,6 +22,7 @@
 #define S_ERR_QTY_IMP QObject::tr("Can't convert quantity to number: %1")
 #define S_ERR_AMO_IMP QObject::tr("Can't convert amount to number: %1")
 #define S_ERR_CUR_NOT_FOUND QObject::tr("Currency not found: %1")
+#define S_ERR_ACC_NOT_FOUND QObject::tr("Account not found: %1")
 
 // At least for Home Bookkeeping XML file
 QString prepareDoubleImport(const QString& s);

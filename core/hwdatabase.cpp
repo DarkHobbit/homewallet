@@ -153,9 +153,16 @@ int HwDatabase::addUnit(const QString &name, const QString &shortName, const QSt
 int HwDatabase::unitId(const QString &name)
 {
     QSqlQuery sqlSel(sqlDb);
-    sqlSel.prepare("select id from hw_unit where name=:name");
+    sqlSel.prepare("select id from hw_unit where short_name=:name");
     sqlSel.bindValue(":name", name);
-    return dictId(sqlSel);
+    int res = dictId(sqlSel);
+    if (res==-1) {
+        sqlSel.prepare("select id from hw_unit where name=:name");
+        sqlSel.bindValue(":name", name);
+        res = dictId(sqlSel);
+
+    }
+    return res;
 }
 
 int HwDatabase::currencyIdByAbbr(const QString &abbr)

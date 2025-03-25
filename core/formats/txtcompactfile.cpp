@@ -162,8 +162,7 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
                   << c.state << " sum " << c.amount << std::endl;
     // Done
     closeFile();
-    analyzeCandidates(db);
-    return !candidates.isEmpty();
+    return (analyzeCandidates(db) && !candidates.isEmpty());
 }
 
 int TxtCompactFile::captureMoneySum(const QString& highPart, const QString& lowPart, bool& ok)
