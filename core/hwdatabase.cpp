@@ -49,7 +49,7 @@ void HwDatabase::getCounts(int &totalInCount, int &totalExpCount)
 HwDatabase::DBFileState HwDatabase::test(const QString &dir)
 {
     if (!open(dir))
-        return Alien;
+        return OpenError;
     if (!checkTablePresence("hw_currency")) {
         close();
         return Alien;
@@ -91,7 +91,7 @@ bool HwDatabase::isEmpty()
     // TODO other categories / non-account data
     return true;
 }
-#include <iostream>
+
 int HwDatabase::addImportFile(const QString &fileName, const QString &fileType)
 {
     QSqlQuery sqlIns(sqlDb);
@@ -101,7 +101,6 @@ int HwDatabase::addImportFile(const QString &fileName, const QString &fileType)
     sqlIns.bindValue(":filename", fileName);
     sqlIns.bindValue(":filetype", fileType);
     if (!execQuery(sqlIns)) {
-        std::cerr << " uu " << sqlIns.lastError().text().toUtf8().data() << std::endl;
         return -1;
     }
     return findImportFile(fileName);
@@ -240,15 +239,20 @@ int HwDatabase::addExpenseCategory(const QString &name, const QString &descr)
 int HwDatabase::expenseCategoryId(const QString &name)
 {
     QSqlQuery sqlSel(sqlDb);
-    sqlSel.prepare("select id from hw_ex_cat where name=:name");
-    sqlSel.bindValue(":name", name);
+    if (isICUSupported) {
+        sqlSel.prepare("select id from hw_ex_cat where upper(name)=:name");
+        sqlSel.bindValue(":name", name.toUpper());
+    }
+    else {
+        sqlSel.prepare("select id from hw_ex_cat where name=:name");
+        sqlSel.bindValue(":name", name);
+    }
     return dictId(sqlSel);
 }
 
 int HwDatabase::addExpenseSubCategory(int idParentCat, const QString &name, const QString &descr)
 {
     QSqlQuery sqlIns(sqlDb);
-//    std::cout << "Ex subcat for cat " << idParentCat << ": " << name.toLocal8Bit().data() << std::endl;
     sqlIns.prepare(QString("insert into hw_ex_subcat (id_ecat, name, descr) values (:id_ecat, :name, :descr)"));
     sqlIns.bindValue(":name", name);
     sqlIns.bindValue(":descr", descr);
@@ -262,8 +266,14 @@ int HwDatabase::addExpenseSubCategory(int idParentCat, const QString &name, cons
 int HwDatabase::expenseSubCategoryId(int idParentCat, const QString &name)
 {
     QSqlQuery sqlSel(sqlDb);
-    sqlSel.prepare("select id from hw_ex_subcat where name=:name and id_ecat=:id_ecat");
-    sqlSel.bindValue(":name", name);
+    if (isICUSupported) {
+        sqlSel.prepare("select id from hw_ex_subcat where upper(name)=:name and id_ecat=:id_ecat");
+        sqlSel.bindValue(":name", name.toUpper());
+    }
+    else {
+        sqlSel.prepare("select id from hw_ex_subcat where name=:name and id_ecat=:id_ecat");
+        sqlSel.bindValue(":name", name);
+    }
     sqlSel.bindValue(":id_ecat", idParentCat);
     return dictId(sqlSel);
 }

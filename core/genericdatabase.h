@@ -35,6 +35,7 @@ public:
     ~GenericDatabase();
     virtual QString fileName()=0;
     QString lastError();
+    QStringList warnings();
     bool exists(const QString& path);
     bool open(const QString& path);
     void close();
@@ -54,6 +55,8 @@ public:
 protected:
     QSqlDatabase sqlDb;
     QString _lastError;
+    QStringList _warnings;
+    bool isICUSupported;
     bool loadSqlFile(const QString& filePath);
     bool checkTablePresence(const QString& tableName);
     //bool checkFieldPresence(const QString& tableName);
@@ -63,6 +66,9 @@ protected:
     QVariant intOrNull(int value, bool notNull);
     QVariant strOrNull(const QString& s);
     QVariant dateOrNull(const QDateTime& value);
+
+private:
+    bool checkForICU();
 };
 
 #endif // GENERICDATABASE_H

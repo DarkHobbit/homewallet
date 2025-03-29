@@ -38,3 +38,5 @@ DISTFILES += \
     $$PWD/dbinit/dbinit.sql \
     $$PWD/dbinit/loadcurrency.sql
 
+LIBS += -lsqlite3
+

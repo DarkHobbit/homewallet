@@ -29,6 +29,7 @@ class HwDatabase: public GenericDatabase
 {
 public:
     enum DBFileState {
+        OpenError,
         Alien,       // SQLite database, but not HW database
         NeedUpgrade, // need to upgrade :)
         Actual       // nothing to do

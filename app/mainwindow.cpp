@@ -66,6 +66,9 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     HwDatabase::DBFileState dbState = db.test(dbPath);
     switch (dbState) {
+    case HwDatabase::OpenError:
+        QMessageBox::critical(0, S_ERROR, db.lastError());
+        return;
     case HwDatabase::Alien:
         QMessageBox::critical(0, S_ERROR, S_ALIEN_DB.arg(dbPath));
         return;
@@ -107,6 +110,8 @@ void MainWindow::openDb(const QString &path)
         S_CANT_OPEN_DB.arg(path).arg(db.lastError()));
         return;
     }
+    for (const QString ws: db.warnings())
+        QMessageBox::warning(0, S_WARNING, ws);
     on_tabWidget_currentChanged(0);
     updateViews();
 }

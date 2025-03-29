@@ -159,7 +159,12 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
     // Debug
     for (const ImpRecCandidate& c: candidates)
         std::cout << "[" << c.source.toUtf8().data() << "] st "
-                  << c.state << " sum " << c.amount << std::endl;
+
+                  << c.state << " typ " << c.type << " sum " << c.amount
+                  << " ali " << c.alias.toUtf8().data()
+                  << " сc " << c.catName.toUtf8().data()
+                  << " сsc " << c.subcatName.toUtf8().data()
+                  << std::endl;
     // Done
     closeFile();
     return (analyzeCandidates(db) && !candidates.isEmpty());

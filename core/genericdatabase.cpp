@@ -12,6 +12,8 @@
  */
 
 #include <iostream>
+#include <sqlite3.h>
+
 #include <QDir>
 #include <QFile>
 #include <QSqlError>
@@ -43,6 +45,11 @@ QString GenericDatabase::lastError()
         return sqlDb.lastError().text();
 }
 
+QStringList GenericDatabase::warnings()
+{
+    return _warnings;
+}
+
 bool GenericDatabase::exists(const QString& path)
 {
     return QFile::exists(path+QDir::separator()+fileName());
@@ -63,9 +70,10 @@ bool GenericDatabase::open(const QString& path)
         }
     }
     sqlDb.setDatabaseName(path+QDir::separator()+fileName());
-    //
-
-    return sqlDb.open();
+    bool res = sqlDb.open();
+    if (res)
+        res = checkForICU();
+    return res;
 }
 
 void GenericDatabase::close()
@@ -244,5 +252,46 @@ QVariant GenericDatabase::strOrNull(const QString &s)
 QVariant GenericDatabase::dateOrNull(const QDateTime &value)
 {
     return value.isValid() ? value.toString("'yyyy.MM.dd'") : QVariant();
+}
+
+bool GenericDatabase::checkForICU()
+{
+    if (sqlDb.driverName()=="QSQLITE") {
+        // Check for internal non-latin support testing on cyrillic "Sputnik" word
+        QSqlQuery sqlCheck(sqlDb);
+        sqlCheck.prepare(QString::fromUtf8("select upper('Спутник')='СПУТНИК'"));
+        // sqlCheck.prepare(QString::fromUtf8("select upper('Table')='TABLE'"));
+        if (!sqlCheck.exec()) {
+            _lastError = QObject::tr("Can't check ICU presence");
+            return false;
+        }
+        sqlCheck.first();
+        bool res = sqlCheck.value(0).toBool();
+        if (res) {
+            isICUSupported = true;
+            return true;
+        }
+        // Try load ICU extension
+        sqlite3 *handle = *static_cast<sqlite3 **>(sqlDb.driver()->handle().data());
+        if (handle) {
+            int res = sqlite3_enable_load_extension(handle, 1);
+            if (res!=SQLITE_OK) {
+                _lastError = QObject::tr("Can't enable extension load, code: %1").arg(res);
+                return false;
+            }
+            char* errMsg;
+            res = sqlite3_load_extension(handle, "libsqliteicu", "sqlite3_icu_init", &errMsg);
+            if (res!=SQLITE_OK) {
+                _warnings << QObject::tr("Can't load ICU extension, code %1:\n%2\nRebuild SQLite with ICU support or provide ICU library as extension")
+                .arg(res).arg(QString::fromUtf8(errMsg));
+                std::cerr << _lastError.toUtf8().data() << std::endl;
+                sqlite3_free(errMsg);
+                isICUSupported = false;
+                return true;
+            }
+        }
+    }
+    isICUSupported = true;
+    return true;
 }
 
