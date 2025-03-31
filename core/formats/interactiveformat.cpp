@@ -60,7 +60,7 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
     }
 
     // See candidates
-    for (ImpRecCandidate c: candidates) {
+    for (ImpRecCandidate& c: candidates) {
         switch(c.type) {
         case ImpRecCandidate::Unknown:
             continue;
@@ -72,7 +72,6 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
             if (!findUnit(db, c, c.unitName, c.idUnit))
                 continue;
             if (!c.subcatName.isEmpty()) { // Full-qualified subcategory
-                // TODO to_upper in sql?
                 c.idCat = db.expenseCategoryId(c.catName);
                 if (c.idCat==-1) {
                     c.state = ImpRecCandidate::UnknownCategory;

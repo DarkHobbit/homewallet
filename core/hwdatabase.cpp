@@ -131,8 +131,14 @@ bool HwDatabase::addAccount(const QString &name, const QString &descr,
 int HwDatabase::accountId(const QString &name)
 {
     QSqlQuery sqlSel(sqlDb);
-    sqlSel.prepare("select id from hw_account where name=:name");
-    sqlSel.bindValue(":name", name);
+    if (isICUSupported) {
+        sqlSel.prepare("select id from hw_account where upper(name)=:name");
+        sqlSel.bindValue(":name", name.toUpper());
+    }
+    else {
+        sqlSel.prepare("select id from hw_account where name=:name");
+        sqlSel.bindValue(":name", name);
+    }
     return dictId(sqlSel);
 }
 
@@ -152,8 +158,14 @@ int HwDatabase::addUnit(const QString &name, const QString &shortName, const QSt
 int HwDatabase::unitId(const QString &name)
 {
     QSqlQuery sqlSel(sqlDb);
-    sqlSel.prepare("select id from hw_unit where short_name=:name");
-    sqlSel.bindValue(":name", name);
+    if (isICUSupported) {
+        sqlSel.prepare("select id from hw_unit where upper(short_name)=:name");
+        sqlSel.bindValue(":name", name.toUpper());
+    }
+    else {
+        sqlSel.prepare("select id from hw_unit where short_name=:name");
+        sqlSel.bindValue(":name", name);
+    }
     int res = dictId(sqlSel);
     if (res==-1) {
         sqlSel.prepare("select id from hw_unit where name=:name");
@@ -192,8 +204,14 @@ int HwDatabase::addIncomeCategory(const QString &name, const QString &descr)
 int HwDatabase::incomeCategoryId(const QString &name)
 {
     QSqlQuery sqlSel(sqlDb);
-    sqlSel.prepare("select id from hw_in_cat where name=:name");
-    sqlSel.bindValue(":name", name);
+    if (isICUSupported) {
+        sqlSel.prepare("select id from hw_in_cat where upper(name)=:name");
+        sqlSel.bindValue(":name", name.toUpper());
+    }
+    else {
+        sqlSel.prepare("select id from hw_in_cat where name=:name");
+        sqlSel.bindValue(":name", name);
+    }
     return dictId(sqlSel);
 }
 
@@ -213,8 +231,14 @@ int HwDatabase::addIncomeSubCategory(int idParentCat, const QString &name, const
 int HwDatabase::incomeSubCategoryId(int idParentCat, const QString &name)
 {
     QSqlQuery sqlSel(sqlDb);
-    sqlSel.prepare("select id from hw_in_subcat where name=:name and id_icat=:id_icat");
-    sqlSel.bindValue(":name", name);
+    if (isICUSupported) {
+        sqlSel.prepare("select id from hw_in_subcat where upper(name)=:name and id_icat=:id_icat");
+        sqlSel.bindValue(":name", name.toUpper());
+    }
+    else {
+        sqlSel.prepare("select id from hw_in_subcat where name=:name and id_icat=:id_icat");
+        sqlSel.bindValue(":name", name);
+    }
     sqlSel.bindValue(":id_icat", idParentCat);
     return dictId(sqlSel);
 }

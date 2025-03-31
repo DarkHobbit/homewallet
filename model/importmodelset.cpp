@@ -18,7 +18,7 @@ ImportModelSet::ImportModelSet(ImpCandidates *cands, QObject *parent)
 {
     // Categorize all candidates
     int i=0;
-    for (ImpRecCandidate cand: *cands) {
+    for (ImpRecCandidate& cand: *cands) {
         switch (cand.type) {
         case ImpRecCandidate::Income:
             refsIncome[i] = &cand;

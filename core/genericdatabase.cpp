@@ -88,9 +88,10 @@ bool GenericDatabase::isOpen()
 
 QString GenericDatabase::dbInfo()
 {
-    return QObject::tr("Driver: %1; database: %2")
+    return QObject::tr("Driver: %1; database: %2; ICU support: %3")
         .arg(sqlDb.driverName())
-        .arg(sqlDb.databaseName());
+        .arg(sqlDb.databaseName())
+        .arg(isICUSupported ? QObject::tr("yes") : QObject::tr("no"));
 }
 
 int GenericDatabase::queryRecCount(QSqlQuery &query)
@@ -258,16 +259,7 @@ bool GenericDatabase::checkForICU()
 {
     if (sqlDb.driverName()=="QSQLITE") {
         // Check for internal non-latin support testing on cyrillic "Sputnik" word
-        QSqlQuery sqlCheck(sqlDb);
-        sqlCheck.prepare(QString::fromUtf8("select upper('Спутник')='СПУТНИК'"));
-        // sqlCheck.prepare(QString::fromUtf8("select upper('Table')='TABLE'"));
-        if (!sqlCheck.exec()) {
-            _lastError = QObject::tr("Can't check ICU presence");
-            return false;
-        }
-        sqlCheck.first();
-        bool res = sqlCheck.value(0).toBool();
-        if (res) {
+        if (checkForICUonly()) {
             isICUSupported = true;
             return true;
         }
@@ -289,9 +281,25 @@ bool GenericDatabase::checkForICU()
                 isICUSupported = false;
                 return true;
             }
+            if (!checkForICUonly()) {
+                _warnings << QObject::tr("ICU extension load failed");
+                isICUSupported = false;
+                return true;
+            }
         }
-    }
+    }    
     isICUSupported = true;
     return true;
+}
+
+bool GenericDatabase::checkForICUonly()
+{
+    QSqlQuery sqlCheck(sqlDb);
+    sqlCheck.prepare(QString::fromUtf8("select upper('Спутник')='СПУТНИК'"));
+    // sqlCheck.prepare(QString::fromUtf8("select upper('Table')='TABLE'"));
+    if (!sqlCheck.exec())
+        _lastError = QObject::tr("Can't check ICU presence");
+    sqlCheck.first();
+    return sqlCheck.value(0).toBool();
 }
 

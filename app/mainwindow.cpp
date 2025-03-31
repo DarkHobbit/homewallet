@@ -110,7 +110,7 @@ void MainWindow::openDb(const QString &path)
         S_CANT_OPEN_DB.arg(path).arg(db.lastError()));
         return;
     }
-    for (const QString ws: db.warnings())
+    for (const QString& ws: db.warnings())
         QMessageBox::warning(0, S_WARNING, ws);
     on_tabWidget_currentChanged(0);
     updateViews();

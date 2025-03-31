@@ -69,6 +69,7 @@ protected:
 
 private:
     bool checkForICU();
+    bool checkForICUonly();
 };
 
 #endif // GENERICDATABASE_H
