@@ -34,6 +34,8 @@ void PostImportDialog::setData(ImpCandidates* _cands)
 {
     cands = _cands;
     mSet = new ImportModelSet(cands, this);
+    ui->tableExpenses->setModel(mSet->mdlExpense);
+    ui->tableIncomes->setModel(mSet->mdlIncome);
     ui->lbStat->setText(mSet->stat());
     setOkAccessibility();
 }

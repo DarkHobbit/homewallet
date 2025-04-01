@@ -17,17 +17,27 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabExpenses">
       <attribute name="title">
        <string>Expenses</string>
       </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QTableView" name="tableExpenses"/>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="tabIncomes">
       <attribute name="title">
        <string>Incomes</string>
       </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QTableView" name="tableIncomes"/>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>

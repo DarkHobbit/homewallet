@@ -59,6 +59,8 @@ int main(int argc, char *argv[])
         else if (ar=="--fullscreen" || ar=="-f")
             gd.fullScreenMode = true;
     }
+    gd.useSystemDateTimeFormat = false;
+    gd.dateFormat = "dd.MM.yyyy";
     // Main Window
     MainWindow w;
     if (!w.db.isOpen())

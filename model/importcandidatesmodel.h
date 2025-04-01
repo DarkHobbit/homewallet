@@ -15,10 +15,10 @@
 #define IMPORTCANDIDATESMODEL_H
 
 #include <QAbstractTableModel>
-#include <QMap>
+#include <QList>
 #include "formats/interactiveformat.h"
 
-typedef QMap<int,ImpRecCandidate*> CandRefs;
+typedef QList<ImpRecCandidate*> CandRefs;
 
 class ImportCandidatesModel : public QAbstractTableModel
 {
@@ -37,6 +37,7 @@ public:
 private:
     ImpRecCandidate::Type candType;
     CandRefs& candRefs;
+    QString fromLowUnit(int amount) const;
 };
 
 #endif // IMPORTCANDIDATESMODEL_H

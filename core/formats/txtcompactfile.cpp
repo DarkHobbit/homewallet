@@ -64,7 +64,7 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
     QTextStream ss(&file);
     QString s;
     QDate lastDate;
-    QRegExp reFullDate(":\\d\\d\\d\\d\\d\\d:");
+    QRegExp reFullDate(":(\\d\\d\\d\\d\\d\\d):");
 
     QRegExp reOnlyDay(":(\\d\\d?):");
     // Тип, СумЦел, СумДроб, Источ, Кат+Подкат,  КолЦел, КолДроб, Хвост
@@ -77,7 +77,8 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
             continue;
         // Date for some next lines
         if (reFullDate.exactMatch(s)) {
-            lastDate = QDate::fromString(s, ":yyMMdd:");
+            lastDate = QDate::fromString(QString("20")+reFullDate.cap(1), "yyyyMMdd");
+            // TODO m.b. separately add reVeryFullData for :19691228: records
             if (!lastDate.isValid()) {
                 _fatalError = QObject::tr("Invalid date: %1").arg(s);
                 closeFile();

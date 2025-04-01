@@ -21,22 +21,22 @@ ImportModelSet::ImportModelSet(ImpCandidates *cands, QObject *parent)
     for (ImpRecCandidate& cand: *cands) {
         switch (cand.type) {
         case ImpRecCandidate::Income:
-            refsIncome[i] = &cand;
+            refsIncome << &cand;
             break;
         case ImpRecCandidate::Expense:
         case ImpRecCandidate::ReceiptStart:
         case ImpRecCandidate::ReceiptEnd:
-            refsExpense[i] = &cand;
+            refsExpense << &cand;
             break;
         case ImpRecCandidate::Transfer:
-            refsTransfer[i] = &cand;
+            refsTransfer << &cand;
             break;
         case ImpRecCandidate::Debtor:
         case ImpRecCandidate::Creditor:
-            refsDebAndCred[i] = &cand;
+            refsDebAndCred << &cand;
             break;
         default:
-            refsUnknown[i] = &cand;
+            refsUnknown << &cand;
         }
         i++;
     }

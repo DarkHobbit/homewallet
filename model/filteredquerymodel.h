@@ -37,6 +37,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     // QVariant data(const QModelIndex &index, int role) const;
     // TODO flags(), if needed
+    // TODO field list for Qt::AlignRight (number)
 protected:
     ModelColumnList visibleColumns;
     QStringList visibleFieldNames;
