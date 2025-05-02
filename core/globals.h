@@ -64,6 +64,7 @@
 #define S_COL_ALIAS QObject::tr("Alias")
 // Pseudo-name for all categories/subcategoried
 #define S_ALL_CAT QObject::tr("<All>")
+#define S_CAT_OTHER QObject::tr("Other")
 
 struct Account {
     QDate openDate;

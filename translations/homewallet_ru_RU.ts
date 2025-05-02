@@ -342,7 +342,7 @@ at record %1 from %2</source>
     <message>
         <location filename="../app/postimportdialog.ui" line="14"/>
         <source>Import candidates</source>
-        <translation type="unfinished"></translation>
+        <translation>Кандидаты на импорт</translation>
     </message>
     <message>
         <location filename="../app/postimportdialog.ui" line="24"/>
@@ -350,12 +350,12 @@ at record %1 from %2</source>
         <translation>Расходы</translation>
     </message>
     <message>
-        <location filename="../app/postimportdialog.ui" line="29"/>
+        <location filename="../app/postimportdialog.ui" line="34"/>
         <source>Incomes</source>
         <translation>Доходы</translation>
     </message>
     <message>
-        <location filename="../app/postimportdialog.ui" line="37"/>
+        <location filename="../app/postimportdialog.ui" line="47"/>
         <source>Not Ready</source>
         <translation>Не готово</translation>
     </message>
@@ -388,6 +388,11 @@ at record %1 from %2</source>
         <translation>Счёт не найден: %1</translation>
     </message>
     <message>
+        <location filename="../core/formats/commonexpimpdef.h" line="26"/>
+        <source>Attribute %1 not found at line %2</source>
+        <translation>Атрибут %1 не найден в строке %2</translation>
+    </message>
+    <message>
         <location filename="../core/formats/xmlfile.cpp" line="33"/>
         <source>Can&apos;t read content from file %1
 %2
@@ -399,56 +404,61 @@ line %3, col %4
 </translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="43"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="44"/>
         <source>Home Bookkeeping XML (*.xml *.XML)</source>
         <translation>XML Домашней Бухгалтерии (*.xml *.XML)</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="61"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="62"/>
         <source>Metadata not found. Probably it isn&apos;t Home Bookkeeping file</source>
         <translation>Метаданные не найдены. Возможно, это не файл Домашней бухгалтерии</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="68"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="69"/>
         <source>Metadata is empty. Probably it isn&apos;t Home Bookkeeping file</source>
         <translation>Метаданные пусты. Возможно, это не файл Домашней бухгалтерии</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="131"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="132"/>
         <source>Unknown Home Bookkeeping file subtype.
 Contact author.</source>
         <translation>Неизвестный подтип файла Домашней бухгалтерии.
 Свяжитесь с автором.</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="136"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="137"/>
         <source>Ambiguous Home Bookkeeping file subtype wasn&apos;t resolved.
 Contact author.</source>
         <translation>Неоднозначность подтипа файла Домашней бухгалтерии не разрешена.
 Свяжитесь с автором.</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="215"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="388"/>
         <source>Account %1 not found, inserted automatically</source>
         <translation>Счёт %1 не найден, добавлен автоматически</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="222"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="225"/>
         <source>Income or expense amount can&apos;t be equal to 0. Date: %1</source>
         <translation>Сумма дохода или расхода не может быть нулевой. Дата: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="227"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="230"/>
         <source>This version of HomeWallet not support multi-currency incomes and expenses, item from %1, currencies: %2</source>
         <translation>Эта версия Домашнего кошелька не поддерживает мультивалютных доходов и расходов, позиция с %1, валюты: %2</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="321"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="344"/>
         <source>Skipped %1 records</source>
         <translation>Пропущено записей: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="364"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="410"/>
+        <source>Money attributes not found: line %1</source>
+        <translation>Денежные атрибуты не найдены в строке %1</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.cpp" line="419"/>
         <source>Money sum doesn&apos;t match: %1</source>
         <translation>Денежная сумма не соответствует шаблону: %1</translation>
     </message>
@@ -487,21 +497,23 @@ Contact author.</source>
         <source>Can&apos;t load ICU extension, code %1:
 %2
 Rebuild SQLite with ICU support or provide ICU library as extension</source>
-        <translation type="unfinished"></translation>
+        <translation>Не могу загрузить расширение ICU, код %1:
+%2
+Пересоберите SQLite с поддержкой ICU или добавьте библиотеку ICU как расширение</translation>
     </message>
     <message>
         <location filename="../core/genericdatabase.cpp" line="285"/>
         <source>ICU extension load failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка загрузки расширения ICU</translation>
     </message>
     <message>
         <location filename="../core/genericdatabase.cpp" line="301"/>
         <source>Can&apos;t check ICU presence</source>
-        <translation type="unfinished"></translation>
+        <translation>Не могу проверить наличие ICU</translation>
     </message>
     <message>
-        <location filename="../core/hwdatabase.cpp" line="193"/>
-        <location filename="../core/hwdatabase.cpp" line="240"/>
+        <location filename="../core/hwdatabase.cpp" line="199"/>
+        <location filename="../core/hwdatabase.cpp" line="258"/>
         <source>No subcategory</source>
         <translation>Нет подкатегории</translation>
     </message>
@@ -787,8 +799,23 @@ Data will be lost</source>
     </message>
     <message>
         <location filename="../core/globals.h" line="63"/>
+        <source>Source</source>
+        <translation>Источник</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="64"/>
+        <source>Alias</source>
+        <translation>Псевдоним</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="66"/>
         <source>&lt;All&gt;</source>
         <translation>&lt;Все&gt;</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="67"/>
+        <source>Other</source>
+        <translation>Прочее</translation>
     </message>
     <message>
         <location filename="../core/formats/formatfactory.cpp" line="55"/>
@@ -815,19 +842,19 @@ Found: %1</source>
         <translation>Компактный текстовый формат (*.txt *.TXT)</translation>
     </message>
     <message>
-        <location filename="../core/formats/txtcompactfile.cpp" line="82"/>
+        <location filename="../core/formats/txtcompactfile.cpp" line="83"/>
         <source>Invalid date: %1</source>
         <translation>Неверная дата: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/txtcompactfile.cpp" line="96"/>
+        <location filename="../core/formats/txtcompactfile.cpp" line="97"/>
         <source>Invalid day for this month: %1, last date was %2</source>
         <translation>Неверный день для этого месяца: %1. Последняя дата: %2</translation>
     </message>
     <message>
-        <location filename="../core/formats/txtcompactfile.cpp" line="187"/>
+        <location filename="../core/formats/txtcompactfile.cpp" line="188"/>
         <source>Too long money sum fractional part: %1,%2</source>
-        <translation type="unfinished"></translation>
+        <translation>Слишком длинная дробная часть денежной суммы: %1,%2</translation>
     </message>
 </context>
 </TS>

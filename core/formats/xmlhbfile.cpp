@@ -14,6 +14,7 @@
 #include <iostream>
 
 #include "commonexpimpdef.h"
+#include "globals.h"
 #include "xmlhbfile.h"
 
 #define DB_CHK(action) \
@@ -149,6 +150,7 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
     }
     HwDatabase::DictColl cats;
     HwDatabase::SubDictColl subcats;
+    int idTransferTypeOther = -1;
     if (_fileSubType==Incomes || _fileSubType==IncomePlan) {
         DB_CHK(db.collectDict(cats, "hw_in_cat"))
         DB_CHK(db.collectSubDict(cats, subcats, "hw_in_subcat", "name", "id", "id_icat"))
@@ -157,6 +159,16 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
         DB_CHK(db.collectDict(cats, "hw_ex_cat"))
         DB_CHK(db.collectSubDict(cats, subcats, "hw_ex_subcat", "name", "id", "id_ecat"))
     }
+    else if (_fileSubType==Transfer) {
+        DB_CHK(db.collectDict(cats, "hw_transfer_type"))
+        if (cats.keys().contains(S_CAT_OTHER))
+            idTransferTypeOther = cats[S_CAT_OTHER];
+        else {
+            idTransferTypeOther = db.addTransferType(S_CAT_OTHER, "");
+            cats[S_CAT_OTHER] =  idTransferTypeOther;
+        }
+    }
+
     /*
     std::cout << "ac_count " << accs.keys().count() <<std::endl; //===>
     std::cout << "cur_count " << currs.keys().count() <<std::endl; //===>
@@ -204,16 +216,7 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             if (!readDoubleVal(elRow, "Quantity", quantity, S_ERR_QTY_IMP))
                 return false;
             // Account
-            QString accName = elRow.attribute("Account");
-            int idAcc;
-            if (accs.keys().contains(accName)) {
-                idAcc = accs[accName];
-            }
-            else {
-                db.addAccount(accName, "Auto-inserted");
-                idAcc = db.accountId(accName);
-                _errors << QObject::tr("Account %1 not found, inserted automatically").arg(accName);
-            }
+            int idAcc = importAccount("Account", elRow, accs, db);
             // Money
             HwDatabase::MultiCurr money;
             if (!importNotNullMoney(money, "Money", elRow))
@@ -230,13 +233,9 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
                 return false;
             }
             QString moneyChar = money.keys().first();
-            if (moneyChar==QString::fromUtf8("р"))
-                moneyChar = QString::fromUtf8("₽"); // exception for old RUR symbol, appears in HB files
-            int idCur = db.currencyIdByAbbr(moneyChar);
-            if (idCur==-1) {
-                _fatalError = S_ERR_CUR_NOT_FOUND.arg(moneyChar);
+            int idCur = importCurrencyByChar(moneyChar, db);
+            if (idCur==-1)
                 return false;
-            }
             // Categories an subcategories
             int idCat, idSubCat;
             QString catName = elRow.attribute("Category");
@@ -289,10 +288,34 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             DB_CHK(ok);
             break;
         }
-        case Transfer:
-
-            // TODO
+        case Transfer: {
+            QDateTime dt;
+            if (!readDateVal(elRow, "MyDate", dt, "yyyyMMdd", S_ERR_DATE_IMP))
+                return false;
+            // Accounts
+            int idAccFrom = importAccount("AccountOut", elRow, accs, db);
+            DB_CHK(idAccFrom!=-1);
+            int idAccTo = importAccount("AccountIn", elRow, accs, db);
+            DB_CHK(idAccTo!=-1);
+            // Money
+            QString moneyChar;
+            QString val = elRow.attribute("MoneyStr", moneyChar);
+            if (val.isEmpty()) {
+                _fatalError = S_ERR_ATTR_NOT_FOUND.arg("MoneyStr").arg(elRow.lineNumber());
+                return false;
+            }
+            int sum = importOneMoneyAttr(val, moneyChar);
+            if (!_fatalError.isEmpty())
+                return false;
+            int idCur = importCurrencyByChar(moneyChar, db);
+            if (idCur==-1)
+                return false;
+            // Insert!
+            bool ok = db.addTransfer(dt, sum, idCur, idAccFrom, idAccTo,
+                idTransferTypeOther, elRow.attribute("Note"), _idImp, sLine);
+            DB_CHK(ok);
             break;
+        }
         case CurrencyConversion:
 
             // TODO
@@ -352,6 +375,21 @@ void XmlHbFile::collectCatSamples(short maxRecordCount, const QString &fieldName
     _categorySamples = cs.join(", ");
 }
 
+int XmlHbFile::importAccount(const QString &attr, const QDomElement &elRow, HwDatabase::DictColl& accs, HwDatabase& db)
+{
+    QString accName = elRow.attribute(attr);
+    int idAcc;
+    if (accs.keys().contains(accName)) {
+        idAcc = accs[accName];
+    }
+    else {
+        db.addAccount(accName, "Auto-inserted");
+        idAcc = db.accountId(accName);
+        _errors << QObject::tr("Account %1 not found, inserted automatically").arg(accName);
+    }
+    return idAcc;
+}
+
 bool XmlHbFile::importNotNullMoney(HwDatabase::MultiCurr& values, const QString &attrPrefix, const QDomElement &elRow)
 {
     values.clear();
@@ -360,21 +398,47 @@ bool XmlHbFile::importNotNullMoney(HwDatabase::MultiCurr& values, const QString 
         if (val.isEmpty())
             continue;
         // Extract digits and moneychars
-        if (!hbMoneySum.exactMatch(val)) {
-            _fatalError = QObject::tr("Money sum doesn't match: %1").arg(val);
+        QString sCur;
+        int sum = importOneMoneyAttr(val, sCur);
+        if (!_fatalError.isEmpty())
             return false;
-        }
-        QString sSum = prepareDoubleImport(hbMoneySum.cap(1));
-        QString sCur = hbMoneySum.cap(2);
-        bool ok;
-        int sum = sSum.toFloat(&ok)*100;
-        if (!ok) {
-            _fatalError = S_ERR_AMO_IMP.arg(sSum);
-            return false;
-        }
         if (!sum)
             continue; // normal case, 2 of 3
         values[sCur] = sum;
     }
+    if (values.isEmpty()) {
+        _fatalError = QObject::tr("Money attributes not found: line %1").arg(elRow.lineNumber());
+        return false;
+    }
     return true;
+}
+
+int XmlHbFile::importOneMoneyAttr(const QString &val, QString& sCur)
+{
+    if (!hbMoneySum.exactMatch(val)) {
+        _fatalError = QObject::tr("Money sum doesn't match: %1").arg(val);
+        return 0;
+    }
+    QString sSum = prepareDoubleImport(hbMoneySum.cap(1));
+    sCur = hbMoneySum.cap(2);
+    bool ok;
+    int sum = sSum.toFloat(&ok)*100;
+    if (!ok) {
+        _fatalError = S_ERR_AMO_IMP.arg(sSum);
+        return 0;
+    }
+    return sum;
+}
+
+int XmlHbFile::importCurrencyByChar(const QString &moneyChar, HwDatabase& db)
+{
+    QString _moneyChar = moneyChar;
+    if (_moneyChar==QString::fromUtf8("р"))
+        _moneyChar = QString::fromUtf8("₽"); // exception for old RUR symbol, appears in HB files
+    int idCur = db.currencyIdByAbbr(_moneyChar);
+    if (idCur==-1) {
+        _fatalError = S_ERR_CUR_NOT_FOUND.arg(_moneyChar);
+        return -1;
+    }
+    return idCur;
 }

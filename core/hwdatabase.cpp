@@ -148,7 +148,7 @@ int HwDatabase::addUnit(const QString &name, const QString &shortName, const QSt
     sqlIns.prepare(
         QString("insert into hw_unit (name, short_name, descr) values (:name, :short_name, :descr)"));
     sqlIns.bindValue(":name", name);
-    sqlIns.bindValue(":short_name", name);
+    sqlIns.bindValue(":short_name", shortName);
     sqlIns.bindValue(":descr", descr);
     if (!execQuery(sqlIns))
         return -1;
@@ -302,6 +302,32 @@ int HwDatabase::expenseSubCategoryId(int idParentCat, const QString &name)
     return dictId(sqlSel);
 }
 
+int HwDatabase::addTransferType(const QString &name, const QString &descr)
+{
+    QSqlQuery sqlIns(sqlDb);
+    sqlIns.prepare(QString("insert into hw_transfer_type (name, descr) values (:name, :descr)"));
+    sqlIns.bindValue(":name", name);
+    sqlIns.bindValue(":descr", descr);
+    if (!execQuery(sqlIns))
+        return -1;
+    else
+        return transferTypeId(name);
+}
+
+int HwDatabase::transferTypeId(const QString &name)
+{
+    QSqlQuery sqlSel(sqlDb);
+    if (isICUSupported) {
+        sqlSel.prepare("select id from hw_transfer_type where upper(name)=:name");
+        sqlSel.bindValue(":name", name.toUpper());
+    }
+    else {
+        sqlSel.prepare("select id from hw_transfer_type where name=:name");
+        sqlSel.bindValue(":name", name);
+    }
+    return dictId(sqlSel);
+}
+
 bool HwDatabase::addIncomeOp(const QDateTime &opDT, double quantity, int amount, int idAcc, int idCur, int idSubCat, int idUnit,
      bool attention, const QString &descr,
      int idImp, const QString& uid)
@@ -345,6 +371,25 @@ bool HwDatabase::addExpenseOp(const QDateTime &opDT, double quantity, int amount
     sqlIns.bindValue(":id_rc", idOrNull(idReceipt));
     sqlIns.bindValue(":discount", intOrNull(discount, discount!=0));
     sqlIns.bindValue(":attention", attention); // проверить отдельно
+    sqlIns.bindValue(":descr", strOrNull(descr));
+    sqlIns.bindValue(":id_imp", idOrNull(idImp));
+    sqlIns.bindValue(":uid_imp", strOrNull(uid));
+    return execQuery(sqlIns);
+}
+
+bool HwDatabase::addTransfer(const QDateTime &opDT, int amount, int idCur, int idAccFrom, int idAccTo,
+    int idTransferType, const QString &descr, int idImp, const QString &uid)
+{
+    QSqlQuery sqlIns(sqlDb);
+    sqlIns.prepare(
+        "insert into hw_transfer(op_date, amount, id_cur, id_ac_out, id_ac_in, id_tt, descr, id_imp, uid_imp) " \
+        "values (:op_date, :amount, :id_cur, :id_ac_out, :id_ac_in, :id_tt, :descr, :id_imp, :uid_imp)");
+    sqlIns.bindValue(":op_date", opDT);
+    sqlIns.bindValue(":amount", amount);
+    sqlIns.bindValue(":id_cur", idCur);
+    sqlIns.bindValue(":id_ac_out", idAccFrom);
+    sqlIns.bindValue(":id_ac_in", idAccTo);
+    sqlIns.bindValue(":id_tt", idTransferType);
     sqlIns.bindValue(":descr", strOrNull(descr));
     sqlIns.bindValue(":id_imp", idOrNull(idImp));
     sqlIns.bindValue(":uid_imp", strOrNull(uid));

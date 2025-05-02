@@ -77,7 +77,10 @@ private:
     QString _categorySamples;
     const QRegExp hbMoneySum;
     void collectCatSamples(short maxRecordCount, const QString &fieldName);
+    int importAccount(const QString& attr, const QDomElement& elRow, HwDatabase::DictColl& accs, HwDatabase& db);
     bool importNotNullMoney(HwDatabase::MultiCurr& values, const QString& attrPrefix, const QDomElement& elRow);
+    int importOneMoneyAttr(const QString& val, QString& sCur);
+    int importCurrencyByChar(const QString& moneyChar, HwDatabase& db);
 };
 
 #endif // XMLHBFILE_H

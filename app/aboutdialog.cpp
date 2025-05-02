@@ -29,11 +29,12 @@ AboutDialog::AboutDialog(QWidget *parent, const QString& dbInfo) :
     ui->lwContributors->setItemWidget(ui->lwContributors->item(2),  new QLabel("<a href=\"https://www.flaticon.com/free-icons/pencil\" title=\"pencil icons\">Pencil icons created by Freepik - Flaticon</a>"));
     ui->lwContributors->addItem("");
     ui->lwContributors->setItemWidget(ui->lwContributors->item(3),  new QLabel("<a href=\"https://www.flaticon.com/free-icons/stop\" title=\"stop icons\">Stop icons created by Alfredo Hernandez - Flaticon</a>"));
-
-    //ui->lwContributors->addItem("Different languages translations: " \
-     //"???");
-    //ui->lwContributors->addItem("French UI: ???");
-    //ui->lwContributors->addItem("Bugfixes: ???");
+    /*
+    ui->lwContributors->addItem("Different languages translations: " \
+     "???");
+    ui->lwContributors->addItem("French UI: ???");
+    ui->lwContributors->addItem("Bugfixes: ???");
+    */
     // Additional info
     QString compiler;
 #if defined __GNUC_MINOR__

@@ -63,6 +63,8 @@ public:
     int expenseCategoryId(const QString& name);
     int addExpenseSubCategory(int idParentCat, const QString& name, const QString& descr);
     int expenseSubCategoryId(int idParentCat, const QString& name);
+    int addTransferType(const QString& name, const QString& descr);
+    int transferTypeId(const QString& name);
     // Inc/Exp
     bool addIncomeOp(const QDateTime& opDT, double quantity,
         int amount, int idAcc, int idCur, int idSubcat, int idUnit,
@@ -70,6 +72,9 @@ public:
     bool addExpenseOp(const QDateTime& opDT, double quantity,
         int amount, int idAcc, int idCur, int idSubcat, int idUnit, int idReceipt,
         int discount, bool attention, const QString& descr, int idImp=-1, const QString& uid="");
+    // Transfer, currencyConv
+    bool addTransfer(const QDateTime& opDT, int amount, int idCur, int idAccFrom, int idAccTo,
+        int idTransferType, const QString& descr, int idImp=-1, const QString& uid="");
 
 };
 

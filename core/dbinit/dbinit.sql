@@ -186,8 +186,8 @@ create table hw_ex_op (
     constraint fk_eximp foreign key(id_imp) references hw_imp_file(id)
 );
 
--- Transfer
-create table hw_transfer_type ( -- currency exchange, deposit into ATM, withdraw from ATM, buy to parents...
+-- Transfer & currency exchange
+create table hw_transfer_type ( -- deposit into ATM, withdraw from ATM, buy to parents...
     id integer not null,
     name char(64) not null,
     descr char(256),
@@ -212,6 +212,8 @@ create table hw_transfer (
     constraint fk_trac_tt foreign key(id_tt) references hw_transfer_type(id)
     constraint fk_trimp foreign key(id_imp) references hw_imp_file(id)
 );
+
+--  TODO currency exchange
 
 -- Debtors, Creditors, their names
 -- TODO
