@@ -20,7 +20,7 @@ ExpenseModel::ExpenseModel(QObject *parent)
     visibleFieldNames
         << "strftime('%d.%m.%Y', e.op_date)" // SQLite-ism!
         << "c.name" << "sc.name" << "e.quantity" << "u.name"
-        << lowUnitFunction("e.amount")
+        << lowUnitFunction("e.amount", "cur.abbr")
         << "cur.abbr" << "a.name"
         << "case e.attention when 1 then '*' else '' end"
         << "e.descr";
@@ -30,7 +30,8 @@ ExpenseModel::ExpenseModel(QObject *parent)
         << S_COL_SUM
         << S_COL_CURRENCY << S_COL_ACCOUNT
         << S_COL_ATTENTION << S_COL_DESCRIPTION;
-    // visibleColumns << 2 << 3 << 0; // demo
+    // TODO read from settings
+    visibleColumns << 0 << 1 << 2 << 3 << 4 << 5 << 7 << 8 << 9;
 }
 
 void ExpenseModel::update()

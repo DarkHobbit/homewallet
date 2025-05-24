@@ -19,14 +19,15 @@ TransferModel::TransferModel(QObject *parent)
 {
           visibleFieldNames
           << "strftime('%d.%m.%Y', t.op_date)" // SQLite-ism!
-          << lowUnitFunction("t.amount")
+          << lowUnitFunction("t.amount", "cur.abbr")
           << "cur.abbr" << "ai.name" << "ao.name"
           << "tt.name" << "tt.descr";
     columnHeaders
         << S_COL_DATE << S_COL_SUM << S_COL_CURRENCY
         << S_COL_FROM << S_COL_TO
         << S_COL_CATEGORY << S_COL_DESCRIPTION;
-
+          // TODO read from settings
+          visibleColumns << 0 << 1 << 3 << 4 << 5 << 6;
 }
 
 void TransferModel::update()

@@ -39,6 +39,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    // Configuration
+    configManager.setDefaults(ui->tvExpenses->font().toString(),
+        ui->tvExpenses->palette().color(QPalette::Base).name(),
+        ui->tvExpenses->palette().color(QPalette::AlternateBase).name());
+    configManager.readConfig(); // TODO see comment in doublecontact
     // Models
     mdlExpenses = new ExpenseModel(this);
     proxyExpenses  = new QSortFilterProxyModel(this);

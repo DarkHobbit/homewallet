@@ -13,7 +13,9 @@
 
 #include <QSqlError>
 #include <QSqlQuery>
+
 #include "filteredquerymodel.h"
+#include "globals.h"
 
 FilteredQueryModel::FilteredQueryModel(QObject *parent)
     : QSqlQueryModel(parent),
@@ -100,12 +102,17 @@ void FilteredQueryModel::updateData(const QString &sql, bool insertWhere)
         emit modelError(qe);
 }
 
-QString FilteredQueryModel::lowUnitFunction(const QString& fieldName)
+QString FilteredQueryModel::lowUnitFunction(const QString& fieldName, const QString& currFieldName)
 {
+    QString res;
     if (0) // SQLite 3.38+ and other databases
-        return QString("format('%.2f', ") + fieldName + "/100.00)";
+        res = QString("format('%.2f', ") + fieldName + "/100.00)";
     else // old SQLite
-        return QString("printf('%.2f', ") + fieldName + "/100.00)";
+        res = QString("printf('%.2f', ") + fieldName + "/100.00)";
+    // TODO m.b. use QLocale::toCurrencyString() on client side in model...
+    if (!currFieldName.isEmpty() && gd.showSumsWithCurrency)
+        res += "||" + currFieldName;
+    return res;
 }
 
 void FilteredQueryModel::makeFilter()

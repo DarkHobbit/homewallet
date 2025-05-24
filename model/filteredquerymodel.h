@@ -46,7 +46,7 @@ protected:
     QDate dtFrom, dtTo;
     virtual void makeFilter();
     void updateData(const QString& sql, bool insertWhere);
-    QString lowUnitFunction(const QString& fieldName);
+    QString lowUnitFunction(const QString& fieldName, const QString& currFieldName = "");
 signals:
     void modelError(const QString& message);
 };

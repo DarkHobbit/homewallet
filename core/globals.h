@@ -80,6 +80,7 @@ struct GlobalConfig {
     bool showTableGrid;
     bool showLineNumbers;
     bool resizeTableRowsToContents;
+    bool showSumsWithCurrency;
     bool useTableAlternateColors;
     bool useSystemFontsAndColors;
     QString tableFont, gridColor1, gridColor2;
