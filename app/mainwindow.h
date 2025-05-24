@@ -22,6 +22,7 @@
 #include "hwdatabase.h"
 #include "expensemodel.h"
 #include "incomemodel.h"
+#include "transfermodel.h"
 
 namespace Ui {
 class MainWindow;
@@ -57,7 +58,7 @@ private slots:
     void on_btn_Filter_Reset_clicked();
     void on_cbDateFrom_stateChanged(int);
     void on_cbDateTo_stateChanged(int);
-    void on_tabWidget_currentChanged(int);
+    void on_tabWidgetMain_currentChanged(int);
     void on_cbCategory_activated(int);
     void on_Model_Error(const QString& message);
 
@@ -65,12 +66,16 @@ private:
     Ui::MainWindow *ui;
     ExpenseModel* mdlExpenses;
     IncomeModel* mdlIncomes;
-    QSortFilterProxyModel *proxyExpenses, *proxyIncomes;
+    TransferModel* mdlTransfer;
+    QSortFilterProxyModel *proxyExpenses, *proxyIncomes, *proxyTransfer;
+
     QLabel *lbCounts;
     enum ActiveTab {
         atExpenses,
         atIncomes,
-        atAccounts
+        atTransfer,
+        atExchange,
+        atAccounts // m.b. atNone?
     };
     void prepareModel(FilteredQueryModel* source, QSortFilterProxyModel *proxy, QTableView* view);
     void updateOneModel(CategoriesBasedQueryModel* source);

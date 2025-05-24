@@ -12,7 +12,8 @@ HEADERS	+= \
     $$PWD/importcandidatesmodel.h \
     $$PWD/importmodelset.h \
     $$PWD/incomemodel.h \
-    $$PWD/testmanager.h
+    $$PWD/testmanager.h \
+    $$PWD/transfermodel.h
 
 SOURCES	+= \
     $$PWD/categoriesbasedquerymodel.cpp \
@@ -22,5 +23,6 @@ SOURCES	+= \
     $$PWD/importcandidatesmodel.cpp \
     $$PWD/importmodelset.cpp \
     $$PWD/incomemodel.cpp \
-    $$PWD/testmanager.cpp
+    $$PWD/testmanager.cpp \
+    $$PWD/transfermodel.cpp
 

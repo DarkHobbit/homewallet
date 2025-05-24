@@ -46,6 +46,9 @@ MainWindow::MainWindow(QWidget *parent) :
     mdlIncomes = new IncomeModel(this);
     proxyIncomes = new QSortFilterProxyModel(this);
     prepareModel(mdlIncomes, proxyIncomes, ui->tvIncomes);
+    mdlTransfer = new TransferModel(this);
+    proxyTransfer = new QSortFilterProxyModel(this);
+    prepareModel(mdlTransfer, proxyTransfer, ui->tvTransfer);
 
     ui->leQuickFilter->installEventFilter(this);
     ui->dteDateFrom->installEventFilter(this);
@@ -85,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent) :
     if (gd.debugDataMode) {
         if (db.isEmpty()) {
             if (TestManager::createTestData(db)) {
-                on_tabWidget_currentChanged(0);
+                on_tabWidgetMain_currentChanged(0);
                 updateViews();
             }
             else
@@ -112,7 +115,7 @@ void MainWindow::openDb(const QString &path)
     }
     for (const QString& ws: db.warnings())
         QMessageBox::warning(0, S_WARNING, ws);
-    on_tabWidget_currentChanged(0);
+    on_tabWidgetMain_currentChanged(0);
     updateViews();
 }
 
@@ -130,6 +133,10 @@ void MainWindow::updateViews()
     case atIncomes:
         updateOneModel(mdlIncomes);
         updateOneView(ui->tvIncomes);
+        break;
+    case atTransfer:
+        updateOneModel(mdlTransfer);
+        updateOneView(ui->tvTransfer);
         break;
     default:
         break;
@@ -390,12 +397,25 @@ void MainWindow::updateOneView(QTableView *view)
 
 MainWindow::ActiveTab MainWindow::activeTab()
 {
-    QTabWidget* t = ui->tabWidget;
+    QTabWidget* t = ui->tabWidgetMain;
+    /*
     QString s = t->tabText(t->indexOf(t->currentWidget()));
     if (s==tr("Expenses"))
         return atExpenses;
     else if (s==tr("Incomes"))
         return atIncomes;
+    else
+        return atAccounts;
+*/
+    QWidget* curW = t->currentWidget();
+    if (curW==ui->tabExpenses)
+        return atExpenses;
+    else if (curW==ui->tabIncomes)
+        return atIncomes;
+    else if (curW==ui->tabTransferAndExchange)
+        return (ui->tabWidgetTransferAndExchange->currentWidget()==ui->tabTransfer)
+                   ? atTransfer : atExchange;
+    // TODO other tabs
     else
         return atAccounts;
 }
@@ -430,7 +450,7 @@ void MainWindow::on_btn_Filter_Reset_clicked()
 {
     ui->cbDateFrom->setChecked(false);
     ui->cbDateTo->setChecked(false);
-    on_tabWidget_currentChanged(0);
+    on_tabWidgetMain_currentChanged(0);
     updateViews();
 }
 
@@ -444,7 +464,7 @@ void MainWindow::on_cbDateTo_stateChanged(int)
     ui->dteDateTo->setEnabled(ui->cbDateTo->isChecked());
 }
 
-void MainWindow::on_tabWidget_currentChanged(int)
+void MainWindow::on_tabWidgetMain_currentChanged(int)
 {
     GenericDatabase::DictColl collCat;
     // TODO here save combo indexes and restore it
@@ -453,17 +473,19 @@ void MainWindow::on_tabWidget_currentChanged(int)
         ui->tvExpenses->resizeColumnsToContents();
         db.collectDict(collCat, "hw_ex_cat");
         // TODO call collectSubDict if will be slow, but it's more complex
-        fillComboByDict(ui->cbCategory, collCat, true);
         break;
     case atIncomes:
         ui->tvIncomes->resizeColumnsToContents();
         db.collectDict(collCat, "hw_in_cat");
-        fillComboByDict(ui->cbCategory, collCat, true);
+        break;
+    case atTransfer:
+        ui->tvTransfer->resizeColumnsToContents();
+        db.collectDict(collCat, "hw_transfer_type");
         break;
     default:
-        //
-        break;
+        ui->cbCategory->clear();
     }
+    fillComboByDict(ui->cbCategory, collCat, true);
     on_cbCategory_activated(0);
     updateViews();
 }
@@ -472,8 +494,18 @@ void MainWindow::on_cbCategory_activated(int)
 {
     GenericDatabase::DictColl collSubcat;
     int idCat = getComboCurrentId(ui->cbCategory);
-    db.collectDict(collSubcat, "hw_ex_subcat", "name", "id", QString("where id_ecat=%1").arg(idCat));
-    fillComboByDict(ui->cbSubcategory, collSubcat, true);
+    switch (activeTab()) {
+    case atExpenses:
+        db.collectDict(collSubcat, "hw_ex_subcat", "name", "id", QString("where id_ecat=%1").arg(idCat));
+        break;
+    case atIncomes:
+        db.collectDict(collSubcat, "hw_in_subcat", "name", "id", QString("where id_icat=%1").arg(idCat));
+        break;
+    default:
+        ui->cbSubcategory->clear();
+    }
+    if (!collSubcat.isEmpty())
+        fillComboByDict(ui->cbSubcategory, collSubcat, true);
 }
 
 void MainWindow::on_Model_Error(const QString &message)

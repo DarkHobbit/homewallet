@@ -153,184 +153,197 @@
     </message>
     <message>
         <location filename="../app/mainwindow.ui" line="25"/>
-        <location filename="../app/mainwindow.cpp" line="395"/>
         <source>Expenses</source>
         <translation>Расходы</translation>
     </message>
     <message>
         <location filename="../app/mainwindow.ui" line="47"/>
-        <location filename="../app/mainwindow.cpp" line="397"/>
         <source>Incomes</source>
         <translation>Доходы</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="77"/>
+        <location filename="../app/mainwindow.ui" line="66"/>
+        <source>Transfer &amp;&amp; Exchange</source>
+        <translation>Переносы и обмен</translation>
+    </message>
+    <message>
+        <location filename="../app/mainwindow.ui" line="76"/>
+        <source>Inter-account transfer</source>
+        <translation>Перенос между счетами</translation>
+    </message>
+    <message>
+        <location filename="../app/mainwindow.ui" line="90"/>
+        <source>Currency exchange</source>
+        <translation>Обмен валюты</translation>
+    </message>
+    <message>
+        <location filename="../app/mainwindow.ui" line="119"/>
         <source>Quick filter</source>
         <translation>Быстрофильтр</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="83"/>
+        <location filename="../app/mainwindow.ui" line="125"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="93"/>
-        <location filename="../app/mainwindow.ui" line="163"/>
+        <location filename="../app/mainwindow.ui" line="135"/>
+        <location filename="../app/mainwindow.ui" line="205"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="103"/>
+        <location filename="../app/mainwindow.ui" line="145"/>
         <source>Filter</source>
         <translation>Фильтр</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="109"/>
+        <location filename="../app/mainwindow.ui" line="151"/>
         <source>Date from</source>
         <translation>Дата от</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="119"/>
+        <location filename="../app/mainwindow.ui" line="161"/>
         <source>Date to</source>
         <translation>Дата до</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="129"/>
+        <location filename="../app/mainwindow.ui" line="171"/>
         <source>Category</source>
         <translation>Категория</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="136"/>
+        <location filename="../app/mainwindow.ui" line="178"/>
         <source>Subcategory</source>
         <translation>Подкатегория</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="170"/>
+        <location filename="../app/mainwindow.ui" line="212"/>
         <source>Reset</source>
         <translation>Сброс</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="186"/>
+        <location filename="../app/mainwindow.ui" line="228"/>
         <source>Add...</source>
         <translation>Добавить...</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="203"/>
+        <location filename="../app/mainwindow.ui" line="245"/>
         <source>Edit...</source>
         <translation>Редактировать...</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="220"/>
+        <location filename="../app/mainwindow.ui" line="262"/>
         <source>Delete...</source>
         <translation>Удалить...</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="243"/>
+        <location filename="../app/mainwindow.ui" line="285"/>
         <source>&amp;File</source>
         <translation>&amp;Файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="251"/>
+        <location filename="../app/mainwindow.ui" line="293"/>
         <source>&amp;View</source>
         <translation>&amp;Вид</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="260"/>
+        <location filename="../app/mainwindow.ui" line="302"/>
         <source>&amp;Help</source>
         <translation>&amp;Справка</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="281"/>
+        <location filename="../app/mainwindow.ui" line="323"/>
         <source>&amp;Import</source>
         <translation>&amp;Импорт</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="284"/>
+        <location filename="../app/mainwindow.ui" line="326"/>
         <source>Alt+I</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="289"/>
+        <location filename="../app/mainwindow.ui" line="331"/>
         <source>E&amp;xit</source>
         <translation>В&amp;ыход</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="294"/>
+        <location filename="../app/mainwindow.ui" line="336"/>
         <source>&amp;Categories</source>
         <translation>&amp;Категории</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="299"/>
+        <location filename="../app/mainwindow.ui" line="341"/>
         <source>&amp;Settings...</source>
         <translation>&amp;Настройки…</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="304"/>
+        <location filename="../app/mainwindow.ui" line="346"/>
         <source>&amp;About</source>
         <translation>&amp;О программе</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="309"/>
+        <location filename="../app/mainwindow.ui" line="351"/>
         <source>About &amp;Qt</source>
         <translation>О Qt</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="314"/>
+        <location filename="../app/mainwindow.ui" line="356"/>
         <source>&amp;DB debug</source>
         <translation>Отладка БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="319"/>
+        <location filename="../app/mainwindow.ui" line="361"/>
         <source>&amp;Filter</source>
         <translation>Фильтр</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="322"/>
+        <location filename="../app/mainwindow.ui" line="364"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="93"/>
+        <location filename="../app/mainwindow.cpp" line="96"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="97"/>
+        <location filename="../app/mainwindow.cpp" line="100"/>
         <source>Database not empty for testing</source>
         <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="140"/>
+        <location filename="../app/mainwindow.cpp" line="147"/>
         <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="189"/>
+        <location filename="../app/mainwindow.cpp" line="196"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="189"/>
+        <location filename="../app/mainwindow.cpp" line="196"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="198"/>
+        <location filename="../app/mainwindow.cpp" line="205"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="215"/>
+        <location filename="../app/mainwindow.cpp" line="222"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="313"/>
+        <location filename="../app/mainwindow.cpp" line="320"/>
         <source>Unknown import error</source>
         <translation>Неизвестная ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="315"/>
+        <location filename="../app/mainwindow.cpp" line="322"/>
         <source>
 at record %1 from %2</source>
         <translation>
@@ -799,21 +812,31 @@ Data will be lost</source>
     </message>
     <message>
         <location filename="../core/globals.h" line="63"/>
+        <source>From</source>
+        <translation>Откуда</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="64"/>
+        <source>To</source>
+        <translation>Куда</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="66"/>
         <source>Source</source>
         <translation>Источник</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="64"/>
+        <location filename="../core/globals.h" line="67"/>
         <source>Alias</source>
         <translation>Псевдоним</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="66"/>
+        <location filename="../core/globals.h" line="69"/>
         <source>&lt;All&gt;</source>
         <translation>&lt;Все&gt;</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="67"/>
+        <location filename="../core/globals.h" line="70"/>
         <source>Other</source>
         <translation>Прочее</translation>
     </message>

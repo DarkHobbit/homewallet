@@ -59,6 +59,9 @@
 #define S_COL_ACCOUNT QObject::tr("Account")
 #define S_COL_ATTENTION QObject::tr("At.")
 #define S_COL_DESCRIPTION QObject::tr("Description")
+// Additional column names for transfer
+#define S_COL_FROM QObject::tr("From")
+#define S_COL_TO QObject::tr("To")
 // Additional column names for import candidates
 #define S_COL_SOURCE QObject::tr("Source")
 #define S_COL_ALIAS QObject::tr("Alias")
