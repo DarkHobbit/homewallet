@@ -103,6 +103,14 @@
     </message>
 </context>
 <context>
+    <name>FilteredQueryModel</name>
+    <message>
+        <location filename="../model/filteredquerymodel.cpp" line="87"/>
+        <source>Incorrect column index found, see Settings-&gt;Columns</source>
+        <translation>Обнаружен некорректный индекс столбца, см. Настройки->Столбцы</translation>
+    </message>
+</context>
+<context>
     <name>ImportModelSet</name>
     <message>
         <location filename="../model/importmodelset.cpp" line="54"/>
@@ -303,47 +311,47 @@
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="96"/>
+        <location filename="../app/mainwindow.cpp" line="101"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="100"/>
+        <location filename="../app/mainwindow.cpp" line="105"/>
         <source>Database not empty for testing</source>
         <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="147"/>
+        <location filename="../app/mainwindow.cpp" line="152"/>
         <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="196"/>
+        <location filename="../app/mainwindow.cpp" line="201"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="196"/>
+        <location filename="../app/mainwindow.cpp" line="201"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="205"/>
+        <location filename="../app/mainwindow.cpp" line="210"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="222"/>
+        <location filename="../app/mainwindow.cpp" line="227"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="320"/>
+        <location filename="../app/mainwindow.cpp" line="325"/>
         <source>Unknown import error</source>
         <translation>Неизвестная ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="322"/>
+        <location filename="../app/mainwindow.cpp" line="327"/>
         <source>
 at record %1 from %2</source>
         <translation>

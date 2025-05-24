@@ -80,8 +80,14 @@ void FilteredQueryModel::updateData(const QString &sql, bool insertWhere)
         fields = visibleFieldNames.join(", ");
     else {
         fields = visibleFieldNames[visibleColumns.first()];
-        for (int i=1; i<visibleColumns.count(); i++)
-            fields += ", " + visibleFieldNames[visibleColumns[i]];
+        for (int i=1; i<visibleColumns.count(); i++) {
+            int fieldIndex = visibleColumns[i];
+            if (fieldIndex>=visibleFieldNames.count()) {
+                fieldIndex = 0; // failback if incorrect settings
+                emit modelError(tr("Incorrect column index found, see Settings->Columns"));
+            }
+            fields += ", " + visibleFieldNames[fieldIndex];
+        }
     }
     // Filter
     QString fAdd = "";
