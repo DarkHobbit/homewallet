@@ -146,6 +146,7 @@ void MainWindow::updateViews()
     default:
         break;
     }
+    resizeViews();
     // Status bar
     int totalInCount, totalExpCount;
     db.getCounts(totalInCount, totalExpCount);
@@ -156,13 +157,19 @@ void MainWindow::updateViews()
         .arg(totalInCount));
 }
 
+void MainWindow::resizeViews()
+{
+    ui->tvExpenses->resizeColumnsToContents();
+    ui->tvIncomes->resizeColumnsToContents();
+    ui->tvTransfer->resizeColumnsToContents();
+    // Alternatives is ui->tvExpenses->setColumnWidth(), autoresized columns
+    // in some cases can be too big (subcategory)
+}
+
 void MainWindow::resizeEvent(QResizeEvent* e)
 {
     QMainWindow::resizeEvent(e);
-    ui->tvExpenses->resizeColumnsToContents();
-    ui->tvIncomes->resizeColumnsToContents();
-    // Alternatives is ui->tvExpenses->setColumnWidth(), autoresized columns
-    // in some cases can be too big (subcategory)
+    resizeViews();
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)

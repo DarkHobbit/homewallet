@@ -37,6 +37,7 @@ public:
     ~MainWindow();
     void openDb(const QString& path);
     void updateViews();
+    void resizeViews();
     HwDatabase db;
     FormatFactory factory;
 
