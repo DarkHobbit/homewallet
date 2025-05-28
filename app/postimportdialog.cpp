@@ -14,6 +14,7 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 
+#include "helpers.h"
 #include "postimportdialog.h"
 #include "ui_postimportdialog.h"
 
@@ -38,6 +39,19 @@ void PostImportDialog::setData(ImpCandidates* _cands)
     ui->tableIncomes->setModel(mSet->mdlIncome);
     ui->lbStat->setText(mSet->stat());
     setOkAccessibility();
+}
+
+void PostImportDialog::showEvent(QShowEvent*)
+{
+    updateTableConfig(ui->tableExpenses);
+    updateTableConfig(ui->tableIncomes);
+    updateOneView(ui->tableExpenses, false);
+    updateOneView(ui->tableIncomes, false);
+    ui->tableExpenses->resizeColumnsToContents();
+    ui->tableIncomes->resizeColumnsToContents();
+    // Try to reuce source string
+    ui->tableExpenses->setColumnWidth(1, ui->tableExpenses->columnWidth(5));
+    ui->tableIncomes->setColumnWidth(1, ui->tableIncomes->columnWidth(5));
 }
 
 void PostImportDialog::setOkAccessibility()

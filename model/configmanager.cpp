@@ -63,7 +63,7 @@ void ConfigManager::readConfig()
     // View
     gd.showTableGrid = settings->value("View/ShowTableGrid", false).toBool();
     gd.showLineNumbers = settings->value("View/ShowLineNumbers", false).toBool();
-    gd.resizeTableRowsToContents = settings->value("View/ResizeTableRowsToContents", true).toBool();
+    gd.resizeTableRowsToContents = settings->value("View/ResizeTableRowsToContents", false).toBool();
     gd.showSumsWithCurrency = settings->value("View/ShowSumsWithCurrency", true).toBool();
     gd.useTableAlternateColors = settings->value("View/UseTableAlternateColors", true).toBool();
     gd.useSystemFontsAndColors = settings->value("View/UseSystemFontsAndColors", false).toBool();

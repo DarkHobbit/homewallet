@@ -15,9 +15,14 @@
 #define HELPERS_H
 
 #include <QComboBox>
+#include <QTableView>
+
 #include "genericdatabase.h"
 
 void fillComboByDict(QComboBox* combo, GenericDatabase::DictColl coll, bool addAllItem);
 int getComboCurrentId(QComboBox* combo);
+// Set color/font for each table view
+void updateTableConfig(QTableView* table);
+void updateOneView(QTableView* view, bool isDatabaseView);
 
 #endif // HELPERS_H

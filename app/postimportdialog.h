@@ -34,6 +34,7 @@ private:
     Ui::PostImportDialog *ui;
     ImpCandidates* cands;
     ImportModelSet* mSet;
+    virtual void showEvent(QShowEvent*);
 private slots:
     void setOkAccessibility();
 };

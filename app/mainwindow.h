@@ -42,7 +42,8 @@ public:
     FormatFactory factory;
 
 protected:
-    void resizeEvent(QResizeEvent* e);
+    virtual void showEvent(QShowEvent* e);
+    virtual void resizeEvent(QResizeEvent* e);
     bool eventFilter(QObject *obj, QEvent *event);
 
 private slots:
@@ -80,7 +81,7 @@ private:
     };
     void prepareModel(FilteredQueryModel* source, QSortFilterProxyModel *proxy, QTableView* view);
     void updateOneModel(CategoriesBasedQueryModel* source);
-    void updateOneView(QTableView* view);
+    void updateConfig();
     ActiveTab activeTab();
 };
 

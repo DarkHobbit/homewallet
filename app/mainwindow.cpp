@@ -132,16 +132,16 @@ void MainWindow::updateViews()
     switch (activeTab()) {
     case atExpenses:
         updateOneModel(mdlExpenses);
-        updateOneView(ui->tvExpenses);
+        updateOneView(ui->tvExpenses, true);
         break;
     // TODO unify all models with datefilters
     case atIncomes:
         updateOneModel(mdlIncomes);
-        updateOneView(ui->tvIncomes);
+        updateOneView(ui->tvIncomes, true);
         break;
     case atTransfer:
         updateOneModel(mdlTransfer);
-        updateOneView(ui->tvTransfer);
+        updateOneView(ui->tvTransfer, true);
         break;
     default:
         break;
@@ -395,18 +395,6 @@ void MainWindow::updateOneModel(CategoriesBasedQueryModel *source)
     source->update();
 }
 
-void MainWindow::updateOneView(QTableView *view)
-{
-    view->setColumnHidden(0, true);
-    // view->resizeRowsToContents(); // very slow, m.b. to settings
-    const int rH = 20;
-#if QT_VERSION >= 0x050200
-    view->verticalHeader()->setMaximumSectionSize(rH);
-#endif
-    for (int i=0; i<view->model()->rowCount(); i++) // M.b. slow on some computers!
-        view->setRowHeight(i, rH);
-}
-
 MainWindow::ActiveTab MainWindow::activeTab()
 {
     QTabWidget* t = ui->tabWidgetMain;
@@ -523,5 +511,22 @@ void MainWindow::on_cbCategory_activated(int)
 void MainWindow::on_Model_Error(const QString &message)
 {
     QMessageBox::critical(0, S_ERROR, message);
+}
+
+void MainWindow::showEvent(QShowEvent *e)
+{
+    // TODO тж. вызывать updateConfig() после настройки, внезапно, конфига
+    updateConfig();
+}
+
+// Manage immediately applied but settings window managed options
+void MainWindow::updateConfig()
+{
+    // Table(s) visible columns
+    // TODO mdlExpenses->updateVisibleColumns();
+    // Table(s) general config (must be after updateVisibleColumns(), because resizeRowsToContents())
+    updateTableConfig(ui->tvExpenses);
+    updateTableConfig(ui->tvIncomes);
+    updateTableConfig(ui->tvTransfer);
 }
 

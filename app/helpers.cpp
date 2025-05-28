@@ -11,6 +11,9 @@
  *
  */
 
+#include <QFont>
+#include <QHeaderView>
+
 #include "globals.h"
 #include "helpers.h"
 
@@ -26,4 +29,37 @@ void fillComboByDict(QComboBox *combo, GenericDatabase::DictColl coll, bool addA
 int getComboCurrentId(QComboBox *combo)
 {
     return combo->itemData(combo->currentIndex()).toInt();
+}
+
+// Set color/font for each table view
+void updateTableConfig(QTableView *table)
+{
+    table->setShowGrid(gd.showTableGrid);
+    table->verticalHeader()->setVisible(gd.showLineNumbers);
+    table->setAlternatingRowColors(gd.useTableAlternateColors);
+    if (!gd.useSystemFontsAndColors) {
+        QFont f;
+        bool fontSuccess = f.fromString(gd.tableFont);
+        if (fontSuccess)
+            table->setFont(f);
+        table->setStyleSheet(QString("QTableView { alternate-background-color: %1; background: %2 }")
+                                 .arg(gd.gridColor2).arg(gd.gridColor1));
+    }
+    if (gd.resizeTableRowsToContents)
+        table->resizeRowsToContents();
+}
+
+
+void updateOneView(QTableView *view, bool isDatabaseView)
+{
+    if (isDatabaseView)
+        view->setColumnHidden(0, true);
+    if (gd.resizeTableRowsToContents)
+        view->resizeRowsToContents();
+    const int rH = 20;
+#if QT_VERSION >= 0x050200
+    view->verticalHeader()->setMaximumSectionSize(rH);
+#endif
+    for (int i=0; i<view->model()->rowCount(); i++) // M.b. slow on some computers!
+        view->setRowHeight(i, rH);
 }
