@@ -44,7 +44,7 @@ QStringList FormatFactory::supportedFilters(QIODevice::OpenModeFlag mode, bool i
             allTypes << ff->supportedFilters();
 
         }
-    allTypes << S_ALL_SUPPORTED.arg(allSupported);
+    allTypes.insert(0, S_ALL_SUPPORTED.arg(allSupported));
     allTypes << S_ALL_FILES;
     return allTypes;
 }

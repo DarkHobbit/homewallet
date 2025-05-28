@@ -107,7 +107,7 @@
     <message>
         <location filename="../model/filteredquerymodel.cpp" line="87"/>
         <source>Incorrect column index found, see Settings-&gt;Columns</source>
-        <translation>Обнаружен некорректный индекс столбца, см. Настройки->Столбцы</translation>
+        <translation>Обнаружен некорректный индекс столбца, см. Настройки-&gt;Столбцы</translation>
     </message>
 </context>
 <context>
@@ -321,37 +321,37 @@
         <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="152"/>
+        <location filename="../app/mainwindow.cpp" line="153"/>
         <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="201"/>
+        <location filename="../app/mainwindow.cpp" line="208"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="201"/>
+        <location filename="../app/mainwindow.cpp" line="208"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="210"/>
+        <location filename="../app/mainwindow.cpp" line="217"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="227"/>
+        <location filename="../app/mainwindow.cpp" line="234"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="325"/>
+        <location filename="../app/mainwindow.cpp" line="332"/>
         <source>Unknown import error</source>
         <translation>Неизвестная ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="327"/>
+        <location filename="../app/mainwindow.cpp" line="334"/>
         <source>
 at record %1 from %2</source>
         <translation>
