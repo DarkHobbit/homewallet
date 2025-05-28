@@ -55,7 +55,7 @@ void ConfigManager::setDefaults(const QString &tableFont, const QString &gridCol
     gd.gridColor1 = gridColor1;
     gd.gridColor2 = gridColor2;
 }
-
+#include <iostream>
 void ConfigManager::readConfig()
 {
     if (!settings)
@@ -71,10 +71,11 @@ void ConfigManager::readConfig()
     gd.gridColor1 = settings->value("View/GridColor1", gd.gridColor1).toString();
     gd.gridColor2 = settings->value("View/GridColor2", gd.gridColor2).toString();
     // Locale
-    gd.dateFormat = settings->value("Locale/DateFormat", QLocale::system().dateFormat()).toString();
-    gd.timeFormat = settings->value("Locale/TimeFormat", QLocale::system().timeFormat()).toString();
-    gd.useSystemDateTimeFormat = settings->value("Locale/UseSystemDateTimeFormat", true).toBool();
+    gd.dateFormat = settings->value("Locale/DateFormat", QLocale::system().dateFormat(QLocale::ShortFormat)).toString();
+    gd.timeFormat = settings->value("Locale/TimeFormat", QLocale::system().timeFormat(QLocale::LongFormat)).toString();
+    gd.useSystemDateTimeFormat = settings->value("Locale/UseSystemDateTimeFormat", false).toBool();
     updateFormats();
+    std::cerr << gd.timeFormat.toUtf8().data() << std::endl;
 }
 
 void ConfigManager::writeConfig()
