@@ -29,6 +29,7 @@
 #include "logwindow.h"
 #include "mainwindow.h"
 #include "postimportdialog.h"
+#include "settingsdialog.h"
 #include "testmanager.h"
 #include "ui_mainwindow.h"
 #include "formats/interactiveformat.h"
@@ -353,7 +354,18 @@ void MainWindow::on_action_Import_triggered()
 
 void MainWindow::on_action_Settings_triggered()
 {
-    // TODO At first, drag view (table) and locale settings from DC
+    SettingsDialog* setDlg = new SettingsDialog(0);
+    setDlg->setData();
+    setDlg->exec();
+    if (setDlg->result()==QDialog::Accepted) {
+        setDlg->getData();
+        configManager.writeConfig();
+        updateConfig();
+        // Language
+        if (setDlg->langChanged())
+            QMessageBox::information(0, S_INFORM, tr("Restart program to apply language change"));
+    }
+    delete setDlg;
 }
 
 #include <iostream>

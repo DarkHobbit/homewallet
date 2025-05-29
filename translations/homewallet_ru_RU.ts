@@ -286,76 +286,86 @@
         <translation>&amp;Настройки…</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="346"/>
+        <location filename="../app/mainwindow.ui" line="344"/>
+        <source>Ctrl+P</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/mainwindow.ui" line="349"/>
         <source>&amp;About</source>
         <translation>&amp;О программе</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="351"/>
+        <location filename="../app/mainwindow.ui" line="354"/>
         <source>About &amp;Qt</source>
         <translation>О Qt</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="356"/>
+        <location filename="../app/mainwindow.ui" line="359"/>
         <source>&amp;DB debug</source>
         <translation>Отладка БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="361"/>
+        <location filename="../app/mainwindow.ui" line="364"/>
         <source>&amp;Filter</source>
         <translation>Фильтр</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="364"/>
+        <location filename="../app/mainwindow.ui" line="367"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="101"/>
+        <location filename="../app/mainwindow.cpp" line="102"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="105"/>
+        <location filename="../app/mainwindow.cpp" line="106"/>
         <source>Database not empty for testing</source>
         <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="153"/>
+        <location filename="../app/mainwindow.cpp" line="154"/>
         <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="208"/>
+        <location filename="../app/mainwindow.cpp" line="209"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="208"/>
+        <location filename="../app/mainwindow.cpp" line="209"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="217"/>
+        <location filename="../app/mainwindow.cpp" line="218"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="234"/>
+        <location filename="../app/mainwindow.cpp" line="235"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="332"/>
+        <location filename="../app/mainwindow.cpp" line="333"/>
         <source>Unknown import error</source>
         <translation>Неизвестная ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="334"/>
+        <location filename="../app/mainwindow.cpp" line="335"/>
         <source>
 at record %1 from %2</source>
         <translation>
 в записи %1 из %2</translation>
+    </message>
+    <message>
+        <location filename="../app/mainwindow.cpp" line="366"/>
+        <source>Restart program to apply language change</source>
+        <translation>Язык сменится после перезапуска программы</translation>
     </message>
 </context>
 <context>
@@ -886,6 +896,94 @@ Found: %1</source>
         <location filename="../core/formats/txtcompactfile.cpp" line="188"/>
         <source>Too long money sum fractional part: %1,%2</source>
         <translation>Слишком длинная дробная часть денежной суммы: %1,%2</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="14"/>
+        <source>Settings</source>
+        <translation>Настройки</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="24"/>
+        <source>General</source>
+        <translation>Общее</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="32"/>
+        <source>Language</source>
+        <translation>Язык</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="42"/>
+        <source>Date format</source>
+        <translation>Формат даты</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="52"/>
+        <source>Time format</source>
+        <translation>Формат времени</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="64"/>
+        <source>Use system date/time format</source>
+        <translation>Использовать системный формат даты и времени</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="71"/>
+        <source>Show money sums in same column with currency</source>
+        <translation>Показывать сумму и валюту в одном столбце</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="78"/>
+        <source>Show grid in tables</source>
+        <translation>Показывать сетку в таблицах</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="85"/>
+        <source>Show line numbers</source>
+        <translation>Показывать номера строк</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="92"/>
+        <source>Resize table rows to contents</source>
+        <translation>Подстраивать высоту строк под содержимое</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="99"/>
+        <source>Use alternate row colors in table</source>
+        <translation>Чередовать цвета строк в таблице</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="106"/>
+        <source>Use system fonts and colors</source>
+        <translation>Использовать системные шрифты и цвета</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="113"/>
+        <source>Table font</source>
+        <translation>Шрифт таблиц</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="120"/>
+        <source>Colors</source>
+        <translation>Цвета</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="126"/>
+        <source>Grid base</source>
+        <translation>Таблицы (основной)</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="133"/>
+        <source>Grid alternate</source>
+        <translation>Таблицы (дополнит.)</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="144"/>
+        <source>Columns</source>
+        <translation>Столбцы</translation>
     </message>
 </context>
 </TS>

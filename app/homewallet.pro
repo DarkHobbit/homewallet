@@ -30,7 +30,8 @@ SOURCES += \
     logwindow.cpp \
     main.cpp \
     mainwindow.cpp \
-    postimportdialog.cpp
+    postimportdialog.cpp \
+    settingsdialog.cpp
 
 HEADERS  += \
     aboutdialog.h \
@@ -38,14 +39,16 @@ HEADERS  += \
     languageselectdialog.h \
     logwindow.h \
     mainwindow.h \
-    postimportdialog.h
+    postimportdialog.h \
+    settingsdialog.h
 
 FORMS    += \
     aboutdialog.ui \
     languageselectdialog.ui \
     logwindow.ui \
     mainwindow.ui \
-    postimportdialog.ui
+    postimportdialog.ui \
+    settingsdialog.ui
 
 unix { 
     OBJECTS_DIR = .obj
