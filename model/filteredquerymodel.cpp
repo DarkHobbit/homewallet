@@ -53,24 +53,60 @@ QVariant FilteredQueryModel::headerData(int section, Qt::Orientation orientation
             return QSqlQueryModel::headerData(section, orientation, role);
         else if (visibleColumns.isEmpty()) // first time
             return columnHeaders[section-1];
-        else // main case
-            return columnHeaders[visibleColumns[section-1]];
+        else { // main case
+            if (section>visibleColumns.count())
+                return "Err1";
+            else {
+                int visIndex = visibleColumns[section-1];
+                if (visIndex>=columnHeaders.count())
+                    return "Err2";
+                else
+                    return columnHeaders[visIndex];
+            }
+        }
     }
     else
         return QSqlQueryModel::headerData(section, orientation, role);
 }
 
-/* TODO Restore if need custom formatting
 QVariant FilteredQueryModel::data(const QModelIndex &index, int role) const
 {
-    if (visibleColumns.isEmpty() || index.column()==0)
+    int col = index.column();
+    if (visibleColumns.isEmpty() || col==0 || col > visibleColumns.count())
         return QSqlQueryModel::data(index, role);
-    else {
-        QModelIndex ind = this->index(index.row(), visibleColumns[index.column()-1]);
-        return QSqlQueryModel::data(ind, role);
+    QVariant res = QSqlQueryModel::data(index, Qt::DisplayRole);
+    int visIndex = visibleColumns[col-1];
+    char fmt = (visIndex<visibleFieldTypes.count()) ? visibleFieldTypes[visIndex] : 'G';
+    if (role==Qt::DisplayRole) {
+        switch (fmt) {
+        case 'D': {
+            QDateTime opDT = res.toDateTime();
+            return gd.useSystemDateTimeFormat ? opDT.toString() : opDT.toString(gd.dateFormat);
+        }
+        case 'M':
+            return res.toString().replace('.', ',');
+        default:
+            return res;
+        }
     }
+    else if (role==SortStringRole) {
+        switch (fmt) {
+        case 'D': {
+            QDateTime opDT = res.toDateTime();
+            return opDT.toString(Qt::ISODate);
+        }
+        case 'M': {
+            QString sRes = res.toString();
+            if (!sRes[sRes.length()-1].isDigit())
+                sRes.remove(sRes.length()-1, 1);
+            return sRes.toDouble();
+        }
+        default:
+            return res;
+        }
+    }
+    else return QSqlQueryModel::data(index, role);
 }
-*/
 
 void FilteredQueryModel::updateData(const QString &sql, bool insertWhere)
 {

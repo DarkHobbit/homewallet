@@ -18,12 +18,15 @@ IncomeModel::IncomeModel(QObject *parent)
     : CategoriesBasedQueryModel{parent}
 {
     visibleFieldNames
-        << "strftime('%d.%m.%Y', i.op_date)" // SQLite-ism!
+        << "i.op_date"
         << "c.name" << "sc.name" << "i.quantity" << "u.name"
         << lowUnitFunction("i.amount", "cur.abbr")
         << "cur.abbr" << "a.name"
         << "case i.attention when 1 then '*' else '' end"
         << "i.descr";
+    visibleFieldTypes
+        << 'D' << 'G' << 'G' << 'G' << 'G'
+        << 'M' << 'G' << 'G' << 'G' << 'G';
     columnHeaders
         << S_COL_DATE
         << S_COL_CATEGORY << S_COL_SUBCATEGORY << S_COL_QUANTITY <<S_COL_UNIT

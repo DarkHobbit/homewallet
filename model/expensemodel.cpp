@@ -18,12 +18,16 @@ ExpenseModel::ExpenseModel(QObject *parent)
     : CategoriesBasedQueryModel(parent)
 {
     visibleFieldNames
-        << "strftime('%d.%m.%Y', e.op_date)" // SQLite-ism!
+        << "e.op_date"
+//        << "strftime('%d.%m.%Y', e.op_date)" // SQLite-ism! TODO both variants for slow devices
         << "c.name" << "sc.name" << "e.quantity" << "u.name"
         << lowUnitFunction("e.amount", "cur.abbr")
         << "cur.abbr" << "a.name"
         << "case e.attention when 1 then '*' else '' end"
         << "e.descr";
+    visibleFieldTypes
+        << 'D' << 'G' << 'G' << 'G' << 'G'
+        << 'M' << 'G' << 'G' << 'G' << 'G';
     columnHeaders
         << S_COL_DATE
         << S_COL_CATEGORY << S_COL_SUBCATEGORY << S_COL_QUANTITY <<S_COL_UNIT

@@ -35,12 +35,13 @@ public:
     // Base model implementation methods
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    // QVariant data(const QModelIndex &index, int role) const;
+    QVariant data(const QModelIndex &index, int role) const;
     // TODO flags(), if needed
     // TODO field list for Qt::AlignRight (number)
 protected:
     ModelColumnList visibleColumns;
     QStringList visibleFieldNames;
+    QList<char> visibleFieldTypes;
     QStringList columnHeaders;
     QStringList filters;
     QDate dtFrom, dtTo;

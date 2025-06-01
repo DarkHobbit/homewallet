@@ -17,11 +17,13 @@
 TransferModel::TransferModel(QObject *parent)
     : CategoriesBasedQueryModel{parent}
 {
-          visibleFieldNames
-          << "strftime('%d.%m.%Y', t.op_date)" // SQLite-ism!
+    visibleFieldNames
+        << "t.op_date"
           << lowUnitFunction("t.amount", "cur.abbr")
           << "cur.abbr" << "ai.name" << "ao.name"
           << "tt.name" << "tt.descr";
+    visibleFieldTypes
+              << 'D' << 'M' << 'G' << 'G' << 'G' << 'G' << 'G';
     columnHeaders
         << S_COL_DATE << S_COL_SUM << S_COL_CURRENCY
         << S_COL_FROM << S_COL_TO
