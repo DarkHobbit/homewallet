@@ -48,18 +48,18 @@ MainWindow::MainWindow(QWidget *parent) :
     // Models
     mdlExpenses = new ExpenseModel(this);
     proxyExpenses  = new QSortFilterProxyModel(this);
-    prepareModel(mdlExpenses, proxyExpenses, ui->tvExpenses);
+    prepareModel(mdlExpenses, proxyExpenses, ui->tvExpenses, "Expenses");
     mdlIncomes = new IncomeModel(this);
     proxyIncomes = new QSortFilterProxyModel(this);
-    prepareModel(mdlIncomes, proxyIncomes, ui->tvIncomes);
+    prepareModel(mdlIncomes, proxyIncomes, ui->tvIncomes, "Incomes");
     mdlTransfer = new TransferModel(this);
     proxyTransfer = new QSortFilterProxyModel(this);
-    prepareModel(mdlTransfer, proxyTransfer, ui->tvTransfer);
+    prepareModel(mdlTransfer, proxyTransfer, ui->tvTransfer, "Transfer");
 
     ui->leQuickFilter->installEventFilter(this);
     ui->dteDateFrom->installEventFilter(this);
     ui->dteDateTo->installEventFilter(this);
-    showMaximized(); // TODO to settings
+    // showMaximized(); // TODO to settings
     // Status bar
     lbCounts = new QLabel(0);
     statusBar()->addWidget(lbCounts);
@@ -381,17 +381,20 @@ void MainWindow::on_actionFilter_triggered()
     ui->leQuickFilter->setFocus();
 }
 
-void MainWindow::prepareModel(FilteredQueryModel *source, QSortFilterProxyModel *proxy, QTableView *view)
+void MainWindow::prepareModel(FilteredQueryModel *source, QSortFilterProxyModel *proxy, QTableView *view, const QString& nameForDebug)
 {
+    source->setObjectName(QString("mdl")+nameForDebug);
     proxy->setSourceModel(source);
     proxy->setFilterKeyColumn(-1);
     proxy->setFilterCaseSensitivity(Qt::CaseInsensitive); // Driver == driver
     proxy->setSortRole(SortStringRole);
+    proxy->setObjectName(QString("proxy")+nameForDebug);
     view->setModel(proxy);
     // TODO implement selection and checkSelection() and mapToSource for all cases, see DoubleContact's checkSelection()
     view->setSortingEnabled(true); // TODO to settings
 //    view->horizontalHeader()->setResizeContentsPrecision(64);
     view->horizontalHeader()->setStretchLastSection(true);
+    view->setObjectName(QString("tv")+nameForDebug);
     // Error handling
     connect(source, SIGNAL(modelError(QString)), this, SLOT(on_Model_Error(QString)));
 }
@@ -525,7 +528,7 @@ void MainWindow::on_Model_Error(const QString &message)
     QMessageBox::critical(0, S_ERROR, message);
 }
 
-void MainWindow::showEvent(QShowEvent *e)
+void MainWindow::showEvent(QShowEvent*)
 {
     // TODO тж. вызывать updateConfig() после настройки, внезапно, конфига
     updateConfig();

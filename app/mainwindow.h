@@ -42,7 +42,7 @@ public:
     FormatFactory factory;
 
 protected:
-    virtual void showEvent(QShowEvent* e);
+    virtual void showEvent(QShowEvent*);
     virtual void resizeEvent(QResizeEvent* e);
     bool eventFilter(QObject *obj, QEvent *event);
 
@@ -79,7 +79,7 @@ private:
         atExchange,
         atAccounts // m.b. atNone?
     };
-    void prepareModel(FilteredQueryModel* source, QSortFilterProxyModel *proxy, QTableView* view);
+    void prepareModel(FilteredQueryModel* source, QSortFilterProxyModel *proxy, QTableView* view, const QString& nameForDebug);
     void updateOneModel(CategoriesBasedQueryModel* source);
     void updateConfig();
     ActiveTab activeTab();
