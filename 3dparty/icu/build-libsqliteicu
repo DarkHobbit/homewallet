@@ -1,0 +1,3 @@
+#!/bin/bash
+
+gcc -shared -fPIC icu.c -o libsqliteicu.so
