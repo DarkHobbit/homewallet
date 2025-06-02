@@ -59,7 +59,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->leQuickFilter->installEventFilter(this);
     ui->dteDateFrom->installEventFilter(this);
     ui->dteDateTo->installEventFilter(this);
-    // showMaximized(); // TODO to settings
+    if (gd.fullScreenMode)
+        showMaximized();
     // Status bar
     lbCounts = new QLabel(0);
     statusBar()->addWidget(lbCounts);

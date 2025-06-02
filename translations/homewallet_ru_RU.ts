@@ -105,7 +105,7 @@
 <context>
     <name>FilteredQueryModel</name>
     <message>
-        <location filename="../model/filteredquerymodel.cpp" line="87"/>
+        <location filename="../model/filteredquerymodel.cpp" line="123"/>
         <source>Incorrect column index found, see Settings-&gt;Columns</source>
         <translation>Обнаружен некорректный индекс столбца, см. Настройки-&gt;Столбцы</translation>
     </message>
@@ -316,54 +316,54 @@
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="102"/>
+        <location filename="../app/mainwindow.cpp" line="103"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="106"/>
+        <location filename="../app/mainwindow.cpp" line="107"/>
         <source>Database not empty for testing</source>
         <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="154"/>
+        <location filename="../app/mainwindow.cpp" line="155"/>
         <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="209"/>
+        <location filename="../app/mainwindow.cpp" line="210"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="209"/>
+        <location filename="../app/mainwindow.cpp" line="210"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="218"/>
+        <location filename="../app/mainwindow.cpp" line="219"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="235"/>
+        <location filename="../app/mainwindow.cpp" line="236"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="333"/>
+        <location filename="../app/mainwindow.cpp" line="334"/>
         <source>Unknown import error</source>
         <translation>Неизвестная ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="335"/>
+        <location filename="../app/mainwindow.cpp" line="336"/>
         <source>
 at record %1 from %2</source>
         <translation>
 в записи %1 из %2</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="366"/>
+        <location filename="../app/mainwindow.cpp" line="367"/>
         <source>Restart program to apply language change</source>
         <translation>Язык сменится после перезапуска программы</translation>
     </message>
@@ -932,56 +932,61 @@ Found: %1</source>
     </message>
     <message>
         <location filename="../app/settingsdialog.ui" line="71"/>
+        <source>Show main window on full screen at startup</source>
+        <translation>Распахивать главное окно на полный экран при загрузке</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="78"/>
         <source>Show money sums in same column with currency</source>
         <translation>Показывать сумму и валюту в одном столбце</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="78"/>
+        <location filename="../app/settingsdialog.ui" line="85"/>
         <source>Show grid in tables</source>
         <translation>Показывать сетку в таблицах</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="85"/>
+        <location filename="../app/settingsdialog.ui" line="92"/>
         <source>Show line numbers</source>
         <translation>Показывать номера строк</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="92"/>
+        <location filename="../app/settingsdialog.ui" line="99"/>
         <source>Resize table rows to contents</source>
         <translation>Подстраивать высоту строк под содержимое</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="99"/>
+        <location filename="../app/settingsdialog.ui" line="106"/>
         <source>Use alternate row colors in table</source>
         <translation>Чередовать цвета строк в таблице</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="106"/>
+        <location filename="../app/settingsdialog.ui" line="113"/>
         <source>Use system fonts and colors</source>
         <translation>Использовать системные шрифты и цвета</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="113"/>
+        <location filename="../app/settingsdialog.ui" line="120"/>
         <source>Table font</source>
         <translation>Шрифт таблиц</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="120"/>
+        <location filename="../app/settingsdialog.ui" line="127"/>
         <source>Colors</source>
         <translation>Цвета</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="126"/>
+        <location filename="../app/settingsdialog.ui" line="133"/>
         <source>Grid base</source>
         <translation>Таблицы (основной)</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="133"/>
+        <location filename="../app/settingsdialog.ui" line="140"/>
         <source>Grid alternate</source>
         <translation>Таблицы (дополнит.)</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="144"/>
+        <location filename="../app/settingsdialog.ui" line="151"/>
         <source>Columns</source>
         <translation>Столбцы</translation>
     </message>

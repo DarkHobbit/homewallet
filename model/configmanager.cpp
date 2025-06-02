@@ -61,6 +61,7 @@ void ConfigManager::readConfig()
     if (!settings)
         return;
     // View
+    gd.fullScreenMode = settings->value("View/FullScreenMode", false).toBool();
     gd.showTableGrid = settings->value("View/ShowTableGrid", false).toBool();
     gd.showLineNumbers = settings->value("View/ShowLineNumbers", false).toBool();
     gd.resizeTableRowsToContents = settings->value("View/ResizeTableRowsToContents", false).toBool();
@@ -82,6 +83,7 @@ void ConfigManager::writeConfig()
     if (!settings)
         return;
     // View
+    settings->setValue("View/FullScreenMode", gd.fullScreenMode);
     settings->setValue("View/ShowTableGrid", gd.showTableGrid);
     settings->setValue("View/ShowLineNumbers", gd.showLineNumbers);
     settings->setValue("View/ResizeTableRowsToContents", gd.resizeTableRowsToContents);

@@ -66,6 +66,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="cbFullScreenMode">
+         <property name="text">
+          <string>Show main window on full screen at startup</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QCheckBox" name="cbShowSumsWithCurrency">
          <property name="text">
           <string>Show money sums in same column with currency</string>

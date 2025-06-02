@@ -33,6 +33,7 @@ bool SettingsDialog::setData()
     ui->cbUseSystemDateTimeFormat->setChecked(gd.useSystemDateTimeFormat);
     on_cbUseSystemDateTimeFormat_clicked(ui->cbUseSystemDateTimeFormat->isChecked());
     // View
+    ui->cbFullScreenMode->setChecked(gd.fullScreenMode);
     ui->cbShowTableGrid->setChecked(gd.showTableGrid);
     ui->cbShowLineNumbers->setChecked(gd.showLineNumbers);
     ui->cbResizeTableRowsToContents->setChecked(gd.resizeTableRowsToContents);
@@ -60,6 +61,7 @@ bool SettingsDialog::getData()
     gd.timeFormat = ui->leTimeFormat->text();
     gd.useSystemDateTimeFormat = ui->cbUseSystemDateTimeFormat->isChecked();
     // View
+    gd.fullScreenMode = ui->cbFullScreenMode->isChecked();
     gd.showTableGrid = ui->cbShowTableGrid->isChecked();
     gd.showLineNumbers = ui->cbShowLineNumbers->isChecked();
     gd.resizeTableRowsToContents = ui->cbResizeTableRowsToContents->isChecked();

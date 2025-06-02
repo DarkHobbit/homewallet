@@ -65,8 +65,8 @@ int main(int argc, char *argv[])
     MainWindow w;
     if (!w.db.isOpen())
         return 1;
-    if (gd.fullScreenMode)
-        w.showMaximized();
+    if (gd.fullScreenMode) // will be rewritten via readConfig(),
+        w.showMaximized(); // command-line key is more priority
     else
         w.show();
     return a.exec();
