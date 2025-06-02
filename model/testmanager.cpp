@@ -31,7 +31,7 @@ QSqlQueryModel *TestManager::dbDebug(const QString &queryText, GenericDatabase &
     return m;
 }
 
-bool TestManager::createTestData(HwDatabase &db)
+bool TestManager::createTestData(HwDatabase &db, int numberOfExpenses)
 {
     // General
     if (!db.addAccount("VISA Mary", "Special expense card")) {
@@ -47,6 +47,7 @@ bool TestManager::createTestData(HwDatabase &db)
     }
     int idCur = currs.values().first();
     int idUnit = db.addUnit("kilogram", "kg", "");
+    QDateTime testDate = QDateTime::currentDateTime();
     // Incomes
     int idCat = db.addIncomeCategory("Work", "Main work");
     if (idCat==-1) {
@@ -58,7 +59,7 @@ bool TestManager::createTestData(HwDatabase &db)
         std::cerr << "Income subcategory add error" << std::endl;
         return false;
     }
-    if (!db.addIncomeOp(QDateTime::currentDateTime(),
+    if (!db.addIncomeOp(testDate,
         1, 200, idAcc, idCur, idSubcat, idUnit, false, "")) {
         std::cerr << "Income operation add error" << std::endl;
         return false;
@@ -69,15 +70,30 @@ bool TestManager::createTestData(HwDatabase &db)
         std::cerr << "Expense category add error" << std::endl;
         return false;
     }
-    idSubcat = db.addExpenseSubCategory(idCat, "Bread", "");
-    if (idSubcat==-1) {
+    int idSubcat1 = db.addExpenseSubCategory(idCat, "Butter", "");
+    if (idSubcat1==-1) {
         std::cerr << "Expense subcategory add error" << std::endl;
         return false;
     }
-    if (!db.addExpenseOp(QDateTime::currentDateTime(),
-          15, 100, idAcc, idCur, idSubcat, idUnit, -1, 0, false, "")) {
-        std::cerr << "Expense operation add error" << std::endl;
+    int idSubcat2 = db.addExpenseSubCategory(idCat, "Bread", "");
+    if (idSubcat2==-1) {
+        std::cerr << "Expense subcategory add error" << std::endl;
         return false;
+    }
+    double quantity = 5;
+    for (int i=0; i<numberOfExpenses; i++) {
+        if (!db.addExpenseOp(testDate,
+                quantity, 100, idAcc, idCur,
+                i%2 ? idSubcat1 : idSubcat2,
+                idUnit, -1, 0, false, "")) {
+            std::cerr << "Expense operation add error" << std::endl;
+            return false;
+        }
+        if (!((i+1)%500))
+            std::cout << "Record " << i+1 << " from " << numberOfExpenses << " inserted" << std::endl;
+        if (!(i%5))
+            testDate = testDate.addDays(1);
+        quantity += 0.01;
     }
     return true;
 }

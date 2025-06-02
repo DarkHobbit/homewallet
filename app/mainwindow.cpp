@@ -93,7 +93,7 @@ MainWindow::MainWindow(QWidget *parent) :
     openDb(dbPath);
     if (gd.debugDataMode) {
         if (db.isEmpty()) {
-            if (TestManager::createTestData(db)) {
+            if (TestManager::createTestData(db, 40000)) {
                 on_tabWidgetMain_currentChanged(0);
                 updateViews();
             }
