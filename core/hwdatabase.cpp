@@ -409,3 +409,24 @@ bool HwDatabase::addTransfer(const QDateTime &opDT, int amount, int idCur, int i
     return execQuery(sqlIns);
 }
 
+bool HwDatabase::addCurrencyConv(const QDateTime &opDT, int idAcc,
+    int idCurFrom, int amountFrom,
+    int idCurTo, int amountTo,
+    const QString &descr, int idImp, const QString &uid)
+{
+    QSqlQuery sqlIns(sqlDb);
+    sqlIns.prepare(
+        "insert into hw_curr_exch(op_date, id_ac, id_cur_in, id_cur_out, amount_in, amount_out, descr, id_imp, uid_imp) " \
+        "values (:op_date, :id_ac, :id_cur_in, :id_cur_out, :amount_in, :amount_out, :descr, :id_imp, :uid_imp)");
+    sqlIns.bindValue(":op_date", opDT);
+    sqlIns.bindValue(":id_ac", idAcc);
+    sqlIns.bindValue(":id_cur_out", idCurFrom);
+    sqlIns.bindValue(":id_cur_in", idCurTo);
+    sqlIns.bindValue(":amount_out", amountFrom);
+    sqlIns.bindValue(":amount_in", amountTo);
+    sqlIns.bindValue(":descr", strOrNull(descr));
+    sqlIns.bindValue(":id_imp", idOrNull(idImp));
+    sqlIns.bindValue(":uid_imp", strOrNull(uid));
+    return execQuery(sqlIns);
+}
+

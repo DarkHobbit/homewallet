@@ -244,16 +244,20 @@ create table hw_transfer (
 
 create table hw_curr_exch (
     id integer not null,
+    op_date date not null,
     id_ac integer not null,
     id_cur_in integer not null,
     id_cur_out integer not null,
     amount_in integer not null, -- in low units
     amount_out integer not null, -- in low units
     descr char(256),
+    id_imp integer null,
+    uid_imp char(64), -- _id for JSON, line after date for TXT...
     constraint pk_ce primary key(id),
     constraint fk_ceac foreign key(id_ac) references hw_account(id),
-    constraint fk_trcur_in foreign key(id_cur_in) references hw_currency(id),
-    constraint fk_trcur_out foreign key(id_cur_out) references hw_currency(id)
+    constraint fk_cecur_in foreign key(id_cur_in) references hw_currency(id),
+    constraint fk_cecur_out foreign key(id_cur_out) references hw_currency(id),
+    constraint fk_ceimp foreign key(id_imp) references hw_imp_file(id)
 );
 
 -- Debtors, Creditors, their names

@@ -232,7 +232,8 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
                 return false;
             if (money.count()==0) {
                 _fatalError = QObject::tr(
-                    "Income or expense amount can't be equal to 0. Date: %1").arg(dt.toString());
+                    "Income or expense amount can't be equal to 0. Date: %1")
+                    .arg(dt.toString());
                 return false;
             }
             else if (money.count()>1) {
@@ -325,10 +326,37 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             DB_CHK(ok);
             break;
         }
-        case CurrencyConversion:
-
-            // TODO
+        case CurrencyConversion: {
+            QDateTime dt;
+            if (!readDateVal(elRow, "MyDate", dt, "yyyyMMdd", S_ERR_DATE_IMP))
+                return false;
+            // Account
+            int idAcc = importAccount("Account", elRow, accs, db);
+            // Money
+            HwDatabase::MultiCurrByChar moneyFrom, moneyTo;
+            if (!importNotNullMoney(moneyFrom, "MoneyOut", elRow, true))
+                return false;
+            if (!importNotNullMoney(moneyTo, "MoneyIn", elRow, true))
+                return false;
+            if (moneyFrom.count()!=1 || moneyTo.count()!=1) {
+                _fatalError = QObject::tr(
+                    "For currency conversion strongly 1 MoneyOut* and 1 MoneyIn* attributes needed at line %1")
+                    .arg(elRow.lineNumber());
+                return false;
+            }
+            int idCurFrom = importCurrencyByChar(moneyFrom.firstKey(), db);
+            if (idCurFrom==-1)
+                return false;
+            int idCurTo = importCurrencyByChar(moneyTo.firstKey(), db);
+            if (idCurTo==-1)
+                return false;
+            bool ok = db.addCurrencyConv(dt, idAcc,
+                idCurFrom, moneyFrom.first(),
+                idCurTo, moneyTo.first(),
+                elRow.attribute("Note"), _idImp, sLine);
+            DB_CHK(ok);
             break;
+        }
         case Debtors:
 
             // TODO

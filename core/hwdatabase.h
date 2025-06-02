@@ -76,7 +76,10 @@ public:
     // Transfer, currencyConv
     bool addTransfer(const QDateTime& opDT, int amount, int idCur, int idAccFrom, int idAccTo,
         int idTransferType, const QString& descr, int idImp=-1, const QString& uid="");
-
+    bool addCurrencyConv(const QDateTime& opDT, int idAcc,
+        int idCurFrom, int amountFrom,
+        int idCurTo, int amountTo,
+        const QString& descr, int idImp=-1, const QString& uid="");
 };
 
 #endif // HWDATABASE_H
