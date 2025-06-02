@@ -1,3 +1,4 @@
 #!/bin/bash
 
 gcc -shared -fPIC icu.c -o libsqliteicu.so
+# Make symlink on libsqliteicu.so to /usr/lib!
