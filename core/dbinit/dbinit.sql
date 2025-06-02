@@ -29,7 +29,17 @@ create table hw_currency (
     constraint uk_cur2 unique(abbr),
     constraint uk_cur3 unique(code)
 );
--- TODO currency rate
+
+create table hw_curr_rate (
+    id integer not null,
+    ch_date date not null,
+    id_cur_low integer null,
+    id_cur_high integer null,
+    rate double,
+    constraint pk_cr primary key(id),
+    constraint fk_crcurl foreign key(id_cur_low) references hw_currency(id),
+    constraint fk_crcurh foreign key(id_cur_high) references hw_currency(id)
+);
 
 -- Units (kg, liter, day, etc.)
 create table hw_unit (
@@ -89,14 +99,30 @@ create table hw_account (
     name char(64) not null,
     descr char(256),
     foundation date null,  -- may be null if imported from hb
-    id_cur integer null, -- only one currency, in hb - many; may be null if imported from hb
-    init_sum integer null, -- in low units (cent, kopeck, pfennig etc.)
     constraint pk_ac primary key(id),
-    constraint uk_ac unique(name),
-    constraint fk_accur foreign key(id_cur) references hw_currency(id)
-    );
--- TODO init sums in separate table
--- TODO account history
+    constraint uk_ac unique(name)
+);
+
+create table hw_acc_init ( -- Start balance for various currencies
+    id integer not null,
+    id_ac integer not null,
+    id_cur integer null,
+    init_sum integer null, -- in low units (cent, kopeck, pfennig etc.)
+    constraint pk_ai primary key(id),
+    constraint uk_ai unique(id_ac, id_cur),
+    constraint fk_aiac foreign key(id_ac) references hw_account(id),
+    constraint fk_aicur foreign key(id_cur) references hw_currency(id)
+);
+
+create table hw_acc_hist ( -- account history
+    id integer not null,
+    ch_date date not null,
+    id_ai integer not null,
+    sum integer null, -- in low units
+    constraint pk_ah primary key(id),
+    constraint uk_ah unique(ch_date, id_ai),
+    constraint fk_ahai foreign key(id_ai) references hw_acc_init(id)
+);
 
 -- Import & audit
 create table hw_imp_file (
@@ -120,6 +146,8 @@ create table hw_alias (
     constraint pk_ali primary key(id),
     constraint uk_ali unique(pattern)
 );
+
+-- TODO audit
 
 -- Incomes
 create table hw_in_op (
@@ -207,13 +235,26 @@ create table hw_transfer (
     id_imp integer null,
     uid_imp char(64), -- _id for JSON, line after date for TXT...
     constraint pk_tr primary key(id),
+    constraint fk_trcur foreign key(id_cur) references hw_currency(id),
     constraint fk_trac_in foreign key(id_ac_in) references hw_account(id),
     constraint fk_trac_out foreign key(id_ac_out) references hw_account(id),
-    constraint fk_trac_tt foreign key(id_tt) references hw_transfer_type(id)
+    constraint fk_trac_tt foreign key(id_tt) references hw_transfer_type(id),
     constraint fk_trimp foreign key(id_imp) references hw_imp_file(id)
 );
 
---  TODO currency exchange
+create table hw_curr_exch (
+    id integer not null,
+    id_ac integer not null,
+    id_cur_in integer not null,
+    id_cur_out integer not null,
+    amount_in integer not null, -- in low units
+    amount_out integer not null, -- in low units
+    descr char(256),
+    constraint pk_ce primary key(id),
+    constraint fk_ceac foreign key(id_ac) references hw_account(id),
+    constraint fk_trcur_in foreign key(id_cur_in) references hw_currency(id),
+    constraint fk_trcur_out foreign key(id_cur_out) references hw_currency(id)
+);
 
 -- Debtors, Creditors, their names
 -- TODO

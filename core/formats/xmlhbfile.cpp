@@ -194,8 +194,17 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             if (accs.keys().contains(accName))
                 skippedRecordCount++;
             else {
-                // TODO Zdes raspoznavat valuty!!!
-                if (!db.addAccount(accName, elRow.attribute("Note"))) {
+                HwDatabase::MultiCurrByChar money;
+                if (!importNotNullMoney(money, "StartBalans", elRow, false))
+                    return false;
+                HwDatabase::MultiCurrById moneyIds;
+                for (const QString& moneyChar: money.keys()) {
+                    int idCur = importCurrencyByChar(moneyChar, db);
+                    if (idCur==-1)
+                        return false;
+                    moneyIds[idCur] = money[moneyChar];
+                }
+                if (!db.addAccount(accName, elRow.attribute("Note"), QDateTime(), moneyIds)) {
                     _fatalError = db.lastError();
                     return false;
                 }
@@ -218,8 +227,8 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             // Account
             int idAcc = importAccount("Account", elRow, accs, db);
             // Money
-            HwDatabase::MultiCurr money;
-            if (!importNotNullMoney(money, "Money", elRow))
+            HwDatabase::MultiCurrByChar money;
+            if (!importNotNullMoney(money, "Money", elRow, true))
                 return false;
             if (money.count()==0) {
                 _fatalError = QObject::tr(
@@ -390,7 +399,7 @@ int XmlHbFile::importAccount(const QString &attr, const QDomElement &elRow, HwDa
     return idAcc;
 }
 
-bool XmlHbFile::importNotNullMoney(HwDatabase::MultiCurr& values, const QString &attrPrefix, const QDomElement &elRow)
+bool XmlHbFile::importNotNullMoney(HwDatabase::MultiCurrByChar& values, const QString &attrPrefix, const QDomElement &elRow, bool skipNulls)
 {
     values.clear();
     for (int i=1; i<=elRow.attributes().count(); i++) {
@@ -402,7 +411,7 @@ bool XmlHbFile::importNotNullMoney(HwDatabase::MultiCurr& values, const QString 
         int sum = importOneMoneyAttr(val, sCur);
         if (!_fatalError.isEmpty())
             return false;
-        if (!sum)
+        if ((!sum) && skipNulls)
             continue; // normal case, 2 of 3
         values[sCur] = sum;
     }

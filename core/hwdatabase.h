@@ -34,7 +34,8 @@ public:
         NeedUpgrade, // need to upgrade :)
         Actual       // nothing to do
     };
-    typedef QMap<QString, int> MultiCurr; // key - $ (etc), value - sum
+    typedef QMap<QString, int> MultiCurrByChar; // key - $ (etc), value - sum
+    typedef QMap<int, int> MultiCurrById; // key - id, value - sum
     HwDatabase();
     ~HwDatabase();
     // Entire database actions
@@ -49,7 +50,7 @@ public:
     virtual QString fileName();
     void getCounts(int& totalInCount, int& totalExpCount);
     bool addAccount(const QString& name, const QString& descr,
-        int idCur=-1, const QDateTime& foundation=QDateTime(), bool hasStartBalance=false, int startBalance=0);
+                    const QDateTime& foundation=QDateTime(), const MultiCurrById& startBalance=MultiCurrById());
     int accountId(const QString& name);
     int addUnit(const QString& name, const QString& shortName, const QString& descr);
     int unitId(const QString& name);

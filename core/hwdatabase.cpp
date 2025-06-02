@@ -88,7 +88,9 @@ bool HwDatabase::isEmpty()
         return false;
     if (!isTableEmpty("hw_ex_cat"))
         return false;
-    // TODO other categories / non-account data
+    if (!isTableEmpty("hw_transfer_type"))
+        return false;
+    // TODO other categories / currencies / non-account data
     return true;
 }
 
@@ -115,17 +117,28 @@ int HwDatabase::findImportFile(const QString &fileName)
 }
 
 bool HwDatabase::addAccount(const QString &name, const QString &descr,
-    int idCur, const QDateTime &foundation, bool hasStartBalance, int startBalance)
+    const QDateTime& foundation, const MultiCurrById& startBalance)
 {
     QSqlQuery sqlIns(sqlDb);
     sqlIns.prepare(
-      "insert into hw_account (name, descr, foundation, id_cur, init_sum) values (:name, :descr, :foundation, :id_cur, :init_sum)");
+      "insert into hw_account (name, descr, foundation) values (:name, :descr, :foundation)");
     sqlIns.bindValue(":name", name);
     sqlIns.bindValue(":descr", descr);
-    sqlIns.bindValue(":foundation", dateOrNull(foundation));
-    sqlIns.bindValue(":id_cur", idOrNull(idCur));
-    sqlIns.bindValue("init_sum", intOrNull(startBalance, hasStartBalance));
-    return execQuery(sqlIns);
+    sqlIns.bindValue(":foundation", dateOrNull(foundation));    
+    if (!execQuery(sqlIns))
+        return -1;
+    int idAcc = accountId(name);
+    // Insert start balance
+    for (int idCur: startBalance.keys()) {
+        sqlIns.prepare(
+            "insert into hw_acc_init(id_ac, id_cur, init_sum) values (:id_ac, :id_cur, :init_sum)");
+        sqlIns.bindValue(":id_ac", idAcc);
+        sqlIns.bindValue(":id_cur", idCur);
+        sqlIns.bindValue(":init_sum", startBalance[idCur]);
+        if (!execQuery(sqlIns))
+            return -1;
+    }
+    return idAcc;
 }
 
 int HwDatabase::accountId(const QString &name)
