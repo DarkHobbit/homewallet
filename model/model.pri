@@ -7,6 +7,7 @@ INCLUDEPATH += $$PWD
 HEADERS	+= \
     $$PWD/categoriesbasedquerymodel.h \
     $$PWD/configmanager.h \
+    $$PWD/currconvmodel.h \
     $$PWD/expensemodel.h \
     $$PWD/filteredquerymodel.h \
     $$PWD/importcandidatesmodel.h \
@@ -18,6 +19,7 @@ HEADERS	+= \
 SOURCES	+= \
     $$PWD/categoriesbasedquerymodel.cpp \
     $$PWD/configmanager.cpp \
+    $$PWD/currconvmodel.cpp \
     $$PWD/expensemodel.cpp \
     $$PWD/filteredquerymodel.cpp \
     $$PWD/importcandidatesmodel.cpp \

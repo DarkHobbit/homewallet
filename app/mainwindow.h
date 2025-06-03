@@ -23,6 +23,7 @@
 #include "expensemodel.h"
 #include "incomemodel.h"
 #include "transfermodel.h"
+#include "currconvmodel.h"
 
 namespace Ui {
 class MainWindow;
@@ -61,6 +62,7 @@ private slots:
     void on_cbDateFrom_stateChanged(int);
     void on_cbDateTo_stateChanged(int);
     void on_tabWidgetMain_currentChanged(int);
+    void on_tabWidgetTransferAndExchange_currentChanged(int);
     void on_cbCategory_activated(int);
     void on_Model_Error(const QString& message);
 
@@ -69,7 +71,9 @@ private:
     ExpenseModel* mdlExpenses;
     IncomeModel* mdlIncomes;
     TransferModel* mdlTransfer;
-    QSortFilterProxyModel *proxyExpenses, *proxyIncomes, *proxyTransfer;
+    CurrConvModel* mdlCurrConv;
+    QSortFilterProxyModel
+        *proxyExpenses, *proxyIncomes, *proxyTransfer, *proxyCurrConv;
 
     QLabel *lbCounts;
     enum ActiveTab {
@@ -80,8 +84,9 @@ private:
         atAccounts // m.b. atNone?
     };
     void prepareModel(FilteredQueryModel* source, QSortFilterProxyModel *proxy, QTableView* view, const QString& nameForDebug);
-    void updateOneModel(CategoriesBasedQueryModel* source);
+    void updateOneModel(FilteredQueryModel* source);
     void updateConfig();
+    void updateTabsAndFilters();
     ActiveTab activeTab();
 };
 

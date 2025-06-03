@@ -55,6 +55,9 @@ MainWindow::MainWindow(QWidget *parent) :
     mdlTransfer = new TransferModel(this);
     proxyTransfer = new QSortFilterProxyModel(this);
     prepareModel(mdlTransfer, proxyTransfer, ui->tvTransfer, "Transfer");
+    mdlCurrConv = new CurrConvModel(this);
+    proxyCurrConv = new QSortFilterProxyModel(this);
+    prepareModel(mdlCurrConv, proxyCurrConv, ui->tvExchange, "CurrConv");
 
     ui->leQuickFilter->installEventFilter(this);
     ui->dteDateFrom->installEventFilter(this);
@@ -144,6 +147,10 @@ void MainWindow::updateViews()
     case atTransfer:
         updateOneModel(mdlTransfer);
         updateOneView(ui->tvTransfer, true);
+        break;
+    case atExchange:
+        updateOneModel(mdlCurrConv);
+        updateOneView(ui->tvExchange, true);
         break;
     default:
         break;
@@ -400,14 +407,20 @@ void MainWindow::prepareModel(FilteredQueryModel *source, QSortFilterProxyModel 
     connect(source, SIGNAL(modelError(QString)), this, SLOT(on_Model_Error(QString)));
 }
 
-void MainWindow::updateOneModel(CategoriesBasedQueryModel *source)
+void MainWindow::updateOneModel(FilteredQueryModel* source)
 {
     source->setFilterDates(
         ui->cbDateFrom->isChecked() ? ui->dteDateFrom->date() : QDate(),
         ui->cbDateTo->isChecked() ? ui->dteDateTo->date() : QDate());
-    source->setFilterCategories(
-        getComboCurrentId(ui->cbCategory),
-        getComboCurrentId(ui->cbSubcategory));
+    CategoriesBasedQueryModel* catSource = dynamic_cast<CategoriesBasedQueryModel*>(source);
+    if (catSource)
+        catSource->setFilterCategories(
+            getComboCurrentId(ui->cbCategory),
+            getComboCurrentId(ui->cbSubcategory));
+    else {
+        ui->cbCategory->clear();
+        ui->cbSubcategory->clear();
+    }
     source->update();
 }
 
@@ -482,28 +495,12 @@ void MainWindow::on_cbDateTo_stateChanged(int)
 
 void MainWindow::on_tabWidgetMain_currentChanged(int)
 {
-    GenericDatabase::DictColl collCat;
-    // TODO here save combo indexes and restore it
-    switch (activeTab()) {
-    case atExpenses:
-        ui->tvExpenses->resizeColumnsToContents();
-        db.collectDict(collCat, "hw_ex_cat");
-        // TODO call collectSubDict if will be slow, but it's more complex
-        break;
-    case atIncomes:
-        ui->tvIncomes->resizeColumnsToContents();
-        db.collectDict(collCat, "hw_in_cat");
-        break;
-    case atTransfer:
-        ui->tvTransfer->resizeColumnsToContents();
-        db.collectDict(collCat, "hw_transfer_type");
-        break;
-    default:
-        ui->cbCategory->clear();
-    }
-    fillComboByDict(ui->cbCategory, collCat, true);
-    on_cbCategory_activated(0);
-    updateViews();
+    updateTabsAndFilters();
+}
+
+void MainWindow::on_tabWidgetTransferAndExchange_currentChanged(int)
+{
+    updateTabsAndFilters();
 }
 
 void MainWindow::on_cbCategory_activated(int)
@@ -531,7 +528,7 @@ void MainWindow::on_Model_Error(const QString &message)
 
 void MainWindow::showEvent(QShowEvent*)
 {
-    // TODO тж. вызывать updateConfig() после настройки, внезапно, конфига
+    // TODO тж. вызывать updateConfig() после настройки, внезапно, конфига, как в DC
     updateConfig();
 }
 
@@ -544,5 +541,34 @@ void MainWindow::updateConfig()
     updateTableConfig(ui->tvExpenses);
     updateTableConfig(ui->tvIncomes);
     updateTableConfig(ui->tvTransfer);
+    updateTableConfig(ui->tvExchange);
+}
+
+void MainWindow::updateTabsAndFilters()
+{
+    GenericDatabase::DictColl collCat;
+    // TODO here save combo indexes and restore it
+    switch (activeTab()) {
+    case atExpenses:
+        ui->tvExpenses->resizeColumnsToContents();
+        db.collectDict(collCat, "hw_ex_cat");
+        // TODO call collectSubDict if will be slow, but it's more complex
+        break;
+    case atIncomes:
+        ui->tvIncomes->resizeColumnsToContents();
+        db.collectDict(collCat, "hw_in_cat");
+        break;
+    case atTransfer:
+        ui->tvTransfer->resizeColumnsToContents();
+        db.collectDict(collCat, "hw_transfer_type");
+        break;
+    case atExchange:
+        ui->tvExchange->resizeColumnsToContents();
+    default:
+        ui->cbCategory->clear();
+    }
+    fillComboByDict(ui->cbCategory, collCat, true);
+    on_cbCategory_activated(0);
+    updateViews();
 }
 
