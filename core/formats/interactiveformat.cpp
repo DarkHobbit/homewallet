@@ -44,19 +44,19 @@ bool InteractiveFormat::isDialogRequired()
 bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
 {
     // Defaults
-    QString curDefault = QString::fromUtf8("₽");
+    candidates.curDefault = QString::fromUtf8("₽");
     // TODO default currency either from DB, or from lua script
-    QString accDefault = QString::fromUtf8("Наличные");
+    candidates.accDefault = QString::fromUtf8("Наличные");
     // TODO default account either from DB, or from lua script
 
-    candidates.idCurDefault = db.currencyIdByAbbr(curDefault);
+    candidates.idCurDefault = db.currencyIdByAbbr(candidates.curDefault);
     if (candidates.idCurDefault == -1) {
-        _fatalError = S_ERR_CUR_NOT_FOUND.arg(curDefault);
+        _fatalError = S_ERR_CUR_NOT_FOUND.arg(candidates.curDefault);
         return false;
     }
-    candidates.idAccDefault = db.accountId(accDefault);
+    candidates.idAccDefault = db.accountId(candidates.accDefault);
     if (candidates.idAccDefault == -1) {
-        _fatalError = S_ERR_ACC_NOT_FOUND.arg(accDefault);
+        _fatalError = S_ERR_ACC_NOT_FOUND.arg(candidates.accDefault);
         return false;
     }
 
@@ -68,6 +68,7 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
         case ImpRecCandidate::Expense:
             if (!findAccount(db, c, c.accName, c.idAcc))
                 continue;
+            // TODO name to abbr!!!
             if (!findCurrency(db, c, c.currName, c.idCur))
                 continue;
             if (!findUnit(db, c, c.unitName, c.idUnit))
@@ -105,11 +106,12 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                     q.first();
                     c.idCat = q.value("id_ecat").toInt();
                     c.idSubcat = q.value("id").toInt();
-                    // TODO find category name and correct case
+                    // Find category name and correct case
                     DB_CHK(q.prepare("select name from hw_ex_cat where id=:id"));
                     q.bindValue(":id", c.idCat);
                     DB_CHK(q.exec());
-                    c.catName = q.value("id").toString();
+                    q.first();
+                    c.catName = q.value("name").toString();
                     c.subcatName = db.expenseSubCategoryById(c.idSubcat);
                     c.state = ImpRecCandidate::ReadyToImport;
                     break;
@@ -146,11 +148,12 @@ bool InteractiveFormat::postImport(HwDatabase& db)
 {
     _totalRecordsCount = candidates.count();
     _importedRecordsCount = 0;
-    for (const ImpRecCandidate&c: candidates) {
+    for (const ImpRecCandidate&c: candidates)
         if (c.state!=ImpRecCandidate::ReadyToImport)
             return false;
-        int idCurActual = (c.idCur==-1) ? candidates.idCurDefault : c.idCur;
-        int idAccActual = (c.idAcc==-1) ? candidates.idAccDefault : c.idAcc;
+    for (const ImpRecCandidate&c: candidates) {
+        int idCurActual = /*(c.idCur==-1) ? candidates.idCurDefault : */c.idCur;
+        int idAccActual = /*(c.idAcc==-1) ? candidates.idAccDefault : */c.idAcc;
         switch (c.type) {
         case ImpRecCandidate::Expense:
             if (!db.addExpenseOp(c.opDT, c.quantity, c.amount, idAccActual, idCurActual,
@@ -182,10 +185,14 @@ bool InteractiveFormat::postImport(HwDatabase& db)
 
 bool InteractiveFormat::findAccount(HwDatabase &db, ImpRecCandidate& c, QString &accName, int &idAcc)
 {
-    if (accName.isEmpty())
+    if (accName.isEmpty()) {
+        accName = candidates.accDefault;
+        idAcc = candidates.idAccDefault;
         return true;
+    }
     idAcc = db.accountId(c.accName);
     if (idAcc==-1) {
+        // TODO try alias
         c.state = ImpRecCandidate::UnknownAccount;
         return false;
     }
@@ -194,10 +201,14 @@ bool InteractiveFormat::findAccount(HwDatabase &db, ImpRecCandidate& c, QString 
 
 bool InteractiveFormat::findCurrency(HwDatabase &db, ImpRecCandidate &c, QString &currAbbr, int &idCurr)
 {
-    if (currAbbr.isEmpty())
+    if (currAbbr.isEmpty()) {
+        currAbbr = candidates.curDefault;
+        idCurr = candidates.idCurDefault;
         return true;
-    idCurr = db.currencyIdByAbbr(currAbbr);
+    }
+    idCurr = db.currencyIdByAbbr(c.currName /*currAbbr*/);
     if (idCurr==-1) {
+        // TODO try alias
         c.state = ImpRecCandidate::UnknownCurrency;
         return false;
     }
@@ -206,10 +217,18 @@ bool InteractiveFormat::findCurrency(HwDatabase &db, ImpRecCandidate &c, QString
 
 bool InteractiveFormat::findUnit(HwDatabase &db, ImpRecCandidate &c, QString &name, int &idUn)
 {
+    /*
     if (name.isEmpty())
         return true;
+*/
     idUn = db.unitId(name);
     if (idUn==-1) {
+        idUn = db.unitId(name+".");
+        if (idUn!=-1) {
+            name = name+".";
+            return true;
+        }
+        // TODO try alias
         c.state = ImpRecCandidate::UnknownUnit;
         return false;
     }

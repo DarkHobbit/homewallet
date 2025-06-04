@@ -11,6 +11,7 @@
  *
  */
 
+#include <QBrush>
 #include "globals.h"
 #include "importcandidatesmodel.h"
 
@@ -118,8 +119,16 @@ QVariant ImportCandidatesModel::data(const QModelIndex &index, int role) const
     else if (role==Qt::TextAlignmentRole) {
         return index.column()==2 ? Qt::AlignRight : QVariant(); // TODO and quantity
     }
-//    else if (role==Qt::BackgroundRole) {
-//    }
+    else if (role==Qt::BackgroundRole) {
+        switch (c->state) {
+        case ImpRecCandidate::ReadyToImport:
+            return QBrush(Qt::green);
+        case ImpRecCandidate::PossiblyDup:
+            return QBrush(Qt::yellow);
+        default:
+            return QBrush(Qt::red);
+        }
+    }
 //    else if (role==SortStringRole) {
 //    }
     return QVariant();

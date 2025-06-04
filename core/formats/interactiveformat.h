@@ -63,7 +63,7 @@ struct ImpRecCandidate
 struct ImpCandidates: public QList<ImpRecCandidate>
 {
     int idCurDefault, idAccDefault;
-    QString defaultCurName;
+    QString accDefault, curDefault;
     bool readyToImport();
 };
 
@@ -78,8 +78,8 @@ public:
 public:
     ImpCandidates candidates;
 private:
-    bool findAccount(HwDatabase &db, ImpRecCandidate& c, QString& accName, int& idAcc);
-    bool findCurrency(HwDatabase &db, ImpRecCandidate& c, QString& currAbbr, int& idCurr);
+    bool findAccount(HwDatabase &db, ImpRecCandidate& c, QString &accName, int &idAcc);
+    bool findCurrency(HwDatabase &db, ImpRecCandidate& c, QString &currAbbr, int &idCurr);
     bool findUnit(HwDatabase &db, ImpRecCandidate& c, QString& name, int& idUn);
 };
 
