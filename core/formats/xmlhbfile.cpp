@@ -17,16 +17,6 @@
 #include "globals.h"
 #include "xmlhbfile.h"
 
-#define DB_CHK(action) \
-{ \
-    if (!(action)) \
-    { \
-        _fatalError = db.lastError(); \
-        return false; \
-    } \
-}
-
-
 XmlHbFile::XmlHbFile()
     : XmlFile(),
     _fileSubType(Unknown), _categorySamples(""),

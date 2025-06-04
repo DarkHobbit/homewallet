@@ -11,6 +11,7 @@
  *
  */
 
+#include <QSqlError>
 #include "commonexpimpdef.h"
 #include "interactiveformat.h"
 
@@ -74,22 +75,53 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
             if (!c.subcatName.isEmpty()) { // Full-qualified subcategory
                 c.idCat = db.expenseCategoryId(c.catName);
                 if (c.idCat==-1) {
+                    // TODO alias for category
                     c.state = ImpRecCandidate::UnknownCategory;
                     continue;
                 }
                 c.idSubcat = db.expenseSubCategoryId(c.idCat, c.subcatName);
                 if (c.idSubcat==-1) {
+                    // TODO alias for subcategory
                     c.state = ImpRecCandidate::UnknownCategory;
                     continue;
                 }
                 // Correct upper/low case
                 c.catName = db.expenseCategoryById(c.idCat);
                 c.subcatName = db.expenseSubCategoryById(c.idSubcat);
+                c.state = ImpRecCandidate::ReadyToImport;
             }
-            else { // alias
-                // TODO
+            else { // Partially-qualified subcategory or alias
+                QSqlQuery q;
+                DB_CHK(q.prepare("select id, id_ecat from hw_ex_subcat where upper(name)=:name"));
+                q.bindValue(":name", c.alias.toUpper());
+                DB_CHK(q.exec());
+                // TODO save ecats here for future ask?
+                bool needSearchAlias = false;
+                switch(db.queryRecCount(q)) {
+                case 0:
+                    needSearchAlias = true;
+                    break;
+                case 1:
+                    q.first();
+                    c.idCat = q.value("id_ecat").toInt();
+                    c.idSubcat = q.value("id").toInt();
+                    // TODO find category name and correct case
+                    DB_CHK(q.prepare("select name from hw_ex_cat where id=:id"));
+                    q.bindValue(":id", c.idCat);
+                    DB_CHK(q.exec());
+                    c.catName = q.value("id").toString();
+                    c.subcatName = db.expenseSubCategoryById(c.idSubcat);
+                    c.state = ImpRecCandidate::ReadyToImport;
+                    break;
+                default:
+                    c.state = ImpRecCandidate::AmbiguousCategory;
+                }
+                if (needSearchAlias) { // Alias!
+
+                    // TODO
+                    c.state = ImpRecCandidate::UnknownAlias; //===>
+                }
             }
-            c.state = ImpRecCandidate::ReadyToImport;
             break;
         case ImpRecCandidate::Income:
             // TODO

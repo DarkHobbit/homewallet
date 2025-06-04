@@ -18,6 +18,15 @@
 #include "hwdatabase.h"
 #include <QStringList>
 
+#define DB_CHK(action) \
+{ \
+        if (!(action)) \
+    { \
+            _fatalError = db.lastError(); \
+            return false; \
+    } \
+}
+
 class FileFormat
 {
 public:
