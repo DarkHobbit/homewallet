@@ -277,6 +277,7 @@ bool GenericDatabase::checkForICU()
         }
         // Try load ICU extension
         sqlite3 *handle = *static_cast<sqlite3 **>(sqlDb.driver()->handle().data());
+#ifdef WITH_SQLITE_EXTENSIONS
         if (handle) {
             int res = sqlite3_enable_load_extension(handle, 1);
             if (res!=SQLITE_OK) {
@@ -299,6 +300,9 @@ bool GenericDatabase::checkForICU()
                 return true;
             }
         }
+#else
+        return false;
+#endif
     }    
     isICUSupported = true;
     return true;

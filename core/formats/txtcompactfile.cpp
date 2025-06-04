@@ -109,9 +109,14 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
             closeFile();
             return false;
         }
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+        QDateTime lsd = QDateTime(lastDate, QTime());
+#else
+        QDateTime lsd = lastDate.startOfDay();
+#endif
         ImpRecCandidate c(s,
             QString::number(line), // TODO
-            line, QDateTime(lastDate.startOfDay()));
+            line, QDateTime(lsd));
         bool ok;
         // Expense or income without currency
         if (reIncExp.exactMatch(s)) {

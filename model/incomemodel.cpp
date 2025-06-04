@@ -15,7 +15,7 @@
 #include "incomemodel.h"
 
 IncomeModel::IncomeModel(QObject *parent)
-    : CategoriesBasedQueryModel{parent}
+    : CategoriesBasedQueryModel(parent)
 {
     visibleFieldNames
         << "i.op_date"

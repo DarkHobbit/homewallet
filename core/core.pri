@@ -2,6 +2,9 @@
 
 QT += core sql xml
 
+# Don't work on macOS currently
+DEFINES += WITH_SQLITE_EXTENSIONS
+
 INCLUDEPATH += $$PWD
 
 HEADERS	+= \

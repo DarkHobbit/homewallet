@@ -15,7 +15,7 @@
 #include "transfermodel.h"
 
 TransferModel::TransferModel(QObject *parent)
-    : CategoriesBasedQueryModel{parent}
+    : CategoriesBasedQueryModel(parent)
 {
     visibleFieldNames
         << "t.op_date"

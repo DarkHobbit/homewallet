@@ -15,7 +15,7 @@
 #include "currconvmodel.h"
 
 CurrConvModel::CurrConvModel(QObject *parent)
-    : FilteredQueryModel{parent}
+    : FilteredQueryModel(parent)
 {
     visibleFieldNames
         << "e.op_date" << "ac.name"

@@ -26,7 +26,7 @@ class PostImportDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit PostImportDialog(QWidget *parent = nullptr);
+    explicit PostImportDialog(QWidget *parent);
     ~PostImportDialog();
     void setData(ImpCandidates* _cands);
 
