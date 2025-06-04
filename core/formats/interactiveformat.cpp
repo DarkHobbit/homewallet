@@ -82,6 +82,9 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                     c.state = ImpRecCandidate::UnknownCategory;
                     continue;
                 }
+                // Correct upper/low case
+                c.catName = db.expenseCategoryById(c.idCat);
+                c.subcatName = db.expenseSubCategoryById(c.idSubcat);
             }
             else { // alias
                 // TODO

@@ -62,6 +62,7 @@ protected:
     //bool checkFieldPresence(const QString& tableName);
     bool execQuery(QSqlQuery& q);
     int dictId(QSqlQuery& q);
+    QString dictName(QSqlQuery& q);
     QVariant idOrNull(int id);
     QVariant intOrNull(int value, bool notNull);
     QVariant strOrNull(const QString& s);

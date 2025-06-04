@@ -235,6 +235,18 @@ int GenericDatabase::dictId(QSqlQuery &q)
     return q.value(0).toInt();
 }
 
+QString GenericDatabase::dictName(QSqlQuery &q)
+{
+    if (!q.exec()) {
+        _lastError = q.lastError().text();
+        return "";
+    }
+    if (queryRecCount(q)==0)
+        return "";
+    q.first();
+    return q.value(0).toString();
+}
+
 QVariant GenericDatabase::idOrNull(int id)
 {
     return (id>0) ? QString::number(id) : QVariant();

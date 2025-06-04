@@ -287,6 +287,14 @@ int HwDatabase::expenseCategoryId(const QString &name)
     return dictId(sqlSel);
 }
 
+QString HwDatabase::expenseCategoryById(int idCat)
+{
+    QSqlQuery sqlSel(sqlDb);
+    sqlSel.prepare("select name from hw_ex_cat where id=:id");
+    sqlSel.bindValue(":id", idCat);
+    return dictName(sqlSel);
+}
+
 int HwDatabase::addExpenseSubCategory(int idParentCat, const QString &name, const QString &descr)
 {
     QSqlQuery sqlIns(sqlDb);
@@ -313,6 +321,14 @@ int HwDatabase::expenseSubCategoryId(int idParentCat, const QString &name)
     }
     sqlSel.bindValue(":id_ecat", idParentCat);
     return dictId(sqlSel);
+}
+
+QString HwDatabase::expenseSubCategoryById(int idSubCat)
+{
+    QSqlQuery sqlSel(sqlDb);
+    sqlSel.prepare("select name from hw_ex_subcat where id=:id");
+    sqlSel.bindValue(":id", idSubCat);
+    return dictName(sqlSel);
 }
 
 int HwDatabase::addTransferType(const QString &name, const QString &descr)
