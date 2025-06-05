@@ -134,6 +134,11 @@ QVariant ImportCandidatesModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+ImpRecCandidate *ImportCandidatesModel::cand(int index)
+{
+    return candRefs[index];
+}
+
 QString ImportCandidatesModel::fromLowUnit(int amount) const
 {
     return QString::number((double)amount/100, 'f', 2);

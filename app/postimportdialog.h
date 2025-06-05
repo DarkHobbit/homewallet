@@ -37,6 +37,7 @@ private:
     virtual void showEvent(QShowEvent*);
 private slots:
     void setOkAccessibility();
+    void on_actExpCandState_triggered();
 };
 
 #endif // POSTIMPORTDIALOG_H

@@ -12,8 +12,10 @@
  */
 
 #include <QDialogButtonBox>
+#include <QMessageBox>
 #include <QPushButton>
 
+#include "globals.h"
 #include "helpers.h"
 #include "postimportdialog.h"
 #include "ui_postimportdialog.h"
@@ -24,6 +26,7 @@ PostImportDialog::PostImportDialog(QWidget *parent) :
     mSet(0)
 {
     ui->setupUi(this);
+    ui->tableExpenses->insertAction(0, ui->actExpCandState);
 }
 
 PostImportDialog::~PostImportDialog()
@@ -58,3 +61,12 @@ void PostImportDialog::setOkAccessibility()
 {
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(mSet->canImport());
 }
+
+void PostImportDialog::on_actExpCandState_triggered()
+{
+    int r = ui->tableExpenses->currentIndex().row();
+    ImpRecCandidate* c = mSet->mdlExpense->cand(r);
+    QMessageBox::information(0, S_INFORM, tr("Row %1: source line %2, state - %3")
+        .arg(r).arg(c->lineNumber).arg(c->state)); //===>
+}
+
