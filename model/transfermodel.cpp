@@ -21,7 +21,7 @@ TransferModel::TransferModel(QObject *parent)
         << "t.op_date"
           << lowUnitFunction("t.amount", "cur.abbr")
           << "cur.abbr" << "ai.name" << "ao.name"
-          << "tt.name" << "tt.descr";
+          << "c.name" << "t.descr";
     visibleFieldTypes
               << 'D' << 'M' << 'G' << 'G' << 'G' << 'G' << 'G';
     columnHeaders
@@ -38,11 +38,11 @@ void TransferModel::update()
         "select t.id, %1" \
         " from " \
         "   hw_transfer t, " \
-        "   hw_account ai, hw_account ao, hw_currency cur, hw_transfer_type tt" \
+        "   hw_account ai, hw_account ao, hw_currency cur, hw_transfer_type c" \
         "   where t.id_ac_in=ai.id" \
         "   and t.id_ac_out=ao.id" \
         "   and t.id_cur=cur.id" \
-        "   and t.id_tt=tt.id" \
+        "   and t.id_tt=c.id" \
         "   %2" \
         " order by op_date desc;";
     updateData(sql, false);

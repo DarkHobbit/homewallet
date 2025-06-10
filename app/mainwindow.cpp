@@ -416,7 +416,7 @@ void MainWindow::updateOneModel(FilteredQueryModel* source)
     if (catSource)
         catSource->setFilterCategories(
             getComboCurrentId(ui->cbCategory),
-            getComboCurrentId(ui->cbSubcategory));
+            ui->cbSubcategory->count()==0 ? -2 : getComboCurrentId(ui->cbSubcategory));
     else {
         ui->cbCategory->clear();
         ui->cbSubcategory->clear();
@@ -517,8 +517,11 @@ void MainWindow::on_cbCategory_activated(int)
     default:
         ui->cbSubcategory->clear();
     }
+    ui->btn_Filter_Apply->setEnabled(ui->cbCategory->count()>0);
     if (!collSubcat.isEmpty())
         fillComboByDict(ui->cbSubcategory, collSubcat, true);
+    else
+        ui->cbSubcategory->clear();
 }
 
 void MainWindow::on_Model_Error(const QString &message)
@@ -564,6 +567,7 @@ void MainWindow::updateTabsAndFilters()
         break;
     case atExchange:
         ui->tvExchange->resizeColumnsToContents();
+        break;
     default:
         ui->cbCategory->clear();
     }
