@@ -65,7 +65,7 @@ private slots:
     void on_tabWidgetMain_currentChanged(int);
     void on_tabWidgetTransferAndExchange_currentChanged(int);
     void on_cbCategory_activated(int);
-    void on_Model_Error(const QString& message);
+    void processModelError(const QString& message);
 
 private:
     Ui::MainWindow *ui;

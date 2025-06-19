@@ -129,7 +129,6 @@ void MainWindow::openDb(const QString &path)
     for (const QString& ws: db.warnings())
         QMessageBox::warning(0, S_WARNING, ws);
     on_tabWidgetMain_currentChanged(0);
-    updateViews();
 }
 
 void MainWindow::updateViews()
@@ -410,7 +409,7 @@ void MainWindow::prepareModel(FilteredQueryModel *source, QSortFilterProxyModel 
     view->horizontalHeader()->setStretchLastSection(true);
     view->setObjectName(QString("tv")+nameForDebug);
     // Error handling
-    connect(source, SIGNAL(modelError(QString)), this, SLOT(on_Model_Error(QString)));
+    connect(source, SIGNAL(modelError(QString)), this, SLOT(processModelError(QString)));
 }
 
 void MainWindow::updateOneModel(FilteredQueryModel* source)
@@ -530,7 +529,7 @@ void MainWindow::on_cbCategory_activated(int)
         ui->cbSubcategory->clear();
 }
 
-void MainWindow::on_Model_Error(const QString &message)
+void MainWindow::processModelError(const QString &message)
 {
     QMessageBox::critical(0, S_ERROR, message);
 }
