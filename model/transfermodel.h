@@ -17,9 +17,12 @@
 
 class TransferModel : public CategoriesBasedQueryModel
 {
+    Q_OBJECT
 public:
     TransferModel(QObject *parent);
-    void update();
+    virtual void setDefaultVisibleColumns();
+    virtual void update();
+    virtual QString localizedName();
 };
 
 #endif // TRANSFERMODEL_H

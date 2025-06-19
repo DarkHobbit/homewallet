@@ -11,6 +11,7 @@
  *
  */
 
+#include <iostream>
 #include <QSqlError>
 #include <QSqlQuery>
 
@@ -21,15 +22,6 @@ FilteredQueryModel::FilteredQueryModel(QObject *parent)
     : QSqlQueryModel(parent),
       dtFrom(QDate()), dtTo(QDate())
 {
-}
-
-void FilteredQueryModel::updateVisibleColumns(const ModelColumnList& _visibleColumns)
-{
-    beginResetModel();
-    visibleColumns.clear();
-    for (const short col: _visibleColumns)
-        visibleColumns.push_back(col);
-    endResetModel();
 }
 
 void FilteredQueryModel::setFilterDates(const QDate &_dtFrom, const QDate &_dtTo)
@@ -106,6 +98,34 @@ QVariant FilteredQueryModel::data(const QModelIndex &index, int role) const
         }
     }
     else return QSqlQueryModel::data(index, role);
+}
+
+void FilteredQueryModel::setVisibleColumns(const QStringList &names)
+{
+    if (names.isEmpty())
+        return;
+    visibleColumns.clear();
+    for (const QString& colName: names) {
+        if (columnHeaders.contains(colName))
+                visibleColumns << columnHeaders.indexOf(colName);
+    }
+}
+
+QStringList FilteredQueryModel::getVisibleColumns()
+{
+    QStringList res;
+    for (short index: visibleColumns) {
+        if (index<columnHeaders.count())
+            res << columnHeaders[index];
+        else
+            std::cerr << "Internal error: index=" << index << ", size=" << columnHeaders.count() <<std::endl;
+    }
+    return res;
+}
+
+QStringList FilteredQueryModel::getAllColumns()
+{
+    return columnHeaders;
 }
 
 void FilteredQueryModel::updateData(const QString &sql, bool insertWhere)

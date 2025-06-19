@@ -29,7 +29,11 @@ CurrConvModel::CurrConvModel(QObject *parent)
         << S_COL_SUM+' '+S_COL_FROM << S_COL_FROM
         << S_COL_SUM+' '+S_COL_TO << S_COL_TO
         << S_COL_DESCRIPTION;
-    // TODO read from settings
+    setDefaultVisibleColumns();
+}
+
+void CurrConvModel::setDefaultVisibleColumns()
+{
     visibleColumns << 0 << 1 << 2 << 3 << 4 << 5 << 6;
 }
 
@@ -46,4 +50,9 @@ void CurrConvModel::update()
         "   %2" \
         " order by op_date desc;";
     updateData(sql, false);
+}
+
+QString CurrConvModel::localizedName()
+{
+    return tr("Currency conversion");
 }

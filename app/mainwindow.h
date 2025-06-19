@@ -18,12 +18,13 @@
 #include <QSortFilterProxyModel>
 #include <QTableView>
 
+#include "currconvmodel.h"
+#include "filteredquerymodel.h"
 #include "formats/formatfactory.h"
 #include "hwdatabase.h"
 #include "expensemodel.h"
 #include "incomemodel.h"
 #include "transfermodel.h"
-#include "currconvmodel.h"
 
 namespace Ui {
 class MainWindow;
@@ -74,6 +75,7 @@ private:
     CurrConvModel* mdlCurrConv;
     QSortFilterProxyModel
         *proxyExpenses, *proxyIncomes, *proxyTransfer, *proxyCurrConv;
+    FQMlist dbModels;
 
     QLabel *lbCounts;
     enum ActiveTab {

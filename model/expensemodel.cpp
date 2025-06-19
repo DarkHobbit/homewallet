@@ -34,7 +34,12 @@ ExpenseModel::ExpenseModel(QObject *parent)
         << S_COL_SUM
         << S_COL_CURRENCY << S_COL_ACCOUNT
         << S_COL_ATTENTION << S_COL_DESCRIPTION;
-    // TODO read from settings
+    setDefaultVisibleColumns();
+}
+
+void ExpenseModel::setDefaultVisibleColumns()
+{
+    visibleColumns.clear();
     visibleColumns << 0 << 1 << 2 << 3 << 4 << 5 << 7 << 8 << 9;
 }
 
@@ -53,5 +58,10 @@ void ExpenseModel::update()
         " %2" \
         " order by op_date desc;";
     updateData(sql, false);
+}
+
+QString ExpenseModel::localizedName()
+{
+    return tr("Expenses");
 }
 

@@ -100,6 +100,29 @@ void ConfigManager::writeConfig()
     settings->setValue("Locale/UseSystemDateTimeFormat", gd.useSystemDateTimeFormat);
 }
 
+void ConfigManager::readTableConfig(FilteredQueryModel *model)
+{
+    if (!settings)
+        return;
+    QString sectName = sectionForModel(model);
+    int visibleColumnCount = settings->value(sectName + "/ColumnsCount", 0).toInt();
+    QStringList cols;
+    for (int i=0; i<visibleColumnCount; i++)
+        cols << settings->value(sectName + QString("/Column%1").arg(i+1)).toString();
+    model->setVisibleColumns(cols);
+}
+
+void ConfigManager::writeTableConfig(FilteredQueryModel *model)
+{
+    if (!settings)
+        return;
+    QString sectName = sectionForModel(model);
+    QStringList cols = model->getVisibleColumns();
+    settings->setValue(sectName + "/ColumnsCount", cols.count());
+    for (int i=0; i<cols.count(); i++)
+        settings->setValue(sectName + QString("/Column%1").arg(i+1), cols[i]);
+}
+
 QString ConfigManager::readLanguage()
 {
     if (!settings)
@@ -159,6 +182,13 @@ void ConfigManager::updateFormats()
         gd.dateFormat = QLocale::system().dateFormat();
         gd.timeFormat = QLocale::system().timeFormat();
     }
+}
+
+QString ConfigManager::sectionForModel(FilteredQueryModel *model)
+{
+    QString res = model->objectName();
+    res.remove("mdl");
+    return QString("TableOf") + res;
 }
 
 ConfigManager configManager;

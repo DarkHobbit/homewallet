@@ -19,9 +19,7 @@
 #include <QStringList>
 
 #include "corehelpers.h"
-#ifdef WITH_MESSAGES
-#include "decodedmessagelist.h"
-#endif
+#include "filteredquerymodel.h"
 
 class ConfigManager
 {
@@ -33,6 +31,8 @@ public:
     void setDefaults(const QString& tableFont, const QString& gridColor1, const QString& gridColor2);
     void readConfig();
     void writeConfig();
+    void readTableConfig(FilteredQueryModel* model);
+    void writeTableConfig(FilteredQueryModel* model);
     // Separate settings, managed by main window and other dialogs
     QString readLanguage();
     void writeLanguage(const QString& language);
@@ -44,6 +44,7 @@ public:
     void updateFormats();
 private:
     QSettings* settings;
+    QString sectionForModel(FilteredQueryModel* model);
 };
 
 extern ConfigManager configManager;

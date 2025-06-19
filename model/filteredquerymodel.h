@@ -14,6 +14,7 @@
 #define FILTEREDQUERYMODEL_H
 
 #include <QDate>
+#include <QList>
 #include <QSqlQueryModel>
 #include <QStringList>
 
@@ -29,8 +30,9 @@ class FilteredQueryModel : public QSqlQueryModel
     Q_OBJECT
 public:
     explicit FilteredQueryModel(QObject *parent);
+    virtual void setDefaultVisibleColumns() = 0;
     virtual void update() = 0;
-    void updateVisibleColumns(const ModelColumnList& _visibleColumns);
+    virtual QString localizedName() = 0;
     void setFilterDates(const QDate& _dtFrom=QDate(), const QDate& _dtTo=QDate());
     // Base model implementation methods
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -38,6 +40,10 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     // TODO flags(), if needed
     // TODO field list for Qt::AlignRight (number)
+    // Settings
+    void setVisibleColumns(const QStringList& names);
+    QStringList getVisibleColumns();
+    QStringList getAllColumns();
 protected:
     ModelColumnList visibleColumns;
     QStringList visibleFieldNames;
@@ -51,5 +57,8 @@ protected:
 signals:
     void modelError(const QString& message);
 };
+
+class FQMlist: public QList<FilteredQueryModel*>
+{};
 
 #endif // FILTEREDQUERYMODEL_H

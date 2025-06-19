@@ -17,9 +17,12 @@
 
 class CurrConvModel : public FilteredQueryModel
 {
+    Q_OBJECT
 public:
     explicit CurrConvModel(QObject *parent);
-    void update();
+    virtual void setDefaultVisibleColumns();
+    virtual void update();
+    virtual QString localizedName();
 };
 
 #endif // CURRCONVMODEL_H

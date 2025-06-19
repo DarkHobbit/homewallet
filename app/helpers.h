@@ -15,10 +15,13 @@
 #define HELPERS_H
 
 #include <QComboBox>
+#include <QListWidget>
+#include <QStringList>
 #include <QTableView>
 
 #include "genericdatabase.h"
 
+QStringList getListItems(QListWidget* list);
 void fillComboByDict(QComboBox* combo, GenericDatabase::DictColl coll, bool addAllItem);
 int getComboCurrentId(QComboBox* combo);
 // Set color/font for each table view

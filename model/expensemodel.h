@@ -21,7 +21,9 @@ class ExpenseModel : public CategoriesBasedQueryModel
     Q_OBJECT
 public:
     ExpenseModel(QObject *parent);
-    void update();
+    virtual void setDefaultVisibleColumns();
+    virtual void update();
+    virtual QString localizedName();
 };
 
 #endif // EXPENSEMODEL_H

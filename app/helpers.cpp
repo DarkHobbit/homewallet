@@ -63,3 +63,11 @@ void updateOneView(QTableView *view, bool isDatabaseView)
     for (int i=0; i<view->model()->rowCount(); i++) // M.b. slow on some computers!
         view->setRowHeight(i, rH);
 }
+
+QStringList getListItems(QListWidget *list)
+{
+    QStringList res;
+    for (int i=0; i<list->count(); i++)
+        res << list->item(i)->text();
+    return res;
+}

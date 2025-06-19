@@ -58,7 +58,10 @@ MainWindow::MainWindow(QWidget *parent) :
     mdlCurrConv = new CurrConvModel(this);
     proxyCurrConv = new QSortFilterProxyModel(this);
     prepareModel(mdlCurrConv, proxyCurrConv, ui->tvExchange, "CurrConv");
-
+    // Table columns
+    for (FilteredQueryModel* mdl: dbModels)
+        configManager.readTableConfig(mdl);
+    // Filter
     ui->leQuickFilter->installEventFilter(this);
     ui->dteDateFrom->installEventFilter(this);
     ui->dteDateTo->installEventFilter(this);
@@ -363,26 +366,28 @@ void MainWindow::on_action_Import_triggered()
 void MainWindow::on_action_Settings_triggered()
 {
     SettingsDialog* setDlg = new SettingsDialog(0);
-    setDlg->setData();
+    setDlg->setData(&dbModels);
     setDlg->exec();
     if (setDlg->result()==QDialog::Accepted) {
         setDlg->getData();
         configManager.writeConfig();
+        updateViews();
         updateConfig();
         // Language
         if (setDlg->langChanged())
             QMessageBox::information(0, S_INFORM, tr("Restart program to apply language change"));
+        // Table columns
+        for (FilteredQueryModel* mdl: dbModels)
+            configManager.writeTableConfig(mdl);
     }
     delete setDlg;
 }
 
-#include <iostream>
 void MainWindow::on_leQuickFilter_textChanged(const QString&)
 {
     if (false) // TODO to Settings
         on_btn_Quick_Filter_Apply_clicked();
 }
-
 
 void MainWindow::on_actionFilter_triggered()
 {
@@ -398,6 +403,7 @@ void MainWindow::prepareModel(FilteredQueryModel *source, QSortFilterProxyModel 
     proxy->setSortRole(SortStringRole);
     proxy->setObjectName(QString("proxy")+nameForDebug);
     view->setModel(proxy);
+    dbModels << source;
     // TODO implement selection and checkSelection() and mapToSource for all cases, see DoubleContact's checkSelection()
     view->setSortingEnabled(true); // TODO to settings
 //    view->horizontalHeader()->setResizeContentsPrecision(64);
@@ -531,16 +537,13 @@ void MainWindow::on_Model_Error(const QString &message)
 
 void MainWindow::showEvent(QShowEvent*)
 {
-    // TODO тж. вызывать updateConfig() после настройки, внезапно, конфига, как в DC
     updateConfig();
 }
 
 // Manage immediately applied but settings window managed options
 void MainWindow::updateConfig()
 {
-    // Table(s) visible columns
-    // TODO mdlExpenses->updateVisibleColumns();
-    // Table(s) general config (must be after updateVisibleColumns(), because resizeRowsToContents())
+    // Table(s) general config (must be after columns config, because resizeRowsToContents())
     updateTableConfig(ui->tvExpenses);
     updateTableConfig(ui->tvIncomes);
     updateTableConfig(ui->tvTransfer);

@@ -18,9 +18,12 @@
 
 class IncomeModel : public CategoriesBasedQueryModel
 {
+    Q_OBJECT
 public:
     IncomeModel(QObject *parent);
-    void update();
+    virtual void setDefaultVisibleColumns();
+    virtual void update();
+    virtual QString localizedName();
 };
 
 #endif // INCOMEMODEL_H

@@ -60,6 +60,14 @@
     </message>
 </context>
 <context>
+    <name>CurrConvModel</name>
+    <message>
+        <location filename="../model/currconvmodel.cpp" line="57"/>
+        <source>Currency conversion</source>
+        <translation>Обмен валют</translation>
+    </message>
+</context>
+<context>
     <name>ExpenseModel</name>
     <message>
         <source>Date</source>
@@ -101,11 +109,16 @@
         <source>Description</source>
         <translation type="obsolete">Описание</translation>
     </message>
+    <message>
+        <location filename="../model/expensemodel.cpp" line="65"/>
+        <source>Expenses</source>
+        <translation>Расходы</translation>
+    </message>
 </context>
 <context>
     <name>FilteredQueryModel</name>
     <message>
-        <location filename="../model/filteredquerymodel.cpp" line="123"/>
+        <location filename="../model/filteredquerymodel.cpp" line="143"/>
         <source>Incorrect column index found, see Settings-&gt;Columns</source>
         <translation>Обнаружен некорректный индекс столбца, см. Настройки-&gt;Столбцы</translation>
     </message>
@@ -122,6 +135,14 @@
         <location filename="../model/importmodelset.cpp" line="60"/>
         <source>Possibly duplicates: expenses %1, incomes %2, transfer %3, debit-credit %4</source>
         <translation>Возможных дубликатов: расходы %1, доходы %2, переносы %3, долги-кредиты %4</translation>
+    </message>
+</context>
+<context>
+    <name>IncomeModel</name>
+    <message>
+        <location filename="../model/incomemodel.cpp" line="64"/>
+        <source>Incomes</source>
+        <translation>Доходы</translation>
     </message>
 </context>
 <context>
@@ -316,54 +337,54 @@
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="106"/>
+        <location filename="../app/mainwindow.cpp" line="109"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="110"/>
+        <location filename="../app/mainwindow.cpp" line="113"/>
         <source>Database not empty for testing</source>
         <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="162"/>
+        <location filename="../app/mainwindow.cpp" line="165"/>
         <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="217"/>
+        <location filename="../app/mainwindow.cpp" line="220"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="217"/>
+        <location filename="../app/mainwindow.cpp" line="220"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="226"/>
+        <location filename="../app/mainwindow.cpp" line="229"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="243"/>
+        <location filename="../app/mainwindow.cpp" line="246"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="341"/>
+        <location filename="../app/mainwindow.cpp" line="344"/>
         <source>Unknown import error</source>
         <translation>Неизвестная ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="343"/>
+        <location filename="../app/mainwindow.cpp" line="346"/>
         <source>
 at record %1 from %2</source>
         <translation>
 в записи %1 из %2</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="374"/>
+        <location filename="../app/mainwindow.cpp" line="378"/>
         <source>Restart program to apply language change</source>
         <translation>Язык сменится после перезапуска программы</translation>
     </message>
@@ -1004,6 +1025,39 @@ Found: %1</source>
         <location filename="../app/settingsdialog.ui" line="151"/>
         <source>Columns</source>
         <translation>Столбцы</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="159"/>
+        <source>Table</source>
+        <translation>Таблица</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="180"/>
+        <source>Visible</source>
+        <translation>Видимые</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="187"/>
+        <source>Available</source>
+        <translation>Доступные</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="259"/>
+        <source>Reset to defaults</source>
+        <translation>Сбросить к виду по умолчанию</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.cpp" line="180"/>
+        <source>List must contain at least one visible column</source>
+        <translation>В списке должен быть хотя бы один видимый столбец</translation>
+    </message>
+</context>
+<context>
+    <name>TransferModel</name>
+    <message>
+        <location filename="../model/transfermodel.cpp" line="58"/>
+        <source>Transfer</source>
+        <translation>Переносы</translation>
     </message>
 </context>
 </TS>

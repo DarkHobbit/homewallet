@@ -28,8 +28,13 @@ TransferModel::TransferModel(QObject *parent)
         << S_COL_DATE << S_COL_SUM << S_COL_CURRENCY
         << S_COL_FROM << S_COL_TO
         << S_COL_CATEGORY << S_COL_DESCRIPTION;
-          // TODO read from settings
-          visibleColumns << 0 << 1 << 3 << 4 << 5 << 6;
+    setDefaultVisibleColumns();
+}
+
+void TransferModel::setDefaultVisibleColumns()
+{
+    visibleColumns.clear();
+    visibleColumns << 0 << 1 << 3 << 4 << 5 << 6;
 }
 
 void TransferModel::update()
@@ -46,4 +51,9 @@ void TransferModel::update()
         "   %2" \
         " order by op_date desc;";
     updateData(sql, false);
+}
+
+QString TransferModel::localizedName()
+{
+    return tr("Transfer");
 }
