@@ -49,11 +49,12 @@ MainWindow::MainWindow(QWidget *parent) :
     QDate dtFilterFrom, dtFilterTo;
     switch (gd.filterDatesOnStartup) {
     case GlobalConfig::fdRestorePrevRange: {
-        configManager.readDateFilter(dtFilterFrom, dtFilterTo);
+        bool useDateFrom, useDateTo;
+        configManager.readDateFilter(useDateFrom, useDateTo, dtFilterFrom, dtFilterTo);
         ui->dteDateFrom->setDate(dtFilterFrom);
         ui->dteDateTo->setDate(dtFilterTo);
-        ui->cbDateFrom->setChecked(true);
-        ui->cbDateTo->setChecked(true);
+        ui->cbDateFrom->setChecked(useDateFrom);
+        ui->cbDateTo->setChecked(useDateTo);
         break;
     }
     case GlobalConfig::fdShowLastNMonths: {
@@ -423,7 +424,6 @@ void MainWindow::prepareModel(FilteredQueryModel *source, QSortFilterProxyModel 
     view->setModel(proxy);
     dbModels << source;
     // TODO implement selection and checkSelection() and mapToSource for all cases, see DoubleContact's checkSelection()
-    view->setSortingEnabled(true); // TODO to settings
 //    view->horizontalHeader()->setResizeContentsPrecision(64);
     view->horizontalHeader()->setStretchLastSection(true);
     view->setObjectName(QString("tv")+nameForDebug);
@@ -502,7 +502,9 @@ void MainWindow::on_btn_Filter_Apply_clicked()
 {
     updateViews();
     // Save filter config
-    configManager.writeDateFilter(ui->dteDateFrom->date(), ui->dteDateTo->date());
+    configManager.writeDateFilter(
+        ui->cbDateFrom->isChecked(), ui->cbDateTo->isChecked(),
+        ui->dteDateFrom->date(), ui->dteDateTo->date());
     configManager.writeCategoriesFilter(activeModel, ui->cbCategory->currentText(), ui->cbSubcategory->currentText());
 }
 
@@ -513,7 +515,7 @@ void MainWindow::on_btn_Filter_Reset_clicked()
     on_tabWidgetMain_currentChanged(0);
     updateViews();
     // Save filter config
-    configManager.writeDateFilter(QDate(), QDate());
+    configManager.writeDateFilter(false, false, QDate(), QDate());
     configManager.writeCategoriesFilter(activeModel, "", "");
 }
 

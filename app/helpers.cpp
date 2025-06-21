@@ -34,6 +34,7 @@ int getComboCurrentId(QComboBox *combo)
 // Set color/font for each table view
 void updateTableConfig(QTableView *table)
 {
+    table->setSortingEnabled(gd.enableSorting);
     table->setShowGrid(gd.showTableGrid);
     table->verticalHeader()->setVisible(gd.showLineNumbers);
     table->setAlternatingRowColors(gd.useTableAlternateColors);

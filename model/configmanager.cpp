@@ -76,11 +76,12 @@ void ConfigManager::readConfig()
     gd.timeFormat = settings->value("Locale/TimeFormat", QLocale::system().timeFormat(QLocale::LongFormat)).toString();
     gd.useSystemDateTimeFormat = settings->value("Locale/UseSystemDateTimeFormat", false).toBool();
     updateFormats();
-    // Filter
+    // Filter & Sort
     gd.applyQuickFilterImmediately = settings->value("Filter/ApplyQuickFilterImmediately", false).toBool();
     gd.filterDatesOnStartup = (GlobalConfig::FilterDatesOnStartup)enFilterDatesOnStartup.load(settings);
     gd.monthsInFilter = settings->value("Filter/MonthsInFilter", 12).toInt();
     gd.saveCategoriesInFilter = settings->value("Filter/SaveCategoriesInFilter", true).toBool();
+    gd.enableSorting = settings->value("Filter/EnableSorting", true).toBool();
 }
 
 void ConfigManager::writeConfig()
@@ -103,11 +104,12 @@ void ConfigManager::writeConfig()
     settings->setValue("Locale/DateFormat", gd.dateFormat);
     settings->setValue("Locale/TimeFormat", gd.timeFormat);
     settings->setValue("Locale/UseSystemDateTimeFormat", gd.useSystemDateTimeFormat);
-    // Filter
+    // Filter & Sort
     settings->setValue("Filter/ApplyQuickFilterImmediately", gd.applyQuickFilterImmediately);
     enFilterDatesOnStartup.save(settings, gd.filterDatesOnStartup);
     settings->setValue("Filter/MonthsInFilter", gd.monthsInFilter);
     settings->setValue("Filter/SaveCategoriesInFilter", gd.saveCategoriesInFilter);
+    settings->setValue("Filter/EnableSorting", gd.enableSorting);
     settings->sync();
 }
 
@@ -134,10 +136,12 @@ void ConfigManager::writeTableConfig(FilteredQueryModel *model)
         settings->setValue(sectName + QString("/Column%1").arg(i+1), cols[i]);
 }
 
-void ConfigManager::readDateFilter(QDate &dtFilterFrom, QDate &dtFilterTo)
+void ConfigManager::readDateFilter(bool& useDateFrom, bool& useDateTo, QDate &dtFilterFrom, QDate &dtFilterTo)
 {
     if (!settings)
         return;
+    useDateFrom = settings->value("Filter/UseDateFrom").toBool();
+    useDateTo = settings->value("Filter/UseDateTo").toBool();
     dtFilterFrom =
         QDate::fromString(settings->value("Filter/DateFrom").toString(),
             Qt::ISODate);
@@ -146,10 +150,12 @@ void ConfigManager::readDateFilter(QDate &dtFilterFrom, QDate &dtFilterTo)
             Qt::ISODate);
 }
 
-void ConfigManager::writeDateFilter(const QDate &dtFilterFrom, const QDate &dtFilterTo)
+void ConfigManager::writeDateFilter(const bool& useDateFrom, const bool& useDateTo, const QDate &dtFilterFrom, const QDate &dtFilterTo)
 {
     if (!settings)
         return;
+    settings->setValue("Filter/UseDateFrom", useDateFrom);
+    settings->setValue("Filter/UseDateTo", useDateTo);
     settings->setValue("Filter/DateFrom", dtFilterFrom.toString(Qt::ISODate));
     settings->setValue("Filter/DateTo", dtFilterTo.toString(Qt::ISODate));
 }

@@ -34,8 +34,8 @@ public:
     void readTableConfig(FilteredQueryModel* model);
     void writeTableConfig(FilteredQueryModel* model);
     // Separate settings, managed by main window and other dialogs
-    void readDateFilter(QDate& dtFilterFrom, QDate& dtFilterTo);
-    void writeDateFilter(const QDate& dtFilterFrom, const QDate& dtFilterTo);
+    void readDateFilter(bool& useDateFrom, bool& useDateTo, QDate& dtFilterFrom, QDate& dtFilterTo);
+    void writeDateFilter(const bool& useDateFrom, const bool& useDateTo, const QDate& dtFilterFrom, const QDate& dtFilterTo);
     void readCategoriesFilter(FilteredQueryModel* model, QString& category, QString& subcategory);
     void writeCategoriesFilter(FilteredQueryModel* model, const QString& category, const QString& subcategory);
     QString readLanguage();

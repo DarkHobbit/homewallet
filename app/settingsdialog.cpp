@@ -56,6 +56,7 @@ bool SettingsDialog::setData(FQMlist* dbModels)
     ui->bgFilterDatesOnStartup->button((int)gd.filterDatesOnStartup)->setChecked(true); // safety provided by caller
     ui->sbMonthsInFilter->setValue(gd.monthsInFilter);
     ui->cbSaveCategoriesInFilter->setChecked(gd.saveCategoriesInFilter);
+    ui->cbEnableSorting->setChecked(gd.enableSorting);
     return true;
 }
 
@@ -93,6 +94,7 @@ bool SettingsDialog::getData()
         (GlobalConfig::FilterDatesOnStartup) ui->bgFilterDatesOnStartup->checkedId();
     gd.monthsInFilter = ui->sbMonthsInFilter->value();
     gd.saveCategoriesInFilter = ui->cbSaveCategoriesInFilter->isChecked();
+    gd.enableSorting = ui->cbEnableSorting->isChecked();
     return true;
 }
 

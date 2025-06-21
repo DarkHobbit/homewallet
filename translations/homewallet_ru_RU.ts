@@ -337,54 +337,54 @@
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="111"/>
+        <location filename="../app/mainwindow.cpp" line="131"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="115"/>
+        <location filename="../app/mainwindow.cpp" line="135"/>
         <source>Database not empty for testing</source>
         <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="166"/>
+        <location filename="../app/mainwindow.cpp" line="183"/>
         <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="221"/>
+        <location filename="../app/mainwindow.cpp" line="238"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="221"/>
+        <location filename="../app/mainwindow.cpp" line="238"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="230"/>
+        <location filename="../app/mainwindow.cpp" line="247"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="247"/>
+        <location filename="../app/mainwindow.cpp" line="264"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="345"/>
+        <location filename="../app/mainwindow.cpp" line="362"/>
         <source>Unknown import error</source>
         <translation>Неизвестная ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="347"/>
+        <location filename="../app/mainwindow.cpp" line="364"/>
         <source>
 at record %1 from %2</source>
         <translation>
 в записи %1 из %2</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="379"/>
+        <location filename="../app/mainwindow.cpp" line="396"/>
         <source>Restart program to apply language change</source>
         <translation>Язык сменится после перезапуска программы</translation>
     </message>
@@ -1042,6 +1042,11 @@ Found: %1</source>
         <translation>Фильтр и сортировка</translation>
     </message>
     <message>
+        <location filename="../app/settingsdialog.ui" line="346"/>
+        <source>Enable sorting</source>
+        <translation>Разрешить сортировку</translation>
+    </message>
+    <message>
         <location filename="../app/settingsdialog.ui" line="180"/>
         <source>Available</source>
         <translation>Доступные</translation>
@@ -1091,7 +1096,7 @@ Found: %1</source>
         <translation>Сбросить к виду по умолчанию</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.cpp" line="192"/>
+        <location filename="../app/settingsdialog.cpp" line="196"/>
         <source>List must contain at least one visible column</source>
         <translation>В списке должен быть хотя бы один видимый столбец</translation>
     </message>

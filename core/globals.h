@@ -98,6 +98,7 @@ struct GlobalConfig {
     } filterDatesOnStartup;
     int monthsInFilter;
     bool saveCategoriesInFilter;
+    bool enableSorting;
     // Session-specific data from command line
     bool fullScreenMode; // Maximize main window at startup
     bool debugDataMode;  // Create debug data at startup
