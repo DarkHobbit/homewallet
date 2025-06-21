@@ -20,6 +20,8 @@
 #include <QStringList>
 #include <qnamespace.h>
 
+#include "corehelpers.h"
+
 // Common strings for translation unify
 // Message boxes
 #define S_ERROR QObject::tr("Error")
@@ -87,10 +89,21 @@ struct GlobalConfig {
     // Locale
     QString dateFormat, timeFormat;
     bool useSystemDateTimeFormat;
-    // TODO
+    // Filter
+    bool applyQuickFilterImmediately;
+    enum FilterDatesOnStartup {
+        fdShowAllRecords,
+        fdRestorePrevRange,
+        fdShowLastNMonths
+    } filterDatesOnStartup;
+    int monthsInFilter;
+    bool saveCategoriesInFilter;
     // Session-specific data from command line
     bool fullScreenMode; // Maximize main window at startup
     bool debugDataMode;  // Create debug data at startup
 } gd;
+
+// Enumerations
+extern EnumSetting enFilterDatesOnStartup;
 
 #endif // GLOBALS_H

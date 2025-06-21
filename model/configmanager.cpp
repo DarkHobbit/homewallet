@@ -76,6 +76,11 @@ void ConfigManager::readConfig()
     gd.timeFormat = settings->value("Locale/TimeFormat", QLocale::system().timeFormat(QLocale::LongFormat)).toString();
     gd.useSystemDateTimeFormat = settings->value("Locale/UseSystemDateTimeFormat", false).toBool();
     updateFormats();
+    // Filter
+    gd.applyQuickFilterImmediately = settings->value("Filter/ApplyQuickFilterImmediately", false).toBool();
+    gd.filterDatesOnStartup = (GlobalConfig::FilterDatesOnStartup)enFilterDatesOnStartup.load(settings);
+    gd.monthsInFilter = settings->value("Filter/MonthsInFilter", 12).toInt();
+    gd.saveCategoriesInFilter = settings->value("Filter/SaveCategoriesInFilter", true).toBool();
 }
 
 void ConfigManager::writeConfig()
@@ -98,6 +103,12 @@ void ConfigManager::writeConfig()
     settings->setValue("Locale/DateFormat", gd.dateFormat);
     settings->setValue("Locale/TimeFormat", gd.timeFormat);
     settings->setValue("Locale/UseSystemDateTimeFormat", gd.useSystemDateTimeFormat);
+    // Filter
+    settings->setValue("Filter/ApplyQuickFilterImmediately", gd.applyQuickFilterImmediately);
+    enFilterDatesOnStartup.save(settings, gd.filterDatesOnStartup);
+    settings->setValue("Filter/MonthsInFilter", gd.monthsInFilter);
+    settings->setValue("Filter/SaveCategoriesInFilter", gd.saveCategoriesInFilter);
+    settings->sync();
 }
 
 void ConfigManager::readTableConfig(FilteredQueryModel *model)
@@ -121,6 +132,44 @@ void ConfigManager::writeTableConfig(FilteredQueryModel *model)
     settings->setValue(sectName + "/ColumnsCount", cols.count());
     for (int i=0; i<cols.count(); i++)
         settings->setValue(sectName + QString("/Column%1").arg(i+1), cols[i]);
+}
+
+void ConfigManager::readDateFilter(QDate &dtFilterFrom, QDate &dtFilterTo)
+{
+    if (!settings)
+        return;
+    dtFilterFrom =
+        QDate::fromString(settings->value("Filter/DateFrom").toString(),
+            Qt::ISODate);
+    dtFilterTo =
+        QDate::fromString(settings->value("Filter/DateTo").toString(),
+            Qt::ISODate);
+}
+
+void ConfigManager::writeDateFilter(const QDate &dtFilterFrom, const QDate &dtFilterTo)
+{
+    if (!settings)
+        return;
+    settings->setValue("Filter/DateFrom", dtFilterFrom.toString(Qt::ISODate));
+    settings->setValue("Filter/DateTo", dtFilterTo.toString(Qt::ISODate));
+}
+
+void ConfigManager::readCategoriesFilter(FilteredQueryModel* model, QString &category, QString &subcategory)
+{
+    if (!settings)
+        return;
+    QString sectName = sectionForModel(model);
+    category = settings->value(sectName + "/FilterCategory").toString();
+    subcategory = settings->value(sectName + "/FilterSubcategory").toString();
+}
+
+void ConfigManager::writeCategoriesFilter(FilteredQueryModel* model, const QString &category, const QString &subcategory)
+{
+    if (!settings)
+        return;
+    QString sectName = sectionForModel(model);
+    settings->setValue(sectName + "/FilterCategory", category);
+    settings->setValue(sectName + "/FilterSubcategory", subcategory);
 }
 
 QString ConfigManager::readLanguage()

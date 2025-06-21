@@ -17,6 +17,9 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     , columnsChanged(false), prevModel(0)
 {
     ui->setupUi(this);
+    ui->bgFilterDatesOnStartup->setId(ui->rbShowAllRecords, 0);
+    ui->bgFilterDatesOnStartup->setId(ui->rbRestorePrevRange, 1);
+    ui->bgFilterDatesOnStartup->setId(ui->rbShowLastNMonths, 2);
 }
 
 SettingsDialog::~SettingsDialog()
@@ -48,6 +51,11 @@ bool SettingsDialog::setData(FQMlist* dbModels)
     _dbModels = dbModels;
     for (FilteredQueryModel* mdl: *_dbModels)
         ui->cbTableNames->addItem(mdl->localizedName());
+    // Filter
+    ui->cbApplyQuickFilterImmediately->setChecked(gd.applyQuickFilterImmediately);
+    ui->bgFilterDatesOnStartup->button((int)gd.filterDatesOnStartup)->setChecked(true); // safety provided by caller
+    ui->sbMonthsInFilter->setValue(gd.monthsInFilter);
+    ui->cbSaveCategoriesInFilter->setChecked(gd.saveCategoriesInFilter);
     return true;
 }
 
@@ -79,6 +87,12 @@ bool SettingsDialog::getData()
     // - from current tab
     if (columnsChanged)
         prevModel->setVisibleColumns(getListItems(ui->lwVisibleColumns));
+    // Filter
+    gd.applyQuickFilterImmediately = ui->cbApplyQuickFilterImmediately->isChecked();
+    gd.filterDatesOnStartup =
+        (GlobalConfig::FilterDatesOnStartup) ui->bgFilterDatesOnStartup->checkedId();
+    gd.monthsInFilter = ui->sbMonthsInFilter->value();
+    gd.saveCategoriesInFilter = ui->cbSaveCategoriesInFilter->isChecked();
     return true;
 }
 

@@ -174,13 +174,6 @@
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="lbVisibleColumns">
-           <property name="text">
-            <string>Visible</string>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="2">
           <widget class="QLabel" name="lbAvailableColumns">
            <property name="text">
@@ -240,6 +233,13 @@
            </item>
           </layout>
          </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="lbVisibleColumns">
+           <property name="text">
+            <string>Visible</string>
+           </property>
+          </widget>
+         </item>
          <item row="1" column="2">
           <widget class="QListWidget" name="lwAvailableColumns">
            <property name="selectionMode">
@@ -249,15 +249,112 @@
          </item>
         </layout>
        </item>
+       <item>
+        <widget class="QPushButton" name="btnResetColumnToDefaults">
+         <property name="text">
+          <string>Reset to defaults</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="btnResetColumnToDefaults">
-     <property name="text">
-      <string>Reset to defaults</string>
-     </property>
+     <widget class="QWidget" name="tabFilter">
+      <attribute name="title">
+       <string>Filter'n'Sort</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QCheckBox" name="cbApplyQuickFilterImmediately">
+         <property name="text">
+          <string>Apply quick filter immediately</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gbFilterDatesOnStartup">
+         <property name="title">
+          <string>At Startup</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QRadioButton" name="rbShowAllRecords">
+            <property name="text">
+             <string>Show all records</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">bgFilterDatesOnStartup</string>
+            </attribute>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rbRestorePrevRange">
+            <property name="text">
+             <string>Restore previous date range</string>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">bgFilterDatesOnStartup</string>
+            </attribute>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QRadioButton" name="rbShowLastNMonths">
+              <property name="text">
+               <string>Show last</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">bgFilterDatesOnStartup</string>
+              </attribute>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="sbMonthsInFilter">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>2400</number>
+              </property>
+              <property name="value">
+               <number>12</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lbShowLastNMonths">
+              <property name="text">
+               <string>months</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cbSaveCategoriesInFilter">
+         <property name="text">
+          <string>Save categories in filter</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>241</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
@@ -307,4 +404,7 @@
    </hints>
   </connection>
  </connections>
+ <buttongroups>
+  <buttongroup name="bgFilterDatesOnStartup"/>
+ </buttongroups>
 </ui>

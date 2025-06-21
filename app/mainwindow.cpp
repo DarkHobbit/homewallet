@@ -37,7 +37,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow), activeModel(0)
 {
     ui->setupUi(this);
     // Configuration
@@ -45,6 +45,28 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tvExpenses->palette().color(QPalette::Base).name(),
         ui->tvExpenses->palette().color(QPalette::AlternateBase).name());
     configManager.readConfig(); // TODO see comment in doublecontact
+    // Filter config (model-independent, see also updateViews())
+    QDate dtFilterFrom, dtFilterTo;
+    switch (gd.filterDatesOnStartup) {
+    case GlobalConfig::fdRestorePrevRange: {
+        configManager.readDateFilter(dtFilterFrom, dtFilterTo);
+        ui->dteDateFrom->setDate(dtFilterFrom);
+        ui->dteDateTo->setDate(dtFilterTo);
+        ui->cbDateFrom->setChecked(true);
+        ui->cbDateTo->setChecked(true);
+        break;
+    }
+    case GlobalConfig::fdShowLastNMonths: {
+        QDate now = QDate::currentDate();
+        ui->dteDateFrom->setDate(now.addMonths(-gd.monthsInFilter));
+        ui->dteDateTo->setDate(now);
+        ui->cbDateFrom->setChecked(true);
+        ui->cbDateTo->setChecked(true);
+        break;
+    }
+    default: // dShowAllRecords - do nothing
+        break;
+    }
     // Models
     mdlExpenses = new ExpenseModel(this);
     proxyExpenses  = new QSortFilterProxyModel(this);
@@ -136,22 +158,19 @@ void MainWindow::updateViews()
     // Filter
     on_cbDateFrom_stateChanged(0);
     on_cbDateTo_stateChanged(0);
-    switch (activeTab()) {
+    ActiveTab _activeTab = activeTab(); // set activeModel!
+    updateOneModel(activeModel);
+    switch (_activeTab) {
     case atExpenses:
-        updateOneModel(mdlExpenses);
         updateOneView(ui->tvExpenses, true);
         break;
-    // TODO unify all models with datefilters
     case atIncomes:
-        updateOneModel(mdlIncomes);
         updateOneView(ui->tvIncomes, true);
         break;
     case atTransfer:
-        updateOneModel(mdlTransfer);
         updateOneView(ui->tvTransfer, true);
         break;
     case atExchange:
-        updateOneModel(mdlCurrConv);
         updateOneView(ui->tvExchange, true);
         break;
     default:
@@ -384,7 +403,7 @@ void MainWindow::on_action_Settings_triggered()
 
 void MainWindow::on_leQuickFilter_textChanged(const QString&)
 {
-    if (false) // TODO to Settings
+    if (gd.applyQuickFilterImmediately)
         on_btn_Quick_Filter_Apply_clicked();
 }
 
@@ -432,26 +451,30 @@ void MainWindow::updateOneModel(FilteredQueryModel* source)
 MainWindow::ActiveTab MainWindow::activeTab()
 {
     QTabWidget* t = ui->tabWidgetMain;
-    /*
-    QString s = t->tabText(t->indexOf(t->currentWidget()));
-    if (s==tr("Expenses"))
-        return atExpenses;
-    else if (s==tr("Incomes"))
-        return atIncomes;
-    else
-        return atAccounts;
-*/
     QWidget* curW = t->currentWidget();
-    if (curW==ui->tabExpenses)
+    if (curW==ui->tabExpenses) {
+        activeModel = mdlExpenses;
         return atExpenses;
-    else if (curW==ui->tabIncomes)
+    }
+    else if (curW==ui->tabIncomes) {
+        activeModel = mdlIncomes;
         return atIncomes;
-    else if (curW==ui->tabTransferAndExchange)
-        return (ui->tabWidgetTransferAndExchange->currentWidget()==ui->tabTransfer)
-                   ? atTransfer : atExchange;
+    }
+    else if (curW==ui->tabTransferAndExchange) {
+        if (ui->tabWidgetTransferAndExchange->currentWidget()==ui->tabTransfer) {
+            activeModel = mdlTransfer;
+            return atTransfer;
+        }
+        else {
+            activeModel = mdlCurrConv;
+            return atExchange;
+        }
+    }
     // TODO other tabs
-    else
+    else {
+        activeModel = 0; // TODO m.b. accounts also will be on main window, m.b. no
         return atAccounts;
+    }
 }
 
 void MainWindow::on_btn_Quick_Filter_Apply_clicked()
@@ -478,6 +501,9 @@ void MainWindow::on_btn_Quick_Filter_Apply_clicked()
 void MainWindow::on_btn_Filter_Apply_clicked()
 {
     updateViews();
+    // Save filter config
+    configManager.writeDateFilter(ui->dteDateFrom->date(), ui->dteDateTo->date());
+    configManager.writeCategoriesFilter(activeModel, ui->cbCategory->currentText(), ui->cbSubcategory->currentText());
 }
 
 void MainWindow::on_btn_Filter_Reset_clicked()
@@ -486,6 +512,9 @@ void MainWindow::on_btn_Filter_Reset_clicked()
     ui->cbDateTo->setChecked(false);
     on_tabWidgetMain_currentChanged(0);
     updateViews();
+    // Save filter config
+    configManager.writeDateFilter(QDate(), QDate());
+    configManager.writeCategoriesFilter(activeModel, "", "");
 }
 
 void MainWindow::on_cbDateFrom_stateChanged(int)
@@ -552,12 +581,10 @@ void MainWindow::updateConfig()
 void MainWindow::updateTabsAndFilters()
 {
     GenericDatabase::DictColl collCat;
-    // TODO here save combo indexes and restore it
     switch (activeTab()) {
     case atExpenses:
         ui->tvExpenses->resizeColumnsToContents();
         db.collectDict(collCat, "hw_ex_cat");
-        // TODO call collectSubDict if will be slow, but it's more complex
         break;
     case atIncomes:
         ui->tvIncomes->resizeColumnsToContents();
@@ -574,7 +601,16 @@ void MainWindow::updateTabsAndFilters()
         ui->cbCategory->clear();
     }
     fillComboByDict(ui->cbCategory, collCat, true);
-    on_cbCategory_activated(0);
+    on_cbCategory_activated(0); // fill subcategories, where needed, and...
+    // Filter config (model-dependent, see also constructor)
+    QString category, subcategory;
+    configManager.readCategoriesFilter(activeModel, category, subcategory);
+    if (!category.isEmpty()) {
+        ui->cbCategory->setCurrentText(category);
+        on_cbCategory_activated(0);
+        if (!subcategory.isEmpty())
+            ui->cbSubcategory->setCurrentText(subcategory);
+    }
     updateViews();
 }
 

@@ -17,3 +17,9 @@
 
 GlobalConfig gd;
 
+// Enumerations
+EnumSetting enFilterDatesOnStartup {
+    "Filter", "DatesOnStartup",
+    "ShowAllRecords;RestorePrevRange;ShowLastNMonths",
+    2
+};

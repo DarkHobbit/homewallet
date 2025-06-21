@@ -76,6 +76,9 @@ private:
     QSortFilterProxyModel
         *proxyExpenses, *proxyIncomes, *proxyTransfer, *proxyCurrConv;
     FQMlist dbModels;
+    // Potentially unsafe pointers (covered by activeTab() in all changed)
+    FilteredQueryModel* activeModel;
+    // End of potentially unsafe pointers
 
     QLabel *lbCounts;
     enum ActiveTab {
