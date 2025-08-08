@@ -334,15 +334,15 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
                     .arg(elRow.lineNumber());
                 return false;
             }
-            int idCurFrom = importCurrencyByChar(moneyFrom.firstKey(), db);
+            int idCurFrom = importCurrencyByChar(moneyFrom.keys().first(), db);
             if (idCurFrom==-1)
                 return false;
-            int idCurTo = importCurrencyByChar(moneyTo.firstKey(), db);
+            int idCurTo = importCurrencyByChar(moneyTo.keys().first(), db);
             if (idCurTo==-1)
                 return false;
             bool ok = db.addCurrencyConv(dt, idAcc,
-                idCurFrom, moneyFrom.first(),
-                idCurTo, moneyTo.first(),
+                idCurFrom, moneyFrom.values().first(),
+                idCurTo, moneyTo.values().first(),
                 elRow.attribute("Note"), _idImp, sLine);
             DB_CHK(ok);
             break;
