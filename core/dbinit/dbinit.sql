@@ -138,9 +138,13 @@ create table hw_imp_file (
 create table hw_alias (
     id integer not null,
     -- ONE of next ids will be not null
+    id_ac integer null,
+    id_cur integer null,
+    id_un integer null,
     id_isubcat integer null,
     id_esubcat integer null,
     id_tt integer null,
+    -- END of ids
     pattern char(64) not null,
     to_descr char(64) not null,
     constraint pk_ali primary key(id),

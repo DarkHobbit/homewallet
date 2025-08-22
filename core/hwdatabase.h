@@ -34,6 +34,14 @@ public:
         NeedUpgrade, // need to upgrade :)
         Actual       // nothing to do
     };
+    enum AliasType {
+        Account,
+        Currency,
+        Unit,
+        IncomeSubCat,
+        ExpenseSubCat,
+        TransferType
+    };
     typedef QMap<QString, int> MultiCurrByChar; // key - $ (etc), value - sum
     typedef QMap<int, int> MultiCurrById; // key - id, value - sum
     HwDatabase();

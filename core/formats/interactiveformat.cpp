@@ -248,3 +248,14 @@ ImpRecCandidate::ImpRecCandidate(const QString &_source, const QString &_uid, in
     quantity = 0.0;
     alias = catName = subcatName = accName = unitName = currName = descr = "";
 }
+
+bool ImpRecCandidate::needAddAlias()
+{
+    return
+        state==UnknownAccount
+        || state==UnknownCurrency
+        || state==UnknownUnit
+        || state==UnknownAlias
+        || state==UnknownCategory
+        || state==UnknownTransType;
+}

@@ -23,7 +23,7 @@
 PostImportDialog::PostImportDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PostImportDialog),
-    mSet(0)
+    mSet(0), activeModel(0), activeView(0)
 {
     ui->setupUi(this);
     ui->tableExpenses->insertAction(0, ui->actExpCandState);
@@ -42,6 +42,13 @@ void PostImportDialog::setData(ImpCandidates* _cands)
     ui->tableIncomes->setModel(mSet->mdlIncome);
     ui->lbStat->setText(mSet->stat());
     setOkAccessibility();
+    ui->btnAddAlias->setShortcut(Qt::Key_Insert);
+    /*
+    connect(mSet->mdlExpense,
+            SIGNAL(dataChanged(QModelIndex,QModelIndex,QVector)),
+            this, SLOT(setAddAliasAccessibility()));
+    // TODO transfer, debt, cred
+    */
 }
 
 void PostImportDialog::showEvent(QShowEvent*)
@@ -57,16 +64,83 @@ void PostImportDialog::showEvent(QShowEvent*)
     ui->tableIncomes->setColumnWidth(1, ui->tableIncomes->columnWidth(5));
 }
 
+PostImportDialog::ActiveTab PostImportDialog::activeTab()
+{
+    QWidget* curW = ui->tabWidget->currentWidget();
+    if (curW==ui->tabExpenses) {
+        activeModel = mSet->mdlExpense;
+        activeView = ui->tableExpenses;
+        return atExpenses;
+    }
+    else if (curW==ui->tabIncomes) {
+        activeModel = mSet->mdlIncome;
+        activeView = ui->tableIncomes;
+        return atIncomes;
+    }
+    // TODO other tabs
+    else {
+        activeModel = mSet->mdlTransfer;
+        activeView = 0; //===>
+        return atTransfer;
+    }
+}
+
 void PostImportDialog::setOkAccessibility()
 {
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(mSet->canImport());
 }
 
+void PostImportDialog::setAddAliasAccessibility()
+{
+    // TODO not called
+    activeTab();
+    if (!activeModel || !activeView)
+        return;
+    int r = activeView->currentIndex().row();
+    ui->btnAddAlias->setEnabled(activeModel->cand(r)->needAddAlias());
+}
+
 void PostImportDialog::on_actExpCandState_triggered()
 {
-    int r = ui->tableExpenses->currentIndex().row();
-    ImpRecCandidate* c = mSet->mdlExpense->cand(r);
-    QMessageBox::information(0, S_INFORM, tr("Row %1: source line %2, state - %3")
-        .arg(r).arg(c->lineNumber).arg(c->state)); //===>
+    activeTab();
+    int r = activeView->currentIndex().row();
+    ImpRecCandidate* c = activeModel->cand(r);
+    QMessageBox::information(0, S_INFORM,
+        tr("Row %1: source line %2\%3\nState: %4")
+        .arg(r).arg(c->lineNumber).arg(c->source)
+        .arg(c->stateString[c->state]));
 }
+
+void PostImportDialog::on_btnAddAlias_clicked()
+{
+    HwDatabase::AliasType alType;
+    QString alS;
+    activeTab();
+    int r = activeView->currentIndex().row();
+    ImpRecCandidate* c = activeModel->cand(r);
+    switch(c->state) {
+    case ImpRecCandidate::UnknownAccount:
+        alType = HwDatabase::Account;
+        alS = c->accName;
+        break;
+    case ImpRecCandidate::UnknownCurrency:
+        alType = HwDatabase::Currency;
+        alS = c->currName;
+        break;
+    case ImpRecCandidate::UnknownUnit:
+        alType = HwDatabase::Unit;
+        alS = c->unitName;
+        break;
+        // TODO category, subcategory, alias
+    default:
+        QMessageBox::critical(0, S_ERROR,
+            tr("No unknown aliases in this row"));
+        return;
+    }
+    QMessageBox::information(0, "dbg",
+       QString("typ %1 src %2").arg(alType).arg(alS)); //===>
+
+
+}
+
 

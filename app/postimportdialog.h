@@ -14,6 +14,8 @@
 #define POSTIMPORTDIALOG_H
 
 #include <QDialog>
+#include <QTableView>
+
 #include "formats/interactiveformat.h"
 #include "importmodelset.h"
 
@@ -34,10 +36,27 @@ private:
     Ui::PostImportDialog *ui;
     ImpCandidates* cands;
     ImportModelSet* mSet;
+    // Potentially unsafe pointers (covered by activeTab() in all changed)
+    ImportCandidatesModel* activeModel;
+    QTableView* activeView;
+    // End of potentially unsafe pointers
+
+    enum ActiveTab {
+        atIncomes,
+        atExpenses,
+        atReceipt,
+        atTransfer,
+        atDebtor,
+        atCreditor,
+    };
+
     virtual void showEvent(QShowEvent*);
+    ActiveTab activeTab();
 private slots:
     void setOkAccessibility();
+    void setAddAliasAccessibility();
     void on_actExpCandState_triggered();
+    void on_btnAddAlias_clicked();
 };
 
 #endif // POSTIMPORTDIALOG_H

@@ -28,13 +28,15 @@ struct ImpRecCandidate
         Initial,
         ParseError,
         UnknownAlias,
+        UnknownAccount,
+        UnknownCurrency,
+        UnknownUnit,
         UnknownCategory,   // or subcategory
         AmbiguousCategory, // or subcategory
-        UnknownAccount,
-        UnknownUnit,
-        UnknownCurrency,
+        UnknownTransType,
         PossiblyDup,
-        ReadyToImport
+        ReadyToImport,
+        MaxState
     } state;
     enum Type {
         Unknown, // if state==ParseError or Initial
@@ -48,6 +50,19 @@ struct ImpRecCandidate
         IncomePlan,
         ExpensePlan*/
     } type;
+    QString stateString[MaxState] = {
+        QObject::tr("initial"),
+        QObject::tr("parse error"),
+        QObject::tr("unknown alias"),
+        QObject::tr("unknown account"),
+        QObject::tr("unknown currency"),
+        QObject::tr("unknown unit"),
+        QObject::tr("unknown category or subcategory"),
+        QObject::tr("ambiguous category or subcategory"),
+        QObject::tr("unknown transfer type"),
+        QObject::tr("possibly duplicate"),
+        QObject::tr("ready to import")
+    };
     // Parsed info
     QDateTime opDT;
     int idAcc, idCat, idSubcat, idCur, idUnit;
@@ -58,6 +73,7 @@ struct ImpRecCandidate
     ImpCandidates* children; // for receipts
     ImpRecCandidate* parent; // for receipt items
     ImpRecCandidate(const QString& _source, const QString& _uid, int _lineNumber, const QDateTime& _opDT);
+    bool needAddAlias();
 };
 
 struct ImpCandidates: public QList<ImpRecCandidate>

@@ -133,7 +133,7 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
                 c.currName = reIncExp.cap(4);
                 c.currName.remove(':');
                 c.accName = reIncExp.cap(5);
-                c.currName.remove('@');
+                c.accName.remove('@');
                 c.alias = reIncExp.cap(6);
                 int slashPos = c.alias.indexOf('/');
                 if (slashPos>-1) {
