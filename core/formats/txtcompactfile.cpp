@@ -68,7 +68,7 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
 
     QRegExp reOnlyDay(":(\\d\\d?):");
     // Тип, СумЦел, СумДроб, Источ, Кат+Подкат,  КолЦел, КолДроб, Хвост
-    QRegExp reIncExp("(\\+?)(\\d+)(?:,|\\.?)(\\d*)(\\:[^@\\:\\s]+)?(@[^@\\s]+)?(?:\\s+)(\\D+)(?:\\s+)(\\d+)(?:,|.?)(\\d*)(\\S+)?(?:\\s+)?(.*)?");
+    QRegExp reIncExp("(\\+?)(\\d+)(?:,|\\.?)(\\d*)(\\:[^@\\:\\s]+)?(@[^@\\s]+)?(?:\\s+)(\\D+)(?:\\s+)(-?\\d*[.,]?\\d*)(\\S+)?(?:\\s+)?(.*)?");
     int line = 0;
     do {
         line++;
@@ -141,12 +141,12 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
                     c.subcatName = c.alias.mid(slashPos+1);
                     c.alias.clear();
                 }
-                c.quantity = captureDouble(reIncExp.cap(7), reIncExp.cap(8), ok);
+                c.quantity = reIncExp.cap(7).replace(',', '.').toDouble(&ok);
                 if (!ok)
                     c.state = ImpRecCandidate::ParseError;
                 else {
-                    c.unitName = reIncExp.cap(9);
-                    c.descr = reIncExp.cap(10).trimmed();
+                    c.unitName = reIncExp.cap(8);
+                    c.descr = reIncExp.cap(9).trimmed();
                     c.state = c.alias.isEmpty()
                         ? ImpRecCandidate::UnknownCategory : ImpRecCandidate::UnknownAlias;
                 }
@@ -196,9 +196,4 @@ int TxtCompactFile::captureMoneySum(const QString& highPart, const QString& lowP
     }
     sNum = highPart+sNum;
     return sNum.toInt(&ok);
-}
-
-double TxtCompactFile::captureDouble(const QString &highPart, const QString &lowPart, bool &ok)
-{
-    return QString("%1.%2").arg(highPart).arg(lowPart).toDouble(&ok);
 }

@@ -28,7 +28,6 @@ public:
     virtual bool importRecords(const QString &path, HwDatabase& db);
 private:
     int captureMoneySum(const QString& highPart, const QString& lowPart, bool& ok);
-    double captureDouble(const QString& highPart, const QString& lowPart, bool& ok);
 };
 
 #endif // TXTCOMPACTFILE_H
