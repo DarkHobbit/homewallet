@@ -371,7 +371,7 @@ void MainWindow::on_action_Import_triggered()
             InteractiveFormat* intFile = dynamic_cast<InteractiveFormat*>(impFile);
             if (intFile) {
                 PostImportDialog* d = new PostImportDialog(0);
-                d->setData(&intFile->candidates);
+                d->setData(intFile, &db);
                 d->exec();
                 if (d->result()==QDialog::Accepted)
                     impFile->postImport(db);

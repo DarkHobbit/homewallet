@@ -16,6 +16,7 @@
 #include <QDialog>
 #include <QTableView>
 
+#include "hwdatabase.h"
 #include "formats/interactiveformat.h"
 #include "importmodelset.h"
 
@@ -30,11 +31,12 @@ class PostImportDialog : public QDialog
 public:
     explicit PostImportDialog(QWidget *parent);
     ~PostImportDialog();
-    void setData(ImpCandidates* _cands);
+    void setData(InteractiveFormat* _intFile, HwDatabase* _db);
 
 private:
     Ui::PostImportDialog *ui;
-    ImpCandidates* cands;
+    InteractiveFormat* intFile;
+    HwDatabase* db;
     ImportModelSet* mSet;
     // Potentially unsafe pointers (covered by activeTab() in all changed)
     ImportCandidatesModel* activeModel;
@@ -57,6 +59,7 @@ private slots:
     void setAddAliasAccessibility();
     void on_actExpCandState_triggered();
     void on_btnAddAlias_clicked();
+    void on_actAddAlias_triggered();
 };
 
 #endif // POSTIMPORTDIALOG_H

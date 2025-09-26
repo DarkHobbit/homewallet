@@ -34,7 +34,7 @@ QSqlQueryModel *TestManager::dbDebug(const QString &queryText, GenericDatabase &
 bool TestManager::createTestData(HwDatabase &db, int numberOfExpenses)
 {
     // General
-    if (!db.addAccount("VISA Mary", "Special expense card")) {
+    if (db.addAccount("VISA Mary", "Special expense card")==-1) {
         std::cerr << "Account add error" << std::endl;
         return false;
     }

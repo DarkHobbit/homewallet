@@ -141,6 +141,8 @@ create table hw_alias (
     id_ac integer null,
     id_cur integer null,
     id_un integer null,
+    id_icat integer null,
+    id_ecat integer null,
     id_isubcat integer null,
     id_esubcat integer null,
     id_tt integer null,

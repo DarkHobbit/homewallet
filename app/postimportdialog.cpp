@@ -15,6 +15,7 @@
 #include <QMessageBox>
 #include <QPushButton>
 
+#include "aliasdialog.h"
 #include "globals.h"
 #include "helpers.h"
 #include "postimportdialog.h"
@@ -27,6 +28,7 @@ PostImportDialog::PostImportDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tableExpenses->insertAction(0, ui->actExpCandState);
+    ui->tableExpenses->insertAction(0, ui->actAddAlias);
 }
 
 PostImportDialog::~PostImportDialog()
@@ -34,10 +36,11 @@ PostImportDialog::~PostImportDialog()
     delete ui;
 }
 
-void PostImportDialog::setData(ImpCandidates* _cands)
+void PostImportDialog::setData(InteractiveFormat* _intFile, HwDatabase* _db)
 {
-    cands = _cands;
-    mSet = new ImportModelSet(cands, this);
+    intFile = _intFile;
+    db = _db;
+    mSet = new ImportModelSet(&_intFile->candidates, this);
     ui->tableExpenses->setModel(mSet->mdlExpense);
     ui->tableIncomes->setModel(mSet->mdlIncome);
     ui->lbStat->setText(mSet->stat());
@@ -113,6 +116,7 @@ void PostImportDialog::on_actExpCandState_triggered()
 
 void PostImportDialog::on_btnAddAlias_clicked()
 {
+    // Select alias type
     HwDatabase::AliasType alType;
     QString alS;
     activeTab();
@@ -137,10 +141,21 @@ void PostImportDialog::on_btnAddAlias_clicked()
             tr("No unknown aliases in this row"));
         return;
     }
-    QMessageBox::information(0, "dbg",
-       QString("typ %1 src %2").arg(alType).arg(alS)); //===>
-
-
+    // Ask user
+    AliasDialog* d = new AliasDialog(0, db);
+    d->addAlias(alType, alS);
+    delete d;
+    // Update candidates and its view
+    intFile->analyzeCandidates(*db);
+    activeModel->update();
+    // TODO if works, write ImportModelSet::updateModels() and move to
+    // (for accs, units, currs need updates all)
 }
 
+
+
+void PostImportDialog::on_actAddAlias_triggered()
+{
+    on_btnAddAlias_clicked();
+}
 

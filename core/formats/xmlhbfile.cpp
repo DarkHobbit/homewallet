@@ -194,7 +194,7 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
                         return false;
                     moneyIds[idCur] = money[moneyChar];
                 }
-                if (!db.addAccount(accName, elRow.attribute("Note"), QDateTime(), moneyIds)) {
+                if (db.addAccount(accName, elRow.attribute("Note"), QDateTime(), moneyIds)==-1) {
                     _fatalError = db.lastError();
                     return false;
                 }

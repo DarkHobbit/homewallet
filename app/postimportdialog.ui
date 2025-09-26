@@ -89,6 +89,14 @@
     <enum>QAction::NoRole</enum>
    </property>
   </action>
+  <action name="actAddAlias">
+   <property name="text">
+    <string>Add alias</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>

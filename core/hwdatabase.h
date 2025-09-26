@@ -51,13 +51,17 @@ public:
     bool upgrade(const QString& dir);
     bool create(const QString& dir);
     bool isEmpty();
-    // Export & Import
+    // Export, import, audit
     int addImportFile(const QString& fileName, const QString& fileType);
     int findImportFile(const QString& fileName);
+    bool addAlias(const QString& pattern, const QString& toDescr,
+                  int idAcc=0, int idCur=0, int idUnit=0,
+                  int idICat=0, int idECat=0, int idISubCat=0, int idESubCat=0,
+                  int idTransferType=0);
     // Subject area
     virtual QString fileName();
     void getCounts(int& totalInCount, int& totalExpCount);
-    bool addAccount(const QString& name, const QString& descr,
+    int addAccount(const QString& name, const QString& descr,
                     const QDateTime& foundation=QDateTime(), const MultiCurrById& startBalance=MultiCurrById());
     int accountId(const QString& name);
     int addUnit(const QString& name, const QString& shortName, const QString& descr);

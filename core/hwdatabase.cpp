@@ -116,7 +116,30 @@ int HwDatabase::findImportFile(const QString &fileName)
     return dictId(sqlSel);
 }
 
-bool HwDatabase::addAccount(const QString &name, const QString &descr,
+bool HwDatabase::addAlias(const QString &pattern, const QString &toDescr,
+    int idAcc, int idCur, int idUnit, int idICat, int idECat, int idISubCat, int idESubCat,
+    int idTransferType)
+{
+    QSqlQuery sqlIns(sqlDb);
+    sqlIns.prepare(QString(
+            "insert into hw_alias" \
+            " (pattern, to_descr, id_ac, id_cur, id_un, id_icat, id_ecat, id_isubcat, id_esubcat, id_tt)" \
+            " values" \
+            " (:pattern, :to_descr, :id_ac, :id_cur, :id_un, :id_icat, :id_ecat, :id_isubcat, :id_esubcat, :id_tt)"));
+    sqlIns.bindValue(":pattern", pattern);
+    sqlIns.bindValue(":to_descr", toDescr);
+    sqlIns.bindValue(":id_ac", idOrNull(idAcc));
+    sqlIns.bindValue(":id_cur", idOrNull(idCur));
+    sqlIns.bindValue(":id_un", idOrNull(idUnit));
+    sqlIns.bindValue(":id_icat", idOrNull(idICat));
+    sqlIns.bindValue(":id_ecat", idOrNull(idECat));
+    sqlIns.bindValue(":id_isubcat", idOrNull(idISubCat));
+    sqlIns.bindValue(":id_esubcat", idOrNull(idESubCat));
+    sqlIns.bindValue(":id_tt", idOrNull(idTransferType));
+    return execQuery(sqlIns);
+}
+
+int HwDatabase::addAccount(const QString &name, const QString &descr,
     const QDateTime& foundation, const MultiCurrById& startBalance)
 {
     QSqlQuery sqlIns(sqlDb);

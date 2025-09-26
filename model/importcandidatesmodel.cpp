@@ -139,6 +139,12 @@ ImpRecCandidate *ImportCandidatesModel::cand(int index)
     return candRefs[index];
 }
 
+void ImportCandidatesModel::update()
+{
+    beginResetModel();
+    endResetModel();
+}
+
 QString ImportCandidatesModel::fromLowUnit(int amount) const
 {
     return QString::number((double)amount/100, 'f', 2);
