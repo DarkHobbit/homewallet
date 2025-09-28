@@ -18,7 +18,7 @@
 #include <QList>
 #include "fileformat.h"
 
-class ImpCandidates;
+struct ImpCandidates;
 struct ImpRecCandidate
 {
     // Source info
@@ -80,6 +80,7 @@ struct ImpCandidates: public QList<ImpRecCandidate>
 {
     int idCurDefault, idAccDefault;
     QString accDefault, curDefault;
+    GenericDatabase::DictColl collAcc, collCurr, collUnit;
     bool readyToImport();
 };
 

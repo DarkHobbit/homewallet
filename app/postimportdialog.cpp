@@ -43,8 +43,7 @@ void PostImportDialog::setData(InteractiveFormat* _intFile, HwDatabase* _db)
     mSet = new ImportModelSet(&_intFile->candidates, this);
     ui->tableExpenses->setModel(mSet->mdlExpense);
     ui->tableIncomes->setModel(mSet->mdlIncome);
-    ui->lbStat->setText(mSet->stat());
-    setOkAccessibility();
+    updateStat();
     ui->btnAddAlias->setShortcut(Qt::Key_Insert);
     /*
     connect(mSet->mdlExpense,
@@ -65,6 +64,13 @@ void PostImportDialog::showEvent(QShowEvent*)
     // Try to reuce source string
     ui->tableExpenses->setColumnWidth(1, ui->tableExpenses->columnWidth(5));
     ui->tableIncomes->setColumnWidth(1, ui->tableIncomes->columnWidth(5));
+}
+
+void PostImportDialog::updateStat()
+{
+    ui->lbStat->setText(mSet->stat());
+    setOkAccessibility();
+    //setAddAliasAccessibility();
 }
 
 PostImportDialog::ActiveTab PostImportDialog::activeTab()
@@ -95,7 +101,6 @@ void PostImportDialog::setOkAccessibility()
 
 void PostImportDialog::setAddAliasAccessibility()
 {
-    // TODO not called
     activeTab();
     if (!activeModel || !activeView)
         return;
@@ -148,6 +153,7 @@ void PostImportDialog::on_btnAddAlias_clicked()
     // Update candidates and its view
     intFile->analyzeCandidates(*db);
     activeModel->update();
+    updateStat();
     // TODO if works, write ImportModelSet::updateModels() and move to
     // (for accs, units, currs need updates all)
 }

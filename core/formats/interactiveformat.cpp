@@ -59,6 +59,10 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
         _fatalError = S_ERR_ACC_NOT_FOUND.arg(candidates.accDefault);
         return false;
     }
+    // Dictionaries
+    candidates.collUnit.clear();
+    db.collectDict(candidates.collUnit, "hw_alias", "pattern", "id_un", "where id_un is not null");
+    // TODO other dicts
 
     // See candidates
     for (ImpRecCandidate& c: candidates) {
@@ -228,7 +232,12 @@ bool InteractiveFormat::findUnit(HwDatabase &db, ImpRecCandidate &c, QString &na
             name = name+".";
             return true;
         }
-        // TODO try alias
+        // Try alias
+        if (candidates.collUnit.keys().contains(name)) {
+            idUn = candidates.collUnit[name];
+            return true;
+        }
+        // TODO
         c.state = ImpRecCandidate::UnknownUnit;
         return false;
     }

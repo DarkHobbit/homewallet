@@ -54,6 +54,7 @@ private:
 
     virtual void showEvent(QShowEvent*);
     ActiveTab activeTab();
+    void updateStat();
 private slots:
     void setOkAccessibility();
     void setAddAliasAccessibility();
