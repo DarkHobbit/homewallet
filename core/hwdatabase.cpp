@@ -150,7 +150,8 @@ int HwDatabase::addAccount(const QString &name, const QString &descr,
     sqlIns.bindValue(":foundation", dateOrNull(foundation));    
     if (!execQuery(sqlIns))
         return -1;
-    int idAcc = accountId(name);
+    int idAcc = accountId(name, Qt::CaseSensitive);
+    // CaseSensitive because in HB it's different records
     // Insert start balance
     for (int idCur: startBalance.keys()) {
         sqlIns.prepare(
@@ -164,10 +165,10 @@ int HwDatabase::addAccount(const QString &name, const QString &descr,
     return idAcc;
 }
 
-int HwDatabase::accountId(const QString &name)
+int HwDatabase::accountId(const QString &name, Qt::CaseSensitivity cs)
 {
     QSqlQuery sqlSel(sqlDb);
-    if (isICUSupported) {
+    if (isICUSupported && cs==Qt::CaseInsensitive) {
         sqlSel.prepare("select id from hw_account where upper(name)=:name");
         sqlSel.bindValue(":name", name.toUpper());
     }

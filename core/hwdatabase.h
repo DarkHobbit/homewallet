@@ -63,7 +63,7 @@ public:
     void getCounts(int& totalInCount, int& totalExpCount);
     int addAccount(const QString& name, const QString& descr,
                     const QDateTime& foundation=QDateTime(), const MultiCurrById& startBalance=MultiCurrById());
-    int accountId(const QString& name);
+    int accountId(const QString& name, Qt::CaseSensitivity cs = Qt::CaseInsensitive);
     int addUnit(const QString& name, const QString& shortName, const QString& descr);
     int unitId(const QString& name);
     int currencyIdByAbbr(const QString& abbr);

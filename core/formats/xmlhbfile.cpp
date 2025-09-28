@@ -412,6 +412,7 @@ int XmlHbFile::importAccount(const QString &attr, const QDomElement &elRow, HwDa
     else {
         db.addAccount(accName, "Auto-inserted");
         idAcc = db.accountId(accName);
+        accs[accName] = idAcc;
         _errors << QObject::tr("Account %1 not found, inserted automatically").arg(accName);
     }
     return idAcc;
