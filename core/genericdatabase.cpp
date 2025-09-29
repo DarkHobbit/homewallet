@@ -252,6 +252,11 @@ QVariant GenericDatabase::idOrNull(int id)
     return (id>0) ? QString::number(id) : QVariant();
 }
 
+QVariant GenericDatabase::idOrNull(int id, bool notNull)
+{
+    return (notNull) ? QString::number(id) : QVariant();
+}
+
 QVariant GenericDatabase::intOrNull(int value, bool notNull)
 {
     return (notNull) ? QString::number(value) : QVariant();

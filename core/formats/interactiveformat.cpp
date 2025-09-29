@@ -60,6 +60,8 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
         return false;
     }
     // Dictionaries
+    candidates.collAcc.clear();
+    db.collectDict(candidates.collAcc, "hw_alias", "pattern", "id_ac", "where id_ac is not null");
     candidates.collUnit.clear();
     db.collectDict(candidates.collUnit, "hw_alias", "pattern", "id_un", "where id_un is not null");
     // TODO other dicts
@@ -196,7 +198,11 @@ bool InteractiveFormat::findAccount(HwDatabase &db, ImpRecCandidate& c, QString 
     }
     idAcc = db.accountId(c.accName);
     if (idAcc==-1) {
-        // TODO try alias
+        // Try alias
+        if (candidates.collAcc.keys().contains(accName)) {
+            idAcc = candidates.collAcc[accName];
+            return true;
+        }
         c.state = ImpRecCandidate::UnknownAccount;
         return false;
     }
@@ -237,7 +243,6 @@ bool InteractiveFormat::findUnit(HwDatabase &db, ImpRecCandidate &c, QString &na
             idUn = candidates.collUnit[name];
             return true;
         }
-        // TODO
         c.state = ImpRecCandidate::UnknownUnit;
         return false;
     }

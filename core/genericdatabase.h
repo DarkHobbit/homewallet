@@ -64,6 +64,7 @@ protected:
     int dictId(QSqlQuery& q);
     QString dictName(QSqlQuery& q);
     QVariant idOrNull(int id);
+    QVariant idOrNull(int id, bool notNull);
     QVariant intOrNull(int value, bool notNull);
     QVariant strOrNull(const QString& s);
     QVariant dateOrNull(const QDateTime& value);

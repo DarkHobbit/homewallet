@@ -38,6 +38,8 @@ public:
         Account,
         Currency,
         Unit,
+        IncomeCat,
+        ExpenseCat,
         IncomeSubCat,
         ExpenseSubCat,
         TransferType
@@ -55,9 +57,7 @@ public:
     int addImportFile(const QString& fileName, const QString& fileType);
     int findImportFile(const QString& fileName);
     bool addAlias(const QString& pattern, const QString& toDescr,
-                  int idAcc=0, int idCur=0, int idUnit=0,
-                  int idICat=0, int idECat=0, int idISubCat=0, int idESubCat=0,
-                  int idTransferType=0);
+        AliasType aType, int idSrc);
     // Subject area
     virtual QString fileName();
     void getCounts(int& totalInCount, int& totalExpCount);

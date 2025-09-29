@@ -40,20 +40,10 @@ void AliasDialog::addAlias(HwDatabase::AliasType alType, const QString &alS)
         // (интерактивный, с выводом ошибок prepare() и execQuery()
         bool res = false;
         int idDict = getComboCurrentId(ui->cbDict);
-        switch (alType) {
-        case HwDatabase::Account:
-            // TODO
-            break;
-        case HwDatabase::Currency:
-            // TODO
-            break;
-        case HwDatabase::Unit:
-            res = db->addAlias(ui->leAlias->text(), ui->teToDescr->toPlainText(), 0, 0, idDict);
-            break;
-            // TODO category, subcategory, alias
-        default:
-            return;
-        }
+        QString al = ui->leAlias->text();
+        QString des = ui->teToDescr->toPlainText();
+        res = db->addAlias(al, des, alType, idDict);
+            // TODO category+subcategory if available
         if (!res)
             QMessageBox::critical(0, S_ERROR, db->lastError());
     }
@@ -72,10 +62,13 @@ void AliasDialog::setType(HwDatabase::AliasType alType)
     case HwDatabase::Account:
         setWindowTitle(tr("Account alias"));
         setSubdictEnabled(false);
+        ui->lbDict->setText(tr("Account"));
+        db->collectDict(coll, "hw_account");
         break;
     case HwDatabase::Currency:
         setWindowTitle(tr("Currency alias"));
         setSubdictEnabled(false);
+        // TODO
         break;
     case HwDatabase::Unit:
         setWindowTitle(tr("Unit alias"));

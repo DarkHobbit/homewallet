@@ -117,8 +117,7 @@ int HwDatabase::findImportFile(const QString &fileName)
 }
 
 bool HwDatabase::addAlias(const QString &pattern, const QString &toDescr,
-    int idAcc, int idCur, int idUnit, int idICat, int idECat, int idISubCat, int idESubCat,
-    int idTransferType)
+    AliasType aType, int idSrc)
 {
     QSqlQuery sqlIns(sqlDb);
     sqlIns.prepare(QString(
@@ -128,14 +127,14 @@ bool HwDatabase::addAlias(const QString &pattern, const QString &toDescr,
             " (:pattern, :to_descr, :id_ac, :id_cur, :id_un, :id_icat, :id_ecat, :id_isubcat, :id_esubcat, :id_tt)"));
     sqlIns.bindValue(":pattern", pattern);
     sqlIns.bindValue(":to_descr", toDescr);
-    sqlIns.bindValue(":id_ac", idOrNull(idAcc));
-    sqlIns.bindValue(":id_cur", idOrNull(idCur));
-    sqlIns.bindValue(":id_un", idOrNull(idUnit));
-    sqlIns.bindValue(":id_icat", idOrNull(idICat));
-    sqlIns.bindValue(":id_ecat", idOrNull(idECat));
-    sqlIns.bindValue(":id_isubcat", idOrNull(idISubCat));
-    sqlIns.bindValue(":id_esubcat", idOrNull(idESubCat));
-    sqlIns.bindValue(":id_tt", idOrNull(idTransferType));
+    sqlIns.bindValue(":id_ac", idOrNull(idSrc, aType==Account));
+    sqlIns.bindValue(":id_cur", idOrNull(idSrc, aType==Currency));
+    sqlIns.bindValue(":id_un", idOrNull(idSrc, aType==Unit));
+    sqlIns.bindValue(":id_icat", idOrNull(idSrc, aType==IncomeCat));
+    sqlIns.bindValue(":id_ecat", idOrNull(idSrc, aType==ExpenseCat));
+    sqlIns.bindValue(":id_isubcat", idOrNull(idSrc, aType==IncomeSubCat));
+    sqlIns.bindValue(":id_esubcat", idOrNull(idSrc, aType==ExpenseSubCat));
+    sqlIns.bindValue(":id_tt", idOrNull(idSrc, aType==TransferType));
     return execQuery(sqlIns);
 }
 
