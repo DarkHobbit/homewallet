@@ -62,6 +62,8 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
     // Dictionaries
     candidates.collAcc.clear();
     db.collectDict(candidates.collAcc, "hw_alias", "pattern", "id_ac", "where id_ac is not null");
+    candidates.collCurr.clear();
+    db.collectDict(candidates.collCurr, "hw_alias", "pattern", "id_cur", "where id_cur is not null");
     candidates.collUnit.clear();
     db.collectDict(candidates.collUnit, "hw_alias", "pattern", "id_un", "where id_un is not null");
     // TODO other dicts
@@ -216,9 +218,13 @@ bool InteractiveFormat::findCurrency(HwDatabase &db, ImpRecCandidate &c, QString
         idCurr = candidates.idCurDefault;
         return true;
     }
-    idCurr = db.currencyIdByAbbr(c.currName /*currAbbr*/);
+    idCurr = db.currencyIdByAbbr(currAbbr);
     if (idCurr==-1) {
-        // TODO try alias
+        // Try alias
+        if (candidates.collCurr.keys().contains(currAbbr)) {
+            idCurr = candidates.collCurr[currAbbr];
+            return true;
+        }
         c.state = ImpRecCandidate::UnknownCurrency;
         return false;
     }

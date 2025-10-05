@@ -68,7 +68,8 @@ void AliasDialog::setType(HwDatabase::AliasType alType)
     case HwDatabase::Currency:
         setWindowTitle(tr("Currency alias"));
         setSubdictEnabled(false);
-        // TODO
+        ui->lbDict->setText(tr("Currency"));
+        db->collectDict(coll, "hw_currency", "full_name");
         break;
     case HwDatabase::Unit:
         setWindowTitle(tr("Unit alias"));
