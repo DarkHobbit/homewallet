@@ -60,6 +60,49 @@
     </message>
 </context>
 <context>
+    <name>AliasDialog</name>
+    <message>
+        <location filename="../app/aliasdialog.ui" line="19"/>
+        <source>Alias</source>
+        <translation>Псевдоним</translation>
+    </message>
+    <message>
+        <location filename="../app/aliasdialog.ui" line="51"/>
+        <source>Addition to descripion</source>
+        <translation>Добавка к описанию</translation>
+    </message>
+    <message>
+        <location filename="../app/aliasdialog.cpp" line="63"/>
+        <source>Account alias</source>
+        <translation>Псевдоним для счёта</translation>
+    </message>
+    <message>
+        <location filename="../app/aliasdialog.cpp" line="65"/>
+        <source>Account</source>
+        <translation>Счёт</translation>
+    </message>
+    <message>
+        <location filename="../app/aliasdialog.cpp" line="69"/>
+        <source>Currency alias</source>
+        <translation>Псевдоним для валюты</translation>
+    </message>
+    <message>
+        <location filename="../app/aliasdialog.cpp" line="71"/>
+        <source>Currency</source>
+        <translation>Валюта</translation>
+    </message>
+    <message>
+        <location filename="../app/aliasdialog.cpp" line="75"/>
+        <source>Unit alias</source>
+        <translation>Псевдоним для единицы измерения</translation>
+    </message>
+    <message>
+        <location filename="../app/aliasdialog.cpp" line="77"/>
+        <source>Unit</source>
+        <translation>Ед.</translation>
+    </message>
+</context>
+<context>
     <name>CurrConvModel</name>
     <message>
         <location filename="../model/currconvmodel.cpp" line="57"/>
@@ -163,14 +206,13 @@
         <translation>Копировать в буфер</translation>
     </message>
     <message>
-        <location filename="../app/logwindow.cpp" line="42"/>
+        <location filename="../app/logwindow.cpp" line="43"/>
         <source>File %1</source>
         <translation>Файл %1</translation>
     </message>
     <message>
-        <location filename="../app/logwindow.cpp" line="43"/>
         <source>%1 records has been read</source>
-        <translation>Прочитано записей: %1</translation>
+        <translation type="obsolete">Прочитано записей: %1</translation>
     </message>
 </context>
 <context>
@@ -337,54 +379,54 @@
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="131"/>
+        <location filename="../app/mainwindow.cpp" line="132"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="135"/>
+        <location filename="../app/mainwindow.cpp" line="136"/>
         <source>Database not empty for testing</source>
         <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="183"/>
+        <location filename="../app/mainwindow.cpp" line="184"/>
         <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="238"/>
+        <location filename="../app/mainwindow.cpp" line="239"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="238"/>
+        <location filename="../app/mainwindow.cpp" line="239"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="247"/>
+        <location filename="../app/mainwindow.cpp" line="248"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="264"/>
+        <location filename="../app/mainwindow.cpp" line="265"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="362"/>
+        <location filename="../app/mainwindow.cpp" line="363"/>
         <source>Unknown import error</source>
         <translation>Неизвестная ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="364"/>
+        <location filename="../app/mainwindow.cpp" line="365"/>
         <source>
 at record %1 from %2</source>
         <translation>
 в записи %1 из %2</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="396"/>
+        <location filename="../app/mainwindow.cpp" line="402"/>
         <source>Restart program to apply language change</source>
         <translation>Язык сменится после перезапуска программы</translation>
     </message>
@@ -412,14 +454,31 @@ at record %1 from %2</source>
         <translation>Не готово</translation>
     </message>
     <message>
-        <location filename="../app/postimportdialog.ui" line="75"/>
+        <location filename="../app/postimportdialog.ui" line="67"/>
+        <location filename="../app/postimportdialog.ui" line="94"/>
+        <source>Add alias</source>
+        <translation>Добавить псевдоним</translation>
+    </message>
+    <message>
+        <location filename="../app/postimportdialog.ui" line="86"/>
         <source>State</source>
         <translation>Состояние</translation>
     </message>
     <message>
-        <location filename="../app/postimportdialog.cpp" line="69"/>
         <source>Row %1: source line %2, state - %3</source>
-        <translation>Строка %1: строка исходного файла %2, состояние: %3</translation>
+        <translation type="obsolete">Строка %1: строка исходного файла %2, состояние: %3</translation>
+    </message>
+    <message>
+        <location filename="../app/postimportdialog.cpp" line="117"/>
+        <source>Row %1: source line %2%3
+State: %4</source>
+        <translation>Запись %1: исходная строка %2%3
+Состояние %4</translation>
+    </message>
+    <message>
+        <location filename="../app/postimportdialog.cpp" line="146"/>
+        <source>No unknown aliases in this row</source>
+        <translation>В этой строке нет неизвестных псевдонимов</translation>
     </message>
 </context>
 <context>
@@ -500,7 +559,7 @@ Contact author.</source>
         <translation>Для обмена валют необходимо строго по одной записи MoneyOut* и MoneyIn*, строка %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="415"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="416"/>
         <source>Account %1 not found, inserted automatically</source>
         <translation>Счёт %1 не найден, добавлен автоматически</translation>
     </message>
@@ -520,12 +579,12 @@ Contact author.</source>
         <translation>Пропущено записей: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="437"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="438"/>
         <source>Money attributes not found: line %1</source>
         <translation>Денежные атрибуты не найдены в строке %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="446"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="447"/>
         <source>Money sum doesn&apos;t match: %1</source>
         <translation>Денежная сумма не соответствует шаблону: %1</translation>
     </message>
@@ -555,12 +614,12 @@ Contact author.</source>
         <translation>нет</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="284"/>
+        <location filename="../core/genericdatabase.cpp" line="289"/>
         <source>Can&apos;t enable extension load, code: %1</source>
         <translation>Не могу разрешить загрузку расширений, код: %1</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="290"/>
+        <location filename="../core/genericdatabase.cpp" line="295"/>
         <source>Can&apos;t load ICU extension, code %1:
 %2
 Rebuild SQLite with ICU support or provide ICU library as extension</source>
@@ -569,18 +628,18 @@ Rebuild SQLite with ICU support or provide ICU library as extension</source>
 Пересоберите SQLite с поддержкой ICU или добавьте библиотеку ICU как расширение</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="298"/>
+        <location filename="../core/genericdatabase.cpp" line="303"/>
         <source>ICU extension load failed</source>
         <translation>Ошибка загрузки расширения ICU</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="317"/>
+        <location filename="../core/genericdatabase.cpp" line="322"/>
         <source>Can&apos;t check ICU presence</source>
         <translation>Не могу проверить наличие ICU</translation>
     </message>
     <message>
-        <location filename="../core/hwdatabase.cpp" line="212"/>
-        <location filename="../core/hwdatabase.cpp" line="271"/>
+        <location filename="../core/hwdatabase.cpp" line="235"/>
+        <location filename="../core/hwdatabase.cpp" line="294"/>
         <source>No subcategory</source>
         <translation>Нет подкатегории</translation>
     </message>
@@ -783,114 +842,119 @@ Use Accounts in-brief file, if you have it</source>
         <translation>Групповая операция не поддерживается, выберите одну запись</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="42"/>
+        <location filename="../core/globals.h" line="43"/>
         <source>This format is read only</source>
         <translation>Это формат только для чтения</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="44"/>
+        <location filename="../core/globals.h" line="45"/>
         <source>Warning: record %1 has %2, not supported in this format.
 Data will be lost</source>
         <translation>Предупреждение: у записи %1 есть %2, не поддерживается в этом формате.
 Данные будут потеряны</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="46"/>
+        <location filename="../core/globals.h" line="47"/>
         <source>%1 %2 will be lost at record %3</source>
         <translation>%1 %2 будет утерян у записи %3</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="48"/>
+        <location filename="../core/globals.h" line="49"/>
+        <source>%1 records has been read</source>
+        <translation>Прочитано записей: %1</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="51"/>
         <source>Mode: </source>
         <translation>Режим: </translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="49"/>
+        <location filename="../core/globals.h" line="52"/>
         <source>sorted</source>
         <translation>сорт.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="50"/>
+        <location filename="../core/globals.h" line="53"/>
         <source>not sorted</source>
         <translation>не сорт.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="54"/>
+        <location filename="../core/globals.h" line="57"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="55"/>
+        <location filename="../core/globals.h" line="58"/>
         <source>Category</source>
         <translation>Категория</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="56"/>
+        <location filename="../core/globals.h" line="59"/>
         <source>Subcategory</source>
         <translation>Подкатегория</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="57"/>
+        <location filename="../core/globals.h" line="60"/>
         <source>Qty.</source>
         <translation>Кол-во</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="58"/>
+        <location filename="../core/globals.h" line="61"/>
         <source>Unit</source>
         <translation>Ед.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="59"/>
+        <location filename="../core/globals.h" line="62"/>
         <source>Sum</source>
         <translation>Сумма</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="60"/>
+        <location filename="../core/globals.h" line="63"/>
         <source>Cur.</source>
         <translation>В.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="61"/>
+        <location filename="../core/globals.h" line="64"/>
         <source>Account</source>
         <translation>Счёт</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="62"/>
+        <location filename="../core/globals.h" line="65"/>
         <source>At.</source>
         <translation>★</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="63"/>
+        <location filename="../core/globals.h" line="66"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="65"/>
+        <location filename="../core/globals.h" line="68"/>
         <source>From</source>
         <translation>Откуда</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="66"/>
+        <location filename="../core/globals.h" line="69"/>
         <source>To</source>
         <translation>Куда</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="68"/>
+        <location filename="../core/globals.h" line="71"/>
         <source>Source</source>
         <translation>Источник</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="69"/>
+        <location filename="../core/globals.h" line="72"/>
         <source>Alias</source>
         <translation>Псевдоним</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="71"/>
+        <location filename="../core/globals.h" line="74"/>
         <source>&lt;All&gt;</source>
         <translation>&lt;Все&gt;</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="72"/>
+        <location filename="../core/globals.h" line="75"/>
         <source>Other</source>
         <translation>Прочее</translation>
     </message>
@@ -932,6 +996,61 @@ Found: %1</source>
         <location filename="../core/formats/txtcompactfile.cpp" line="193"/>
         <source>Too long money sum fractional part: %1,%2</source>
         <translation>Слишком длинная дробная часть денежной суммы: %1,%2</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/interactiveformat.h" line="54"/>
+        <source>initial</source>
+        <translation>начальное</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/interactiveformat.h" line="55"/>
+        <source>parse error</source>
+        <translation>ошибка разбора</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/interactiveformat.h" line="56"/>
+        <source>unknown alias</source>
+        <translation>неизвестный псевдоним&gt;</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/interactiveformat.h" line="57"/>
+        <source>unknown account</source>
+        <translation>неизвестный счёт</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/interactiveformat.h" line="58"/>
+        <source>unknown currency</source>
+        <translation>неизвестная валюта</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/interactiveformat.h" line="59"/>
+        <source>unknown unit</source>
+        <translation>неизвестная единица измерения</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/interactiveformat.h" line="60"/>
+        <source>unknown category or subcategory</source>
+        <translation>неизвестная категория или подкатегория</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/interactiveformat.h" line="61"/>
+        <source>ambiguous category or subcategory</source>
+        <translation>неоднозначная категория или подкатегория</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/interactiveformat.h" line="62"/>
+        <source>unknown transfer type</source>
+        <translation>неизвестный тип переноса</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/interactiveformat.h" line="63"/>
+        <source>possibly duplicate</source>
+        <translation>возможно, дубль</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/interactiveformat.h" line="64"/>
+        <source>ready to import</source>
+        <translation>готово к импорту</translation>
     </message>
 </context>
 <context>

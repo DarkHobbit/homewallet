@@ -15,6 +15,7 @@
 #include <QClipboard>
 #include <QPushButton>
 
+#include "globals.h"
 #include "logwindow.h"
 #include "ui_logwindow.h"
 
@@ -40,7 +41,7 @@ LogWindow::~LogWindow()
 void LogWindow::setData(const QString& path, int itemCount, const QStringList &errors)
 {
     setWindowTitle(tr("File %1").arg(path));
-    ui->lbSummary->setText(tr("%1 records has been read").arg(itemCount));
+    ui->lbSummary->setText(S_INFO_IMP_STAT.arg(itemCount));
     ui->lwErrors->clear();
     ui->lwErrors->addItems(errors);
 }

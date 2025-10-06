@@ -378,6 +378,11 @@ void MainWindow::on_action_Import_triggered()
                 delete d;
             }
         }
+        else
+            impFile->postImport(db);
+        if (errors.isEmpty())
+            QMessageBox::information(0, S_INFORM,
+                S_INFO_IMP_STAT.arg(impFile->importedRecordsCount()));
         updateViews();
     }
 }
