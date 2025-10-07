@@ -30,6 +30,27 @@
 class FileFormat
 {
 public:
+    enum SubType { // Subtype or export & import file
+        Unknown,
+        AccountsInBrief,
+        CurrencyRate,
+        Incomes,
+        Expenses,
+        Transfer,
+        CurrencyConversion,
+        Debtors, // TODO see, has database fio dictionary?
+        Creditors, // TODO -"-
+        IncomePlan,
+        ExpensePlan,
+        // HomeWallet specific
+        Aliases,
+        Categories,
+        // (Home Bookkeeping XML) specific
+        AccountsInDetail, // not supported, because not contains key account data
+        IncomesOrExpenses, // ambiguous, must be replaced on Incomes or Expenses by caller
+        DebtorsOrCreditors, // ambiguous, must be replaced on Debtors or Creditors by caller
+        IncomeOrExpensePlan // ambiguous, must be replaced on PlanIncomes or PlanExpenses by caller
+    };
     FileFormat();
     virtual ~FileFormat();
     virtual void clear();

@@ -285,6 +285,7 @@
      <string>&amp;File</string>
     </property>
     <addaction name="action_Import"/>
+    <addaction name="action_Export"/>
     <addaction name="separator"/>
     <addaction name="actionE_xit"/>
    </widget>
@@ -324,6 +325,14 @@
    </property>
    <property name="shortcut">
     <string>Alt+I</string>
+   </property>
+  </action>
+  <action name="action_Export">
+   <property name="text">
+    <string>&amp;Export</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+E</string>
    </property>
   </action>
   <action name="actionE_xit">

@@ -36,23 +36,6 @@
 class XmlHbFile: public XmlFile
 {
 public:
-    enum SubType { // Subtype or Home Bookkeeping XML file
-        Unknown,
-        AccountsInBrief,
-        AccountsInDetail, // not supported, because not contains key account data
-        CurrencyRate,
-        Incomes,
-        Expenses,
-        IncomesOrExpenses, // ambiguous, must be replaced on Incomes or Expenses by caller
-        Transfer,
-        CurrencyConversion,
-        Debtors, // TODO see, has database fio dictionary?
-        Creditors, // TODO -"-
-        DebtorsOrCreditors, // ambiguous, must be replaced on Debtors or Creditors by caller
-        IncomePlan,
-        ExpensePlan,
-        IncomeOrExpensePlan // ambiguous, must be replaced on PlanIncomes or PlanExpenses by caller
-    };
     XmlHbFile();
     virtual QIODevice::OpenMode supportedModes();
     virtual QStringList supportedFilters();

@@ -54,6 +54,7 @@ private slots:
     void on_action_DbDebug_triggered();
     void on_actionE_xit_triggered();
     void on_action_Import_triggered();
+    void on_action_Export_triggered();
     void on_action_Settings_triggered();
     void on_leQuickFilter_textChanged(const QString&);
     void on_actionFilter_triggered();

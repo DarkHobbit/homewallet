@@ -24,6 +24,7 @@
 
 #include "aboutdialog.h"
 #include "configmanager.h"
+#include "exportdialog.h"
 #include "globals.h"
 #include "helpers.h"
 #include "logwindow.h"
@@ -385,6 +386,13 @@ void MainWindow::on_action_Import_triggered()
                 S_INFO_IMP_STAT.arg(impFile->importedRecordsCount()));
         updateViews();
     }
+}
+
+void MainWindow::on_action_Export_triggered()
+{
+    ExportDialog* d = new ExportDialog(0);
+    d->exec();
+    delete d;
 }
 
 void MainWindow::on_action_Settings_triggered()
