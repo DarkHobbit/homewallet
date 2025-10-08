@@ -26,35 +26,35 @@ TEMPLATE = app
 SOURCES += \
     aboutdialog.cpp \
     aliasdialog.cpp \
-    exportdialog.cpp \
     helpers.cpp \
     languageselectdialog.cpp \
     logwindow.cpp \
     main.cpp \
     mainwindow.cpp \
-    postimportdialog.cpp \
-    settingsdialog.cpp
+    settingsdialog.cpp \
+    formatsgui/exportdialog.cpp \
+    formatsgui/postimportdialog.cpp \
 
 HEADERS  += \
     aboutdialog.h \
     aliasdialog.h \
-    exportdialog.h \
     helpers.h \
     languageselectdialog.h \
     logwindow.h \
     mainwindow.h \
-    postimportdialog.h \
-    settingsdialog.h
+    settingsdialog.h \
+    formatsgui/exportdialog.h \
+    formatsgui/postimportdialog.h \
 
 FORMS    += \
     aboutdialog.ui \
     aliasdialog.ui \
-    exportdialog.ui \
     languageselectdialog.ui \
     logwindow.ui \
     mainwindow.ui \
-    postimportdialog.ui \
-    settingsdialog.ui
+    settingsdialog.ui \
+    formatsgui/exportdialog.ui \
+    formatsgui/postimportdialog.ui \
 
 unix { 
     OBJECTS_DIR = .obj

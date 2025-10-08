@@ -24,17 +24,17 @@
 
 #include "aboutdialog.h"
 #include "configmanager.h"
-#include "exportdialog.h"
 #include "globals.h"
 #include "helpers.h"
 #include "logwindow.h"
 #include "mainwindow.h"
-#include "postimportdialog.h"
 #include "settingsdialog.h"
 #include "testmanager.h"
 #include "ui_mainwindow.h"
 #include "formats/interactiveformat.h"
 #include "formats/xmlhbfile.h"
+#include "formatsgui/exportdialog.h"
+#include "formatsgui/postimportdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
