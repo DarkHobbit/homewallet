@@ -24,6 +24,11 @@ ExportDialog::ExportDialog(FormatFactory* _factory, QWidget *parent)
 {
     ui->setupUi(this);
     ui->cbFormat->addItems(factory->supportedFilters(QIODevice::WriteOnly, false));
+
+    insertAction(0, ui->actionSelectAll);
+    connect(ui->actionSelectAll, SIGNAL(triggered(bool)), this, SLOT(on_btnSelectAll_clicked()));
+    insertAction(0, ui->actionUnselectAll);
+    connect(ui->actionUnselectAll, SIGNAL(triggered(bool)), this, SLOT(on_btnUnselectAll_clicked()));
 }
 
 ExportDialog::~ExportDialog()

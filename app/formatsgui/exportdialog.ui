@@ -153,7 +153,7 @@
         <item>
          <widget class="QPushButton" name="btnSelectAll">
           <property name="text">
-           <string>Select all</string>
+           <string>Select all (Ctrl+A)</string>
           </property>
          </widget>
         </item>
@@ -173,7 +173,7 @@
         <item>
          <widget class="QPushButton" name="btnUnselectAll">
           <property name="text">
-           <string>Unselect all</string>
+           <string>Unselect all (Ctrl+B)</string>
           </property>
          </widget>
         </item>
@@ -193,6 +193,25 @@
     </widget>
    </item>
   </layout>
+  <action name="actionSelectAll">
+   <property name="text">
+    <string>Select all</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionUnselectAll">
+   <property name="text">
+    <string>Unselect all</string>
+   </property>
+   <property name="toolTip">
+    <string>Unselect all</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>
