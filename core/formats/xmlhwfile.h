@@ -1,6 +1,6 @@
 /* Home wallet
  *
- * Module: Compact Text File (see ???) export/import
+ * Module: HomeWallet XML file export/import
  *
  * Copyright 2025 Mikhail Y. Zvyozdochkin aka DarkHobbit <pub@zvyozdochkin.ru>
  *
@@ -11,24 +11,22 @@
  *
  */
 
-#ifndef TXTCOMPACTFILE_H
-#define TXTCOMPACTFILE_H
+#ifndef XMLHWFILE_H
+#define XMLHWFILE_H
 
-#include "interactiveformat.h"
+#include "xmlfile.h"
 
-class TxtCompactFile : public InteractiveFormat
+class XmlHwFile : public XmlFile
 {
 public:
-    TxtCompactFile();
-    virtual QStringList supportedExtensions();
-    virtual QStringList supportedFilters();
-    virtual QIODevice::OpenMode supportedModes();
-    virtual SubTypeFlags supportedExportSubTypes();
+    XmlHwFile();
     virtual bool detect(const QString &path);
+    virtual QIODevice::OpenMode supportedModes();
+    virtual QStringList supportedFilters();
+    virtual SubTypeFlags supportedExportSubTypes();
     virtual QString formatAbbr();
+    virtual bool isDialogRequired();
     virtual bool importRecords(const QString &path, HwDatabase& db);
-private:
-    int captureMoneySum(const QString& highPart, const QString& lowPart, bool& ok);
 };
 
-#endif // TXTCOMPACTFILE_H
+#endif // XMLHWFILE_H

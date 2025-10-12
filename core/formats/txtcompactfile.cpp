@@ -36,6 +36,11 @@ QIODevice::OpenMode TxtCompactFile::supportedModes()
     return QIODevice::ReadOnly;
 }
 
+FileFormat::SubTypeFlags TxtCompactFile::supportedExportSubTypes()
+{
+    return Unknown;
+}
+
 bool TxtCompactFile::detect(const QString &path)
 {
     if (!openFile(path, QIODevice::ReadOnly))

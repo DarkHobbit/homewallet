@@ -34,6 +34,11 @@ QStringList XmlHbFile::supportedFilters()
     return QStringList() << QObject::tr("Home Bookkeeping XML (*.xml *.XML)");
 }
 
+FileFormat::SubTypeFlags XmlHbFile::supportedExportSubTypes()
+{
+    return Unknown;
+}
+
 void XmlHbFile::clear()
 {
     QDomDocument::clear();

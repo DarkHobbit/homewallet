@@ -39,6 +39,7 @@
 #define S_SEEK_ERR QObject::tr("Can't seek to %1 in file\n%2")
 #define S_REC_NOT_SEL QObject::tr("Record not selected")
 #define S_ONLY_ONE_REC QObject::tr("Group operation not implemented, select one record")
+#define S_INTERNAL_ERR QObject::tr("Internal error")
 // Common import messages
 #define S_READ_ONLY_FORMAT QObject::tr("This format is read only")
 #define S_ERR_UNSUPPORTED_TAG \

@@ -16,6 +16,7 @@ HEADERS	+= \
     $$PWD/formats/txtcompactfile.h \
     $$PWD/formats/xmlfile.h \
     $$PWD/formats/xmlhbfile.h \
+    $$PWD/formats/xmlhwfile.h \
     $$PWD/genericdatabase.h \
     $$PWD/globals.h \
     $$PWD/hwdatabase.h \
@@ -31,6 +32,7 @@ SOURCES	+= \
     $$PWD/formats/txtcompactfile.cpp \
     $$PWD/formats/xmlfile.cpp \
     $$PWD/formats/xmlhbfile.cpp \
+    $$PWD/formats/xmlhwfile.cpp \
     $$PWD/genericdatabase.cpp \
     $$PWD/globals.cpp \
     $$PWD/hwdatabase.cpp \

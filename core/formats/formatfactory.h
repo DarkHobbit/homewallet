@@ -14,6 +14,7 @@
 #define FORMATFACTORY_H
 
 #include <QIODevice>
+#include <QMap>
 #include <QStringList>
 
 #include "fileformat.h"
@@ -24,10 +25,13 @@ public:
     FormatFactory();
     ~FormatFactory();
     QStringList supportedFilters(QIODevice::OpenModeFlag mode, bool isReportFormat);
-    FileFormat* createObject(const QString& url, QIODevice::OpenModeFlag mode);
+    FileFormat* getObject(const QString& url, QIODevice::OpenModeFlag mode);
+    FileFormat* formatByFilter(const QString& filter);
     QString error;
 private:
     QList<FileFormat*> formats;
+    QMap<QString, FileFormat*> formatsByFilter;
+
 };
 
 #endif // FORMATFACTORY_H

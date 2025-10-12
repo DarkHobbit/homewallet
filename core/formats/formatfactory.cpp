@@ -12,19 +12,25 @@
  */
 //#include <QFileInfo>
 #include <QObject>
+#include <QStringList>
 
 #include "formatfactory.h"
 #include "globals.h"
 #include "txtcompactfile.h"
 #include "xmlhbfile.h"
+#include "xmlhwfile.h"
 
 FormatFactory::FormatFactory()
     :error("")
 {
     formats
         << new XmlHbFile()
+        << new XmlHwFile()
         << new TxtCompactFile();
     // ...here add new formats
+    for (FileFormat* ff: formats)
+        for (const QString& filter: ff->supportedFilters())
+            formatsByFilter[filter] = ff;
 }
 
 FormatFactory::~FormatFactory()
@@ -44,12 +50,14 @@ QStringList FormatFactory::supportedFilters(QIODevice::OpenModeFlag mode, bool i
             allTypes << ff->supportedFilters();
 
         }
-    allTypes.insert(0, S_ALL_SUPPORTED.arg(allSupported));
-    allTypes << S_ALL_FILES;
+    if (mode==QIODevice::ReadOnly) {
+        allTypes.insert(0, S_ALL_SUPPORTED.arg(allSupported));
+        allTypes << S_ALL_FILES;
+    }
     return allTypes;
 }
 
-FileFormat *FormatFactory::createObject(const QString &url, QIODevice::OpenModeFlag mode)
+FileFormat *FormatFactory::getObject(const QString &url, QIODevice::OpenModeFlag mode)
 {
     if (url.isEmpty()) {
         error = QObject::tr("Empty file name");
@@ -64,4 +72,14 @@ FileFormat *FormatFactory::createObject(const QString &url, QIODevice::OpenModeF
     // Sad but true
     error = QObject::tr("Unknown file format:\n%1").arg(url);
     return 0;
+}
+
+FileFormat *FormatFactory::formatByFilter(const QString &filter)
+{
+    if (formatsByFilter.keys().contains(filter)) {
+        formatsByFilter[filter]->clear();
+        return formatsByFilter[filter];
+    }
+    else
+        return 0;
 }

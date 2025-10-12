@@ -39,6 +39,7 @@ public:
     XmlHbFile();
     virtual QIODevice::OpenMode supportedModes();
     virtual QStringList supportedFilters();
+    virtual SubTypeFlags supportedExportSubTypes();
     virtual void clear();
     virtual bool detect(const QString &path);
     virtual QString formatAbbr();
@@ -52,7 +53,7 @@ public:
         return
             _fileSubType==IncomesOrExpenses ||
             _fileSubType==DebtorsOrCreditors ||
-               _fileSubType==IncomeOrExpensePlan;
+            _fileSubType==IncomeOrExpensePlan;
 
     }
 private:

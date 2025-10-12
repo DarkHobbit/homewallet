@@ -270,7 +270,7 @@ void MainWindow::on_action_Import_triggered()
     if (!path.isEmpty()) {
         configManager.setLastImportedFile(path);
         // If format is unknown...
-        FileFormat* impFile = factory.createObject(path, QIODevice::ReadOnly);
+        FileFormat* impFile = factory.getObject(path, QIODevice::ReadOnly);
         if (!impFile) {
             QMessageBox::critical(0, S_ERROR, factory.error);
             return;
@@ -390,7 +390,7 @@ void MainWindow::on_action_Import_triggered()
 
 void MainWindow::on_action_Export_triggered()
 {
-    ExportDialog* d = new ExportDialog(0);
+    ExportDialog* d = new ExportDialog(&factory, 0);
     d->exec();
     delete d;
 }
