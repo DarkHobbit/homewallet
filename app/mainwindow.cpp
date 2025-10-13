@@ -387,12 +387,21 @@ void MainWindow::on_action_Import_triggered()
         updateViews();
     }
 }
-
+#include <iostream>
 void MainWindow::on_action_Export_triggered()
 {
     ExportDialog* d = new ExportDialog(&factory, 0);
-    d->exec();
+    int res = d->exec();
+    FileFormat* expFile = d->getCurrentFormat();
+    FileFormat::SubTypeFlags subTypes = d->getSubTypes();
+    QString path = d->getPath();
+    bool isDir = d->isDir();
     delete d;
+    if (res!=QDialog::Accepted)
+        return;
+    // TODO here select, file or dir
+    expFile->exportRecords(path, db, subTypes);
+    // TODO fatalError, errors
 }
 
 void MainWindow::on_action_Settings_triggered()

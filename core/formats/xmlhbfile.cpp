@@ -377,6 +377,12 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
     return true;
 }
 
+bool XmlHbFile::exportRecords(const QString &path, HwDatabase &db, SubTypeFlags subTypes)
+{
+    // TODO
+    return false; //===>
+}
+
 XmlHbFile::SubType XmlHbFile::fileSubType()
 {
     return _fileSubType;

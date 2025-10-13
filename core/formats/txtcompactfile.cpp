@@ -181,6 +181,11 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
     return (analyzeCandidates(db) && !candidates.isEmpty());
 }
 
+bool TxtCompactFile::exportRecords(const QString&, HwDatabase&, SubTypeFlags)
+{
+    return false; // It's read-only format by design
+}
+
 int TxtCompactFile::captureMoneySum(const QString& highPart, const QString& lowPart, bool& ok)
 {
     QString sNum = lowPart; // process 35 and 35,3 and 35,45

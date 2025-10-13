@@ -206,6 +206,20 @@ void ConfigManager::setLastImportedFile(const QString &path)
     settings->setValue("General/LastImportedFile", path);
 }
 
+QString ConfigManager::lastExportedFile()
+{
+    if (!settings)
+        return "";
+    return settings->value("General/LastExportedFile", defaultDocDir()).toString();
+}
+
+void ConfigManager::setLastExportedFile(const QString &path)
+{
+    if (!settings)
+        return;
+    settings->setValue("General/LastExportedFile", path);
+}
+
 QString ConfigManager::localDatabaseDir()
 {
     if (!settings)

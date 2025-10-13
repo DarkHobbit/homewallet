@@ -42,6 +42,8 @@ public:
     void writeLanguage(const QString& language);
     QString lastImportedFile();
     void setLastImportedFile(const QString& path);
+    QString lastExportedFile();
+    void setLastExportedFile(const QString& path);
     QString localDatabaseDir();
     void setLocalDatabaseDir(const QString& dir);
     static QString defaultDocDir();

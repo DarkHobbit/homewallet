@@ -48,6 +48,9 @@
     QObject::tr("%1 %2 will be lost at record %3")
 #define S_INFO_IMP_STAT \
     QObject::tr("%1 records has been read")
+// Common export messages
+#define S_ERR_EMPTY_EXPORT_SUBTYPES \
+    QObject::tr("Select at least one export information type")
 // Status messages
 #define SS_MODE QObject::tr("Mode: ")
 #define SS_SORT_ON QObject::tr("sorted")

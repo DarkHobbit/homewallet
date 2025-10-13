@@ -67,6 +67,7 @@ public:
     virtual bool importRecords(const QString &path, HwDatabase& db)=0;
     virtual bool postImport(HwDatabase&);
     void setIdImp(int idImp);
+    virtual bool exportRecords(const QString &path, HwDatabase& db, FileFormat::SubTypeFlags subTypes)=0;
     QStringList errors();
     QString fatalError();
     int importedRecordsCount();

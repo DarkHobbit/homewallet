@@ -11,7 +11,12 @@
  *
  */
 
+#include <QDialogButtonBox>
+#include <QFileDialog>
+#include <QFileInfo>
 #include <QMessageBox>
+
+#include "configmanager.h"
 #include "globals.h"
 #include "exportdialog.h"
 #include "ui_exportdialog.h"
@@ -23,6 +28,12 @@ ExportDialog::ExportDialog(FormatFactory* _factory, QWidget *parent)
     , currentFormat(0)
 {
     ui->setupUi(this);
+    QString path = configManager.lastExportedFile();
+    ui->lePath->setText(configManager.lastExportedFile());
+    if (QFileInfo(path).isDir())
+        ui->rbDirectory->setChecked(true);
+    else
+        ui->rbSingleFile->setChecked(true);
     ui->cbFormat->addItems(factory->supportedFilters(QIODevice::WriteOnly, false));
 
     insertAction(0, ui->actionSelectAll);
@@ -34,6 +45,34 @@ ExportDialog::ExportDialog(FormatFactory* _factory, QWidget *parent)
 ExportDialog::~ExportDialog()
 {
     delete ui;
+}
+
+FileFormat *ExportDialog::getCurrentFormat()
+{
+    return currentFormat;
+}
+
+FileFormat::SubTypeFlags ExportDialog::getSubTypes()
+{
+    FileFormat::SubTypeFlags subTypes = FileFormat::Unknown;
+    checkSubType(subTypes, ui->cbAccounts, FileFormat::AccountsInBrief);
+    checkSubType(subTypes, ui->cbAliases, FileFormat::Aliases);
+    checkSubType(subTypes, ui->cbCategories, FileFormat::Categories);
+    checkSubType(subTypes, ui->cbExpenses, FileFormat::Expenses);
+    checkSubType(subTypes, ui->cbIncomes, FileFormat::Incomes);
+    checkSubType(subTypes, ui->cbTransfer, FileFormat::Transfer);
+    // TODO other sc
+    return subTypes;
+}
+
+QString ExportDialog::getPath()
+{
+    return ui->lePath->text();
+}
+
+bool ExportDialog::isDir()
+{
+    return ui->rbDirectory->isChecked();
 }
 
 void ExportDialog::changeEvent(QEvent *e)
@@ -77,13 +116,19 @@ void ExportDialog::selectSubTypeIfEnabled(QCheckBox *cb)
         cb->setChecked(true);
 }
 
+void ExportDialog::checkSubType(FileFormat::SubTypeFlags subTypes, QCheckBox *cb, FileFormat::SubType typeFlag)
+{
+    if (cb->isChecked())
+        subTypes |= typeFlag;
+}
+
 
 void ExportDialog::on_btnSelectAll_clicked()
 {
     selectSubTypeIfEnabled(ui->cbAccounts);
     selectSubTypeIfEnabled(ui->cbAliases);
     selectSubTypeIfEnabled(ui->cbCategories);
-    selectSubTypeIfEnabled(ui->cbAliases);
+    selectSubTypeIfEnabled(ui->cbExpenses);
     selectSubTypeIfEnabled(ui->cbIncomes);
     selectSubTypeIfEnabled(ui->cbTransfer);
     // TODO other sc
@@ -94,10 +139,37 @@ void ExportDialog::on_btnUnselectAll_clicked()
     ui->cbAccounts->setChecked(false);
     ui->cbAliases->setChecked(false);
     ui->cbCategories->setChecked(false);
-    ui->cbAliases->setChecked(false);
+    ui->cbExpenses->setChecked(false);
     ui->cbIncomes->setChecked(false);
     ui->cbTransfer->setChecked(false);
     // TODO other sc
 }
 
+void ExportDialog::accept()
+{
+    if (ui->cbAccounts->isChecked()
+        ||ui->cbAliases->isChecked()
+        ||ui->cbCategories->isChecked()
+        ||ui->cbExpenses->isChecked()
+        ||ui->cbIncomes->isChecked()
+        ||ui->cbTransfer->isChecked()
+        // TODO other sc
+        ) {
+        configManager.setLastExportedFile(ui->lePath->text());
+        QDialog::accept();
+    }
+    else
+        QMessageBox::information(0, S_ERROR, S_ERR_EMPTY_EXPORT_SUBTYPES);
+}
+
+void ExportDialog::on_btnSelectPath_clicked()
+{
+    QString path = ui->lePath->text();
+    if (ui->rbDirectory->isChecked())
+        path = QFileDialog::getExistingDirectory(0, tr("Select export directory"), path);
+    else
+        path = QFileDialog::getSaveFileName(0, tr("Select export file"),
+            path, factory->supportedFilters(QIODevice::WriteOnly, false).join(";;"));
+    ui->lePath->setText(path);
+}
 

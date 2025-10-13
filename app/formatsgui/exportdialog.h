@@ -29,6 +29,10 @@ class ExportDialog : public QDialog
 public:
     explicit ExportDialog(FormatFactory* _factory, QWidget *parent = nullptr);
     ~ExportDialog();
+    FileFormat* getCurrentFormat();
+    FileFormat::SubTypeFlags getSubTypes();
+    QString getPath();
+    bool isDir();
 
 protected:
     void changeEvent(QEvent *e);
@@ -37,6 +41,8 @@ private slots:
     void on_cbFormat_currentIndexChanged(int);
     void on_btnSelectAll_clicked();
     void on_btnUnselectAll_clicked();
+    virtual void accept();
+    void on_btnSelectPath_clicked();
 
 private:
     Ui::ExportDialog *ui;
@@ -44,6 +50,7 @@ private:
     FileFormat* currentFormat;
     void setSubTypeEnabled(QCheckBox* cb, FileFormat::SubType typeFlag);
     void selectSubTypeIfEnabled(QCheckBox* cb);
+    void checkSubType(FileFormat::SubTypeFlags subTypes, QCheckBox* cb, FileFormat::SubType typeFlag);
 };
 
 #endif // EXPORTDIALOG_H

@@ -45,6 +45,7 @@ public:
     virtual QString formatAbbr();
     virtual bool isDialogRequired();
     virtual bool importRecords(const QString &path, HwDatabase& db);
+    virtual bool exportRecords(const QString &path, HwDatabase& db, FileFormat::SubTypeFlags subTypes);
     SubType fileSubType();
     void setFileSubType(SubType subType);
     QString categorySamples();

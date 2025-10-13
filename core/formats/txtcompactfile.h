@@ -27,6 +27,7 @@ public:
     virtual bool detect(const QString &path);
     virtual QString formatAbbr();
     virtual bool importRecords(const QString &path, HwDatabase& db);
+    virtual bool exportRecords(const QString &path, HwDatabase& db, FileFormat::SubTypeFlags subTypes);
 private:
     int captureMoneySum(const QString& highPart, const QString& lowPart, bool& ok);
 };

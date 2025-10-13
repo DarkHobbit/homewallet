@@ -53,3 +53,9 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
     // TODO
     return false; //===>
 }
+
+bool XmlHwFile::exportRecords(const QString &path, HwDatabase &db, SubTypeFlags subTypes)
+{
+    // TODO
+    return false; //===>
+}

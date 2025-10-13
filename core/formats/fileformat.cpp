@@ -25,6 +25,8 @@ FileFormat::~FileFormat()
 
 void FileFormat::clear()
 {
+    _importedRecordsCount = 0;
+    _totalRecordsCount = 0;
     _errors.clear();
     _fatalError.clear();
 }
