@@ -399,9 +399,30 @@ void MainWindow::on_action_Export_triggered()
     delete d;
     if (res!=QDialog::Accepted)
         return;
-    // TODO here select, file or dir
-    expFile->exportRecords(path, db, subTypes);
-    // TODO fatalError, errors
+    bool eRes = true;
+    if (isDir) { // Separate file in dir by each info type
+        int test = 1;
+        for (int i=0; i<FileFormat::subTypeFlagsCount; i++) {
+            std::cout << "test=" << test << std::endl;
+            if (subTypes.testFlag((FileFormat::SubType)test)) {
+                std::cout << "passed" << std::endl;
+                QString fPath = path+QDir::separator()+subTypeFileNames[i]+"."
+                    +expFile->supportedExtensions()[0];
+                eRes = expFile->exportRecords(fPath, db, subTypes);
+                if (!eRes)
+                    break;
+            }
+            test = test << 1;
+        }
+    }
+    else { // Entire file with multi-info-type
+        // TODO
+    }
+    /*
+    if (!eRes)
+        expFile->fatalError()
+    // TODO fatalError, errors showErrors vs LogWindow
+*/
 }
 
 void MainWindow::on_action_Settings_triggered()

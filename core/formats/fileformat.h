@@ -45,14 +45,15 @@ public:
         ExpensePlan = 0x0200,
         // HomeWallet specific
         Aliases     = 0x0400,
-        Categories  = 0x0800,
+        Categories  = 0x0800, // including currencies and units
         // (Home Bookkeeping XML) specific
-        AccountsInDetail  = 0x0800, // not supported, because not contains key account data
+        AccountsInDetail  = 0x2000, // not supported, because not contains key account data
         IncomesOrExpenses, // ambiguous, must be replaced on Incomes or Expenses by caller
         DebtorsOrCreditors, // ambiguous, must be replaced on Debtors or Creditors by caller
         IncomeOrExpensePlan // ambiguous, must be replaced on PlanIncomes or PlanExpenses by caller
     };
     typedef QFlags<SubType> SubTypeFlags;
+    static const int subTypeFlagsCount = 13;
 
     FileFormat();
     virtual ~FileFormat();
@@ -85,5 +86,7 @@ protected:
     bool openFile(QString path, QIODevice::OpenMode mode);
     void closeFile();
 };
+
+extern char subTypeFileNames[][FileFormat::subTypeFlagsCount];
 
 #endif // FILEFORMAT_H

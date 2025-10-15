@@ -50,7 +50,7 @@ private:
     FileFormat* currentFormat;
     void setSubTypeEnabled(QCheckBox* cb, FileFormat::SubType typeFlag);
     void selectSubTypeIfEnabled(QCheckBox* cb);
-    void checkSubType(FileFormat::SubTypeFlags subTypes, QCheckBox* cb, FileFormat::SubType typeFlag);
+    void checkSubType(FileFormat::SubTypeFlags& subTypes, QCheckBox* cb, FileFormat::SubType typeFlag);
 };
 
 #endif // EXPORTDIALOG_H

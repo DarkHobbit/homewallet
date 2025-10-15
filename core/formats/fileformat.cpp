@@ -86,3 +86,9 @@ void FileFormat::lossData(QStringList &errors, const QString &recName, const QSt
 {
     lossData(errors, recName, fieldName, !field.isEmpty());
 }
+
+char subTypeFileNames[][FileFormat::subTypeFlagsCount] = {
+    "accounts", "currate", "incomes", "expenses", "transfer",
+    "currconv", "debtors", "creditors", "incplan", "expplan",
+    "aliases", "categories", "accdetail"
+};
