@@ -17,7 +17,7 @@
 #include "globals.h"
 
 FileFormat::FileFormat()
-    :_importedRecordsCount(0), _totalRecordsCount(-1)
+    :_processedRecordsCount(0), _totalRecordsCount(-1)
 {}
 
 FileFormat::~FileFormat()
@@ -25,7 +25,7 @@ FileFormat::~FileFormat()
 
 void FileFormat::clear()
 {
-    _importedRecordsCount = 0;
+    _processedRecordsCount = 0;
     _totalRecordsCount = 0;
     _errors.clear();
     _fatalError.clear();
@@ -51,9 +51,9 @@ QString FileFormat::fatalError()
     return _fatalError;
 }
 
-int FileFormat::importedRecordsCount()
+int FileFormat::processedRecordsCount()
 {
-    return _importedRecordsCount;
+    return _processedRecordsCount;
 }
 
 int FileFormat::totalRecordsCount()

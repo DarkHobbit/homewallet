@@ -71,7 +71,7 @@ public:
     virtual bool exportRecords(const QString &path, HwDatabase& db, FileFormat::SubTypeFlags subTypes)=0;
     QStringList errors();
     QString fatalError();
-    int importedRecordsCount();
+    int processedRecordsCount();
     int totalRecordsCount();
     static void lossData(QStringList& errors, const QString& recName,
         const QString& fieldName, bool condition);
@@ -82,7 +82,7 @@ protected:
     QFile file;
     QStringList _errors;
     QString _fatalError;
-    int _importedRecordsCount, _totalRecordsCount;
+    int _processedRecordsCount, _totalRecordsCount;
     bool openFile(QString path, QIODevice::OpenMode mode);
     void closeFile();
 };

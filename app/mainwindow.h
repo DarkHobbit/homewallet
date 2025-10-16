@@ -94,6 +94,8 @@ private:
     void updateConfig();
     void updateTabsAndFilters();
     ActiveTab activeTab();
+    void processImpExErrors(FileFormat* f, bool res, const QString& path);
+    void processImpExSuccess(FileFormat* f);
 };
 
 #endif // MAINWINDOW_H

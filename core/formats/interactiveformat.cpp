@@ -155,7 +155,7 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
 bool InteractiveFormat::postImport(HwDatabase& db)
 {
     _totalRecordsCount = candidates.count();
-    _importedRecordsCount = 0;
+    _processedRecordsCount = 0;
     for (const ImpRecCandidate&c: candidates)
         if (c.state!=ImpRecCandidate::ReadyToImport)
             return false;
@@ -186,7 +186,7 @@ bool InteractiveFormat::postImport(HwDatabase& db)
         default:
             return false;
         }
-        _importedRecordsCount++;
+        _processedRecordsCount++;
     }
     return true;
 }

@@ -352,42 +352,28 @@ void MainWindow::on_action_Import_triggered()
 
         // Actually, import
         bool res = impFile->importRecords(path, db);
-        QString fatalError = impFile->fatalError();
-        QStringList errors = impFile->errors();
-        if (!errors.isEmpty()) {
-            LogWindow* w = new LogWindow(0);
-            w->setData(path, impFile->importedRecordsCount(), errors);
-            w->exec();
-            delete w;
-        }
-        if (fatalError.isEmpty() && !res)
-            fatalError = tr("Unknown import error");
-        if (!fatalError.isEmpty()) {
-            fatalError += tr("\nat record %1 from %2")
-                .arg(impFile->importedRecordsCount())
-                .arg(impFile->totalRecordsCount());
-            QMessageBox::critical(0, S_ERROR, fatalError);
-        }
-        else if (impFile->isDialogRequired()) {
-            InteractiveFormat* intFile = dynamic_cast<InteractiveFormat*>(impFile);
-            if (intFile) {
-                PostImportDialog* d = new PostImportDialog(0);
-                d->setData(intFile, &db);
-                d->exec();
-                if (d->result()==QDialog::Accepted)
-                    impFile->postImport(db);
-                delete d;
+        processImpExErrors(impFile, res, path);
+        // Post-import
+        if (res) {
+            if (impFile->isDialogRequired()) {
+                InteractiveFormat* intFile = dynamic_cast<InteractiveFormat*>(impFile);
+                if (intFile) {
+                    PostImportDialog* d = new PostImportDialog(0);
+                    d->setData(intFile, &db);
+                    d->exec();
+                    if (d->result()==QDialog::Accepted)
+                        impFile->postImport(db);
+                    delete d;
+                }
             }
+            else
+                impFile->postImport(db);
         }
-        else
-            impFile->postImport(db);
-        if (errors.isEmpty())
-            QMessageBox::information(0, S_INFORM,
-                S_INFO_IMP_STAT.arg(impFile->importedRecordsCount()));
+        processImpExSuccess(impFile);
         updateViews();
     }
 }
-#include <iostream>
+
 void MainWindow::on_action_Export_triggered()
 {
     ExportDialog* d = new ExportDialog(&factory, 0);
@@ -403,9 +389,7 @@ void MainWindow::on_action_Export_triggered()
     if (isDir) { // Separate file in dir by each info type
         int test = 1;
         for (int i=0; i<FileFormat::subTypeFlagsCount; i++) {
-            std::cout << "test=" << test << std::endl;
             if (subTypes.testFlag((FileFormat::SubType)test)) {
-                std::cout << "passed" << std::endl;
                 QString fPath = path+QDir::separator()+subTypeFileNames[i]+"."
                     +expFile->supportedExtensions()[0];
                 eRes = expFile->exportRecords(fPath, db, subTypes);
@@ -418,11 +402,8 @@ void MainWindow::on_action_Export_triggered()
     else { // Entire file with multi-info-type
         // TODO
     }
-    /*
-    if (!eRes)
-        expFile->fatalError()
-    // TODO fatalError, errors showErrors vs LogWindow
-*/
+    processImpExErrors(expFile, eRes, path);
+    processImpExSuccess(expFile);
 }
 
 void MainWindow::on_action_Settings_triggered()
@@ -657,5 +638,32 @@ void MainWindow::updateTabsAndFilters()
             ui->cbSubcategory->setCurrentText(subcategory);
     }
     updateViews();
+}
+
+void MainWindow::processImpExErrors(FileFormat *f, bool res, const QString& path)
+{
+    QString fatalError = f->fatalError();
+    QStringList errors = f->errors();
+    if (!errors.isEmpty()) {
+        LogWindow* w = new LogWindow(0);
+        w->setData(path, f->processedRecordsCount(), errors);
+        w->exec();
+        delete w;
+    }
+    if (fatalError.isEmpty() && !res) {
+        fatalError = S_ERR_UNKNOWN_IMP_EX;
+    }
+    if (!fatalError.isEmpty()) {
+        fatalError += S_ERR_REC_NUM
+                          .arg(f->processedRecordsCount())
+                          .arg(f->totalRecordsCount());
+        QMessageBox::critical(0, S_ERROR, fatalError);
+    }
+}
+
+void MainWindow::processImpExSuccess(FileFormat *f)
+{
+    QMessageBox::information(0, S_INFORM,
+        S_INFO_IMP_STAT.arg(f->processedRecordsCount()));
 }
 

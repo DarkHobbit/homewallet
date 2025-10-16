@@ -40,17 +40,20 @@
 #define S_REC_NOT_SEL QObject::tr("Record not selected")
 #define S_ONLY_ONE_REC QObject::tr("Group operation not implemented, select one record")
 #define S_INTERNAL_ERR QObject::tr("Internal error")
-// Common import messages
+// Common import/export messages
 #define S_READ_ONLY_FORMAT QObject::tr("This format is read only")
 #define S_ERR_UNSUPPORTED_TAG \
     QObject::tr("Warning: record %1 has %2, not supported in this format.\nData will be lost")
 #define S_ERR_EXTRA_TAG \
     QObject::tr("%1 %2 will be lost at record %3")
 #define S_INFO_IMP_STAT \
-    QObject::tr("%1 records has been read")
-// Common export messages
+    QObject::tr("%1 records has been processed")
 #define S_ERR_EMPTY_EXPORT_SUBTYPES \
     QObject::tr("Select at least one export information type")
+#define S_ERR_UNKNOWN_IMP_EX \
+    QObject::tr("Unknown import/export error")
+#define S_ERR_REC_NUM \
+    QObject::tr("\nat record %1 from %2")
 // Status messages
 #define SS_MODE QObject::tr("Mode: ")
 #define SS_SORT_ON QObject::tr("sorted")

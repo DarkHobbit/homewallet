@@ -176,7 +176,7 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
     // Import records
     QDomNodeList records = elementsByTagName("RECORD");
     _totalRecordsCount = records.count();
-    _importedRecordsCount = 0;
+    _processedRecordsCount = 0;
     int skippedRecordCount = 0;
     for (int i=0; i<records.count() /*&& i<20*/; i++) {
         if (i%500==0)
@@ -369,9 +369,9 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             // TODO
             break;
         }
-        _importedRecordsCount++;
+        _processedRecordsCount++;
     }
-    std::cout << "Total records " << records.count() << ", skipped " << skippedRecordCount << ", imported " << _importedRecordsCount << std::endl;
+    std::cout << "Total records " << records.count() << ", skipped " << skippedRecordCount << ", imported " << _processedRecordsCount << std::endl;
     if (skippedRecordCount>0)
         _errors << QObject::tr("Skipped %1 records").arg(skippedRecordCount);
     return true;
