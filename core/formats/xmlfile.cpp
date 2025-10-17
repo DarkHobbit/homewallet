@@ -11,6 +11,8 @@
  *
  */
 
+#include <QTextStream>
+
 #include "commonexpimpdef.h"
 #include "xmlfile.h"
 
@@ -18,9 +20,54 @@ XmlFile::XmlFile()
     :FileFormat(), QDomDocument()
 {}
 
+XmlFile::XmlFile(const QString &docTypeName)
+    :FileFormat(), QDomDocument(docTypeName)
+{}
+
+void XmlFile::clear()
+{
+    FileFormat::clear();
+    QDomDocument::clear();
+}
+
 QStringList XmlFile::supportedExtensions()
 {
     return (QStringList() << "xml" << "XML");
+}
+
+QDomElement XmlFile::beginCreateXml(const QString &rootElementName)
+{
+    QDomNode xmlNode =
+        createProcessingInstruction("xml", "version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"");
+    insertBefore(xmlNode, firstChild());
+    QDomElement elRoot = createElement(rootElementName);
+    appendChild(elRoot);
+    return elRoot;
+}
+
+bool XmlFile::endCreateXml(const QString &path)
+{
+    QFile file(path);
+    if (file.exists())
+        file.remove();
+    if (file.open(QIODevice::WriteOnly))
+    {
+        QTextStream out(&file);
+        save(out, 4);
+        file.close();
+        return true;
+    }
+    else {
+        _fatalError = file.errorString();
+        return false;
+    }
+}
+
+QDomElement XmlFile::addElem(QDomElement &elParent, const QString &name)
+{
+    QDomElement elem = createElement(name);
+    elParent.appendChild(elem);
+    return elem;
 }
 
 bool XmlFile::readFromFile(const QString &path)

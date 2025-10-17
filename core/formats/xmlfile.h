@@ -21,9 +21,16 @@
 class XmlFile: public FileFormat, public QDomDocument
 {
 public:
-    XmlFile();
+    XmlFile(); // for read-only types
+    XmlFile(const QString &docTypeName);
+    virtual void clear();
     virtual QStringList supportedExtensions();
 protected:
+    // Write
+    QDomElement beginCreateXml(const QString& rootElementName);
+    bool endCreateXml(const QString& path);
+    QDomElement addElem(QDomElement& elParent, const QString& name);
+    // Read
     bool readFromFile(const QString &path);
     bool readDoubleVal(const QDomElement& el, const QString& attrName, double& res, const QString& errorMessageTemplate);
     bool readDateVal(const QDomElement& el, const QString& attrName, QDateTime& res, const QString& format, const QString& errorMessageTemplate);

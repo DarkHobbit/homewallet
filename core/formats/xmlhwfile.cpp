@@ -11,11 +11,12 @@
  *
  */
 
+#include <QDateTime>
 #include "xmlhwfile.h"
 
 XmlHwFile::XmlHwFile()
-{
-}
+    :XmlFile("homewallet")
+{}
 
 bool XmlHwFile::detect(const QString &path)
 {
@@ -50,12 +51,21 @@ bool XmlHwFile::isDialogRequired()
 
 bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
 {
+    QDomDocument doc;
     // TODO
     return false; //===>
 }
 
 bool XmlHwFile::exportRecords(const QString &path, HwDatabase &db, SubTypeFlags subTypes)
 {
-    // TODO
-    return false; //===>
+    QDomElement elRoot = beginCreateXml("homewallet");
+    QDomElement elMeta = addElem(elRoot, "metadata");
+    elMeta.setAttribute("created", QDateTime::currentDateTime().toString(Qt::ISODate));
+    // TODO user, program version
+
+    // TODO call testFlags for each subtypes
+    // TODO on each iteration, call exportAliases, exportExpenses, etc
+    // TODO <aliases> <expenses> etc
+    // <ali> <exp> etc
+    return endCreateXml(path);
 }
