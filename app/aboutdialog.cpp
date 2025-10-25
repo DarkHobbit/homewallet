@@ -12,6 +12,8 @@
  */
 
 #include <limits.h>
+#include <QApplication>
+
 #include "pathmanager.h"
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
@@ -20,8 +22,10 @@ AboutDialog::AboutDialog(QWidget *parent, const QString& dbInfo) :
     QDialog(parent),
     ui(new Ui::AboutDialog)
 {
-    // Contributors
     ui->setupUi(this);
+    // Version
+    ui->lbVer->setText(QString("v ") + qApp->applicationVersion());
+    // Contributors
     ui->lwContributors->addItem("Icons made by:");
     ui->lwContributors->addItem("");
     ui->lwContributors->setItemWidget(ui->lwContributors->item(1), new QLabel("<a href=\"https://www.flaticon.com/free-icons/google-plus\" title=\"google-plus icons\">Google-plus icons created by Pixel perfect - Flaticon</a>"));

@@ -28,6 +28,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    a.setApplicationVersion("0.0.1");
     configManager.prepare();
     pathManager.prepare();
     // Set UI language
