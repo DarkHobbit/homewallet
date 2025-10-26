@@ -30,6 +30,9 @@ protected:
     QDomElement beginCreateXml(const QString& rootElementName);
     bool endCreateXml(const QString& path);
     QDomElement addElem(QDomElement& elParent, const QString& name);
+    bool exportElemsFromQuery(HwDatabase &db, QDomElement& elParent,
+        const QString& groupElemName, const QString& recElemName, const QString& query,
+        const QStringList& fieldNames);
     // Read
     bool readFromFile(const QString &path);
     bool readDoubleVal(const QDomElement& el, const QString& attrName, double& res, const QString& errorMessageTemplate);

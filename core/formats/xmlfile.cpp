@@ -11,6 +11,7 @@
  *
  */
 
+#include <QSqlQuery>
 #include <QTextStream>
 
 #include "commonexpimpdef.h"
@@ -70,6 +71,29 @@ QDomElement XmlFile::addElem(QDomElement &elParent, const QString &name)
     return elem;
 }
 
+bool XmlFile::exportElemsFromQuery(HwDatabase &db, QDomElement &elParent,
+    const QString &groupElemName, const QString &recElemName, const QString &query,
+    const QStringList& fieldNames)
+{
+    QSqlQuery sqlSel(db.sqlDbRef());
+    if (!db.prepQuery(sqlSel, query))
+        return false;
+    if (!db.execQuery(sqlSel))
+        return false;
+    if (db.queryRecCount(sqlSel)==0)
+        return true;
+    QDomElement elGroup = addElem(elParent, groupElemName);
+    sqlSel.first();
+    while (sqlSel.isValid()) {
+        QDomElement elRec = addElem(elGroup, recElemName);
+        for (int i=0; i<fieldNames.count(); i++)
+            elRec.setAttribute(fieldNames[i], sqlSel.value(i).toString());
+        _processedRecordsCount++;
+        sqlSel.next();
+    }
+    return true;
+}
+
 bool XmlFile::readFromFile(const QString &path)
 {
     if (!openFile(path, QIODevice::ReadOnly))
@@ -78,7 +102,7 @@ bool XmlFile::readFromFile(const QString &path)
     int err_line, err_col;
     if (!setContent(&file, &err_msg, &err_line, &err_col)) {
         _fatalError = QObject::tr("Can't read content from file %1\n%2\nline %3, col %4\n")
-                          .arg(path).arg(err_msg).arg(err_line).arg(err_col);
+            .arg(path).arg(err_msg).arg(err_line).arg(err_col);
         closeFile();
         return false;
     }

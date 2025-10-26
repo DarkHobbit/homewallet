@@ -11,7 +11,10 @@
  *
  */
 
+#include <QCoreApplication>
 #include <QDateTime>
+#include <QDir>
+
 #include "xmlhwfile.h"
 
 XmlHwFile::XmlHwFile()
@@ -61,11 +64,44 @@ bool XmlHwFile::exportRecords(const QString &path, HwDatabase &db, SubTypeFlags 
     QDomElement elRoot = beginCreateXml("homewallet");
     QDomElement elMeta = addElem(elRoot, "metadata");
     elMeta.setAttribute("created", QDateTime::currentDateTime().toString(Qt::ISODate));
-    // TODO user, program version
+//#if QT_VERSION >= 0x050000
+    elMeta.setAttribute("user", QDir::home().dirName());
+//#endif
+    elMeta.setAttribute("appversion", qApp->applicationVersion());
 
-    // TODO call testFlags for each subtypes
-    // TODO on each iteration, call exportAliases, exportExpenses, etc
-    // TODO <aliases> <expenses> etc
-    // <ali> <exp> etc
+    if (subTypes.testFlag(FileFormat::Aliases))
+        UP_CHK(exportAliases(db, elRoot));
+    // TODO call testFlags for other subtypes, call exportExpenses <exp>, etc
     return endCreateXml(path);
+}
+
+#define Q_SEL_ALIAS_ACC \
+    "select al.pattern, al.to_descr, reft.name as ref" \
+    " from hw_alias al, hw_account reft" \
+    " where al.id_ac=reft.id" \
+    " order by ref;"
+
+#define Q_SEL_ALIAS_CUR \
+"select al.pattern, al.to_descr, reft.short_name as ref" \
+    " from hw_alias al, hw_currency reft" \
+    " where al.id_cur=reft.id" \
+    " order by ref" \
+
+#define Q_SEL_ALIAS_UN \
+"select al.pattern, al.to_descr, reft.name as ref" \
+    " from hw_alias al, hw_unit reft" \
+    " where al.id_un=reft.id" \
+    " order by ref" \
+
+bool XmlHwFile::exportAliases(HwDatabase &db, QDomElement &elRoot)
+{
+    QDomElement elList = addElem(elRoot, "aliases");
+    DB_CHK(exportElemsFromQuery(db, elList, "foraccounts", "ali", Q_SEL_ALIAS_ACC,
+        QStringList() << "pattern" << "to_descr" << "ref"));
+    DB_CHK(exportElemsFromQuery(db, elList, "forcurrency", "ali", Q_SEL_ALIAS_CUR,
+        QStringList() << "pattern" << "to_descr" << "ref"));
+    DB_CHK(exportElemsFromQuery(db, elList, "forunit", "ali", Q_SEL_ALIAS_UN,
+        QStringList() << "pattern" << "to_descr" << "ref"));
+    // TODO
+    return true;
 }

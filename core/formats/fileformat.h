@@ -19,6 +19,14 @@
 #include "hwdatabase.h"
 #include <QStringList>
 
+#define UP_CHK(action) \
+{ \
+        if (!(action)) \
+    { \
+            return false; \
+    } \
+}
+
 #define DB_CHK(action) \
 { \
         if (!(action)) \

@@ -28,6 +28,8 @@ public:
     virtual bool isDialogRequired();
     virtual bool importRecords(const QString &path, HwDatabase& db);
     virtual bool exportRecords(const QString &path, HwDatabase& db, FileFormat::SubTypeFlags subTypes);
+private:
+    bool exportAliases(HwDatabase& db, QDomElement& elRoot);
 };
 
 #endif // XMLHWFILE_H

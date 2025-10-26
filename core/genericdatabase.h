@@ -41,8 +41,11 @@ public:
     void close();
     bool isOpen();
     QString dbInfo();
+    QSqlDatabase& sqlDbRef();
     // Tools
     int queryRecCount(QSqlQuery& query);
+    bool prepQuery(QSqlQuery& q, const QString& sql);
+    bool execQuery(QSqlQuery& q);
     bool collectDict(DictColl& coll, const QString& tableName,
         const QString& fieldName = "name", const QString& idFieldName = "id",
         const QString& where = "");
@@ -60,7 +63,6 @@ protected:
     bool loadSqlFile(const QString& filePath);
     bool checkTablePresence(const QString& tableName);
     //bool checkFieldPresence(const QString& tableName);
-    bool execQuery(QSqlQuery& q);
     int dictId(QSqlQuery& q);
     QString dictName(QSqlQuery& q);
     QVariant idOrNull(int id);

@@ -94,6 +94,11 @@ QString GenericDatabase::dbInfo()
         .arg(isICUSupported ? QObject::tr("yes") : QObject::tr("no"));
 }
 
+QSqlDatabase &GenericDatabase::sqlDbRef()
+{
+    return sqlDb;
+}
+
 int GenericDatabase::queryRecCount(QSqlQuery &query)
 {
     if (query.driver()->hasFeature(QSqlDriver::QuerySize))
@@ -205,6 +210,15 @@ bool GenericDatabase::checkTablePresence(const QString &tableName)
         return false;
     }
     return true;
+}
+
+bool GenericDatabase::prepQuery(QSqlQuery &q, const QString &sql)
+{
+    bool res = q.prepare(sql);
+    if (!res) {
+        _lastError = q.lastError().text() + ":\n" + q.lastQuery();
+    }
+    return res;
 }
 
 bool GenericDatabase::execQuery(QSqlQuery &q)
