@@ -102,6 +102,6 @@ bool XmlHwFile::exportAliases(HwDatabase &db, QDomElement &elRoot)
         QStringList() << "pattern" << "to_descr" << "ref"));
     DB_CHK(exportElemsFromQuery(db, elList, "forunit", "ali", Q_SEL_ALIAS_UN,
         QStringList() << "pattern" << "to_descr" << "ref"));
-    // TODO
+    // TODO other alias destinations
     return true;
 }
