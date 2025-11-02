@@ -162,7 +162,6 @@ create table hw_in_op (
     quantity double,
     -- price integer not null, -- in low units
     amount integer not null, -- in low units
-    -- id_subcat integer not null,
     id_ac integer not null,
     id_cur integer not null, -- only one currency, in hb - many
     id_isubcat integer not null,
@@ -171,12 +170,15 @@ create table hw_in_op (
     descr char(256),
     id_imp integer null,
     uid_imp char(64), -- _id for JSON, line after date for TXT...
+    id_imp_verify integer null,
+    uid_imp_verify char(64), -- see uid_imp
     constraint pk_iop primary key(id),
     constraint fk_inac foreign key(id_ac) references hw_account(id),
     constraint fk_incur foreign key(id_cur) references hw_currency(id),
     constraint fk_insub foreign key(id_isubcat) references hw_in_subcat(id),
     constraint fk_inun foreign key(id_un) references hw_units(id),
-    constraint fk_inimp foreign key(id_imp) references hw_imp_file(id)
+    constraint fk_inimp foreign key(id_imp) references hw_imp_file(id),
+    constraint fk_inimp_v foreign key(id_imp_verify) references hw_imp_file(id)
 );
 
 -- Expenses
@@ -188,10 +190,13 @@ create table hw_receipt ( -- in shop, rus. чек
     id_cur integer not null,
     id_imp integer null,
     uid_imp char(64), -- _id for JSON, line after date for TXT...
+    id_imp_verify integer null,
+    uid_imp_verify char(64), -- see uid_imp
     constraint pk_rc primary key(id),
     constraint fk_rcac foreign key(id_ac) references hw_account(id),
     constraint fk_rccur foreign key(id_cur) references hw_currency(id),
     constraint fk_rcimp foreign key(id_imp) references hw_imp_file(id)
+    constraint fk_rcimp_v foreign key(id_imp_verify) references hw_imp_file(id)
 );
 
 create table hw_ex_op (
@@ -200,7 +205,6 @@ create table hw_ex_op (
     quantity double,
     -- price integer not null, -- in low units
     amount integer not null, -- in low units, after discount, if discount present
-    -- id_subcat integer not null,
     id_ac integer not null,
     id_cur integer not null, -- only one currency, in hb - many
     id_esubcat integer not null,
@@ -211,13 +215,16 @@ create table hw_ex_op (
     descr char(256),
     id_imp integer null,
     uid_imp char(64), -- _id for JSON, line after date for TXT...
+    id_imp_verify integer null,
+    uid_imp_verify char(64), -- see uid_imp
     constraint pk_eop primary key(id),
     constraint fk_exac foreign key(id_ac) references hw_account(id),
     constraint fk_excur foreign key(id_cur) references hw_currency(id),
     constraint fk_exsub foreign key(id_esubcat) references hw_ex_subcat(id),
     constraint fk_exun foreign key(id_un) references hw_units(id),
     constraint fk_exrc foreign key(id_rc) references hw_receipt(id),
-    constraint fk_eximp foreign key(id_imp) references hw_imp_file(id)
+    constraint fk_eximp foreign key(id_imp) references hw_imp_file(id),
+    constraint fk_eximp_v foreign key(id_imp_verify) references hw_imp_file(id)
 );
 
 -- Transfer & currency exchange
@@ -240,12 +247,15 @@ create table hw_transfer (
     descr char(256),
     id_imp integer null,
     uid_imp char(64), -- _id for JSON, line after date for TXT...
+    id_imp_verify integer null,
+    uid_imp_verify char(64), -- see uid_imp
     constraint pk_tr primary key(id),
     constraint fk_trcur foreign key(id_cur) references hw_currency(id),
     constraint fk_trac_in foreign key(id_ac_in) references hw_account(id),
     constraint fk_trac_out foreign key(id_ac_out) references hw_account(id),
     constraint fk_trac_tt foreign key(id_tt) references hw_transfer_type(id),
-    constraint fk_trimp foreign key(id_imp) references hw_imp_file(id)
+    constraint fk_trimp foreign key(id_imp) references hw_imp_file(id),
+    constraint fk_trimp_v foreign key(id_imp_verify) references hw_imp_file(id)
 );
 
 create table hw_curr_exch (
@@ -259,14 +269,69 @@ create table hw_curr_exch (
     descr char(256),
     id_imp integer null,
     uid_imp char(64), -- _id for JSON, line after date for TXT...
+    id_imp_verify integer null,
+    uid_imp_verify char(64), -- see uid_imp
     constraint pk_ce primary key(id),
     constraint fk_ceac foreign key(id_ac) references hw_account(id),
     constraint fk_cecur_in foreign key(id_cur_in) references hw_currency(id),
     constraint fk_cecur_out foreign key(id_cur_out) references hw_currency(id),
     constraint fk_ceimp foreign key(id_imp) references hw_imp_file(id)
+    constraint fk_ceimp_v foreign key(id_imp_verify) references hw_imp_file(id)
 );
 
 -- Debtors, Creditors, their names
+create table hw_correspondent ( -- debtor or creditor
+    id integer not null,
+    name char(64) not null,
+    descr char(256),
+    constraint pk_crs primary key(id)
+);
+
+create table hw_credit ( -- lend or borrow
+    id integer not null,
+    op_date date not null,
+    close_date date,
+    remind_date date,
+    is_lend integer not null, -- 1 if lend, 0 if borrow
+    id_crs integer null,      -- debtor or creditor
+    amount integer not null, -- in low units
+    id_ac integer not null,
+    id_cur integer not null,
+    rate double, -- in percents
+    is_rate_onetime, -- 0 if onetime, 1 if per year
+    is_closed integer not null, -- 1 if closed, 0 if else
+    descr char(256),
+    id_imp integer null,
+    uid_imp char(64), -- _id for JSON, line after date for TXT...
+    id_imp_verify integer null,
+    uid_imp_verify char(64), -- see uid_imp
+    constraint pk_crd primary key(id),
+    constraint fk_crdcrs foreign key(id_crs) references hw_correspondent(id),
+    constraint fk_crdac foreign key(id_ac) references hw_account(id),
+    constraint fk_crdcur foreign key(id_cur) references hw_currency(id),
+    constraint fk_crdimp foreign key(id_imp) references hw_imp_file(id),
+    constraint fk_crdimp_v foreign key(id_imp_verify) references hw_imp_file(id)
+    check (is_lend=0 or is_lend=1),
+    check (is_rate_onetime=0 or is_rate_onetime=1)
+);
+
+-- TODO payout table
+create table hw_repayment (
+    id integer not null,
+    id_crd integer not null,
+    op_date date not null,
+    amount integer not null, -- in low units
+    descr char(256),
+    id_imp integer null,
+    uid_imp char(64), -- _id for JSON, line after date for TXT...
+    id_imp_verify integer null,
+    uid_imp_verify char(64), -- see uid_imp
+    constraint pk_crp primary key(id),
+    constraint fk_crpcrd foreign key(id_crd) references hw_credit(id),
+    constraint fk_crpimp foreign key(id_imp) references hw_imp_file(id),
+    constraint fk_crpimp_v foreign key(id_imp_verify) references hw_imp_file(id)
+);
+
+-- Data from bank files (check!)
 -- TODO
--- TODO data from bank files (check!)
 
