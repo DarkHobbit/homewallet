@@ -18,6 +18,8 @@
 #include <QDomDocument>
 #include "fileformat.h"
 
+#define S_ERR_UNK_ELEM QObject::tr("Unknown XML element: %1")
+
 class XmlFile: public FileFormat, public QDomDocument
 {
 public:

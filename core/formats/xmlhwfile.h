@@ -29,7 +29,10 @@ public:
     virtual bool importRecords(const QString &path, HwDatabase& db);
     virtual bool exportRecords(const QString &path, HwDatabase& db, FileFormat::SubTypeFlags subTypes);
 private:
+    bool importAliases(const QDomElement& e, HwDatabase& db);
     bool exportAliases(HwDatabase& db, QDomElement& elRoot);
+    bool importAliasesGroup(HwDatabase &db, const QDomElement& elAliGr, HwDatabase::AliasType alType,
+         const QString& errorMessageIfRefMissing, HwDatabase::DictColl& alColl, HwDatabase::DictColl& srcColl);
 };
 
 #endif // XMLHWFILE_H

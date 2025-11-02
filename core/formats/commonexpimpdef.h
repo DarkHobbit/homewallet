@@ -22,6 +22,7 @@
 #define S_ERR_QTY_IMP QObject::tr("Can't convert quantity to number: %1")
 #define S_ERR_AMO_IMP QObject::tr("Can't convert amount to number: %1")
 #define S_ERR_CUR_NOT_FOUND QObject::tr("Currency not found: %1")
+#define S_ERR_UNIT_NOT_FOUND QObject::tr("Unit not found: %1")
 #define S_ERR_ACC_NOT_FOUND QObject::tr("Account not found: %1")
 #define S_ERR_ATTR_NOT_FOUND QObject::tr("Attribute %1 not found at line %2")
 
