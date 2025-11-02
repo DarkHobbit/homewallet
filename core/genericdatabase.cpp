@@ -116,8 +116,11 @@ bool GenericDatabase::collectDict(GenericDatabase::DictColl& coll, const QString
     const QString &fieldName, const QString& idFieldName, const QString& where)
 {
     QSqlQuery sqlColl(sqlDb);
-    sqlColl.prepare(QString("select %1, %2 from %3 %4 order by %2;")
-                        .arg(idFieldName).arg(fieldName).arg(tableName).arg(where));
+    if (!sqlColl.prepare(QString("select %1, %2 from %3 %4 order by %2;")
+          .arg(idFieldName).arg(fieldName).arg(tableName).arg(where))) {
+        _lastError = sqlColl.lastError().text();
+        return false;
+    }
     if (!sqlColl.exec()) {
         _lastError = sqlColl.lastError().text();
         return false;

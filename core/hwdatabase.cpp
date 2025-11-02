@@ -97,8 +97,9 @@ bool HwDatabase::isEmpty()
 int HwDatabase::addImportFile(const QString &fileName, const QString &fileType)
 {
     QSqlQuery sqlIns(sqlDb);
-    sqlIns.prepare(
-        "insert into hw_imp_file (imp_date, filename, filetype) values (:imp_date, :filename, :filetype)");
+    if (!prepQuery(sqlIns,
+        "insert into hw_imp_file (imp_date, filename, filetype) values (:imp_date, :filename, :filetype)"))
+        return -1;
     sqlIns.bindValue(":imp_date", QDateTime::currentDateTime());
     sqlIns.bindValue(":filename", fileName);
     sqlIns.bindValue(":filetype", fileType);
@@ -111,7 +112,8 @@ int HwDatabase::addImportFile(const QString &fileName, const QString &fileType)
 int HwDatabase::findImportFile(const QString &fileName)
 {
     QSqlQuery sqlSel(sqlDb);
-    sqlSel.prepare("select id from hw_imp_file where filename=:filename");
+    if (!prepQuery(sqlSel, "select id from hw_imp_file where filename=:filename"))
+        return -1;
     sqlSel.bindValue(":filename", fileName);
     return dictId(sqlSel);
 }
@@ -120,11 +122,12 @@ bool HwDatabase::addAlias(const QString &pattern, const QString &toDescr,
     AliasType aType, int idSrc)
 {
     QSqlQuery sqlIns(sqlDb);
-    sqlIns.prepare(QString(
+    if (!prepQuery(sqlIns,
             "insert into hw_alias" \
             " (pattern, to_descr, id_ac, id_cur, id_un, id_icat, id_ecat, id_isubcat, id_esubcat, id_tt)" \
             " values" \
-            " (:pattern, :to_descr, :id_ac, :id_cur, :id_un, :id_icat, :id_ecat, :id_isubcat, :id_esubcat, :id_tt)"));
+            " (:pattern, :to_descr, :id_ac, :id_cur, :id_un, :id_icat, :id_ecat, :id_isubcat, :id_esubcat, :id_tt)"))
+            return -1;
     sqlIns.bindValue(":pattern", pattern);
     sqlIns.bindValue(":to_descr", toDescr);
     sqlIns.bindValue(":id_ac", idOrNull(idSrc, aType==Account));
@@ -142,8 +145,9 @@ int HwDatabase::addAccount(const QString &name, const QString &descr,
     const QDateTime& foundation, const MultiCurrById& startBalance)
 {
     QSqlQuery sqlIns(sqlDb);
-    sqlIns.prepare(
-      "insert into hw_account (name, descr, foundation) values (:name, :descr, :foundation)");
+    if (!prepQuery(sqlIns,
+      "insert into hw_account (name, descr, foundation) values (:name, :descr, :foundation)"))
+        return -1;
     sqlIns.bindValue(":name", name);
     sqlIns.bindValue(":descr", descr);
     sqlIns.bindValue(":foundation", dateOrNull(foundation));    
@@ -153,8 +157,9 @@ int HwDatabase::addAccount(const QString &name, const QString &descr,
     // CaseSensitive because in HB it's different records
     // Insert start balance
     for (int idCur: startBalance.keys()) {
-        sqlIns.prepare(
-            "insert into hw_acc_init(id_ac, id_cur, init_sum) values (:id_ac, :id_cur, :init_sum)");
+        if (!prepQuery(sqlIns,
+            "insert into hw_acc_init(id_ac, id_cur, init_sum) values (:id_ac, :id_cur, :init_sum)"))
+            return -1;
         sqlIns.bindValue(":id_ac", idAcc);
         sqlIns.bindValue(":id_cur", idCur);
         sqlIns.bindValue(":init_sum", startBalance[idCur]);
@@ -168,11 +173,13 @@ int HwDatabase::accountId(const QString &name, Qt::CaseSensitivity cs)
 {
     QSqlQuery sqlSel(sqlDb);
     if (isICUSupported && cs==Qt::CaseInsensitive) {
-        sqlSel.prepare("select id from hw_account where upper(name)=:name");
+        if (!prepQuery(sqlSel, "select id from hw_account where upper(name)=:name"))
+            return -1;
         sqlSel.bindValue(":name", name.toUpper());
     }
     else {
-        sqlSel.prepare("select id from hw_account where name=:name");
+        if (!prepQuery(sqlSel, "select id from hw_account where name=:name"))
+            return -1;
         sqlSel.bindValue(":name", name);
     }
     return dictId(sqlSel);
@@ -181,8 +188,8 @@ int HwDatabase::accountId(const QString &name, Qt::CaseSensitivity cs)
 int HwDatabase::addUnit(const QString &name, const QString &shortName, const QString &descr)
 {
     QSqlQuery sqlIns(sqlDb);
-    sqlIns.prepare(
-        QString("insert into hw_unit (name, short_name, descr) values (:name, :short_name, :descr)"));
+    if (!prepQuery(sqlIns, "insert into hw_unit (name, short_name, descr) values (:name, :short_name, :descr)"))
+        return -1;
     sqlIns.bindValue(":name", name);
     sqlIns.bindValue(":short_name", shortName);
     sqlIns.bindValue(":descr", descr);
@@ -195,16 +202,19 @@ int HwDatabase::unitId(const QString &name)
 {
     QSqlQuery sqlSel(sqlDb);
     if (isICUSupported) {
-        sqlSel.prepare("select id from hw_unit where upper(short_name)=:name");
+        if (!prepQuery(sqlSel, "select id from hw_unit where upper(short_name)=:name"))
+            return -1;
         sqlSel.bindValue(":name", name.toUpper());
     }
     else {
-        sqlSel.prepare("select id from hw_unit where short_name=:name");
+        if (!prepQuery(sqlSel, "select id from hw_unit where short_name=:name"))
+            return -1;
         sqlSel.bindValue(":name", name);
     }
     int res = dictId(sqlSel);
     if (res==-1) {
-        sqlSel.prepare("select id from hw_unit where name=:name");
+        if (!prepQuery(sqlSel, "select id from hw_unit where name=:name"))
+            return -1;
         sqlSel.bindValue(":name", name);
         res = dictId(sqlSel);
 
@@ -215,7 +225,8 @@ int HwDatabase::unitId(const QString &name)
 int HwDatabase::currencyIdByAbbr(const QString &abbr)
 {
     QSqlQuery sqlSel(sqlDb);
-    sqlSel.prepare("select id from hw_currency where abbr=:abbr");
+    if (!prepQuery(sqlSel, "select id from hw_currency where abbr=:abbr"))
+        return -1;
     sqlSel.bindValue(":abbr", abbr);
     return dictId(sqlSel);
 }
@@ -223,14 +234,17 @@ int HwDatabase::currencyIdByAbbr(const QString &abbr)
 int HwDatabase::addIncomeCategory(const QString &name, const QString &descr)
 {
     QSqlQuery sqlIns(sqlDb);
-    sqlIns.prepare(QString("insert into hw_in_cat (name, descr) values (:name, :descr)"));
+    if (!prepQuery(sqlIns, "insert into hw_in_cat (name, descr) values (:name, :descr)"))
+        return -1;
     sqlIns.bindValue(":name", name);
     sqlIns.bindValue(":descr", descr);
     if (!execQuery(sqlIns))
         return -1;
     int idCat = incomeCategoryId(name);
     // Insert empty subcategory
-    sqlIns.prepare(QString("insert into hw_in_subcat (id_icat, name, descr) values (:id_icat, :name, :descr)"));
+    if (!prepQuery(sqlIns,
+      "insert into hw_in_subcat (id_icat, name, descr) values (:id_icat, :name, :descr)"))
+        return -1;
     sqlIns.bindValue(":name", "--");
     sqlIns.bindValue(":descr", QObject::tr("No subcategory"));
     sqlIns.bindValue(":id_icat", idCat);
@@ -241,11 +255,13 @@ int HwDatabase::incomeCategoryId(const QString &name)
 {
     QSqlQuery sqlSel(sqlDb);
     if (isICUSupported) {
-        sqlSel.prepare("select id from hw_in_cat where upper(name)=:name");
+        if (!prepQuery(sqlSel, "select id from hw_in_cat where upper(name)=:name"))
+            return -1;
         sqlSel.bindValue(":name", name.toUpper());
     }
     else {
-        sqlSel.prepare("select id from hw_in_cat where name=:name");
+        if (!prepQuery(sqlSel, "select id from hw_in_cat where name=:name"))
+            return -1;
         sqlSel.bindValue(":name", name);
     }
     return dictId(sqlSel);
@@ -254,7 +270,9 @@ int HwDatabase::incomeCategoryId(const QString &name)
 int HwDatabase::addIncomeSubCategory(int idParentCat, const QString &name, const QString &descr)
 {
     QSqlQuery sqlIns(sqlDb);
-    sqlIns.prepare(QString("insert into hw_in_subcat (id_icat, name, descr) values (:id_icat, :name, :descr)"));
+    if (!prepQuery(sqlIns,
+      "insert into hw_in_subcat (id_icat, name, descr) values (:id_icat, :name, :descr)"))
+        return -1;
     sqlIns.bindValue(":name", name);
     sqlIns.bindValue(":descr", descr);
     sqlIns.bindValue(":id_icat", idParentCat);
@@ -268,11 +286,15 @@ int HwDatabase::incomeSubCategoryId(int idParentCat, const QString &name)
 {
     QSqlQuery sqlSel(sqlDb);
     if (isICUSupported) {
-        sqlSel.prepare("select id from hw_in_subcat where upper(name)=:name and id_icat=:id_icat");
+        if (!prepQuery(sqlSel,
+          "select id from hw_in_subcat where upper(name)=:name and id_icat=:id_icat"))
+            return -1;
         sqlSel.bindValue(":name", name.toUpper());
     }
     else {
-        sqlSel.prepare("select id from hw_in_subcat where name=:name and id_icat=:id_icat");
+        if (!prepQuery(sqlSel,
+          "select id from hw_in_subcat where name=:name and id_icat=:id_icat"))
+            return -1;
         sqlSel.bindValue(":name", name);
     }
     sqlSel.bindValue(":id_icat", idParentCat);
@@ -282,14 +304,18 @@ int HwDatabase::incomeSubCategoryId(int idParentCat, const QString &name)
 int HwDatabase::addExpenseCategory(const QString &name, const QString &descr)
 {
     QSqlQuery sqlIns(sqlDb);
-    sqlIns.prepare(QString("insert into hw_ex_cat (name, descr) values (:name, :descr)"));
+    if (!prepQuery(sqlIns,
+      "insert into hw_ex_cat (name, descr) values (:name, :descr)"))
+        return -1;
     sqlIns.bindValue(":name", name);
     sqlIns.bindValue(":descr", descr);
     if (!execQuery(sqlIns))
         return -1;
     int idCat = expenseCategoryId(name);
     // Insert empty subcategory
-    sqlIns.prepare(QString("insert into hw_ex_subcat (id_ecat, name, descr) values (:id_ecat, :name, :descr)"));
+    if (!prepQuery(sqlIns,
+      "insert into hw_ex_subcat (id_ecat, name, descr) values (:id_ecat, :name, :descr)"))
+        return -1;
     sqlIns.bindValue(":name", "--");
     sqlIns.bindValue(":descr", QObject::tr("No subcategory"));
     sqlIns.bindValue(":id_ecat", idCat);
@@ -300,11 +326,13 @@ int HwDatabase::expenseCategoryId(const QString &name)
 {
     QSqlQuery sqlSel(sqlDb);
     if (isICUSupported) {
-        sqlSel.prepare("select id from hw_ex_cat where upper(name)=:name");
+        if (!prepQuery(sqlSel, "select id from hw_ex_cat where upper(name)=:name"))
+            return -1;
         sqlSel.bindValue(":name", name.toUpper());
     }
     else {
-        sqlSel.prepare("select id from hw_ex_cat where name=:name");
+        if (!prepQuery(sqlSel, "select id from hw_ex_cat where name=:name"))
+            return -1;
         sqlSel.bindValue(":name", name);
     }
     return dictId(sqlSel);
@@ -313,7 +341,8 @@ int HwDatabase::expenseCategoryId(const QString &name)
 QString HwDatabase::expenseCategoryById(int idCat)
 {
     QSqlQuery sqlSel(sqlDb);
-    sqlSel.prepare("select name from hw_ex_cat where id=:id");
+    if (!prepQuery(sqlSel, "select name from hw_ex_cat where id=:id"))
+        return "";
     sqlSel.bindValue(":id", idCat);
     return dictName(sqlSel);
 }
@@ -321,7 +350,9 @@ QString HwDatabase::expenseCategoryById(int idCat)
 int HwDatabase::addExpenseSubCategory(int idParentCat, const QString &name, const QString &descr)
 {
     QSqlQuery sqlIns(sqlDb);
-    sqlIns.prepare(QString("insert into hw_ex_subcat (id_ecat, name, descr) values (:id_ecat, :name, :descr)"));
+    if (!prepQuery(sqlIns,
+      "insert into hw_ex_subcat (id_ecat, name, descr) values (:id_ecat, :name, :descr)"))
+        return -1;
     sqlIns.bindValue(":name", name);
     sqlIns.bindValue(":descr", descr);
     sqlIns.bindValue(":id_ecat", idParentCat);
@@ -335,11 +366,15 @@ int HwDatabase::expenseSubCategoryId(int idParentCat, const QString &name)
 {
     QSqlQuery sqlSel(sqlDb);
     if (isICUSupported) {
-        sqlSel.prepare("select id from hw_ex_subcat where upper(name)=:name and id_ecat=:id_ecat");
+        if (!prepQuery(sqlSel,
+          "select id from hw_ex_subcat where upper(name)=:name and id_ecat=:id_ecat"))
+            return -1;
         sqlSel.bindValue(":name", name.toUpper());
     }
     else {
-        sqlSel.prepare("select id from hw_ex_subcat where name=:name and id_ecat=:id_ecat");
+        if (!prepQuery(sqlSel,
+          "select id from hw_ex_subcat where name=:name and id_ecat=:id_ecat"))
+            return -1;
         sqlSel.bindValue(":name", name);
     }
     sqlSel.bindValue(":id_ecat", idParentCat);
@@ -349,7 +384,8 @@ int HwDatabase::expenseSubCategoryId(int idParentCat, const QString &name)
 QString HwDatabase::expenseSubCategoryById(int idSubCat)
 {
     QSqlQuery sqlSel(sqlDb);
-    sqlSel.prepare("select name from hw_ex_subcat where id=:id");
+    if (!prepQuery(sqlSel, "select name from hw_ex_subcat where id=:id"))
+        return "";
     sqlSel.bindValue(":id", idSubCat);
     return dictName(sqlSel);
 }
@@ -357,7 +393,9 @@ QString HwDatabase::expenseSubCategoryById(int idSubCat)
 int HwDatabase::addTransferType(const QString &name, const QString &descr)
 {
     QSqlQuery sqlIns(sqlDb);
-    sqlIns.prepare(QString("insert into hw_transfer_type (name, descr) values (:name, :descr)"));
+    if (!prepQuery(sqlIns,
+      "insert into hw_transfer_type (name, descr) values (:name, :descr)"))
+        return -1;
     sqlIns.bindValue(":name", name);
     sqlIns.bindValue(":descr", descr);
     if (!execQuery(sqlIns))
@@ -370,11 +408,15 @@ int HwDatabase::transferTypeId(const QString &name)
 {
     QSqlQuery sqlSel(sqlDb);
     if (isICUSupported) {
-        sqlSel.prepare("select id from hw_transfer_type where upper(name)=:name");
+        if (!prepQuery(sqlSel,
+          "select id from hw_transfer_type where upper(name)=:name"))
+            return -1;
         sqlSel.bindValue(":name", name.toUpper());
     }
     else {
-        sqlSel.prepare("select id from hw_transfer_type where name=:name");
+        if (!prepQuery(sqlSel,
+          "select id from hw_transfer_type where name=:name"))
+            return -1;
         sqlSel.bindValue(":name", name);
     }
     return dictId(sqlSel);
@@ -385,9 +427,10 @@ bool HwDatabase::addIncomeOp(const QDateTime &opDT, double quantity, int amount,
      int idImp, const QString& uid)
 {
     QSqlQuery sqlIns(sqlDb);
-    sqlIns.prepare(
-        "insert into hw_in_op(op_date, quantity, amount, id_ac, id_cur, id_isubcat, id_un, attention, descr, id_imp, uid_imp) " \
-        "values (:op_date, :quantity, :amount, :id_ac, :id_cur, :id_isubcat, :id_un, :attention, :descr, :id_imp, :uid_imp)");
+     if (!prepQuery(sqlIns,
+      "insert into hw_in_op(op_date, quantity, amount, id_ac, id_cur, id_isubcat, id_un, attention, descr, id_imp, uid_imp) " \
+      "values (:op_date, :quantity, :amount, :id_ac, :id_cur, :id_isubcat, :id_un, :attention, :descr, :id_imp, :uid_imp)"))
+         return -1;
     sqlIns.bindValue(":op_date", opDT);
     // TODO Проверить ornull с нулевыми значениями!!!
     sqlIns.bindValue(":quantity", quantity);
@@ -409,9 +452,10 @@ bool HwDatabase::addExpenseOp(const QDateTime &opDT, double quantity, int amount
     int idImp, const QString& uid)
 {
     QSqlQuery sqlIns(sqlDb);
-    sqlIns.prepare(
-        "insert into hw_ex_op(op_date, quantity, amount, id_ac, id_cur, id_esubcat, id_un, id_rc, discount, attention, descr, id_imp, uid_imp) " \
-        "values (:op_date, :quantity, :amount, :id_ac, :id_cur, :id_esubcat, :id_un, :id_rc, :discount, :attention, :descr, :id_imp, :uid_imp)");
+         if (!prepQuery(sqlIns,
+          "insert into hw_ex_op(op_date, quantity, amount, id_ac, id_cur, id_esubcat, id_un, id_rc, discount, attention, descr, id_imp, uid_imp) " \
+          "values (:op_date, :quantity, :amount, :id_ac, :id_cur, :id_esubcat, :id_un, :id_rc, :discount, :attention, :descr, :id_imp, :uid_imp)"))
+             return -1;
     sqlIns.bindValue(":op_date", opDT);
     // TODO Проверить ornull с нулевыми значениями!!!
     sqlIns.bindValue(":quantity", quantity);
@@ -433,9 +477,10 @@ bool HwDatabase::addTransfer(const QDateTime &opDT, int amount, int idCur, int i
     int idTransferType, const QString &descr, int idImp, const QString &uid)
 {
     QSqlQuery sqlIns(sqlDb);
-    sqlIns.prepare(
-        "insert into hw_transfer(op_date, amount, id_cur, id_ac_out, id_ac_in, id_tt, descr, id_imp, uid_imp) " \
-        "values (:op_date, :amount, :id_cur, :id_ac_out, :id_ac_in, :id_tt, :descr, :id_imp, :uid_imp)");
+    if (!prepQuery(sqlIns,
+      "insert into hw_transfer(op_date, amount, id_cur, id_ac_out, id_ac_in, id_tt, descr, id_imp, uid_imp) " \
+      "values (:op_date, :amount, :id_cur, :id_ac_out, :id_ac_in, :id_tt, :descr, :id_imp, :uid_imp)"))
+        return -1;
     sqlIns.bindValue(":op_date", opDT);
     sqlIns.bindValue(":amount", amount);
     sqlIns.bindValue(":id_cur", idCur);
@@ -454,9 +499,10 @@ bool HwDatabase::addCurrencyConv(const QDateTime &opDT, int idAcc,
     const QString &descr, int idImp, const QString &uid)
 {
     QSqlQuery sqlIns(sqlDb);
-    sqlIns.prepare(
-        "insert into hw_curr_exch(op_date, id_ac, id_cur_in, id_cur_out, amount_in, amount_out, descr, id_imp, uid_imp) " \
-        "values (:op_date, :id_ac, :id_cur_in, :id_cur_out, :amount_in, :amount_out, :descr, :id_imp, :uid_imp)");
+    if (!prepQuery(sqlIns,
+      "insert into hw_curr_exch(op_date, id_ac, id_cur_in, id_cur_out, amount_in, amount_out, descr, id_imp, uid_imp) " \
+      "values (:op_date, :id_ac, :id_cur_in, :id_cur_out, :amount_in, :amount_out, :descr, :id_imp, :uid_imp)"))
+        return -1;
     sqlIns.bindValue(":op_date", opDT);
     sqlIns.bindValue(":id_ac", idAcc);
     sqlIns.bindValue(":id_cur_out", idCurFrom);
