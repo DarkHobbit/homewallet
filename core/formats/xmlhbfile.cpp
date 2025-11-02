@@ -51,6 +51,8 @@ bool XmlHbFile::detect(const QString &path)
     // Read XML
     if (!readFromFile(path))
         return false;
+    if (documentElement().nodeName()!="RECORDS")
+        return false;
     // Metadata
     QDomNodeList fields = elementsByTagName("FIELD");
     if (fields.isEmpty()) {
@@ -134,6 +136,8 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
     }
     // Read XML
     if (!readFromFile(path))
+        return false;
+    if (documentElement().nodeName()!="RECORDS")
         return false;
     // Prepare dictionaries
     HwDatabase::DictColl accs; // Account list will need always :)
