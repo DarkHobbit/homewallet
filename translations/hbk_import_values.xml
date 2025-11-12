@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<hbk_import_values>
+    <debt_status_flags>
+        <dsf lang="be" closed_val="Пагашаны" not_closed_val="Не пагашаны" />
+        <dsf lang="bg" closed_val="Погасен" not_closed_val="Не погасен" />
+        <dsf lang="en" closed_val="Repaid" not_closed_val="Not repaid" />
+        <dsf lang="es" closed_val="Reembolsado" not_closed_val="No reembolsado" />
+        <dsf lang="pt" closed_val="Pago" not_closed_val="Nao paga" />
+        <dsf lang="ro" closed_val="Stins" not_closed_val="Ne stins" />
+        <dsf lang="ru" closed_val="Погашен" not_closed_val="Не погашен" />
+        <dsf lang="uk" closed_val="Погашено" not_closed_val="Не погашено" />
+    </debt_status_flags>
+    <year_percent_flags>
+        <yperc lang="ru" val="в год" />
+    </year_percent_flags>
+    <year_period_flags>
+        <yprd lang="ru" qua="1" val="год" />
+        <yprd lang="ru" qua="2" val="года" />
+        <yprd lang="ru" qua="5" val="лет" />
+<!-- TODO other languages -->
+    </year_period_flags>
+    <month_period_flags>
+        <mprd lang="ru" qua="1" val="месяц" />
+        <mprd lang="ru" qua="2" val="месяца" />
+        <mprd lang="ru" qua="5" val="месяцев" />
+<!-- TODO other languages -->
+    </month_period_flags>
+</hbk_import_values>

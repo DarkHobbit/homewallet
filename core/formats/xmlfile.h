@@ -18,7 +18,12 @@
 #include <QDomDocument>
 #include "fileformat.h"
 
-#define S_ERR_UNK_ELEM QObject::tr("Unknown XML element: %1")
+#define S_ELEM_MISSING \
+    QObject::tr("XML element %1 is missing")
+#define S_ERR_UNK_ELEM \
+    QObject::tr("Unknown XML element: %1")
+#define S_ERR_READ_CONTENT \
+    QObject::tr("Can't read content from file %1\n%2\nline %3, col %4\n")
 
 class XmlFile: public FileFormat, public QDomDocument
 {
@@ -39,6 +44,7 @@ protected:
     bool readFromFile(const QString &path);
     bool readDoubleVal(const QDomElement& el, const QString& attrName, double& res, const QString& errorMessageTemplate);
     bool readDateVal(const QDomElement& el, const QString& attrName, QDateTime& res, const QString& format, const QString& errorMessageTemplate);
+    bool readPercentVal(const QDomElement& el, const QString& attrName, double &res, const QString& errorMessageTemplate, QString& tail);
 };
 
 #endif // XMLFILE_H

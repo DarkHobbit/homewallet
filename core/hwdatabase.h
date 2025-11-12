@@ -80,6 +80,8 @@ public:
     QString expenseSubCategoryById(int idSubCat);
     int addTransferType(const QString& name, const QString& descr);
     int transferTypeId(const QString& name);
+    int addCorrespondent(const QString& name, const QString& descr);
+    int correspondentId(const QString& name);
     // Inc/Exp
     bool addIncomeOp(const QDateTime& opDT, double quantity,
         int amount, int idAcc, int idCur, int idSubcat, int idUnit,
@@ -94,6 +96,14 @@ public:
         int idCurFrom, int amountFrom,
         int idCurTo, int amountTo,
         const QString& descr, int idImp=-1, const QString& uid="");
+    // Debtors, Creditors
+    bool addCredit(const QDateTime& opDT, const QDateTime& closeDT, const QDateTime& remindDT,
+        bool isLend, int idCrs,
+        int amount, int downPay, int moneyBack, int moneyRemainingDebt,
+        int idAcc, int idCur, double rate, bool isRateOneTime,
+        int period, int periodUnit,
+        bool isClosed, const QString& descr,
+        int idImp=-1, const QString& uid="");
 };
 
 #endif // HWDATABASE_H

@@ -422,6 +422,38 @@ int HwDatabase::transferTypeId(const QString &name)
     return dictId(sqlSel);
 }
 
+int HwDatabase::addCorrespondent(const QString &name, const QString &descr)
+{
+    QSqlQuery sqlIns(sqlDb);
+    if (!prepQuery(sqlIns,
+      "insert into hw_correspondent (name, descr) values (:name, :descr)"))
+        return -1;
+    sqlIns.bindValue(":name", name);
+    sqlIns.bindValue(":descr", descr);
+    if (!execQuery(sqlIns))
+        return -1;
+    else
+        return correspondentId(name);
+}
+
+int HwDatabase::correspondentId(const QString &name)
+{
+    QSqlQuery sqlSel(sqlDb);
+    if (isICUSupported) {
+        if (!prepQuery(sqlSel,
+          "select id from hw_correspondent where upper(name)=:name"))
+            return -1;
+        sqlSel.bindValue(":name", name.toUpper());
+    }
+    else {
+        if (!prepQuery(sqlSel,
+          "select id from hw_hw_correspondent where name=:name"))
+            return -1;
+        sqlSel.bindValue(":name", name);
+    }
+    return dictId(sqlSel);
+}
+
 bool HwDatabase::addIncomeOp(const QDateTime &opDT, double quantity, int amount, int idAcc, int idCur, int idSubCat, int idUnit,
      bool attention, const QString &descr,
      int idImp, const QString& uid)
@@ -432,14 +464,13 @@ bool HwDatabase::addIncomeOp(const QDateTime &opDT, double quantity, int amount,
       "values (:op_date, :quantity, :amount, :id_ac, :id_cur, :id_isubcat, :id_un, :attention, :descr, :id_imp, :uid_imp)"))
          return -1;
     sqlIns.bindValue(":op_date", opDT);
-    // TODO Проверить ornull с нулевыми значениями!!!
     sqlIns.bindValue(":quantity", quantity);
     sqlIns.bindValue(":amount", amount);
     sqlIns.bindValue(":id_ac", idAcc);
     sqlIns.bindValue(":id_cur", idCur);
     sqlIns.bindValue(":id_isubcat", idSubCat);
     sqlIns.bindValue(":id_un", idOrNull(idUnit));
-    sqlIns.bindValue(":attention", attention); // проверить отдельно
+    sqlIns.bindValue(":attention", attention);
     sqlIns.bindValue(":descr", strOrNull(descr));
     sqlIns.bindValue(":id_imp", idOrNull(idImp));
     sqlIns.bindValue(":uid_imp", strOrNull(uid));
@@ -457,7 +488,6 @@ bool HwDatabase::addExpenseOp(const QDateTime &opDT, double quantity, int amount
           "values (:op_date, :quantity, :amount, :id_ac, :id_cur, :id_esubcat, :id_un, :id_rc, :discount, :attention, :descr, :id_imp, :uid_imp)"))
              return -1;
     sqlIns.bindValue(":op_date", opDT);
-    // TODO Проверить ornull с нулевыми значениями!!!
     sqlIns.bindValue(":quantity", quantity);
     sqlIns.bindValue(":amount", amount);
     sqlIns.bindValue(":id_ac", idAcc);
@@ -466,7 +496,7 @@ bool HwDatabase::addExpenseOp(const QDateTime &opDT, double quantity, int amount
     sqlIns.bindValue(":id_un", idOrNull(idUnit));
     sqlIns.bindValue(":id_rc", idOrNull(idReceipt));
     sqlIns.bindValue(":discount", intOrNull(discount, discount!=0));
-    sqlIns.bindValue(":attention", attention); // проверить отдельно
+    sqlIns.bindValue(":attention", attention);
     sqlIns.bindValue(":descr", strOrNull(descr));
     sqlIns.bindValue(":id_imp", idOrNull(idImp));
     sqlIns.bindValue(":uid_imp", strOrNull(uid));
@@ -509,6 +539,49 @@ bool HwDatabase::addCurrencyConv(const QDateTime &opDT, int idAcc,
     sqlIns.bindValue(":id_cur_in", idCurTo);
     sqlIns.bindValue(":amount_out", amountFrom);
     sqlIns.bindValue(":amount_in", amountTo);
+    sqlIns.bindValue(":descr", strOrNull(descr));
+    sqlIns.bindValue(":id_imp", idOrNull(idImp));
+    sqlIns.bindValue(":uid_imp", strOrNull(uid));
+    return execQuery(sqlIns);
+}
+
+bool HwDatabase::addCredit(const QDateTime &opDT, const QDateTime &closeDT, const QDateTime &remindDT,
+    bool isLend, int idCrs,
+    int amount, int downPay, int moneyBack, int moneyRemainingDebt,
+    int idAcc, int idCur, double rate, bool isRateOneTime,
+    int period, int periodUnit,
+    bool isClosed, const QString &descr,
+    int idImp, const QString &uid)
+{
+    QSqlQuery sqlIns(sqlDb);
+    if (!prepQuery(sqlIns,
+      "insert into hw_credit(" \
+      " op_date, close_date, remind_date, is_lend, id_crs," \
+      " amount, down_pay, money_back, money_remaining_debt, id_ac, id_cur," \
+      " rate, is_rate_onetime, period, period_unit, is_closed, descr," \
+      " id_imp, uid_imp" \
+      ") values (" \
+      " :op_date, :close_date, :remind_date, :is_lend, :id_crs," \
+      " :amount, :down_pay, :money_back, :money_remaining_debt, :id_ac, :id_cur," \
+      " :rate, :is_rate_onetime, :period, :period_unit, :is_closed, :descr," \
+      " :id_imp, :uid_imp)"))
+        return false;
+    sqlIns.bindValue(":op_date", opDT);
+    sqlIns.bindValue(":close_date", dateOrNull(closeDT));
+    sqlIns.bindValue(":remind_date", dateOrNull(remindDT));
+    sqlIns.bindValue(":is_lend", isLend);
+    sqlIns.bindValue(":id_crs", idCrs);
+    sqlIns.bindValue(":amount", amount);
+    sqlIns.bindValue(":down_pay", intOrNull(downPay, downPay!=0));
+    sqlIns.bindValue(":money_back", moneyBack);
+    sqlIns.bindValue(":money_remaining_debt", moneyRemainingDebt); // New
+    sqlIns.bindValue(":id_ac", idAcc);
+    sqlIns.bindValue(":id_cur", idCur);
+    sqlIns.bindValue(":rate", intOrNull(rate, rate!=0));
+    sqlIns.bindValue(":is_rate_onetime", isRateOneTime);
+    sqlIns.bindValue(":period", intOrNull(period, period!=0));
+    sqlIns.bindValue(":period_unit", periodUnit);
+    sqlIns.bindValue(":is_closed", isClosed);
     sqlIns.bindValue(":descr", strOrNull(descr));
     sqlIns.bindValue(":id_imp", idOrNull(idImp));
     sqlIns.bindValue(":uid_imp", strOrNull(uid));

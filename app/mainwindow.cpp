@@ -335,7 +335,7 @@ void MainWindow::on_action_Import_triggered()
                 }
             }
             else if (sType==XmlHbFile::AccountsInDetail) {
-                QMessageBox::critical(0, S_ERROR, S_ACC_DET_NOT_SUPPORTED);
+                QMessageBox::critical(0, S_ERROR, S_ERR_ACC_DET_NOT_SUPPORTED);
                 return;
             }
         }

@@ -286,7 +286,7 @@ QVariant GenericDatabase::strOrNull(const QString &s)
 
 QVariant GenericDatabase::dateOrNull(const QDateTime &value)
 {
-    return value.isValid() ? value.toString("'yyyy.MM.dd'") : QVariant();
+    return value.isValid() ? value.toString("yyyy-MM-dd") : QVariant();
 }
 
 bool GenericDatabase::checkForICU()

@@ -12,9 +12,11 @@
  */
 
 #include <iostream>
+#include <QDir>
 
 #include "commonexpimpdef.h"
 #include "globals.h"
+#include "pathmanager.h"
 #include "xmlhbfile.h"
 
 XmlHbFile::XmlHbFile()
@@ -167,7 +169,13 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             cats[S_CAT_OTHER] =  idTransferTypeOther;
         }
     }
+    else if (_fileSubType==Debtors || _fileSubType==Creditors)
+        DB_CHK(db.collectDict(cats, "hw_correspondent"))
 
+    QString hbkImpValPath = pathManager.transPath()
+        + QDir::separator() + "hbk_import_values.xml";
+    if (!prepareImportValues(hbkImpValPath))
+        return false;
     /*
     std::cout << "ac_count " << accs.keys().count() <<std::endl; //===>
     std::cout << "cur_count " << currs.keys().count() <<std::endl; //===>
@@ -194,7 +202,7 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
                 skippedRecordCount++;
             else {
                 HwDatabase::MultiCurrByChar money;
-                if (!importNotNullMoney(money, "StartBalans", elRow, false))
+                if (!importMoneyGroup(money, "StartBalans", elRow, false))
                     return false;
                 HwDatabase::MultiCurrById moneyIds;
                 for (const QString& moneyChar: money.keys()) {
@@ -227,18 +235,14 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             int idAcc = importAccount("Account", elRow, accs, db);
             // Money
             HwDatabase::MultiCurrByChar money;
-            if (!importNotNullMoney(money, "Money", elRow, true))
+            if (!importMoneyGroup(money, "Money", elRow, true))
                 return false;
             if (money.count()==0) {
-                _fatalError = QObject::tr(
-                    "Income or expense amount can't be equal to 0. Date: %1")
-                    .arg(dt.toString());
+                _fatalError = S_ERR_ACC_EMPTY_SUM.arg(dt.toString());
                 return false;
             }
             else if (money.count()>1) {
-                _fatalError = QObject::tr(
-                    "This version of HomeWallet not support multi-currency incomes and expenses, item from %1, currencies: %2")
-                    .arg(dt.toString()).arg(money.count());
+                _fatalError = S_ERR_MULTI_ACC_NOT_SUPPORTED.arg(dt.toString()).arg(money.count());
                 return false;
             }
             QString moneyChar = money.keys().first();
@@ -333,9 +337,9 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             int idAcc = importAccount("Account", elRow, accs, db);
             // Money
             HwDatabase::MultiCurrByChar moneyFrom, moneyTo;
-            if (!importNotNullMoney(moneyFrom, "MoneyOut", elRow, true))
+            if (!importMoneyGroup(moneyFrom, "MoneyOut", elRow, true))
                 return false;
-            if (!importNotNullMoney(moneyTo, "MoneyIn", elRow, true))
+            if (!importMoneyGroup(moneyTo, "MoneyIn", elRow, true))
                 return false;
             if (moneyFrom.count()!=1 || moneyTo.count()!=1) {
                 _fatalError = QObject::tr(
@@ -357,13 +361,118 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             break;
         }
         case Debtors:
-
-            // TODO
+        case Creditors: {
+            bool isLend = _fileSubType==Debtors;
+            // Dates
+            QDateTime dtOp, dtClose;
+            if (!readDateVal(elRow, "MyDate", dtOp, "yyyyMMdd", S_ERR_DATE_IMP))
+                return false;
+            if (elRow.hasAttribute("DateClose")) {
+                if (!readDateVal(elRow, "DateClose", dtClose, "yyyyMMdd", S_ERR_DATE_IMP))
+                    return false;
+            }
+            else
+                dtClose = QDateTime();
+            // Account
+            int idAcc = importAccount("Account", elRow, accs, db);
+            // Debtor/creditor
+            int idCorr;
+            QString corrName = elRow.attribute("FIO");
+            if (cats.keys().contains(corrName))
+                idCorr = cats[corrName];
+            else {
+                idCorr = db.addCorrespondent(corrName, "");
+                cats[corrName] = idCorr;
+            }
+            // Rate in percents
+            double percRate;
+            QString sOneTime;
+            bool isOneTime;
+            if (!readPercentVal(elRow, "PercentText", percRate, S_ERR_PERC_IMP, sOneTime))
+                return false;
+            if (sOneTime.isEmpty())
+                isOneTime = true;
+            else if (yearPercentValues.contains(sOneTime))
+                isOneTime = false; // Example: "5% в год"
+            else {
+                _fatalError = S_ERR_UNK_LANG_FLAG
+                        .arg(QObject::tr("rate type"))
+                        .arg(sOneTime)
+                        .arg(QObject::tr("rate type text"))
+                        .arg(hbkImpValPath);
+                    return false;
+            }
+            // Period
+            int period = 0;
+            int periodUnit = 0;
+            if (elRow.hasAttribute("PercentPeriodText")) {
+                // Example: "6 месяцев"
+                QString sPeriod = elRow.attribute("PercentPeriodText");
+                int spacePos = sPeriod.indexOf(" ");
+                if (spacePos==-1) {
+                    _fatalError = QObject::tr("Period unit not specified: %1").arg(sPeriod);
+                    return false;
+                }
+                period = sPeriod.left(spacePos).toInt();
+                QString sPeriodUnit = sPeriod.mid(spacePos+1);
+                if (yearPeriodValues.contains(sPeriodUnit))
+                    periodUnit = 2;
+                else if (monthPeriodValues.contains(sPeriodUnit))
+                    periodUnit = 1;
+                else {
+                    _fatalError = S_ERR_UNK_LANG_FLAG
+                            .arg(QObject::tr("period unit"))
+                            .arg(sOneTime)
+                            .arg(QObject::tr("period unit text"))
+                            .arg(hbkImpValPath);
+                        return false;
+                }
+            }
+            // Status
+            bool isClosed;
+            QString dStatus = elRow.attribute("DebtStatusText");
+            if (debtClosedValues.contains(dStatus))
+                isClosed = true;
+            else if (debtNotClosedValues.contains(dStatus))
+                isClosed = false;
+            else {
+                _fatalError = S_ERR_UNK_LANG_FLAG
+                    .arg(QObject::tr("debt status"))
+                    .arg(dStatus)
+                    .arg(QObject::tr("status text for repaid and not repaid loans"))
+                    .arg(hbkImpValPath);
+                return false;
+            }
+            // Money: amount, moneyback, remaining debt (down pay is absent in HBK)
+            HwDatabase::MultiCurrByChar money, moneyBack, moneyRemaining;
+            if (!importMoneyGroup(money, "Money", elRow, true)
+              ||!importMoneyGroup(moneyBack, "MoneyBack", elRow, true, false)
+              ||!importMoneyGroup(moneyRemaining, "Total", elRow, true, false))
+                return false;
+            if (money.count()==0) {
+                _fatalError = S_ERR_ACC_EMPTY_SUM.arg(dtOp.toString());
+                return false;
+            }
+            if (money.count()>1 || moneyBack.count()>1 || moneyRemaining.count()>1) {
+                _fatalError = S_ERR_MULTI_ACC_NOT_SUPPORTED.arg(dtOp.toString()).arg(42);
+                return false;
+            }
+            int moneyBackVal = moneyBack.isEmpty() ? 0 : moneyBack.values().first();
+            int moneyRemainingVal = moneyRemaining.isEmpty() ? 0 : moneyRemaining.values().first();
+            QString moneyChar = money.keys().first();
+            int idCur = importCurrencyByChar(moneyChar, db);
+            if (idCur==-1)
+                return false;
+            // Insert!
+            bool ok = db.addCredit(dtOp, dtClose, QDateTime(),
+                isLend, idCorr,
+                money.values().first(), 0, moneyBackVal, moneyRemainingVal,
+                idAcc, idCur, percRate, isOneTime,
+                period, periodUnit, isClosed,
+                elRow.attribute("Note"), _idImp, sLine);
+            DB_CHK(ok);
             break;
-        case Creditors:
-
-            // TODO
-            break;
+        }
         case IncomePlan:
 
             // TODO
@@ -433,7 +542,8 @@ int XmlHbFile::importAccount(const QString &attr, const QDomElement &elRow, HwDa
     return idAcc;
 }
 
-bool XmlHbFile::importNotNullMoney(HwDatabase::MultiCurrByChar& values, const QString &attrPrefix, const QDomElement &elRow, bool skipNulls)
+bool XmlHbFile::importMoneyGroup(HwDatabase::MultiCurrByChar& values, const QString &attrPrefix, const QDomElement &elRow,
+    bool skipNulls, bool failIfAllNulls)
 {
     values.clear();
     for (int i=1; i<=elRow.attributes().count(); i++) {
@@ -449,8 +559,9 @@ bool XmlHbFile::importNotNullMoney(HwDatabase::MultiCurrByChar& values, const QS
             continue; // normal case, 2 of 3
         values[sCur] = sum;
     }
-    if (values.isEmpty()) {
-        _fatalError = QObject::tr("Money attributes not found: line %1").arg(elRow.lineNumber());
+    if (values.isEmpty() && failIfAllNulls) {
+        _fatalError = QObject::tr("Money attributes not found: line %1")
+                .arg(elRow.lineNumber());
         return false;
     }
     return true;
@@ -484,4 +595,62 @@ int XmlHbFile::importCurrencyByChar(const QString &moneyChar, HwDatabase& db)
         return -1;
     }
     return idCur;
+}
+
+// Flags for credit status (closed/not closed) in HBK are language-specific
+// Ergo, we must check for ALL possible values
+bool XmlHbFile::prepareImportValues(const QString& hbkImpValPath)
+{
+    QFile hivF(hbkImpValPath);
+    if (!hivF.open(QIODevice::ReadOnly)) {
+        _fatalError = S_READ_ERR.arg(hbkImpValPath);
+        return false;
+    }
+    QDomDocument hivDoc;
+    QString err_msg;
+    int err_line, err_col;
+    bool res = hivDoc.setContent(&hivF, &err_msg, &err_line, &err_col);
+    hivF.close();
+    if (!res) {
+        _fatalError = S_ERR_READ_CONTENT.arg(hbkImpValPath).arg(err_msg).arg(err_line).arg(err_col);
+        return false;
+    }
+    if (hivDoc.documentElement().nodeName()!="hbk_import_values") {
+        _fatalError = S_ERR_UNK_ELEM.arg(hivDoc.documentElement().nodeName());
+        return false;
+    }
+    QDomElement elDebtFlags = hivDoc.documentElement().firstChildElement("debt_status_flags");
+    if (elDebtFlags.isNull()) {
+        _fatalError = S_ELEM_MISSING.arg("debt_status_flags");
+        return false;
+    }
+    debtClosedValues.clear();
+    debtNotClosedValues.clear();
+    for (QDomElement elF=elDebtFlags.firstChildElement("dsf"); !elF.isNull(); elF=elF.nextSiblingElement("dsf")) {
+        debtClosedValues << elF.attribute("closed_val");
+        debtNotClosedValues << elF.attribute("not_closed_val");
+    }
+    QDomElement elPercFlags = hivDoc.documentElement().firstChildElement("year_percent_flags");
+    if (elPercFlags.isNull()) {
+        _fatalError = S_ELEM_MISSING.arg("year_percent_flags");
+        return false;
+    }
+    yearPercentValues.clear();
+    for (QDomElement elP=elPercFlags.firstChildElement("yperc"); !elP.isNull(); elP=elP.nextSiblingElement("yperc"))
+        yearPercentValues << elP.attribute("val");
+    QDomElement elYearPrdFlags = hivDoc.documentElement().firstChildElement("year_period_flags");
+    if (elYearPrdFlags.isNull()) {
+        _fatalError = S_ELEM_MISSING.arg("year_period_flags");
+        return false;
+    }
+    for (QDomElement elP=elYearPrdFlags.firstChildElement("yprd"); !elP.isNull(); elP=elP.nextSiblingElement("yprd"))
+        yearPeriodValues << elP.attribute("val");
+    QDomElement elMonthPrdFlags = hivDoc.documentElement().firstChildElement("month_period_flags");
+    if (elMonthPrdFlags.isNull()) {
+        _fatalError = S_ELEM_MISSING.arg("month_period_flags");
+        return false;
+    }
+    for (QDomElement elP=elMonthPrdFlags.firstChildElement("mprd"); !elP.isNull(); elP=elP.nextSiblingElement("mprd"))
+        monthPeriodValues << elP.attribute("val");
+    return true;
 }

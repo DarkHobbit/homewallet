@@ -101,8 +101,7 @@ bool XmlFile::readFromFile(const QString &path)
     QString err_msg;
     int err_line, err_col;
     if (!setContent(&file, &err_msg, &err_line, &err_col)) {
-        _fatalError = QObject::tr("Can't read content from file %1\n%2\nline %3, col %4\n")
-            .arg(path).arg(err_msg).arg(err_line).arg(err_col);
+        _fatalError = S_ERR_READ_CONTENT.arg(path).arg(err_msg).arg(err_line).arg(err_col);
         closeFile();
         return false;
     }
@@ -127,5 +126,23 @@ bool XmlFile::readDateVal(const QDomElement &el, const QString &attrName, QDateT
     if (!res.isValid())
         _fatalError = errorMessageTemplate.arg(s);
     return res.isValid();
+}
+
+bool XmlFile::readPercentVal(const QDomElement &el, const QString &attrName, double &res, const QString &errorMessageTemplate, QString& tail)
+{
+    bool ok;
+    QString sPercRate = el.attribute(attrName);
+    int percPos = sPercRate.indexOf("%");
+    if (percPos==-1) {
+        _fatalError = errorMessageTemplate.arg(sPercRate);
+        return false;
+    }
+    res = prepareDoubleImport(sPercRate.left(percPos)).toDouble(&ok);
+    if (!ok) {
+        _fatalError = errorMessageTemplate.arg(sPercRate);
+        return false;
+    }
+    tail = sPercRate.mid(percPos+1).trimmed();
+    return ok;
 }
 

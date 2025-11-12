@@ -293,12 +293,17 @@ create table hw_credit ( -- lend or borrow
     close_date date,
     remind_date date,
     is_lend integer not null, -- 1 if lend, 0 if borrow
-    id_crs integer null,      -- debtor or creditor
+    id_crs integer null,      -- correspondent: debtor or creditor
     amount integer not null, -- in low units
+    down_pay integer, -- in low units
+    money_back integer not null, -- in low units
+    money_remaining_debt integer not null, -- in low units
     id_ac integer not null,
     id_cur integer not null,
     rate double, -- in percents
-    is_rate_onetime, -- 0 if onetime, 1 if per year
+    is_rate_onetime integer not null, -- 0 if onetime, 1 if per year
+    period integer,
+    period_unit integer not null, -- 0 if eternal, 1 if months, 2 if years
     is_closed integer not null, -- 1 if closed, 0 if else
     descr char(256),
     id_imp integer null,
@@ -311,8 +316,8 @@ create table hw_credit ( -- lend or borrow
     constraint fk_crdcur foreign key(id_cur) references hw_currency(id),
     constraint fk_crdimp foreign key(id_imp) references hw_imp_file(id),
     constraint fk_crdimp_v foreign key(id_imp_verify) references hw_imp_file(id)
-    check (is_lend=0 or is_lend=1),
-    check (is_rate_onetime=0 or is_rate_onetime=1)
+    -- check (is_lend=0 or is_lend=1),
+    -- check (is_rate_onetime=0 or is_rate_onetime=1)
 );
 
 -- TODO payout table
