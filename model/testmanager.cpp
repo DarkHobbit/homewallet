@@ -21,7 +21,7 @@ TestManager::TestManager()
 
 QSqlQueryModel *TestManager::dbDebug(const QString &queryText, GenericDatabase &db)
 {
-    QSqlQuery q;
+    QSqlQuery q(db.sqlDbRef());
     q.prepare(queryText);
     q.exec();
     QSqlQueryModel* m = new QSqlQueryModel();

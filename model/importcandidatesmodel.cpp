@@ -24,7 +24,7 @@ ImportCandidatesModel::ImportCandidatesModel(ImpRecCandidate::Type _candType,
 {    
 }
 
-Qt::ItemFlags ImportCandidatesModel::flags(const QModelIndex &index) const
+Qt::ItemFlags ImportCandidatesModel::flags(const QModelIndex&) const
 {
     Qt::ItemFlags f = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     // TODO m.b. exclude receipt begin & receipt end

@@ -490,10 +490,12 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
     return true;
 }
 
-bool XmlHbFile::exportRecords(const QString &path, HwDatabase &db, SubTypeFlags subTypes)
+bool XmlHbFile::exportRecords(const QString&, HwDatabase&, SubTypeFlags)
 {
-    // TODO
-    return false; //===>
+    // Currently, not implemented, because useless - HBK can't import its own XML files.
+    // (can QIF, CSV and XLS)
+    // Maybe, in future...
+    return false;
 }
 
 XmlHbFile::SubType XmlHbFile::fileSubType()
