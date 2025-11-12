@@ -632,10 +632,10 @@ void MainWindow::updateTabsAndFilters()
     QString category, subcategory;
     configManager.readCategoriesFilter(activeModel, category, subcategory);
     if (!category.isEmpty()) {
-        ui->cbCategory->setCurrentText(category);
+        ui->cbCategory->setCurrentIndex(ui->cbCategory->findText(category));
         on_cbCategory_activated(0);
         if (!subcategory.isEmpty())
-            ui->cbSubcategory->setCurrentText(subcategory);
+            ui->cbSubcategory->setCurrentIndex(ui->cbSubcategory->findText(subcategory));
     }
     updateViews();
 }

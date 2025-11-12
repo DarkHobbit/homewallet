@@ -119,7 +119,7 @@ void ExportDialog::selectSubTypeIfEnabled(QCheckBox *cb)
 void ExportDialog::checkSubType(FileFormat::SubTypeFlags& subTypes, QCheckBox *cb, FileFormat::SubType typeFlag)
 {
     if (cb->isChecked())
-        subTypes.setFlag(typeFlag);
+        subTypes |= typeFlag; // WAS: setFlag
 }
 
 
