@@ -153,7 +153,7 @@
         <translation type="obsolete">Описание</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="65"/>
+        <location filename="../model/expensemodel.cpp" line="66"/>
         <source>Expenses</source>
         <translation>Расходы</translation>
     </message>
@@ -275,9 +275,14 @@
 <context>
     <name>FilteredQueryModel</name>
     <message>
-        <location filename="../model/filteredquerymodel.cpp" line="143"/>
+        <location filename="../model/filteredquerymodel.cpp" line="159"/>
         <source>Incorrect column index found, see Settings-&gt;Columns</source>
         <translation>Обнаружен некорректный индекс столбца, см. Настройки-&gt;Столбцы</translation>
+    </message>
+    <message>
+        <location filename="../model/filteredquerymodel.cpp" line="213"/>
+        <source>Can&apos;t remove records from this table</source>
+        <translation>Из этой таблицы нельзя удалять записи</translation>
     </message>
 </context>
 <context>
@@ -538,6 +543,10 @@
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
+        <source>Can&apos;t remove records from this table</source>
+        <translation type="obsolete">Из этой таблицы нельзя удалять записи</translation>
+    </message>
+    <message>
         <source>Unknown import error</source>
         <translation type="obsolete">Неизвестная ошибка импорта</translation>
     </message>
@@ -701,12 +710,37 @@ Contact author.</source>
         <translation>Для обмена валют необходимо строго по одной записи MoneyOut* и MoneyIn*, строка %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="405"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="399"/>
+        <source>rate type</source>
+        <translation>тип ставки</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.cpp" line="401"/>
+        <source>rate type text</source>
+        <translation>текст типа ставки</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.cpp" line="413"/>
+        <source>Period unit not specified: %1</source>
+        <translation>Единица периода не задана</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.cpp" line="424"/>
+        <source>period unit</source>
+        <translation>единица периода</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.cpp" line="426"/>
+        <source>period unit text</source>
+        <translation>текст единицы периода</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.cpp" line="440"/>
         <source>debt status</source>
         <translation>статус долга</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="407"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="442"/>
         <source>status text for repaid and not repaid loans</source>
         <translation>тексты статусов для погашенных и непогашенных долгов</translation>
     </message>
@@ -719,7 +753,7 @@ or manually add it to %2.</source>
 или вручную добавьте их в %2.</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="503"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="542"/>
         <source>Account %1 not found, inserted automatically</source>
         <translation>Счёт %1 не найден, добавлен автоматически</translation>
     </message>
@@ -734,17 +768,17 @@ or manually add it to %2.</source>
         <translation>Эта версия Домашнего кошелька не поддерживает мультивалютных доходов и расходов, позиция с %1, валюты: %2</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="452"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="489"/>
         <source>Skipped %1 records</source>
         <translation>Пропущено записей: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="525"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="565"/>
         <source>Money attributes not found: line %1</source>
         <translation>Денежные атрибуты не найдены в строке %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="534"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="575"/>
         <source>Money sum doesn&apos;t match: %1</source>
         <translation>Денежная сумма не соответствует шаблону: %1</translation>
     </message>
@@ -1016,19 +1050,24 @@ or manually add it to %4.</source>
         <translation>Внутренняя ошибка</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="44"/>
+        <location filename="../core/globals.h" line="43"/>
+        <source>Do you really want to delete the selected items?</source>
+        <translation>Вы действительно хотите удалить выбранные записи?</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="45"/>
         <source>This format is read only</source>
         <translation>Это формат только для чтения</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="46"/>
+        <location filename="../core/globals.h" line="47"/>
         <source>Warning: record %1 has %2, not supported in this format.
 Data will be lost</source>
         <translation>Предупреждение: у записи %1 есть %2, не поддерживается в этом формате.
 Данные будут потеряны</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="48"/>
+        <location filename="../core/globals.h" line="49"/>
         <source>%1 %2 will be lost at record %3</source>
         <translation>%1 %2 будет утерян у записи %3</translation>
     </message>
@@ -1037,119 +1076,119 @@ Data will be lost</source>
         <translation type="obsolete">Прочитано записей: %1</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="50"/>
+        <location filename="../core/globals.h" line="51"/>
         <source>%1 records has been processed</source>
         <translation>Обработано записей: %1</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="52"/>
+        <location filename="../core/globals.h" line="53"/>
         <source>Select at least one export information type</source>
         <translation>Выберите хотя бы один тип информации</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="54"/>
+        <location filename="../core/globals.h" line="55"/>
         <source>Unknown import/export error</source>
         <translation>Неизвестная ошибка импорта/экспориа</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="56"/>
+        <location filename="../core/globals.h" line="57"/>
         <source>
 at record %1 from %2</source>
         <translation>
 в записи %1 из %2</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="58"/>
+        <location filename="../core/globals.h" line="59"/>
         <source>Mode: </source>
         <translation>Режим: </translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="59"/>
+        <location filename="../core/globals.h" line="60"/>
         <source>sorted</source>
         <translation>сорт.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="60"/>
+        <location filename="../core/globals.h" line="61"/>
         <source>not sorted</source>
         <translation>не сорт.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="64"/>
+        <location filename="../core/globals.h" line="65"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="65"/>
+        <location filename="../core/globals.h" line="66"/>
         <source>Category</source>
         <translation>Категория</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="66"/>
+        <location filename="../core/globals.h" line="67"/>
         <source>Subcategory</source>
         <translation>Подкатегория</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="67"/>
+        <location filename="../core/globals.h" line="68"/>
         <source>Qty.</source>
         <translation>Кол-во</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="68"/>
+        <location filename="../core/globals.h" line="69"/>
         <source>Unit</source>
         <translation>Ед.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="69"/>
+        <location filename="../core/globals.h" line="70"/>
         <source>Sum</source>
         <translation>Сумма</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="70"/>
+        <location filename="../core/globals.h" line="71"/>
         <source>Cur.</source>
         <translation>В.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="71"/>
+        <location filename="../core/globals.h" line="72"/>
         <source>Account</source>
         <translation>Счёт</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="72"/>
+        <location filename="../core/globals.h" line="73"/>
         <source>At.</source>
         <translation>★</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="73"/>
+        <location filename="../core/globals.h" line="74"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="75"/>
+        <location filename="../core/globals.h" line="76"/>
         <source>From</source>
         <translation>Откуда</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="76"/>
+        <location filename="../core/globals.h" line="77"/>
         <source>To</source>
         <translation>Куда</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="78"/>
+        <location filename="../core/globals.h" line="79"/>
         <source>Source</source>
         <translation>Источник</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="79"/>
+        <location filename="../core/globals.h" line="80"/>
         <source>Alias</source>
         <translation>Псевдоним</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="81"/>
+        <location filename="../core/globals.h" line="82"/>
         <source>&lt;All&gt;</source>
         <translation>&lt;Все&gt;</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="82"/>
+        <location filename="../core/globals.h" line="83"/>
         <source>Other</source>
         <translation>Прочее</translation>
     </message>

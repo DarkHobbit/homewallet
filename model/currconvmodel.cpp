@@ -30,6 +30,7 @@ CurrConvModel::CurrConvModel(QObject *parent)
         << S_COL_SUM+' '+S_COL_TO << S_COL_TO
         << S_COL_DESCRIPTION;
     setDefaultVisibleColumns();
+    deleteQuery = "delete from hw_curr_exch where id=:id";
 }
 
 void CurrConvModel::setDefaultVisibleColumns()

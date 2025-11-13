@@ -67,6 +67,9 @@ private slots:
     void on_tabWidgetTransferAndExchange_currentChanged(int);
     void on_cbCategory_activated(int);
     void processModelError(const QString& message);
+    void on_btn_Add_clicked();
+    void on_btn_Edit_clicked();
+    void on_btn_Delete_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -78,8 +81,10 @@ private:
         *proxyExpenses, *proxyIncomes, *proxyTransfer, *proxyCurrConv;
     FQMlist dbModels;
     // Potentially unsafe pointers (covered by activeTab() in all changed)
+    QTableView* activeView;
     FilteredQueryModel* activeModel;
     // End of potentially unsafe pointers
+    QModelIndexList selection;
 
     QLabel *lbCounts;
     enum ActiveTab {
@@ -94,6 +99,7 @@ private:
     void updateConfig();
     void updateTabsAndFilters();
     ActiveTab activeTab();
+    bool checkSelection(bool errorIfNoSelected = true, bool onlyOneRowAllowed = false);
     void processImpExErrors(FileFormat* f, bool res, const QString& path);
     void processImpExSuccess(FileFormat* f);
 };

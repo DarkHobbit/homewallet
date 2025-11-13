@@ -11,6 +11,7 @@
  *
  */
 
+#include <algorithm>
 #include <iostream>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -20,6 +21,7 @@
 
 FilteredQueryModel::FilteredQueryModel(QObject *parent)
     : QSqlQueryModel(parent),
+      deleteQuery(""),
       dtFrom(QDate()), dtTo(QDate())
 {
 }
@@ -128,6 +130,20 @@ QStringList FilteredQueryModel::getAllColumns()
     return columnHeaders;
 }
 
+bool FilteredQueryModel::removeAnyRows(QModelIndexList &indices)
+{
+    std::sort(indices.begin(), indices.end());
+    // foreach not usable here - reverse order needed
+    beginRemoveRows (QModelIndex(), 0, indices.count()-1);
+    for (int i=indices.count()-1; i>=0; i--) {
+        int id = QSqlQueryModel::data(index(indices[i].row(), 0), Qt::DisplayRole).toInt();
+        if (!removeById(id))
+            return false;
+    }
+    endRemoveRows();
+    return true;
+}
+
 void FilteredQueryModel::updateData(const QString &sql, bool insertWhere)
 {
     // Fields
@@ -187,4 +203,26 @@ void FilteredQueryModel::makeFilter()
     if (dtTo.isValid())
         filters <<
             QString("strftime('%Y%m%d', op_date)<='")+dtTo.toString("yyyyMMdd")+"'";
+}
+
+// Default implementation
+// For some models cascade remove or additional check required
+// TODO for expenses, check receipts, already check splits, etc
+bool FilteredQueryModel::removeById(int id)
+{
+    if (deleteQuery.isEmpty()) {
+        emit modelError(tr("Can't remove records from this table"));
+        return false;
+    }
+    QSqlQuery q;
+    if (!q.prepare(deleteQuery)) {
+        emit modelError(QString("Deletion prepare error: ")+q.lastError().text());
+        return false;
+    }
+    q.bindValue(":id", id);
+    if (!q.exec()) {
+        emit modelError(QString("Deletion execute error: ")+q.lastError().text());
+        return false;
+    }
+    return true;
 }

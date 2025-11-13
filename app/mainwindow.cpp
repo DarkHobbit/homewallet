@@ -478,19 +478,23 @@ MainWindow::ActiveTab MainWindow::activeTab()
     QWidget* curW = t->currentWidget();
     if (curW==ui->tabExpenses) {
         activeModel = mdlExpenses;
+        activeView = ui->tvExpenses;
         return atExpenses;
     }
     else if (curW==ui->tabIncomes) {
         activeModel = mdlIncomes;
+        activeView = ui->tvIncomes;
         return atIncomes;
     }
     else if (curW==ui->tabTransferAndExchange) {
         if (ui->tabWidgetTransferAndExchange->currentWidget()==ui->tabTransfer) {
             activeModel = mdlTransfer;
+            activeView = ui->tvTransfer;
             return atTransfer;
         }
         else {
             activeModel = mdlCurrConv;
+            activeView = ui->tvExchange;
             return atExchange;
         }
     }
@@ -511,6 +515,13 @@ void MainWindow::on_btn_Quick_Filter_Apply_clicked()
     case atIncomes:
         proxy = proxyIncomes;
         break;
+    case atTransfer:
+        proxy = proxyTransfer;
+        break;
+    case atExchange:
+        proxy = proxyCurrConv;
+        break;
+    // TODO other tabs
     default:
         proxy = 0;
         break;
@@ -665,5 +676,48 @@ void MainWindow::processImpExSuccess(FileFormat *f)
 {
     QMessageBox::information(0, S_INFORM,
         S_INFO_IMP_STAT.arg(f->processedRecordsCount()));
+}
+
+void MainWindow::on_btn_Add_clicked()
+{
+    QMessageBox::critical(0, S_ERROR, "=|=UNDER CONSTRUCTION=|=");
+}
+
+void MainWindow::on_btn_Edit_clicked()
+{
+    QMessageBox::critical(0, S_ERROR, "=|=UNDER CONSTRUCTION=|=");
+}
+
+void MainWindow::on_btn_Delete_clicked()
+{
+    activeTab();
+    if (!checkSelection()) return;
+    if (QMessageBox::question(0, S_CONFIRM, S_REMOVE_CONFIRM,
+                              QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
+    {
+        if (activeModel->removeAnyRows(selection))
+            updateViews(); // TODO restore prev position from removes
+    }
+}
+
+
+bool MainWindow::checkSelection(bool errorIfNoSelected, bool onlyOneRowAllowed)
+{
+    QModelIndexList proxySelection = activeView->selectionModel()->selectedRows();
+    if (proxySelection.count()==0) {
+        if (errorIfNoSelected)
+            QMessageBox::critical(0, S_ERROR, S_REC_NOT_SEL);
+        return false;
+    }
+    if (onlyOneRowAllowed && (proxySelection.count()>1)) {
+        QMessageBox::critical(0, S_ERROR, S_ONLY_ONE_REC);
+        return false;
+    }
+    // Map indices from proxy to source
+    QSortFilterProxyModel* selectedProxy = dynamic_cast<QSortFilterProxyModel*>(activeView->model());
+    selection.clear();
+    foreach(QModelIndex index, proxySelection)
+        selection << selectedProxy->mapToSource(index);
+    return true;
 }
 

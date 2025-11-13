@@ -40,6 +40,7 @@
 #define S_REC_NOT_SEL QObject::tr("Record not selected")
 #define S_ONLY_ONE_REC QObject::tr("Group operation not implemented, select one record")
 #define S_INTERNAL_ERR QObject::tr("Internal error")
+#define S_REMOVE_CONFIRM QObject::tr("Do you really want to delete the selected items?")
 // Common import/export messages
 #define S_READ_ONLY_FORMAT QObject::tr("This format is read only")
 #define S_ERR_UNSUPPORTED_TAG \

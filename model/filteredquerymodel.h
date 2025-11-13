@@ -44,14 +44,18 @@ public:
     void setVisibleColumns(const QStringList& names);
     QStringList getVisibleColumns();
     QStringList getAllColumns();
+    bool removeAnyRows(QModelIndexList& indices);
 protected:
     ModelColumnList visibleColumns;
     QStringList visibleFieldNames;
     QList<char> visibleFieldTypes;
     QStringList columnHeaders;
+    QString deleteQuery;
+
     QStringList filters;
     QDate dtFrom, dtTo;
     virtual void makeFilter();
+    virtual bool removeById(int id); // dafault implementation,
     void updateData(const QString& sql, bool insertWhere);
     QString lowUnitFunction(const QString& fieldName, const QString& currFieldName = "");
 signals:
