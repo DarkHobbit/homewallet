@@ -75,6 +75,17 @@
 // Additional column names for transfer
 #define S_COL_FROM QObject::tr("From")
 #define S_COL_TO QObject::tr("To")
+// Additional column names for credits
+#define S_COL_CLOSE_DATE QObject::tr("Close date")
+#define S_COL_REMIND_DATE QObject::tr("Remind date")
+#define S_COL_DEBTOR QObject::tr("Debtor")
+#define S_COL_CREDITOR QObject::tr("Creditor")
+#define S_COL_DOWN_PAY QObject::tr("Down pay")
+#define S_COL_MONEY_BACK QObject::tr("Moneyback")
+#define S_COL_REMAINING_DEBT QObject::tr("Remaining")
+#define S_COL_RATE QObject::tr("Rate")
+#define S_COL_PERIOD QObject::tr("Period")
+#define S_COL_IS_CLOSED QObject::tr("Closed")
 // Additional column names for import candidates
 #define S_COL_SOURCE QObject::tr("Source")
 #define S_COL_ALIAS QObject::tr("Alias")

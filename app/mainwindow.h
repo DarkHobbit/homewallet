@@ -18,10 +18,12 @@
 #include <QSortFilterProxyModel>
 #include <QTableView>
 
-#include "currconvmodel.h"
-#include "filteredquerymodel.h"
 #include "formats/formatfactory.h"
 #include "hwdatabase.h"
+
+#include "creditmodel.h"
+#include "currconvmodel.h"
+#include "filteredquerymodel.h"
 #include "expensemodel.h"
 #include "incomemodel.h"
 #include "transfermodel.h"
@@ -65,11 +67,12 @@ private slots:
     void on_cbDateTo_stateChanged(int);
     void on_tabWidgetMain_currentChanged(int);
     void on_tabWidgetTransferAndExchange_currentChanged(int);
+    void on_tabWidgetLendAndBorrow_currentChanged(int index);
     void on_cbCategory_activated(int);
     void processModelError(const QString& message);
     void on_btn_Add_clicked();
     void on_btn_Edit_clicked();
-    void on_btn_Delete_clicked();
+    void on_btn_Delete_clicked();    
 
 private:
     Ui::MainWindow *ui;
@@ -77,8 +80,10 @@ private:
     IncomeModel* mdlIncomes;
     TransferModel* mdlTransfer;
     CurrConvModel* mdlCurrConv;
+    CreditModel *mdlLend, *mdlBorrow;
     QSortFilterProxyModel
-        *proxyExpenses, *proxyIncomes, *proxyTransfer, *proxyCurrConv;
+        *proxyExpenses, *proxyIncomes, *proxyTransfer, *proxyCurrConv,
+        *proxyLend, *proxyBorrow;
     FQMlist dbModels;
     // Potentially unsafe pointers (covered by activeTab() in all changed)
     QTableView* activeView;
@@ -92,6 +97,8 @@ private:
         atIncomes,
         atTransfer,
         atExchange,
+        atLend,
+        atBorrow,
         atAccounts // m.b. atNone?
     };
     void prepareModel(FilteredQueryModel* source, QSortFilterProxyModel *proxy, QTableView* view, const QString& nameForDebug);

@@ -23,7 +23,7 @@ ExpenseModel::ExpenseModel(QObject *parent)
         << "c.name" << "sc.name" << "e.quantity" << "u.name"
         << lowUnitFunction("e.amount", "cur.abbr")
         << "cur.abbr" << "a.name"
-        << "case e.attention when 1 then '*' else '' end"
+        << QString::fromUtf8("case e.attention when 1 then '★' else '' end")
         << "e.descr";
     visibleFieldTypes
         << 'D' << 'G' << 'G' << 'G' << 'G'

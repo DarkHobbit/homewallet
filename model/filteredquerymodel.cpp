@@ -79,6 +79,12 @@ QVariant FilteredQueryModel::data(const QModelIndex &index, int role) const
         }
         case 'M':
             return res.toString().replace('.', ',');
+        case 'P': {
+            if (res.isNull())
+                return res;
+            else
+                return res.toString() + "%";
+        }
         default:
             return res;
         }

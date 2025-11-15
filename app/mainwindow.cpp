@@ -82,6 +82,12 @@ MainWindow::MainWindow(QWidget *parent) :
     mdlCurrConv = new CurrConvModel(this);
     proxyCurrConv = new QSortFilterProxyModel(this);
     prepareModel(mdlCurrConv, proxyCurrConv, ui->tvExchange, "CurrConv");
+    mdlLend = new CreditModel(this, true);
+    proxyLend = new QSortFilterProxyModel(this);
+    prepareModel(mdlLend, proxyLend, ui->tvLend, "Lend");
+    mdlBorrow = new CreditModel(this, false);
+    proxyBorrow = new QSortFilterProxyModel(this);
+    prepareModel(mdlBorrow, proxyBorrow, ui->tvBorrow, "Borrow");
     // Table columns
     for (FilteredQueryModel* mdl: dbModels)
         configManager.readTableConfig(mdl);
@@ -175,6 +181,13 @@ void MainWindow::updateViews()
     case atExchange:
         updateOneView(ui->tvExchange, true);
         break;
+    case atLend:
+        updateOneView(ui->tvLend, true);
+        break;
+    case atBorrow:
+        updateOneView(ui->tvBorrow, true);
+        break;
+    // Here process other tabs
     default:
         break;
     }
@@ -194,6 +207,10 @@ void MainWindow::resizeViews()
     ui->tvExpenses->resizeColumnsToContents();
     ui->tvIncomes->resizeColumnsToContents();
     ui->tvTransfer->resizeColumnsToContents();
+    ui->tvExchange->resizeColumnsToContents();
+    ui->tvLend->resizeColumnsToContents();
+    ui->tvBorrow->resizeColumnsToContents();
+    // Here process other tabs
     // Alternatives is ui->tvExpenses->setColumnWidth(), autoresized columns
     // in some cases can be too big (subcategory)
 }
@@ -498,7 +515,19 @@ MainWindow::ActiveTab MainWindow::activeTab()
             return atExchange;
         }
     }
-    // TODO other tabs
+    else if (curW==ui->tabLendAndBorrow) {
+        if (ui->tabWidgetLendAndBorrow->currentWidget()==ui->tabLend) {
+            activeModel = mdlLend;
+            activeView = ui->tvLend;
+            return atLend;
+        }
+        else {
+            activeModel = mdlBorrow;
+            activeView = ui->tvBorrow;
+            return atBorrow;
+        }
+    }
+    // Here process other tabs
     else {
         activeModel = 0; // TODO m.b. accounts also will be on main window, m.b. no
         return atAccounts;
@@ -521,7 +550,13 @@ void MainWindow::on_btn_Quick_Filter_Apply_clicked()
     case atExchange:
         proxy = proxyCurrConv;
         break;
-    // TODO other tabs
+    case atLend:
+        proxy = proxyLend;
+        break;
+    case atBorrow:
+        proxy = proxyBorrow;
+        break;
+    // Here process other tabs
     default:
         proxy = 0;
         break;
@@ -574,6 +609,11 @@ void MainWindow::on_tabWidgetTransferAndExchange_currentChanged(int)
     updateTabsAndFilters();
 }
 
+void MainWindow::on_tabWidgetLendAndBorrow_currentChanged(int index)
+{
+    updateTabsAndFilters();
+}
+
 void MainWindow::on_cbCategory_activated(int)
 {
     GenericDatabase::DictColl collSubcat;
@@ -613,6 +653,9 @@ void MainWindow::updateConfig()
     updateTableConfig(ui->tvIncomes);
     updateTableConfig(ui->tvTransfer);
     updateTableConfig(ui->tvExchange);
+    updateTableConfig(ui->tvLend);
+    updateTableConfig(ui->tvBorrow);
+    // Here process other tabs
 }
 
 void MainWindow::updateTabsAndFilters()
@@ -634,6 +677,13 @@ void MainWindow::updateTabsAndFilters()
     case atExchange:
         ui->tvExchange->resizeColumnsToContents();
         break;
+    case atLend:
+        ui->tvLend->resizeColumnsToContents();
+        break;
+    case atBorrow:
+        ui->tvBorrow->resizeColumnsToContents();
+        break;
+    // Here process other tabs
     default:
         ui->cbCategory->clear();
     }
