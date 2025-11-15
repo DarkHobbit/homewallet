@@ -457,6 +457,7 @@ void MainWindow::on_actionFilter_triggered()
 void MainWindow::prepareModel(FilteredQueryModel *source, QSortFilterProxyModel *proxy, QTableView *view, const QString& nameForDebug)
 {
     source->setObjectName(QString("mdl")+nameForDebug);
+    source->setDefaultVisibleColumns();
     proxy->setSourceModel(source);
     proxy->setFilterKeyColumn(-1);
     proxy->setFilterCaseSensitivity(Qt::CaseInsensitive); // Driver == driver

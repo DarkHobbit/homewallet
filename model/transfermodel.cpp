@@ -28,7 +28,6 @@ TransferModel::TransferModel(QObject *parent)
         << S_COL_DATE << S_COL_SUM << S_COL_CURRENCY
         << S_COL_FROM << S_COL_TO
         << S_COL_CATEGORY << S_COL_DESCRIPTION;
-    setDefaultVisibleColumns();
     deleteQuery = "delete from hw_transfer where id=:id";
 }
 

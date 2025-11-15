@@ -33,7 +33,6 @@ IncomeModel::IncomeModel(QObject *parent)
         << S_COL_SUM
         << S_COL_CURRENCY << S_COL_ACCOUNT
         << S_COL_ATTENTION << S_COL_DESCRIPTION;
-    setDefaultVisibleColumns();
     deleteQuery = "delete from hw_in_op where id=:id";
 }
 

@@ -39,7 +39,6 @@ CreditModel::CreditModel(QObject *parent, bool _isLend)
         << S_COL_SUM << S_COL_DOWN_PAY << S_COL_MONEY_BACK << S_COL_REMAINING_DEBT
         << S_COL_CURRENCY << S_COL_ACCOUNT <<  S_COL_RATE <<  S_COL_PERIOD
         << S_COL_IS_CLOSED << S_COL_DESCRIPTION;
-    setDefaultVisibleColumns();
     deleteQuery = "delete from hw_credit where id=:id";
 }
 
