@@ -405,7 +405,7 @@ void MainWindow::on_action_Export_triggered()
             if (subTypes.testFlag((FileFormat::SubType)test)) {
                 QString fPath = path+QDir::separator()+subTypeFileNames[i]+"."
                     +expFile->supportedExtensions()[0];
-                eRes = expFile->exportRecords(fPath, db, subTypes);
+                eRes = expFile->exportRecords(fPath, db, (FileFormat::SubType)test);
                 if (!eRes)
                     break;
             }

@@ -56,6 +56,7 @@ bool XmlFile::endCreateXml(const QString &path)
         QTextStream out(&file);
         save(out, 4);
         file.close();
+        QDomDocument::clear();
         return true;
     }
     else {
