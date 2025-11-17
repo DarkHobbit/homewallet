@@ -105,12 +105,12 @@
 <context>
     <name>CreditModel</name>
     <message>
-        <location filename="../model/creditmodel.cpp" line="70"/>
+        <location filename="../model/creditmodel.cpp" line="69"/>
         <source>Lend</source>
         <translation>Долги</translation>
     </message>
     <message>
-        <location filename="../model/creditmodel.cpp" line="70"/>
+        <location filename="../model/creditmodel.cpp" line="69"/>
         <source>Borrow</source>
         <translation>Кредиты</translation>
     </message>
@@ -118,7 +118,7 @@
 <context>
     <name>CurrConvModel</name>
     <message>
-        <location filename="../model/currconvmodel.cpp" line="58"/>
+        <location filename="../model/currconvmodel.cpp" line="57"/>
         <source>Currency conversion</source>
         <translation>Обмен валют</translation>
     </message>
@@ -166,7 +166,7 @@
         <translation type="obsolete">Описание</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="66"/>
+        <location filename="../model/expensemodel.cpp" line="65"/>
         <source>Expenses</source>
         <translation>Расходы</translation>
     </message>
@@ -315,7 +315,7 @@
 <context>
     <name>IncomeModel</name>
     <message>
-        <location filename="../model/incomemodel.cpp" line="65"/>
+        <location filename="../model/incomemodel.cpp" line="64"/>
         <source>Incomes</source>
         <translation>Доходы</translation>
     </message>
@@ -551,22 +551,22 @@
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="253"/>
+        <location filename="../app/mainwindow.cpp" line="257"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="253"/>
+        <location filename="../app/mainwindow.cpp" line="257"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="262"/>
+        <location filename="../app/mainwindow.cpp" line="266"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="279"/>
+        <location filename="../app/mainwindow.cpp" line="283"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
@@ -733,42 +733,42 @@ Contact author.</source>
 Свяжитесь с автором.</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="345"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="363"/>
         <source>For currency conversion strongly 1 MoneyOut* and 1 MoneyIn* attributes needed at line %1</source>
         <translation>Для обмена валют необходимо строго по одной записи MoneyOut* и MoneyIn*, строка %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="399"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="417"/>
         <source>rate type</source>
         <translation>тип ставки</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="401"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="419"/>
         <source>rate type text</source>
         <translation>текст типа ставки</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="413"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="431"/>
         <source>Period unit not specified: %1</source>
         <translation>Единица периода не задана</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="424"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="442"/>
         <source>period unit</source>
         <translation>единица периода</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="426"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="444"/>
         <source>period unit text</source>
         <translation>текст единицы периода</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="440"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="458"/>
         <source>debt status</source>
         <translation>статус долга</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="442"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="460"/>
         <source>status text for repaid and not repaid loans</source>
         <translation>тексты статусов для погашенных и непогашенных долгов</translation>
     </message>
@@ -781,32 +781,32 @@ or manually add it to %2.</source>
 или вручную добавьте их в %2.</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="542"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="571"/>
         <source>Account %1 not found, inserted automatically</source>
         <translation>Счёт %1 не найден, добавлен автоматически</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.h" line="31"/>
+        <location filename="../core/formats/xmlhbfile.h" line="32"/>
         <source>Income or expense amount can&apos;t be equal to 0. Date: %1</source>
         <translation>Сумма дохода или расхода не может быть нулевой. Дата: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.h" line="33"/>
+        <location filename="../core/formats/xmlhbfile.h" line="34"/>
         <source>This version of HomeWallet not support multi-currency incomes and expenses, item from %1, currencies: %2</source>
         <translation>Эта версия Домашнего кошелька не поддерживает мультивалютных доходов и расходов, позиция с %1, валюты: %2</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="489"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="518"/>
         <source>Skipped %1 records</source>
         <translation>Пропущено записей: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="565"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="594"/>
         <source>Money attributes not found: line %1</source>
         <translation>Денежные атрибуты не найдены в строке %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="575"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="604"/>
         <source>Money sum doesn&apos;t match: %1</source>
         <translation>Денежная сумма не соответствует шаблону: %1</translation>
     </message>
@@ -932,14 +932,22 @@ Specify appropriate content type</source>
         <translation>планы доходов или расходов</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.h" line="28"/>
         <source>Accounts in-detail file not supported because not contains key account data/
 Use Accounts in-brief file, if you have it</source>
-        <translation>Файл Счета подробно не поддерживается, поскольку в нём нет ключевых данных счетов.
+        <translation type="obsolete">Файл Счета подробно не поддерживается, поскольку в нём нет ключевых данных счетов.
 Используйте файл Счета кратко, если он у вас есть</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.h" line="35"/>
+        <location filename="../core/formats/xmlhbfile.h" line="28"/>
+        <source>Accounts in-detail file must be loading AFTER Accounts in-brief file
+because not contains key account data.
+Use Accounts in-brief file primarily</source>
+        <translation>Файл Счета подробно должен загружаться после файла Счета кратко,
+поскольку в нём нет ключевых данных счетов.
+Сначала загрузите файл Счета кратко</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.h" line="36"/>
         <source>Unknown %1: %2. Probably you are using Home Bookkeeping with new UI language.
 Contact Homewallet author, tell %3 and UI language,
 or manually add it to %4.</source>
@@ -948,32 +956,32 @@ or manually add it to %4.</source>
 или вручную добавьте их в %4.</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.h" line="39"/>
+        <location filename="../core/formats/xmlhbfile.h" line="40"/>
         <source>Treat as incomes</source>
         <translation>Это доходы</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.h" line="40"/>
+        <location filename="../core/formats/xmlhbfile.h" line="41"/>
         <source>Treat as expenses</source>
         <translation>Это расходы</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.h" line="41"/>
+        <location filename="../core/formats/xmlhbfile.h" line="42"/>
         <source>Treat as debtors</source>
         <translation>Это должники</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.h" line="42"/>
+        <location filename="../core/formats/xmlhbfile.h" line="43"/>
         <source>Treat as creditors</source>
         <translation>Это кредиторы</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.h" line="43"/>
+        <location filename="../core/formats/xmlhbfile.h" line="44"/>
         <source>Treat as income planning</source>
         <translation>Это планы доходов</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.h" line="44"/>
+        <location filename="../core/formats/xmlhbfile.h" line="45"/>
         <source>Treat as expense planning</source>
         <translation>Это планы расходов</translation>
     </message>
@@ -1365,7 +1373,7 @@ Found: %1</source>
         <translation>готово к импорту</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhwfile.cpp" line="41"/>
+        <location filename="../core/formats/xmlhwfile.cpp" line="42"/>
         <source>HomeWallet XML (*.xml *.XML)</source>
         <translation>HomeWallet XML (*.xml *.XML)</translation>
     </message>
@@ -1540,7 +1548,7 @@ Found: %1</source>
 <context>
     <name>TransferModel</name>
     <message>
-        <location filename="../model/transfermodel.cpp" line="59"/>
+        <location filename="../model/transfermodel.cpp" line="58"/>
         <source>Transfer</source>
         <translation>Переносы</translation>
     </message>

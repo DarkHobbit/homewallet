@@ -351,10 +351,6 @@ void MainWindow::on_action_Import_triggered()
                     hbFile->setFileSubType((btnRes==btnAlt1) ? res1 : res2);
                 }
             }
-            else if (sType==XmlHbFile::AccountsInDetail) {
-                QMessageBox::critical(0, S_ERROR, S_ERR_ACC_DET_NOT_SUPPORTED);
-                return;
-            }
         }
         // Check if already
         QFileInfo fi(path);

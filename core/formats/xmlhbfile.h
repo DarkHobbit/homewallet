@@ -24,9 +24,10 @@
 #define S_HB_SELECT_AMBIG_DC  QObject::tr("debtors or creditors")
 #define S_HB_SELECT_AMBIG_PIE  QObject::tr("income or expense plan")
 
-#define S_ERR_ACC_DET_NOT_SUPPORTED \
-  QObject::tr("Accounts in-detail file not supported because not contains key account data/" \
-  "\nUse Accounts in-brief file, if you have it")
+#define S_ERR_ACC_DET_SEQ \
+  QObject::tr("Accounts in-detail file must be loading AFTER Accounts in-brief file" \
+   "\nbecause not contains key account data." \
+  "\nUse Accounts in-brief file primarily")
 #define S_ERR_ACC_EMPTY_SUM \
   QObject::tr("Income or expense amount can't be equal to 0. Date: %1")
 #define S_ERR_MULTI_ACC_NOT_SUPPORTED \

@@ -73,7 +73,7 @@ bool XmlHbFile::detect(const QString &path)
         if (fieldNames.contains("StartBalans1") && fieldNames.contains("Note"))
             _fileSubType = AccountsInBrief;
         else
-            _fileSubType = AccountsInDetail; // not
+            _fileSubType = AccountsInDetail;
     }
     // 2. Currency rate
     else if ((fieldNames.contains("Rate2") || fieldNames.contains("Rate1"))
@@ -145,6 +145,7 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
     HwDatabase::DictColl accs; // Account list will need always :)
     DB_CHK(db.collectDict(accs, "hw_account"));
     HwDatabase::DictColl currs, units; // Currencies, units - almost always
+    QMap<QString, QDateTime> minDates; // for AccountsInDetail
     if (_fileSubType!=AccountsInBrief) {
         DB_CHK(db.collectDict(currs, "hw_currency", "abbr"))
         DB_CHK(db.collectDict(units, "hw_unit", "short_name"))
@@ -216,6 +217,23 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
                     return false;
                 }
             }
+            break;
+        }
+        case AccountsInDetail: { // only after AccountsInBrief
+            QString accName = elRow.attribute("Account");
+            QDateTime dt;
+            if (!readDateVal(elRow, "MyDate", dt, "yyyyMMdd", S_ERR_DATE_IMP))
+                return false;
+            if (!accs.keys().contains(accName)) {
+                _fatalError = S_ERR_ACC_NOT_FOUND.arg(accName) + "\n" + S_ERR_ACC_DET_SEQ;
+                return false;
+            }
+            if (minDates.contains(accName)) {
+                if (dt<minDates[accName])
+                    minDates[accName] = dt;
+            }
+            else
+                minDates[accName] = dt;
             break;
         }
         case CurrencyRate:
@@ -483,6 +501,17 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             break;
         }
         _processedRecordsCount++;
+    }
+    if (_fileSubType==AccountsInDetail) {
+        for (const QString& accName: minDates.keys()) {
+            int idAcc = accs[accName];
+            QSqlQuery sqlUp(db.sqlDbRef());
+            DB_CHK(db.prepQuery(sqlUp, "update hw_account set foundation=:fd where id=:id"))
+            sqlUp.bindValue(":fd", minDates[accName]);
+            sqlUp.bindValue(":id", idAcc);
+            DB_CHK(db.execQuery(sqlUp))
+        }
+        _processedRecordsCount = minDates.count();
     }
     std::cout << "Total records " << records.count() << ", skipped " << skippedRecordCount << ", imported " << _processedRecordsCount << std::endl;
     if (skippedRecordCount>0)
