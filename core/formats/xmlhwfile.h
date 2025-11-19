@@ -14,7 +14,10 @@
 #ifndef XMLHWFILE_H
 #define XMLHWFILE_H
 
+#include <QMap>
 #include "xmlfile.h"
+
+typedef QMap<int,QDomElement> ChildRecMap;
 
 class XmlHwFile : public XmlFile
 {
@@ -30,9 +33,16 @@ public:
     virtual bool exportRecords(const QString &path, HwDatabase& db, FileFormat::SubTypeFlags subTypes);
 private:
     bool importAliases(const QDomElement& e, HwDatabase& db);
+
+    bool exportAccounts(HwDatabase& db, QDomElement& elRoot);
     bool exportAliases(HwDatabase& db, QDomElement& elRoot);
+
     bool importAliasesGroup(HwDatabase &db, const QDomElement& elAliGr, HwDatabase::AliasType alType,
          const QString& errorMessageIfRefMissing, HwDatabase::DictColl& alColl, HwDatabase::DictColl& srcColl);
+    bool exportCategories(HwDatabase& db, QDomElement& elRoot);
+    //bool exportOneDbRecord(QSqlQuery& q, QDomElement& elGroup, const QString& reqElemName);
+    bool exportDbRecordsGroup(HwDatabase& db, const QString& qs, QDomElement& elGroup,
+        const QString& reqElemName, ChildRecMap* children = 0);
 };
 
 #endif // XMLHWFILE_H

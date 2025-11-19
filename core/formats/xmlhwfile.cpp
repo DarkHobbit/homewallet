@@ -14,6 +14,7 @@
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QDir>
+#include <QSqlRecord>
 
 #include "commonexpimpdef.h"
 #include "xmlhwfile.h"
@@ -43,7 +44,8 @@ QStringList XmlHwFile::supportedFilters()
 
 FileFormat::SubTypeFlags XmlHwFile::supportedExportSubTypes()
 {
-    return Aliases;
+    return (FileFormat::SubTypeFlags)
+        (AccountsInBrief | Aliases | Categories);
 }
 
 QString XmlHwFile::formatAbbr()
@@ -69,11 +71,8 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
         if (e.nodeName()=="aliases") {
             if (!importAliases(e, db))
                 return false;
-
-
-
-        // TODO
         }
+        // TODO
         else if (e.nodeName()!="metadata")
             _errors << S_ERR_UNK_ELEM.arg(e.nodeName());
     }
@@ -90,9 +89,14 @@ bool XmlHwFile::exportRecords(const QString &path, HwDatabase &db, SubTypeFlags 
 //#endif
     elMeta.setAttribute("appversion", qApp->applicationVersion());
 
+    if (subTypes.testFlag(FileFormat::AccountsInBrief))
+        UP_CHK(exportAccounts(db, elRoot));
     if (subTypes.testFlag(FileFormat::Aliases))
         UP_CHK(exportAliases(db, elRoot));
+    if (subTypes.testFlag(FileFormat::Categories))
+        UP_CHK(exportCategories(db, elRoot));
     // TODO call testFlags for other subtypes, call exportExpenses <exp>, etc
+
     return endCreateXml(path);
 }
 
@@ -129,6 +133,31 @@ bool XmlHwFile::importAliases(const QDomElement &e, HwDatabase &db)
             _errors << S_ERR_UNK_ELEM.arg(elAliGr.nodeName());
     }
     return true;
+}
+
+#define Q_SEL_ACCOUNT \
+"select id, name as n, descr as d, foundation as fd" \
+    " from hw_account" \
+    " order by name;"
+
+#define Q_SEL_ACC_INIT \
+"select ain.id, ain.init_sum, cur.abbr as cur" \
+    " from hw_acc_init ain, hw_currency cur" \
+    " where ain.id_cur=cur.id" \
+    " and ain.id_ac=%1" \
+    " order by cur.seq_order;"
+
+bool XmlHwFile::exportAccounts(HwDatabase &db, QDomElement &elRoot)
+{
+    ChildRecMap elAccs;
+    QDomElement elGroup = addElem(elRoot, "accounts");
+    bool res = exportDbRecordsGroup(db, Q_SEL_ACCOUNT, elGroup, "ac", &elAccs);
+    if (res) {
+        foreach (int idAcc, elAccs.keys())
+            if (!exportDbRecordsGroup(db, QString(Q_SEL_ACC_INIT).arg(idAcc), elAccs[idAcc], "init"))
+                return false;
+    }
+    return res;
 }
 
 #define Q_SEL_ALIAS_ACC \
@@ -179,5 +208,42 @@ bool XmlHwFile::importAliasesGroup(HwDatabase &db, const QDomElement& elAliGr, H
             alType, srcColl[alRef]);
     }
     _processedRecordsCount += elAliGr.childNodes().count();
+    return true;
+}
+
+bool XmlHwFile::exportCategories(HwDatabase &db, QDomElement &elRoot)
+{
+    // TODO
+}
+
+/*bool XmlHwFile::exportOneDbRecord(QSqlQuery &q, QDomElement& elGroup, const QString& reqElemName)
+{
+    // TODO
+}*/
+
+bool XmlHwFile::exportDbRecordsGroup(HwDatabase &db, const QString &qs, QDomElement &elGroup,
+    const QString &reqElemName, ChildRecMap* children)
+{
+    QSqlQuery q;
+    DB_CHK(db.prepQuery(q, qs));
+    DB_CHK(db.execQuery(q))
+    if (q.first()) {
+        // Collect field names => attr names
+        QStringList fieldNames;
+        for (int i=1; i<q.record().count(); i++)
+            fieldNames << q.record().fieldName(i);
+        // Process records
+        while (q.isValid()) {
+            QDomElement elRec = addElem(elGroup, reqElemName);
+            for (int i=1; i<=fieldNames.count(); i++)
+                elRec.setAttribute(fieldNames[i-1], q.value(i).toString());
+            if (children) {
+                int id = q.value(0).toInt();
+                (*children)[id] = elRec;
+            }
+            q.next();
+        }
+        _processedRecordsCount += elGroup.childNodes().count();
+    }
     return true;
 }
