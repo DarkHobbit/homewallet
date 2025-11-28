@@ -136,12 +136,12 @@ bool XmlHwFile::importAliases(const QDomElement &e, HwDatabase &db)
 }
 
 #define Q_SEL_ACCOUNT \
-"select id, name as n, descr as d, foundation as fd" \
+    "select id, name as n, descr as d, foundation as fd" \
     " from hw_account" \
     " order by name;"
 
 #define Q_SEL_ACC_INIT \
-"select ain.id, ain.init_sum, cur.abbr as cur" \
+    "select ain.id, ain.init_sum, cur.abbr as cur" \
     " from hw_acc_init ain, hw_currency cur" \
     " where ain.id_cur=cur.id" \
     " and ain.id_ac=%1" \
@@ -167,7 +167,7 @@ bool XmlHwFile::exportAccounts(HwDatabase &db, QDomElement &elRoot)
     " order by ref;"
 
 #define Q_SEL_ALIAS_CUR \
-"select al.pattern, al.to_descr, reft.short_name as ref" \
+    "select al.pattern, al.to_descr, reft.short_name as ref" \
     " from hw_alias al, hw_currency reft" \
     " where al.id_cur=reft.id" \
     " order by ref" \
@@ -211,15 +211,66 @@ bool XmlHwFile::importAliasesGroup(HwDatabase &db, const QDomElement& elAliGr, H
     return true;
 }
 
+#define Q_SEL_IN_CAT \
+"select id, name as n, descr as d" \
+    " from hw_in_cat order by name;"
+
+#define Q_SEL_IN_SUBCAT \
+"select id, name as n, descr as d" \
+    " from hw_in_subcat where id_icat=%1 order by name;"
+
+#define Q_SEL_EX_CAT \
+    "select id, name as n, descr as d" \
+    " from hw_ex_cat order by name;"
+
+#define Q_SEL_EX_SUBCAT \
+"select sc.id, sc.name as n, sc.descr as d, un.short_name as und" \
+    " from hw_ex_subcat sc, hw_unit un" \
+    " where sc.id_un_default=un.id and sc.id_ecat=%1" \
+" union " \
+" select sc.id, sc.name as n, sc.descr as d, null as und" \
+    " from hw_ex_subcat sc" \
+    " where sc.id_un_default is null and sc.id_ecat=%2" \
+" order by sc.name;"
+
+#define Q_SEL_TR_TYPE \
+"select id, name as n, descr as d" \
+    " from hw_transfer_type order by name;"
+
+#define Q_SEL_CORRESPONDENT \
+"select id, name as n, descr as d" \
+    " from hw_correspondent order by name;"
+
 bool XmlHwFile::exportCategories(HwDatabase &db, QDomElement &elRoot)
 {
-    // TODO
+    ChildRecMap children;
+    // Income categories
+    QDomElement elICGroup = addElem(elRoot, "incomecategories");
+    bool res = exportDbRecordsGroup(db, Q_SEL_IN_CAT, elICGroup, "cat", &children);
+    if (!res)
+        return false;
+    foreach (int idInCat, children.keys())
+        if (!exportDbRecordsGroup(db, QString(Q_SEL_IN_SUBCAT).arg(idInCat), children[idInCat], "cat"))
+            return false;
+    // Expense categories
+    children.clear();
+    QDomElement elECGroup = addElem(elRoot, "expensecategories");
+    res = exportDbRecordsGroup(db, Q_SEL_EX_CAT, elECGroup, "cat", &children);
+    if (!res)
+        return false;
+    foreach (int idExCat, children.keys())
+        if (!exportDbRecordsGroup(db, QString(Q_SEL_EX_SUBCAT).arg(idExCat).arg(idExCat), children[idExCat], "cat"))
+            return false;
+    // Transfer types
+    QDomElement elTTGroup = addElem(elRoot, "transfertypes");
+    res = exportDbRecordsGroup(db, Q_SEL_TR_TYPE, elTTGroup, "tt", &children);
+    if (!res)
+        return false;
+    // Correspondents (debtors/creditors)
+    QDomElement elCorGroup = addElem(elRoot, "correspondents");
+    res = exportDbRecordsGroup(db, Q_SEL_CORRESPONDENT, elCorGroup, "cor", &children);
+    return res;
 }
-
-/*bool XmlHwFile::exportOneDbRecord(QSqlQuery &q, QDomElement& elGroup, const QString& reqElemName)
-{
-    // TODO
-}*/
 
 bool XmlHwFile::exportDbRecordsGroup(HwDatabase &db, const QString &qs, QDomElement &elGroup,
     const QString &reqElemName, ChildRecMap* children)
@@ -235,8 +286,10 @@ bool XmlHwFile::exportDbRecordsGroup(HwDatabase &db, const QString &qs, QDomElem
         // Process records
         while (q.isValid()) {
             QDomElement elRec = addElem(elGroup, reqElemName);
-            for (int i=1; i<=fieldNames.count(); i++)
-                elRec.setAttribute(fieldNames[i-1], q.value(i).toString());
+            for (int i=1; i<=fieldNames.count(); i++) {
+                if (!q.isNull(i))
+                    elRec.setAttribute(fieldNames[i-1], q.value(i).toString());
+            }
             if (children) {
                 int id = q.value(0).toInt();
                 (*children)[id] = elRec;

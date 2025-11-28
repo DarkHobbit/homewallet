@@ -1124,7 +1124,7 @@ Data will be lost</source>
     <message>
         <location filename="../core/globals.h" line="55"/>
         <source>Unknown import/export error</source>
-        <translation>Неизвестная ошибка импорта/экспориа</translation>
+        <translation>Неизвестная ошибка импорта/экспорта</translation>
     </message>
     <message>
         <location filename="../core/globals.h" line="57"/>

@@ -40,7 +40,6 @@ private:
     bool importAliasesGroup(HwDatabase &db, const QDomElement& elAliGr, HwDatabase::AliasType alType,
          const QString& errorMessageIfRefMissing, HwDatabase::DictColl& alColl, HwDatabase::DictColl& srcColl);
     bool exportCategories(HwDatabase& db, QDomElement& elRoot);
-    //bool exportOneDbRecord(QSqlQuery& q, QDomElement& elGroup, const QString& reqElemName);
     bool exportDbRecordsGroup(HwDatabase& db, const QString& qs, QDomElement& elGroup,
         const QString& reqElemName, ChildRecMap* children = 0);
 };
