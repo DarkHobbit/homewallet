@@ -45,7 +45,8 @@ QStringList XmlHwFile::supportedFilters()
 FileFormat::SubTypeFlags XmlHwFile::supportedExportSubTypes()
 {
     return (FileFormat::SubTypeFlags)
-        (AccountsInBrief | Aliases | Categories);
+        (AccountsInBrief | Aliases | Categories
+         | Expenses);
 }
 
 QString XmlHwFile::formatAbbr()
@@ -95,7 +96,18 @@ bool XmlHwFile::exportRecords(const QString &path, HwDatabase &db, SubTypeFlags 
         UP_CHK(exportAliases(db, elRoot));
     if (subTypes.testFlag(FileFormat::Categories))
         UP_CHK(exportCategories(db, elRoot));
+    if (subTypes.testFlag(FileFormat::Expenses))
+        UP_CHK(exportExpenses(db, elRoot));
     // TODO call testFlags for other subtypes, call exportExpenses <exp>, etc
+
+    // In Qt 6.2+, we can use testFlags()... maybe later...
+    if (subTypes.testFlag(FileFormat::Expenses)
+     || subTypes.testFlag(FileFormat::Incomes)
+     || subTypes.testFlag(FileFormat::Transfer)
+     || subTypes.testFlag(FileFormat::CurrencyConversion)
+     || subTypes.testFlag(FileFormat::Debtors)
+     || subTypes.testFlag(FileFormat::Creditors))
+        UP_CHK(exportImportReferences(db, elRoot));
 
     return endCreateXml(path);
 }
@@ -263,13 +275,51 @@ bool XmlHwFile::exportCategories(HwDatabase &db, QDomElement &elRoot)
             return false;
     // Transfer types
     QDomElement elTTGroup = addElem(elRoot, "transfertypes");
-    res = exportDbRecordsGroup(db, Q_SEL_TR_TYPE, elTTGroup, "tt", &children);
+    res = exportDbRecordsGroup(db, Q_SEL_TR_TYPE, elTTGroup, "tt");
     if (!res)
         return false;
     // Correspondents (debtors/creditors)
     QDomElement elCorGroup = addElem(elRoot, "correspondents");
-    res = exportDbRecordsGroup(db, Q_SEL_CORRESPONDENT, elCorGroup, "cor", &children);
+    res = exportDbRecordsGroup(db, Q_SEL_CORRESPONDENT, elCorGroup, "cor");
     return res;
+}
+
+#define Q_SEL_EX_OP \
+    "select ex.id, ex.op_date as dt, ex.quantity as q, un.short_name as u," \
+    " ex.amount as a, cur.abbr as cu, acc.name as ac," \
+    " cat.name||'::'||scat.name as ca," \
+    " ex.discount as di," \
+    " case ex.attention when 1 then 'yes' else null end as at," \
+    " ex.descr as d," \
+    " fim.filename||'::'||uid_imp as imp," \
+    " fvf.filename||'::'||uid_imp_verify as vfy" \
+    " from" \
+    " hw_ex_cat cat, hw_ex_subcat scat," \
+    " hw_ex_op ex" \
+    " left join hw_unit un on un.id=ex.id_un" \
+    " left join hw_currency cur on cur.id=ex.id_cur" \
+    " left join hw_account acc on acc.id=ex.id_ac" \
+    " left join hw_imp_file fim on fim.id=ex.id_imp" \
+    " left join hw_imp_file fvf on fvf.id=ex.id_imp_verify" \
+    " where id_rc is null" \
+    " and ex.id_esubcat=scat.id" \
+    " and scat.id_ecat=cat.id" \
+    " order by dt, ca;"
+
+bool XmlHwFile::exportExpenses(HwDatabase &db, QDomElement &elRoot)
+{
+    QDomElement elExpGroup = addElem(elRoot, "expenses");
+    bool res = exportDbRecordsGroup(db, Q_SEL_EX_OP, elExpGroup, "exp");
+    if (!res)
+        return false;
+    // TODO receipts here!
+    // TODO check attention
+    return true;
+}
+
+bool XmlHwFile::exportImportReferences(HwDatabase &db, QDomElement &elRoot)
+{
+    return true; // TODO
 }
 
 bool XmlHwFile::exportDbRecordsGroup(HwDatabase &db, const QString &qs, QDomElement &elGroup,
