@@ -214,12 +214,12 @@
         <translation>Информация для экспорта</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/exportdialog.ui" line="100"/>
+        <location filename="../app/formatsgui/exportdialog.ui" line="107"/>
         <source>Accounts</source>
         <translation>Счета</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/exportdialog.ui" line="107"/>
+        <location filename="../app/formatsgui/exportdialog.ui" line="135"/>
         <source>Expenses</source>
         <translation>Расходы</translation>
     </message>
@@ -229,58 +229,78 @@
         <translation>Псевдонимы</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/exportdialog.ui" line="121"/>
+        <location filename="../app/formatsgui/exportdialog.ui" line="128"/>
         <source>Incomes</source>
         <translation>Доходы</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/exportdialog.ui" line="128"/>
+        <location filename="../app/formatsgui/exportdialog.ui" line="100"/>
         <source>Categories</source>
         <translation>Категории</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/exportdialog.ui" line="135"/>
+        <location filename="../app/formatsgui/exportdialog.ui" line="121"/>
         <source>Transfer</source>
         <translation>Переносы</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/exportdialog.ui" line="159"/>
+        <location filename="../app/formatsgui/exportdialog.ui" line="142"/>
+        <source>Borrow</source>
+        <translation>Кредиты</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/exportdialog.ui" line="149"/>
+        <source>Lend</source>
+        <translation>Долги</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/exportdialog.ui" line="156"/>
+        <source>Exchange</source>
+        <translation>Обмен валют</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/exportdialog.ui" line="163"/>
+        <source>Rates</source>
+        <translation>Курсы валют</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/exportdialog.ui" line="187"/>
         <source>Select all (Ctrl+A)</source>
         <translation>Выбрать всё (Ctrl+A)</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/exportdialog.ui" line="179"/>
+        <location filename="../app/formatsgui/exportdialog.ui" line="207"/>
         <source>Unselect all (Ctrl+B)</source>
         <translation>Снять всё (Ctrl+B)</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/exportdialog.ui" line="201"/>
+        <location filename="../app/formatsgui/exportdialog.ui" line="229"/>
         <source>Select all</source>
         <translation>Выбрать всё</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/exportdialog.ui" line="204"/>
+        <location filename="../app/formatsgui/exportdialog.ui" line="232"/>
         <source>Ctrl+A</source>
         <translation>Ctrl+A</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/exportdialog.ui" line="209"/>
-        <location filename="../app/formatsgui/exportdialog.ui" line="212"/>
+        <location filename="../app/formatsgui/exportdialog.ui" line="237"/>
+        <location filename="../app/formatsgui/exportdialog.ui" line="240"/>
         <source>Unselect all</source>
         <translation>Снять всё</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/exportdialog.ui" line="215"/>
+        <location filename="../app/formatsgui/exportdialog.ui" line="243"/>
         <source>Ctrl+B</source>
         <translation>Ctrl+B</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/exportdialog.cpp" line="169"/>
+        <location filename="../app/formatsgui/exportdialog.cpp" line="184"/>
         <source>Select export directory</source>
         <translation>Выберите каталог для экспорта</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/exportdialog.cpp" line="171"/>
+        <location filename="../app/formatsgui/exportdialog.cpp" line="186"/>
         <source>Select export file</source>
         <translation>Выберите файл для экспорта</translation>
     </message>
@@ -392,7 +412,7 @@
     <message>
         <location filename="../app/mainwindow.ui" line="132"/>
         <source>Borrow from other (credit)</source>
-        <translation>Взяли у нас (кредит)</translation>
+        <translation>Взяли у других (кредит)</translation>
     </message>
     <message>
         <location filename="../app/mainwindow.ui" line="161"/>

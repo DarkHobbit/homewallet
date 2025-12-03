@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>497</width>
-    <height>399</height>
+    <height>432</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -94,17 +94,17 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QGridLayout" name="gridLayout">
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="cbCategories">
+          <property name="text">
+           <string>Categories</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="0">
          <widget class="QCheckBox" name="cbAccounts">
           <property name="text">
            <string>Accounts</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QCheckBox" name="cbExpenses">
-          <property name="text">
-           <string>Expenses</string>
           </property>
          </widget>
         </item>
@@ -115,6 +115,13 @@
           </property>
          </widget>
         </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="cbTransfer">
+          <property name="text">
+           <string>Transfer</string>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="1">
          <widget class="QCheckBox" name="cbIncomes">
           <property name="text">
@@ -122,17 +129,38 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QCheckBox" name="cbCategories">
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="cbExpenses">
           <property name="text">
-           <string>Categories</string>
+           <string>Expenses</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QCheckBox" name="cbTransfer">
+        <item row="5" column="1">
+         <widget class="QCheckBox" name="cbBorrow">
           <property name="text">
-           <string>Transfer</string>
+           <string>Borrow</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QCheckBox" name="cbLend">
+          <property name="text">
+           <string>Lend</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QCheckBox" name="cbExchange">
+          <property name="text">
+           <string>Exchange</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QCheckBox" name="cbRates">
+          <property name="text">
+           <string>Rates</string>
           </property>
          </widget>
         </item>

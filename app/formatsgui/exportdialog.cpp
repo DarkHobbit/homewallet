@@ -61,7 +61,10 @@ FileFormat::SubTypeFlags ExportDialog::getSubTypes()
     checkSubType(subTypes, ui->cbExpenses, FileFormat::Expenses);
     checkSubType(subTypes, ui->cbIncomes, FileFormat::Incomes);
     checkSubType(subTypes, ui->cbTransfer, FileFormat::Transfer);
-    // TODO other sc
+    checkSubType(subTypes, ui->cbLend, FileFormat::Debtors);
+    checkSubType(subTypes, ui->cbBorrow, FileFormat::Creditors);
+    checkSubType(subTypes, ui->cbExchange, FileFormat::CurrencyConversion);
+    checkSubType(subTypes, ui->cbRates, FileFormat::CurrencyRate);
     return subTypes;
 }
 
@@ -100,7 +103,10 @@ void ExportDialog::on_cbFormat_currentIndexChanged(int)
     setSubTypeEnabled(ui->cbExpenses, FileFormat::Expenses);
     setSubTypeEnabled(ui->cbIncomes, FileFormat::Incomes);
     setSubTypeEnabled(ui->cbTransfer, FileFormat::Transfer);
-    // TODO other sc
+    setSubTypeEnabled(ui->cbLend, FileFormat::Debtors);
+    setSubTypeEnabled(ui->cbBorrow, FileFormat::Creditors);
+    setSubTypeEnabled(ui->cbExchange, FileFormat::CurrencyConversion);
+    setSubTypeEnabled(ui->cbRates, FileFormat::CurrencyRate);
 }
 
 void ExportDialog::setSubTypeEnabled(QCheckBox *cb, FileFormat::SubType typeFlag)
@@ -131,7 +137,10 @@ void ExportDialog::on_btnSelectAll_clicked()
     selectSubTypeIfEnabled(ui->cbExpenses);
     selectSubTypeIfEnabled(ui->cbIncomes);
     selectSubTypeIfEnabled(ui->cbTransfer);
-    // TODO other sc
+    selectSubTypeIfEnabled(ui->cbLend);
+    selectSubTypeIfEnabled(ui->cbBorrow);
+    selectSubTypeIfEnabled(ui->cbExchange);
+    selectSubTypeIfEnabled(ui->cbRates);
 }
 
 void ExportDialog::on_btnUnselectAll_clicked()
@@ -142,7 +151,10 @@ void ExportDialog::on_btnUnselectAll_clicked()
     ui->cbExpenses->setChecked(false);
     ui->cbIncomes->setChecked(false);
     ui->cbTransfer->setChecked(false);
-    // TODO other sc
+    ui->cbLend->setChecked(false);
+    ui->cbBorrow->setChecked(false);
+    ui->cbExchange->setChecked(false);
+    ui->cbRates->setChecked(false);
 }
 
 void ExportDialog::accept()
@@ -153,7 +165,10 @@ void ExportDialog::accept()
         ||ui->cbExpenses->isChecked()
         ||ui->cbIncomes->isChecked()
         ||ui->cbTransfer->isChecked()
-        // TODO other sc
+        ||ui->cbLend->isChecked()
+        ||ui->cbBorrow->isChecked()
+        ||ui->cbExchange->isChecked()
+        ||ui->cbRates->isChecked()
         ) {
         configManager.setLastExportedFile(ui->lePath->text());
         QDialog::accept();
