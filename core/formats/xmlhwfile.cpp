@@ -317,9 +317,14 @@ bool XmlHwFile::exportExpenses(HwDatabase &db, QDomElement &elRoot)
     return true;
 }
 
+#define Q_SEL_IMP_FILES \
+    "select id, imp_date as dt, filename as fn, filetype as ft, descr as d" \
+    " from hw_imp_file order by dt, fn;"
+
 bool XmlHwFile::exportImportReferences(HwDatabase &db, QDomElement &elRoot)
 {
-    return true; // TODO
+    QDomElement elImpGroup = addElem(elRoot, "importfiles");
+    return exportDbRecordsGroup(db, Q_SEL_IMP_FILES, elImpGroup, "imf");
 }
 
 bool XmlHwFile::exportDbRecordsGroup(HwDatabase &db, const QString &qs, QDomElement &elGroup,
