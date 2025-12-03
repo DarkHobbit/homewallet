@@ -42,6 +42,7 @@ private:
     bool exportCategories(HwDatabase& db, QDomElement& elRoot);
     bool exportExpenses(HwDatabase& db, QDomElement& elRoot);
     bool exportIncomes(HwDatabase& db, QDomElement& elRoot);
+    bool exportTransfer(HwDatabase& db, QDomElement& elRoot);
 
     bool exportImportReferences(HwDatabase& db, QDomElement& elRoot);
 

@@ -46,7 +46,7 @@ FileFormat::SubTypeFlags XmlHwFile::supportedExportSubTypes()
 {
     return (FileFormat::SubTypeFlags)
         (AccountsInBrief | Aliases | Categories
-         | Expenses | Incomes);
+         | Expenses | Incomes | Transfer);
 }
 
 QString XmlHwFile::formatAbbr()
@@ -100,6 +100,8 @@ bool XmlHwFile::exportRecords(const QString &path, HwDatabase &db, SubTypeFlags 
         UP_CHK(exportExpenses(db, elRoot));
     if (subTypes.testFlag(FileFormat::Incomes))
         UP_CHK(exportIncomes(db, elRoot));
+    if (subTypes.testFlag(FileFormat::Transfer))
+        UP_CHK(exportTransfer(db, elRoot));
     // TODO call testFlags for other subtypes
 
     // In Qt 6.2+, we can use testFlags()... maybe later...
@@ -342,6 +344,28 @@ bool XmlHwFile::exportIncomes(HwDatabase &db, QDomElement &elRoot)
 {
     QDomElement elIncGroup = addElem(elRoot, "incomes");
     return exportDbRecordsGroup(db, Q_SEL_IN_OP, elIncGroup, "inc");
+}
+
+#define Q_SEL_TR \
+    "select tr.id, tr.op_date as dt, cur.abbr as cur," \
+    " acci.name as ai, acco.name as ao, tt.name as t," \
+    " tr.descr as d," \
+    " fim.filename||'::'||uid_imp as imp," \
+    " fvf.filename||'::'||uid_imp_verify as vfy" \
+    " from" \
+    " hw_transfer tr" \
+    " left join hw_currency cur on cur.id=tr.id_cur" \
+    " left join hw_account acci on acci.id=tr.id_ac_in" \
+    " left join hw_account acco on acco.id=tr.id_ac_out" \
+    " left join hw_imp_file fim on fim.id=tr.id_imp" \
+    " left join hw_imp_file fvf on fvf.id=tr.id_imp_verify" \
+    " left join hw_transfer_type tt on tt.id=tr.id_tt" \
+    " order by dt, t;"
+
+bool XmlHwFile::exportTransfer(HwDatabase &db, QDomElement &elRoot)
+{
+    QDomElement elTrGroup = addElem(elRoot, "transfer");
+    return exportDbRecordsGroup(db, Q_SEL_TR, elTrGroup, "tr");
 }
 
 #define Q_SEL_IMP_FILES \
