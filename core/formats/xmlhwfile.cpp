@@ -46,7 +46,8 @@ FileFormat::SubTypeFlags XmlHwFile::supportedExportSubTypes()
 {
     return (FileFormat::SubTypeFlags)
         (AccountsInBrief | Aliases | Categories
-         | Expenses | Incomes | Transfer);
+         | Expenses | Incomes | Transfer
+         | CurrencyConversion);
 }
 
 QString XmlHwFile::formatAbbr()
@@ -102,6 +103,8 @@ bool XmlHwFile::exportRecords(const QString &path, HwDatabase &db, SubTypeFlags 
         UP_CHK(exportIncomes(db, elRoot));
     if (subTypes.testFlag(FileFormat::Transfer))
         UP_CHK(exportTransfer(db, elRoot));
+    if (subTypes.testFlag(FileFormat::CurrencyConversion))
+        UP_CHK(exportCurrencyConversion(db, elRoot));
     // TODO call testFlags for other subtypes
 
     // In Qt 6.2+, we can use testFlags()... maybe later...
@@ -366,6 +369,28 @@ bool XmlHwFile::exportTransfer(HwDatabase &db, QDomElement &elRoot)
 {
     QDomElement elTrGroup = addElem(elRoot, "transfer");
     return exportDbRecordsGroup(db, Q_SEL_TR, elTrGroup, "tr");
+}
+
+#define Q_SEL_CUR_EXCH \
+    "select ce.id, ce.op_date as dt, acc.name as ac," \
+    "curi.abbr as ci, curo.abbr as co, amount_in as ami, amount_out as amo," \
+    " ce.descr as d," \
+    " fim.filename||'::'||uid_imp as imp," \
+    " fvf.filename||'::'||uid_imp_verify as vfy" \
+    " from" \
+    " hw_curr_exch ce" \
+    " left join hw_account acc on acc.id=ce.id_ac" \
+    " left join hw_currency curi on curi.id=ce.id_cur_in" \
+    " left join hw_currency curo on curo.id=ce.id_cur_out" \
+    " left join hw_imp_file fim on fim.id=ce.id_imp" \
+    " left join hw_imp_file fvf on fvf.id=ce.id_imp_verify" \
+    " order by dt, co;"
+
+
+bool XmlHwFile::exportCurrencyConversion(HwDatabase &db, QDomElement &elRoot)
+{
+    QDomElement elCeGroup = addElem(elRoot, "currencyexchange");
+    return exportDbRecordsGroup(db, Q_SEL_CUR_EXCH, elCeGroup, "ce");
 }
 
 #define Q_SEL_IMP_FILES \
