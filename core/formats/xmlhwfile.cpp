@@ -46,7 +46,7 @@ FileFormat::SubTypeFlags XmlHwFile::supportedExportSubTypes()
 {
     return (FileFormat::SubTypeFlags)
         (AccountsInBrief | Aliases | Categories
-         | Expenses);
+         | Expenses | Incomes);
 }
 
 QString XmlHwFile::formatAbbr()
@@ -98,7 +98,9 @@ bool XmlHwFile::exportRecords(const QString &path, HwDatabase &db, SubTypeFlags 
         UP_CHK(exportCategories(db, elRoot));
     if (subTypes.testFlag(FileFormat::Expenses))
         UP_CHK(exportExpenses(db, elRoot));
-    // TODO call testFlags for other subtypes, call exportExpenses <exp>, etc
+    if (subTypes.testFlag(FileFormat::Incomes))
+        UP_CHK(exportIncomes(db, elRoot));
+    // TODO call testFlags for other subtypes
 
     // In Qt 6.2+, we can use testFlags()... maybe later...
     if (subTypes.testFlag(FileFormat::Expenses)
@@ -313,8 +315,33 @@ bool XmlHwFile::exportExpenses(HwDatabase &db, QDomElement &elRoot)
     if (!res)
         return false;
     // TODO receipts here!
-    // TODO check attention
     return true;
+}
+
+#define Q_SEL_IN_OP \
+"select inc.id, inc.op_date as dt, inc.quantity as q, un.short_name as u," \
+    " inc.amount as a, cur.abbr as cu, acc.name as ac," \
+    " cat.name||'::'||scat.name as ca," \
+    " case inc.attention when 1 then 'yes' else null end as at," \
+    " inc.descr as d," \
+    " fim.filename||'::'||uid_imp as imp," \
+    " fvf.filename||'::'||uid_imp_verify as vfy" \
+    " from" \
+    " hw_in_cat cat, hw_in_subcat scat," \
+    " hw_in_op inc" \
+    " left join hw_unit un on un.id=inc.id_un" \
+    " left join hw_currency cur on cur.id=inc.id_cur" \
+    " left join hw_account acc on acc.id=inc.id_ac" \
+    " left join hw_imp_file fim on fim.id=inc.id_imp" \
+    " left join hw_imp_file fvf on fvf.id=inc.id_imp_verify" \
+    " where inc.id_isubcat=scat.id" \
+    " and scat.id_icat=cat.id" \
+    " order by dt, ca;"
+
+bool XmlHwFile::exportIncomes(HwDatabase &db, QDomElement &elRoot)
+{
+    QDomElement elIncGroup = addElem(elRoot, "incomes");
+    return exportDbRecordsGroup(db, Q_SEL_IN_OP, elIncGroup, "inc");
 }
 
 #define Q_SEL_IMP_FILES \

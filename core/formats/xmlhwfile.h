@@ -41,6 +41,7 @@ private:
          const QString& errorMessageIfRefMissing, HwDatabase::DictColl& alColl, HwDatabase::DictColl& srcColl);
     bool exportCategories(HwDatabase& db, QDomElement& elRoot);
     bool exportExpenses(HwDatabase& db, QDomElement& elRoot);
+    bool exportIncomes(HwDatabase& db, QDomElement& elRoot);
 
     bool exportImportReferences(HwDatabase& db, QDomElement& elRoot);
 
