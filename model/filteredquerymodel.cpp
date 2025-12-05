@@ -13,6 +13,8 @@
 
 #include <algorithm>
 #include <iostream>
+#include <sqlite3.h>
+
 #include <QSqlError>
 #include <QSqlQuery>
 
@@ -189,11 +191,20 @@ void FilteredQueryModel::updateData(const QString &sql, bool insertWhere)
 QString FilteredQueryModel::lowUnitFunction(const QString& fieldName, const QString& currFieldName)
 {
     QString res;
-    if (0) // SQLite 3.38+ and other databases
+    QString drvName = QSqlDatabase::database().driverName();
+    if (drvName=="QSQLITE") {
+        int dbmsVer = sqlite3_libversion_number();
+        if (dbmsVer>=3038000) // SQLite 3.38+
+            res = QString("format('%.2f', ") + fieldName + "/100.00)";
+        else if (dbmsVer>=3008003) // SQLite 3.8.3+
+            res = QString("printf('%.2f', ") + fieldName + "/100.00)";
+        else // very old SQLite (e.g. 3.7.17 from Debian Wheezy)
+            // TODO very slow on 40000 records; m.b. use QLocale::toCurrencyString() on client side in model...
+            res = QString("substr(cast(") + fieldName + " as text), 1, length(cast(" + fieldName + " as text))-2)||'.'"
+                + "||substr(cast(" + fieldName + " as text), length(cast(" + fieldName + " as text))-1, 2)";
+    }
+    else // other DBMSes, e.g. PostgreSQL
         res = QString("format('%.2f', ") + fieldName + "/100.00)";
-    else // old SQLite
-        res = QString("printf('%.2f', ") + fieldName + "/100.00)";
-    // TODO m.b. use QLocale::toCurrencyString() on client side in model...
     if (!currFieldName.isEmpty() && gd.showSumsWithCurrency)
         res += "||" + currFieldName;
     return res;
