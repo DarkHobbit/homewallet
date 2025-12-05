@@ -179,13 +179,12 @@ void FilteredQueryModel::updateData(const QString &sql, bool insertWhere)
     // All together
     QSqlQuery q(sql.arg(fields).arg(fAdd));
     setQuery(q);
-    QString qe = q.lastError().text();
-    if (qe.isEmpty()) {
+    if (q.lastError().type()==QSqlError::NoError) {
         while (canFetchMore())
             fetchMore();
     }
     else
-        emit modelError(qe);
+        emit modelError(q.lastError().text());
 }
 
 QString FilteredQueryModel::lowUnitFunction(const QString& fieldName, const QString& currFieldName)
