@@ -79,8 +79,6 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
             // TODO name to abbr!!!
             if (!findCurrency(db, c, c.currName, c.idCur))
                 continue;
-            if (!findUnit(db, c, c.unitName, c.idUnit))
-                continue;
             if (!c.subcatName.isEmpty()) { // Full-qualified subcategory
                 c.idCat = db.expenseCategoryId(c.catName);
                 if (c.idCat==-1) {
@@ -125,13 +123,18 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                     break;
                 default:
                     c.state = ImpRecCandidate::AmbiguousCategory;
+                    continue;
                 }
                 if (needSearchAlias) { // Alias!
 
                     // TODO
                     c.state = ImpRecCandidate::UnknownAlias; //===>
+                    continue;
                 }
             }
+            // Strictly after subcategories
+            if (!findUnit(db, c, c.unitName, c.idUnit))
+                continue;
             break;
         case ImpRecCandidate::Income:
             // TODO
