@@ -60,6 +60,24 @@
     </message>
 </context>
 <context>
+    <name>AddDefaultUnitDialog</name>
+    <message>
+        <location filename="../app/formatsgui/adddefaultunitdialog.ui" line="14"/>
+        <source>Default unit for </source>
+        <translation>Единица измерения по умолчанию для </translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/adddefaultunitdialog.ui" line="22"/>
+        <source>Recent used</source>
+        <translation>Ранее использованные</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/adddefaultunitdialog.ui" line="32"/>
+        <source>Other</source>
+        <translation>Прочие</translation>
+    </message>
+</context>
+<context>
     <name>AliasDialog</name>
     <message>
         <location filename="../app/aliasdialog.ui" line="19"/>
@@ -308,12 +326,12 @@
 <context>
     <name>FilteredQueryModel</name>
     <message>
-        <location filename="../model/filteredquerymodel.cpp" line="165"/>
+        <location filename="../model/filteredquerymodel.cpp" line="167"/>
         <source>Incorrect column index found, see Settings-&gt;Columns</source>
         <translation>Обнаружен некорректный индекс столбца, см. Настройки-&gt;Столбцы</translation>
     </message>
     <message>
-        <location filename="../model/filteredquerymodel.cpp" line="220"/>
+        <location filename="../model/filteredquerymodel.cpp" line="230"/>
         <source>Can&apos;t remove records from this table</source>
         <translation>Из этой таблицы нельзя удалять записи</translation>
     </message>
@@ -644,18 +662,23 @@ at record %1 from %2</source>
         <translation>Состояние</translation>
     </message>
     <message>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="102"/>
+        <source>Add default unit</source>
+        <translation>Добавить единицу измерения по умолчанию</translation>
+    </message>
+    <message>
         <source>Row %1: source line %2, state - %3</source>
         <translation type="obsolete">Строка %1: строка исходного файла %2, состояние: %3</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="117"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="129"/>
         <source>Row %1: source line %2%3
 State: %4</source>
         <translation>Запись %1: исходная строка %2%3
 Состояние %4</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="146"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="158"/>
         <source>No unknown aliases in this row</source>
         <translation>В этой строке нет неизвестных псевдонимов</translation>
     </message>
@@ -701,6 +724,31 @@ State: %4</source>
         <location filename="../core/formats/commonexpimpdef.h" line="29"/>
         <source>Attribute %1 not found at line %2</source>
         <translation>Атрибут %1 не найден в строке %2</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/commonexpimpdef.h" line="31"/>
+        <source>At first, define subcategory for this record</source>
+        <translation>Сперва задайте подкатегорию для этой записи</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/commonexpimpdef.h" line="32"/>
+        <source>Unit isn&apos;t empty</source>
+        <translation>Единица измерения уже задана</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/commonexpimpdef.h" line="33"/>
+        <source>It isn&apos;t neither income, nor expense</source>
+        <translation>Это ни доход, ни расход</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/commonexpimpdef.h" line="34"/>
+        <source>No units found in database</source>
+        <translation>В БД нет единиц измерения</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/commonexpimpdef.h" line="37"/>
+        <source>Subcategory %1 already have default unit: %2. Are you really want replace it?</source>
+        <translation>У подкатегории %1 уже есть единица измерения по умолчанию: %2. Вы действительно хотите её заменить?</translation>
     </message>
     <message>
         <location filename="../core/formats/xmlfile.h" line="22"/>
@@ -1350,7 +1398,7 @@ Found: %1</source>
     <message>
         <location filename="../core/formats/interactiveformat.h" line="56"/>
         <source>unknown alias</source>
-        <translation>неизвестный псевдоним&gt;</translation>
+        <translation>неизвестный псевдоним</translation>
     </message>
     <message>
         <location filename="../core/formats/interactiveformat.h" line="57"/>

@@ -26,6 +26,7 @@ TEMPLATE = app
 SOURCES += \
     aboutdialog.cpp \
     aliasdialog.cpp \
+    formatsgui/adddefaultunitdialog.cpp \
     helpers.cpp \
     languageselectdialog.cpp \
     logwindow.cpp \
@@ -38,6 +39,7 @@ SOURCES += \
 HEADERS  += \
     aboutdialog.h \
     aliasdialog.h \
+    formatsgui/adddefaultunitdialog.h \
     helpers.h \
     languageselectdialog.h \
     logwindow.h \
@@ -49,6 +51,7 @@ HEADERS  += \
 FORMS    += \
     aboutdialog.ui \
     aliasdialog.ui \
+    formatsgui/adddefaultunitdialog.ui \
     languageselectdialog.ui \
     logwindow.ui \
     mainwindow.ui \

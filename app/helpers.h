@@ -21,6 +21,16 @@
 
 #include "genericdatabase.h"
 
+#define GUI_DB_CHK(action, q) \
+{ \
+        if (!(action)) \
+    { \
+            QMessageBox::critical(0, S_ERROR, q.lastError().text()); \
+            return; \
+    } \
+}
+
+
 QStringList getListItems(QListWidget* list);
 void fillComboByDict(QComboBox* combo, GenericDatabase::DictColl coll, bool addAllItem);
 int getComboCurrentId(QComboBox* combo);

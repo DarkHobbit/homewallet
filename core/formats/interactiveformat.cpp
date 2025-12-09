@@ -133,8 +133,24 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                 }
             }
             // Strictly after subcategories
-            if (!findUnit(db, c, c.unitName, c.idUnit))
-                continue;
+            if (c.unitName.isEmpty()) {
+                // Try to use default unit
+                QSqlQuery qDefUnit;
+                DB_CHK(qDefUnit.prepare(SQL_GET_DEF_EXP_UNIT));
+                qDefUnit.bindValue(":id", c.idSubcat);
+                DB_CHK(qDefUnit.exec());
+                if (db.queryRecCount(qDefUnit)>0) {
+                    c.unitName = qDefUnit.value(0).toInt();
+                    c.idUnit = qDefUnit.value(1).toInt();
+                }
+                else
+                    c.state = ImpRecCandidate::UnknownUnit;
+            }
+            else {
+                // Exactly defined unit
+                if (!findUnit(db, c, c.unitName, c.idUnit))
+                    continue;
+            }
             break;
         case ImpRecCandidate::Income:
             // TODO

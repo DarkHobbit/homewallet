@@ -15,7 +15,9 @@
 #include <QMessageBox>
 #include <QPushButton>
 
+#include "adddefaultunitdialog.h"
 #include "aliasdialog.h"
+#include "formats/commonexpimpdef.h"
 #include "globals.h"
 #include "helpers.h"
 #include "postimportdialog.h"
@@ -29,6 +31,7 @@ PostImportDialog::PostImportDialog(QWidget *parent) :
     ui->setupUi(this);
     ui->tableExpenses->insertAction(0, ui->actExpCandState);
     ui->tableExpenses->insertAction(0, ui->actAddAlias);
+    ui->tableExpenses->insertAction(0, ui->actAddDefaultUnit);
 }
 
 PostImportDialog::~PostImportDialog()
@@ -64,6 +67,15 @@ void PostImportDialog::showEvent(QShowEvent*)
     // Try to reuce source string
     ui->tableExpenses->setColumnWidth(1, ui->tableExpenses->columnWidth(5));
     ui->tableIncomes->setColumnWidth(1, ui->tableIncomes->columnWidth(5));
+}
+
+void PostImportDialog::updateView()
+{
+    intFile->analyzeCandidates(*db);
+    activeModel->update();
+    updateStat();
+    // TODO if works, write ImportModelSet::updateModels() and move to
+    // (for accs, units, currs need updates all)
 }
 
 void PostImportDialog::updateStat()
@@ -140,7 +152,7 @@ void PostImportDialog::on_btnAddAlias_clicked()
         alType = HwDatabase::Unit;
         alS = c->unitName;
         break;
-        // TODO category, subcategory, alias
+        // TODO category, subcategory (check c->type)
     default:
         QMessageBox::critical(0, S_ERROR,
             tr("No unknown aliases in this row"));
@@ -151,17 +163,34 @@ void PostImportDialog::on_btnAddAlias_clicked()
     d->addAlias(alType, alS);
     delete d;
     // Update candidates and its view
-    intFile->analyzeCandidates(*db);
-    activeModel->update();
-    updateStat();
-    // TODO if works, write ImportModelSet::updateModels() and move to
-    // (for accs, units, currs need updates all)
+    updateView();
 }
-
-
 
 void PostImportDialog::on_actAddAlias_triggered()
 {
     on_btnAddAlias_clicked();
+}
+
+void PostImportDialog::on_actAddDefaultUnit_triggered()
+{
+    activeTab();
+    int r = activeView->currentIndex().row();
+    ImpRecCandidate* c = activeModel->cand(r);
+    if (c->subcatName.isEmpty()) {
+        QMessageBox::critical(0, S_ERROR, S_ERR_NO_SUBCAT);
+        return;
+    }
+    if (!c->unitName.isEmpty()) {
+        QMessageBox::critical(0, S_ERROR, S_ERR_UNIT_ISNT_EMPTY);
+        return;
+    }
+    if (c->type!=ImpRecCandidate::Income && c->type!=ImpRecCandidate::Expense) {
+        QMessageBox::critical(0, S_ERROR, S_ERR_NOT_INC_NOT_EXP);
+        return;
+    }
+    auto d = new AddDefaultUnitDialog(0, db);
+    d->addDefaultUnit(c->idSubcat, c->subcatName, c->type==ImpRecCandidate::Expense);
+    // Update candidates and its view
+    updateView();
 }
 

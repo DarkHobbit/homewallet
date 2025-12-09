@@ -97,6 +97,14 @@
     <enum>QAction::NoRole</enum>
    </property>
   </action>
+  <action name="actAddDefaultUnit">
+   <property name="text">
+    <string>Add default unit</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>
