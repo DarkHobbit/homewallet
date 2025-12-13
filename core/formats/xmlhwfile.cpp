@@ -47,7 +47,8 @@ FileFormat::SubTypeFlags XmlHwFile::supportedExportSubTypes()
     return (FileFormat::SubTypeFlags)
         (AccountsInBrief | Aliases | Categories
          | Expenses | Incomes | Transfer
-         | CurrencyConversion);
+         | CurrencyConversion | Debtors | Creditors
+        );
 }
 
 QString XmlHwFile::formatAbbr()
@@ -105,8 +106,13 @@ bool XmlHwFile::exportRecords(const QString &path, HwDatabase &db, SubTypeFlags 
         UP_CHK(exportTransfer(db, elRoot));
     if (subTypes.testFlag(FileFormat::CurrencyConversion))
         UP_CHK(exportCurrencyConversion(db, elRoot));
+    if (subTypes.testFlag(FileFormat::Debtors))
+        UP_CHK(exportCredits(db, elRoot, "lendto", "ln", true));
+    if (subTypes.testFlag(FileFormat::Creditors))
+        UP_CHK(exportCredits(db, elRoot, "borrowfrom", "br", false));
     // TODO call testFlags for other subtypes
 
+    // Export references to import file refs (not all export types)
     // In Qt 6.2+, we can use testFlags()... maybe later...
     if (subTypes.testFlag(FileFormat::Expenses)
      || subTypes.testFlag(FileFormat::Incomes)
@@ -373,7 +379,7 @@ bool XmlHwFile::exportTransfer(HwDatabase &db, QDomElement &elRoot)
 
 #define Q_SEL_CUR_EXCH \
     "select ce.id, ce.op_date as dt, acc.name as ac," \
-    "curi.abbr as ci, curo.abbr as co, amount_in as ami, amount_out as amo," \
+    " curi.abbr as ci, curo.abbr as co, amount_in as ami, amount_out as amo," \
     " ce.descr as d," \
     " fim.filename||'::'||uid_imp as imp," \
     " fvf.filename||'::'||uid_imp_verify as vfy" \
@@ -386,11 +392,52 @@ bool XmlHwFile::exportTransfer(HwDatabase &db, QDomElement &elRoot)
     " left join hw_imp_file fvf on fvf.id=ce.id_imp_verify" \
     " order by dt, co;"
 
-
 bool XmlHwFile::exportCurrencyConversion(HwDatabase &db, QDomElement &elRoot)
 {
     QDomElement elCeGroup = addElem(elRoot, "currencyexchange");
     return exportDbRecordsGroup(db, Q_SEL_CUR_EXCH, elCeGroup, "ce");
+}
+
+#define Q_SEL_CRED \
+    "select cr.id, cr.op_date as dt, cr.close_date as dtc, remind_date as dtr," \
+    " cs.name as crs, cr.amount as a, cr.down_pay as dp, cr.money_back as mb, cr.money_remaining_debt as mrd," \
+    " cur.abbr as cu, acc.name as ac," \
+    " cr.rate as r, cr.is_rate_onetime as ot, period as p," \
+    " case period_unit" \
+    "  when 0 then 'eternal'" \
+    "  when 1 then 'month'" \
+    "  when 2 then 'year'" \
+    "  else 'unknown'" \
+    " end as pu," \
+    " case is_closed when 1 then 'yes' else 'no' end as cls," \
+    " cr.descr as d," \
+    " fim.filename||'::'||uid_imp as imp," \
+    " fvf.filename||'::'||uid_imp_verify as vfy" \
+    " from" \
+    " hw_credit cr" \
+    " left join hw_currency cur on cur.id=cr.id_cur" \
+    " left join hw_account acc on acc.id=cr.id_ac" \
+    " left join hw_correspondent cs on cs.id=cr.id_crs" \
+    " left join hw_imp_file fim on fim.id=cr.id_imp" \
+    " left join hw_imp_file fvf on fvf.id=cr.id_imp_verify" \
+    " where is_lend=%1" \
+    " order by dt;"
+
+bool XmlHwFile::exportCredits(HwDatabase &db, QDomElement &elRoot, const QString& groupName, const QString& elName, bool isLend)
+{
+    ChildRecMap elCreds;
+    QDomElement elGroup = addElem(elRoot, groupName);
+    bool res = exportDbRecordsGroup(db, QString(Q_SEL_CRED).arg(isLend ? "true" : "false"),
+               elGroup, elName, &elCreds);
+    if (res) {
+        // TODO возврат, уточнить, возврат это RETURN или что-то ещё
+        /*
+        foreach (int idCred, elCreds.keys())
+            if (!exportDbRecordsGroup(db, QString(Q_SEL_CRED_RET).arg(idCred), elCreds[idCred], "???"))
+                return false;
+                */
+    }
+    return res;
 }
 
 #define Q_SEL_IMP_FILES \

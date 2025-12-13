@@ -44,6 +44,7 @@ private:
     bool exportIncomes(HwDatabase& db, QDomElement& elRoot);
     bool exportTransfer(HwDatabase& db, QDomElement& elRoot);
     bool exportCurrencyConversion(HwDatabase& db, QDomElement& elRoot);
+    bool exportCredits(HwDatabase& db, QDomElement& elRoot, const QString& groupName, const QString& elName, bool isLend);
 
     bool exportImportReferences(HwDatabase& db, QDomElement& elRoot);
 

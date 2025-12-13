@@ -47,7 +47,7 @@ public:
         Expenses        = 0x0008,
         Transfer        = 0x0010,
         CurrencyConversion = 0x0020,
-        Debtors     = 0x0040, // TODO see, has database fio dictionary?
+        Debtors     = 0x0040, // TODO see, has HB database fio dictionary?
         Creditors   = 0x0080, // TODO -"-
         IncomePlan  = 0x0100,
         ExpensePlan = 0x0200,
