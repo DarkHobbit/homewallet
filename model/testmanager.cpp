@@ -24,11 +24,16 @@ QSqlQueryModel *TestManager::dbDebug(const QString &queryText, GenericDatabase &
     QSqlQuery q(db.sqlDbRef());
     q.prepare(queryText);
     q.exec();
-    QSqlQueryModel* m = new QSqlQueryModel();
-    m->setQuery(q);
-    while (m->canFetchMore())
-        m->fetchMore();
-    return m;
+    // TODO protect prepare()
+    if (q.isSelect()) {
+        QSqlQueryModel* m = new QSqlQueryModel();
+        m->setQuery(q);
+        while (m->canFetchMore())
+            m->fetchMore();
+        return m;
+    }
+    else
+        return 0;
 }
 
 bool TestManager::createTestData(HwDatabase &db, int numberOfExpenses)

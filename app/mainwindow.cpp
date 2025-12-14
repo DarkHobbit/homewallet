@@ -257,6 +257,8 @@ void MainWindow::on_action_DbDebug_triggered()
         0, tr("DB query"), tr("Query text"), QLineEdit::Normal, "select ");
     if (!sQuery.isEmpty()) {
         QSqlQueryModel* m = TestManager::dbDebug(sQuery, db);
+        if (!m)
+            return;
         QString err = m->lastError().text();
         if (err.trimmed().isEmpty()) {
             QMessageBox::information(0, S_INFORM, QString("%1 records got").arg(m->rowCount()));
