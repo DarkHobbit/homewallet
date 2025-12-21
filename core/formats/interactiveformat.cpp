@@ -38,7 +38,7 @@ void InteractiveFormat::clear()
 
 bool InteractiveFormat::isDialogRequired()
 {
-    return !candidates.readyToImport();
+    return true;
 }
 bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
 {

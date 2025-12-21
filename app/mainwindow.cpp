@@ -380,6 +380,8 @@ void MainWindow::on_action_Import_triggered()
                         impFile->postImport(db);
                     delete d;
                 }
+                else
+                    QMessageBox::warning(0, S_WARNING, tr("Format require dialog, but dialog not provided. Contact author"));
             }
             else
                 impFile->postImport(db);
