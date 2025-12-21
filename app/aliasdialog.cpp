@@ -20,7 +20,8 @@
 
 AliasDialog::AliasDialog(QWidget *parent, HwDatabase* _db) :
     QDialog(parent),
-    ui(new Ui::AliasDialog), db(_db)
+    ui(new Ui::AliasDialog),
+    db(_db), alType(HwDatabase::Account)
 {
     ui->setupUi(this);
 }
@@ -30,20 +31,33 @@ AliasDialog::~AliasDialog()
     delete ui;
 }
 
-void AliasDialog::addAlias(HwDatabase::AliasType alType, const QString &alS)
+void AliasDialog::addAlias(HwDatabase::AliasType _alType, const QString &alS, const QString &alHint)
 {
+    alType = _alType;
     ui->leAlias->setText(alS);
     setType(alType);
+    // For subcategories, set category candidate
+    if (!alHint.isEmpty()) {
+        int hintPos = ui->cbDict->findText(alHint);
+        if (hintPos>-1)
+            ui->cbDict->setCurrentIndex(hintPos);
+    }
+    // Tune combo to similar text (after hint set!)
+    if (ui->cbSubDict->isEnabled())
+        setSimilarComboText(ui->cbSubDict, alS);
+    else
+        setSimilarComboText(ui->cbDict, alS);
+    // Drive!
     exec();
     if (result()==QDialog::Accepted) {
         // TODO сделать некий intExecQuery() на базе GenericDatabase::execQuery
         // (интерактивный, с выводом ошибок prepare() и execQuery()
         bool res = false;
-        int idDict = getComboCurrentId(ui->cbDict);
+        int idDict = ui->cbSubDict->isEnabled() ? getComboCurrentId(ui->cbSubDict)
+                                                : getComboCurrentId(ui->cbDict);
         QString al = ui->leAlias->text();
         QString des = ui->teToDescr->toPlainText();
         res = db->addAlias(al, des, alType, idDict);
-            // TODO category+subcategory if available
         if (!res)
             QMessageBox::critical(0, S_ERROR, db->lastError());
     }
@@ -63,26 +77,61 @@ void AliasDialog::setType(HwDatabase::AliasType alType)
         setWindowTitle(tr("Account alias"));
         setSubdictEnabled(false);
         ui->lbDict->setText(tr("Account"));
+        ui->lbSubDict->setText(tr(""));
         db->collectDict(coll, "hw_account");
         break;
     case HwDatabase::Currency:
         setWindowTitle(tr("Currency alias"));
         setSubdictEnabled(false);
         ui->lbDict->setText(tr("Currency"));
+        ui->lbSubDict->setText(tr(""));
         db->collectDict(coll, "hw_currency", "full_name");
         break;
     case HwDatabase::Unit:
         setWindowTitle(tr("Unit alias"));
         setSubdictEnabled(false);
         ui->lbDict->setText(tr("Unit"));
+        ui->lbSubDict->setText(tr(""));
         db->collectDict(coll, "hw_unit");
         break;
-        // TODO category, subcategory, alias
+    case HwDatabase::IncomeCat:
+    case HwDatabase::ExpenseCat: {
+        setWindowTitle(tr("Category alias"));
+        setSubdictEnabled(false);
+        ui->lbDict->setText(tr("Category"));
+        ui->lbSubDict->setText(tr(""));
+        if (alType==HwDatabase::IncomeSubCat)
+            db->collectDict(coll, "hw_in_cat");
+        else
+            db->collectDict(coll, "hw_ex_cat");
+        break;
+    }
+    case HwDatabase::IncomeSubCat:
+    case HwDatabase::ExpenseSubCat: {
+        setWindowTitle(tr("Subcategory alias"));
+        setSubdictEnabled(true);
+        ui->lbDict->setText(tr("Category"));
+        ui->lbSubDict->setText(tr("Subcategory"));
+        if (alType==HwDatabase::IncomeSubCat) {
+            db->collectDict(coll, "hw_in_cat");
+            db->collectSubDict(coll, subCats, "hw_in_subcat", "name", "id", "id_icat");
+        }
+        else {
+            db->collectDict(coll, "hw_ex_cat");
+            db->collectSubDict(coll, subCats, "hw_ex_subcat", "name", "id", "id_ecat");
+        }
+        break;
+    }
     default:
         return;
     }
     fillComboByDict(ui->cbDict, coll, false);
-    if (ui->cbSubDict->isEnabled()) {
-        // TODO inc/exp subcat
-    }
 }
+
+void AliasDialog::on_cbDict_currentTextChanged(const QString &catName)
+{
+    ui->cbSubDict->clear();
+    if (!catName.isEmpty() && !subCats.isEmpty())
+        fillComboByDict(ui->cbSubDict, subCats[catName], false);
+}
+

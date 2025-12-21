@@ -40,7 +40,7 @@ bool InteractiveFormat::isDialogRequired()
 {
     return !candidates.readyToImport();
 }
-
+#include <iostream>
 bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
 {
     // Defaults
@@ -60,13 +60,28 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
         return false;
     }
     // Dictionaries
+    // - general: account, currency, unit
     candidates.collAcc.clear();
     db.collectDict(candidates.collAcc, "hw_alias", "pattern", "id_ac", "where id_ac is not null");
     candidates.collCurr.clear();
     db.collectDict(candidates.collCurr, "hw_alias", "pattern", "id_cur", "where id_cur is not null");
     candidates.collUnit.clear();
     db.collectDict(candidates.collUnit, "hw_alias", "pattern", "id_un", "where id_un is not null");
-    // TODO other dicts
+    candidates.collInCat.clear();
+    // - incomes
+    db.collectDict(candidates.collInCat, "hw_alias", "pattern", "id_icat", "where id_icat is not null");
+    candidates.collInAllSubCat.clear();
+    db.collectDict(candidates.collInAllSubCat, "hw_alias", "pattern", "id_isubcat", "where id_isubcat is not null");
+    candidates.collInCatBySubcat.clear();
+    db.collectDict(candidates.collInCatBySubcat, "hw_in_subcat", "name", "id_icat");
+    candidates.collExCat.clear();
+    // - expenses
+    db.collectDict(candidates.collExCat, "hw_alias", "pattern", "id_ecat", "where id_ecat is not null");
+    candidates.collExAllSubCat.clear();
+    db.collectDict(candidates.collExAllSubCat, "hw_alias", "pattern", "id_esubcat", "where id_esubcat is not null");
+    candidates.collExCatBySubcat.clear();
+    db.collectDict(candidates.collExCatBySubcat, "hw_ex_subcat", "name", "id_ecat");
+    // TODO transfer types
 
     // See candidates
     for (ImpRecCandidate& c: candidates) {
@@ -82,17 +97,27 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
             if (!c.subcatName.isEmpty()) { // Full-qualified subcategory
                 c.idCat = db.expenseCategoryId(c.catName);
                 if (c.idCat==-1) {
-                    // TODO alias for category
-                    c.state = ImpRecCandidate::UnknownCategory;
-                    continue;
+                    // Alias for category
+                    if (candidates.collExCat.keys().contains(c.catName)) {
+                        c.idCat = candidates.collExCat[c.catName];
+                    }
+                    else {
+                        c.state = ImpRecCandidate::UnknownCategory;
+                        continue;
+                    }
                 }
                 c.idSubcat = db.expenseSubCategoryId(c.idCat, c.subcatName);
                 if (c.idSubcat==-1) {
-                    // TODO alias for subcategory
-                    c.state = ImpRecCandidate::UnknownCategory;
-                    continue;
+                    // Alias for subcategory
+                    if (candidates.collExAllSubCat.keys().contains(c.subcatName)) {
+                        c.idSubcat = candidates.collExAllSubCat[c.subcatName];
+                    }
+                    else {
+                        c.state = ImpRecCandidate::UnknownSubCategory;
+                        continue;
+                    }
                 }
-                // Correct upper/low case
+                // Correct upper/low case and decode from aliases
                 c.catName = db.expenseCategoryById(c.idCat);
                 c.subcatName = db.expenseSubCategoryById(c.idSubcat);
                 c.state = ImpRecCandidate::ReadyToImport;
@@ -102,7 +127,6 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                 DB_CHK(q.prepare("select id, id_ecat from hw_ex_subcat where upper(name)=:name"));
                 q.bindValue(":name", c.alias.toUpper());
                 DB_CHK(q.exec());
-                // TODO save ecats here for future ask?
                 bool needSearchAlias = false;
                 switch(db.queryRecCount(q)) {
                 case 0:
@@ -122,14 +146,22 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                     c.state = ImpRecCandidate::ReadyToImport;
                     break;
                 default:
-                    c.state = ImpRecCandidate::AmbiguousCategory;
+                    c.state = ImpRecCandidate::AmbiguousSubCategory;
                     continue;
                 }
                 if (needSearchAlias) { // Alias!
-
-                    // TODO
-                    c.state = ImpRecCandidate::UnknownAlias; //===>
-                    continue;
+                    if (candidates.collExAllSubCat.keys().contains(c.alias)) {
+                        c.idSubcat = candidates.collExAllSubCat[c.alias];
+                        c.subcatName = db.expenseSubCategoryById(c.idSubcat);
+                        c.idCat = candidates.collExCatBySubcat[c.subcatName];
+                        c.catName = db.expenseCategoryById(c.idCat);
+                        c.state = ImpRecCandidate::ReadyToImport;
+                        break;
+                    }
+                    else {
+                        c.state = ImpRecCandidate::UnknownAlias;
+                        continue;
+                    }
                 }
             }
             // Strictly after subcategories

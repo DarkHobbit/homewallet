@@ -135,10 +135,11 @@ void PostImportDialog::on_btnAddAlias_clicked()
 {
     // Select alias type
     HwDatabase::AliasType alType;
-    QString alS;
+    QString alS, alHint = "";
     activeTab();
     int r = activeView->currentIndex().row();
     ImpRecCandidate* c = activeModel->cand(r);
+    bool isIncome = c->type==ImpRecCandidate::Income;
     switch(c->state) {
     case ImpRecCandidate::UnknownAccount:
         alType = HwDatabase::Account;
@@ -152,7 +153,22 @@ void PostImportDialog::on_btnAddAlias_clicked()
         alType = HwDatabase::Unit;
         alS = c->unitName;
         break;
-        // TODO category, subcategory (check c->type)
+    case ImpRecCandidate::UnknownCategory:
+        alType = isIncome ? HwDatabase::IncomeCat
+                          : HwDatabase::ExpenseCat;
+        alS = c->catName;
+        break;
+    case ImpRecCandidate::UnknownSubCategory:
+        alType = isIncome ? HwDatabase::IncomeSubCat
+                          : HwDatabase::ExpenseSubCat;
+        alS = c->subcatName;
+        alHint = c->catName;
+        break;
+    case ImpRecCandidate::UnknownAlias:
+        alType = isIncome ? HwDatabase::IncomeSubCat
+                          : HwDatabase::ExpenseSubCat;
+        alS = c->alias;
+        break;
     default:
         QMessageBox::critical(0, S_ERROR,
             tr("No unknown aliases in this row"));
@@ -160,7 +176,7 @@ void PostImportDialog::on_btnAddAlias_clicked()
     }
     // Ask user
     AliasDialog* d = new AliasDialog(0, db);
-    d->addAlias(alType, alS);
+    d->addAlias(alType, alS, alHint);
     delete d;
     // Update candidates and its view
     updateView();

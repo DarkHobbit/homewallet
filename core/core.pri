@@ -41,6 +41,7 @@ SOURCES	+= \
 
 DISTFILES += \
     $$PWD/dbinit/dbinit.sql \
+    $$PWD/dbinit/debugquerysamples.sql \
     $$PWD/dbinit/loadcurrency.sql
 
 LIBS += -lsqlite3

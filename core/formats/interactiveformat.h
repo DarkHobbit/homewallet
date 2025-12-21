@@ -31,8 +31,9 @@ struct ImpRecCandidate
         UnknownAccount,
         UnknownCurrency,
         UnknownUnit,
-        UnknownCategory,   // or subcategory
-        AmbiguousCategory, // or subcategory
+        UnknownCategory,
+        UnknownSubCategory,
+        AmbiguousSubCategory,
         UnknownTransType,
         PossiblyDup,
         ReadyToImport,
@@ -57,8 +58,9 @@ struct ImpRecCandidate
         QObject::tr("unknown account"),
         QObject::tr("unknown currency"),
         QObject::tr("unknown unit"),
-        QObject::tr("unknown category or subcategory"),
-        QObject::tr("ambiguous category or subcategory"),
+        QObject::tr("unknown category"),
+        QObject::tr("unknown subcategory"),
+        QObject::tr("ambiguous subcategory"),
         QObject::tr("unknown transfer type"),
         QObject::tr("possibly duplicate"),
         QObject::tr("ready to import")
@@ -81,6 +83,8 @@ struct ImpCandidates: public QList<ImpRecCandidate>
     int idCurDefault, idAccDefault;
     QString accDefault, curDefault;
     GenericDatabase::DictColl collAcc, collCurr, collUnit;
+    GenericDatabase::DictColl collInCat, collInAllSubCat, collExCat, collExAllSubCat;
+    GenericDatabase::DictColl collInCatBySubcat, collExCatBySubcat;
     bool readyToImport();
 };
 

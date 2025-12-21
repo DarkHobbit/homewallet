@@ -29,11 +29,16 @@ class AliasDialog : public QDialog
 public:
     explicit AliasDialog(QWidget *parent, HwDatabase* _db);
     ~AliasDialog();
-    void addAlias(HwDatabase::AliasType alType, const QString& alS);
+    void addAlias(HwDatabase::AliasType _alType, const QString& alS, const QString &alHint);
+
+private slots:
+    void on_cbDict_currentTextChanged(const QString &catName);
 
 private:
     Ui::AliasDialog *ui;
     HwDatabase* db;
+    HwDatabase::AliasType alType;
+    GenericDatabase::SubDictColl subCats;
     void setSubdictEnabled(bool state);
     void setType(HwDatabase::AliasType alType);
 };

@@ -72,3 +72,16 @@ QStringList getListItems(QListWidget *list)
         res << list->item(i)->text();
     return res;
 }
+
+void setSimilarComboText(QComboBox *combo, const QString &pattern)
+{
+    if (combo->count()<2)
+        return;
+    for (int i=0; i<combo->count()-1; i++) {
+        if (combo->itemText(i)<=pattern && combo->itemText(i+1)>pattern) {
+            combo->setCurrentIndex(i);
+            return;
+        }
+    }
+    combo->setCurrentIndex(combo->count()-1);
+}

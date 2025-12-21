@@ -34,6 +34,8 @@
 QStringList getListItems(QListWidget* list);
 void fillComboByDict(QComboBox* combo, GenericDatabase::DictColl coll, bool addAllItem);
 int getComboCurrentId(QComboBox* combo);
+// setSimilarComboText() assumes that combo box items sorted alphabetically
+void setSimilarComboText(QComboBox* combo, const QString& pattern);
 // Set color/font for each table view
 void updateTableConfig(QTableView* table);
 void updateOneView(QTableView* view, bool isDatabaseView);
