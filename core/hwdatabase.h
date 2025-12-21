@@ -66,6 +66,7 @@ public:
     int accountId(const QString& name, Qt::CaseSensitivity cs = Qt::CaseInsensitive);
     int addUnit(const QString& name, const QString& shortName, const QString& descr);
     int unitId(const QString& name);
+    QString unitById(int idUnit);
     int currencyIdByAbbr(const QString& abbr);
     // Categories
     int addIncomeCategory(const QString& name, const QString& descr);

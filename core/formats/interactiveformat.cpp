@@ -40,7 +40,6 @@ bool InteractiveFormat::isDialogRequired()
 {
     return !candidates.readyToImport();
 }
-#include <iostream>
 bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
 {
     // Defaults
@@ -172,7 +171,7 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                 qDefUnit.bindValue(":id", c.idSubcat);
                 DB_CHK(qDefUnit.exec());
                 if (db.queryRecCount(qDefUnit)>0) {
-                    c.unitName = qDefUnit.value(0).toInt();
+                    c.unitName = QString("[%1]").arg(qDefUnit.value(0).toString());
                     c.idUnit = qDefUnit.value(1).toInt();
                 }
                 else
@@ -284,12 +283,8 @@ bool InteractiveFormat::findCurrency(HwDatabase &db, ImpRecCandidate &c, QString
 
 bool InteractiveFormat::findUnit(HwDatabase &db, ImpRecCandidate &c, QString &name, int &idUn)
 {
-    /*
-    if (name.isEmpty())
-        return true;
-*/
     idUn = db.unitId(name);
-    if (idUn==-1) {
+    if (idUn==-1) { // hack for dotted units
         idUn = db.unitId(name+".");
         if (idUn!=-1) {
             name = name+".";
@@ -298,6 +293,7 @@ bool InteractiveFormat::findUnit(HwDatabase &db, ImpRecCandidate &c, QString &na
         // Try alias
         if (candidates.collUnit.keys().contains(name)) {
             idUn = candidates.collUnit[name];
+            name = QString("(%1)").arg(db.unitById(idUn));
             return true;
         }
         c.state = ImpRecCandidate::UnknownUnit;
@@ -305,7 +301,6 @@ bool InteractiveFormat::findUnit(HwDatabase &db, ImpRecCandidate &c, QString &na
     }
     return true;
 }
-
 
 ImpRecCandidate::ImpRecCandidate(const QString &_source, const QString &_uid, int _lineNumber, const QDateTime& _opDT)
     :source(_source), uid(_uid), lineNumber(_lineNumber), opDT(_opDT)

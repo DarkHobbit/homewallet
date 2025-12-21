@@ -222,6 +222,15 @@ int HwDatabase::unitId(const QString &name)
     return res;
 }
 
+QString HwDatabase::unitById(int idUnit)
+{
+    QSqlQuery sqlSel(sqlDb);
+    if (!prepQuery(sqlSel, "select short_name from hw_unit where id=:id"))
+        return "";
+    sqlSel.bindValue(":id", idUnit);
+    return dictName(sqlSel);
+}
+
 int HwDatabase::currencyIdByAbbr(const QString &abbr)
 {
     QSqlQuery sqlSel(sqlDb);
