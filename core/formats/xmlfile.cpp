@@ -12,6 +12,7 @@
  */
 
 #include <QSqlQuery>
+#include <QSqlRecord>
 #include <QTextStream>
 
 #include "commonexpimpdef.h"
@@ -91,6 +92,35 @@ bool XmlFile::exportElemsFromQuery(HwDatabase &db, QDomElement &elParent,
             elRec.setAttribute(fieldNames[i], sqlSel.value(i).toString());
         _processedRecordsCount++;
         sqlSel.next();
+    }
+    return true;
+}
+
+bool XmlFile::exportDbRecordsGroup(HwDatabase &db, const QString &qs, QDomElement &elGroup,
+    const QString &reqElemName, ChildRecMap* children)
+{
+    QSqlQuery q;
+    DB_CHK(db.prepQuery(q, qs));
+    DB_CHK(db.execQuery(q))
+    if (q.first()) {
+        // Collect field names => attr names
+        QStringList fieldNames;
+        for (int i=1; i<q.record().count(); i++)
+            fieldNames << q.record().fieldName(i);
+        // Process records
+        while (q.isValid()) {
+            QDomElement elRec = addElem(elGroup, reqElemName);
+            for (int i=1; i<=fieldNames.count(); i++) {
+                if (!q.isNull(i))
+                    elRec.setAttribute(fieldNames[i-1], q.value(i).toString());
+            }
+            if (children) {
+                int id = q.value(0).toInt();
+                (*children)[id] = elRec;
+            }
+            q.next();
+        }
+        _processedRecordsCount += elGroup.childNodes().count();
     }
     return true;
 }

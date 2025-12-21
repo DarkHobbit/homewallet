@@ -14,7 +14,6 @@
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QDir>
-#include <QSqlRecord>
 
 #include "commonexpimpdef.h"
 #include "xmlhwfile.h"
@@ -203,6 +202,33 @@ bool XmlHwFile::exportAccounts(HwDatabase &db, QDomElement &elRoot)
     " where al.id_un=reft.id" \
     " order by ref" \
 
+#define Q_SEL_ALIAS_ICAT \
+    "select al.pattern, al.to_descr, c.name as ref" \
+        " from hw_alias al, hw_in_cat c" \
+        " where al.id_icat=c.id" \
+        " order by ref" \
+
+#define Q_SEL_ALIAS_ISUBCAT \
+    "select al.pattern, al.to_descr," \
+        "  c.name||'::'||sc.name as ref" \
+        " from hw_alias al, hw_in_cat c, hw_in_subcat sc" \
+        " where al.id_isubcat=sc.id and sc.id_icat=c.id" \
+        " order by ref" \
+
+#define Q_SEL_ALIAS_ECAT \
+    "select al.pattern, al.to_descr, c.name as ref" \
+        " from hw_alias al, hw_ex_cat c" \
+        " where al.id_ecat=c.id" \
+        " order by ref" \
+
+#define Q_SEL_ALIAS_ESUBCAT \
+    "select al.pattern, al.to_descr," \
+        "  c.name||'::'||sc.name as ref" \
+        " from hw_alias al, hw_ex_cat c, hw_ex_subcat sc" \
+        " where al.id_esubcat=sc.id and sc.id_ecat=c.id" \
+        " order by ref" \
+
+
 bool XmlHwFile::exportAliases(HwDatabase &db, QDomElement &elRoot)
 {
     QDomElement elList = addElem(elRoot, "aliases");
@@ -212,7 +238,15 @@ bool XmlHwFile::exportAliases(HwDatabase &db, QDomElement &elRoot)
         QStringList() << "pattern" << "to_descr" << "ref"));
     DB_CHK(exportElemsFromQuery(db, elList, "forunit", "ali", Q_SEL_ALIAS_UN,
         QStringList() << "pattern" << "to_descr" << "ref"));
-    // TODO other alias destinations
+    DB_CHK(exportElemsFromQuery(db, elList, "forincomecategories", "ali", Q_SEL_ALIAS_ICAT,
+        QStringList() << "pattern" << "to_descr" << "ref"));
+    DB_CHK(exportElemsFromQuery(db, elList, "forincomesubcategories", "ali", Q_SEL_ALIAS_ISUBCAT,
+        QStringList() << "pattern" << "to_descr" << "ref"));
+    DB_CHK(exportElemsFromQuery(db, elList, "forexpensecategories", "ali", Q_SEL_ALIAS_ECAT,
+        QStringList() << "pattern" << "to_descr" << "ref"));
+    DB_CHK(exportElemsFromQuery(db, elList, "forexpensesubcategories", "ali", Q_SEL_ALIAS_ESUBCAT,
+        QStringList() << "pattern" << "to_descr" << "ref"));
+    // TODO transfer type
     return true;
 }
 
@@ -448,33 +482,4 @@ bool XmlHwFile::exportImportReferences(HwDatabase &db, QDomElement &elRoot)
 {
     QDomElement elImpGroup = addElem(elRoot, "importfiles");
     return exportDbRecordsGroup(db, Q_SEL_IMP_FILES, elImpGroup, "imf");
-}
-
-bool XmlHwFile::exportDbRecordsGroup(HwDatabase &db, const QString &qs, QDomElement &elGroup,
-    const QString &reqElemName, ChildRecMap* children)
-{
-    QSqlQuery q;
-    DB_CHK(db.prepQuery(q, qs));
-    DB_CHK(db.execQuery(q))
-    if (q.first()) {
-        // Collect field names => attr names
-        QStringList fieldNames;
-        for (int i=1; i<q.record().count(); i++)
-            fieldNames << q.record().fieldName(i);
-        // Process records
-        while (q.isValid()) {
-            QDomElement elRec = addElem(elGroup, reqElemName);
-            for (int i=1; i<=fieldNames.count(); i++) {
-                if (!q.isNull(i))
-                    elRec.setAttribute(fieldNames[i-1], q.value(i).toString());
-            }
-            if (children) {
-                int id = q.value(0).toInt();
-                (*children)[id] = elRec;
-            }
-            q.next();
-        }
-        _processedRecordsCount += elGroup.childNodes().count();
-    }
-    return true;
 }

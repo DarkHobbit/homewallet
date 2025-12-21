@@ -25,6 +25,8 @@
 #define S_ERR_READ_CONTENT \
     QObject::tr("Can't read content from file %1\n%2\nline %3, col %4\n")
 
+typedef QMap<int,QDomElement> ChildRecMap;
+
 class XmlFile: public FileFormat, public QDomDocument
 {
 public:
@@ -40,6 +42,8 @@ protected:
     bool exportElemsFromQuery(HwDatabase &db, QDomElement& elParent,
         const QString& groupElemName, const QString& recElemName, const QString& query,
         const QStringList& fieldNames);
+    bool exportDbRecordsGroup(HwDatabase& db, const QString& qs, QDomElement& elGroup,
+        const QString& reqElemName, ChildRecMap* children = 0);
     // Read
     bool readFromFile(const QString &path);
     bool readDoubleVal(const QDomElement& el, const QString& attrName, double& res, const QString& errorMessageTemplate);

@@ -17,8 +17,6 @@
 #include <QMap>
 #include "xmlfile.h"
 
-typedef QMap<int,QDomElement> ChildRecMap;
-
 class XmlHwFile : public XmlFile
 {
 public:
@@ -47,9 +45,6 @@ private:
     bool exportCredits(HwDatabase& db, QDomElement& elRoot, const QString& groupName, const QString& elName, bool isLend);
 
     bool exportImportReferences(HwDatabase& db, QDomElement& elRoot);
-
-    bool exportDbRecordsGroup(HwDatabase& db, const QString& qs, QDomElement& elGroup,
-        const QString& reqElemName, ChildRecMap* children = 0);
 };
 
 #endif // XMLHWFILE_H
