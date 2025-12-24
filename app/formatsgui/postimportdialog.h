@@ -33,6 +33,9 @@ public:
     ~PostImportDialog();
     void setData(InteractiveFormat* _intFile, HwDatabase* _db);
 
+protected:
+    bool eventFilter(QObject *obj, QEvent *event);
+
 private:
     Ui::PostImportDialog *ui;
     InteractiveFormat* intFile;
@@ -65,6 +68,7 @@ private slots:
     void on_actAddAlias_triggered();
     void on_actAddDefaultUnit_triggered();
     void on_btnQuickFilter_clicked();
+    void on_actFilter_triggered();
 };
 
 #endif // POSTIMPORTDIALOG_H

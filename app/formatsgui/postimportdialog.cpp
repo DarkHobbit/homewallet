@@ -12,6 +12,7 @@
  */
 
 #include <QDialogButtonBox>
+#include <QKeyEvent>
 #include <QMessageBox>
 #include <QPushButton>
 
@@ -32,6 +33,9 @@ PostImportDialog::PostImportDialog(QWidget *parent) :
     ui->tableExpenses->insertAction(0, ui->actExpCandState);
     ui->tableExpenses->insertAction(0, ui->actAddAlias);
     ui->tableExpenses->insertAction(0, ui->actAddDefaultUnit);
+    // Filter
+    ui->leQuickFilter->installEventFilter(this);
+    addAction(ui->actFilter);
 }
 
 PostImportDialog::~PostImportDialog()
@@ -58,6 +62,21 @@ void PostImportDialog::setData(InteractiveFormat* _intFile, HwDatabase* _db)
             this, SLOT(setAddAliasAccessibility()));
     // TODO transfer, debt, cred
     */
+}
+
+bool PostImportDialog::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *kEv = static_cast<QKeyEvent *>(event);
+        if (kEv->key()==Qt::Key_Enter || kEv->key()==Qt::Key_Return) {
+            if (focusWidget()==ui->leQuickFilter)
+                on_btnQuickFilter_clicked();
+        }
+        else
+            return false;
+        return true;
+    } else // default
+        return QObject::eventFilter(obj, event);
 }
 
 void PostImportDialog::showEvent(QShowEvent*)
@@ -238,5 +257,11 @@ void PostImportDialog::on_btnQuickFilter_clicked()
         proxy->setFilterWildcard("");
     else
         proxy->setFilterWildcard(filterText);
+}
+
+
+void PostImportDialog::on_actFilter_triggered()
+{
+    ui->leQuickFilter->setFocus();
 }
 

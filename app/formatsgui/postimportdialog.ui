@@ -122,6 +122,14 @@
     <enum>QAction::NoRole</enum>
    </property>
   </action>
+  <action name="actFilter">
+   <property name="text">
+    <string>Filter</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>
