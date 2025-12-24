@@ -171,8 +171,9 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                 qDefUnit.bindValue(":id", c.idSubcat);
                 DB_CHK(qDefUnit.exec());
                 if (db.queryRecCount(qDefUnit)>0) {
-                    c.unitName = QString("[%1]").arg(qDefUnit.value(0).toString());
+                    c.unitName = qDefUnit.value(0).toString();
                     c.idUnit = qDefUnit.value(1).toInt();
+                    c.unitSource = ImpRecCandidate::FromDefaultValue;
                 }
                 else
                     c.state = ImpRecCandidate::UnknownUnit;
@@ -293,7 +294,8 @@ bool InteractiveFormat::findUnit(HwDatabase &db, ImpRecCandidate &c, QString &na
         // Try alias
         if (candidates.collUnit.keys().contains(name)) {
             idUn = candidates.collUnit[name];
-            name = QString("(%1)").arg(db.unitById(idUn));
+            name = db.unitById(idUn);
+            c.unitSource = ImpRecCandidate::FromAlias;
             return true;
         }
         c.state = ImpRecCandidate::UnknownUnit;
@@ -313,6 +315,7 @@ ImpRecCandidate::ImpRecCandidate(const QString &_source, const QString &_uid, in
     amount = 0;
     quantity = 0.0;
     alias = catName = subcatName = accName = unitName = currName = descr = "";
+    unitSource = FromSource;
 }
 
 bool ImpRecCandidate::needAddAlias()

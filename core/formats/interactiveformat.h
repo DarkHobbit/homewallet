@@ -72,6 +72,11 @@ struct ImpRecCandidate
     int amount;
     double quantity;
     QString alias, catName, subcatName, accName, accToName, unitName, currName, descr;
+    enum UnitSource {
+        FromSource,
+        FromAlias,
+        FromDefaultValue
+    } unitSource;
     ImpCandidates* children; // for receipts
     ImpRecCandidate* parent; // for receipt items
     ImpRecCandidate(const QString& _source, const QString& _uid, int _lineNumber, const QDateTime& _opDT);

@@ -106,7 +106,14 @@ QVariant ImportCandidatesModel::data(const QModelIndex &index, int role) const
             case 6:  return c->catName;
             case 7:  return c->subcatName;
             case 8:  return c->quantity;
-            case 9:  return c->unitName;
+            case 9:  switch (c->unitSource) {
+                case ImpRecCandidate::FromAlias:
+                    return QString("(%1)").arg(c->unitName);
+                case ImpRecCandidate::FromDefaultValue:
+                    return QString("[%1]").arg(c->unitName);
+                default:
+                    return c->unitName;
+            }
             case 10: return c->descr;
         default: return QVariant();
         }
