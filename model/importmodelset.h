@@ -15,6 +15,7 @@
 #define IMPORTMODELSET_H
 
 #include <QObject>
+#include <QSortFilterProxyModel>
 
 #include "importcandidatesmodel.h"
 
@@ -28,12 +29,16 @@ public:
     ImportCandidatesModel
         *mdlIncome, *mdlExpense, *mdlTransfer,
         *mdlDebAndCred, *mdlUnknown;
+    QSortFilterProxyModel
+        *proxyIncome, *proxyExpense, *proxyTransfer,
+        *proxyDebAndCred, *proxyUnknown;
     CandRefs refsIncome, refsExpense, refsTransfer,
         refsDebAndCred, refsUnknown;
     int incReadyCount, expReadyCount, trfReadyCount, dncReadyCount;
     int incPossDupCount, expPossDupCount, trfPossDupCount, dncPossDupCount;
 
 private:
+    QSortFilterProxyModel* makeProxy(ImportCandidatesModel* source);
     void calcCounts(CandRefs& refs, int& readyCount, int& possiblyDupsCount);
     void calcAllCounts();
 

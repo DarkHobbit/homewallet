@@ -43,9 +43,13 @@ void PostImportDialog::setData(InteractiveFormat* _intFile, HwDatabase* _db)
 {
     intFile = _intFile;
     db = _db;
+
     mSet = new ImportModelSet(&_intFile->candidates, this);
-    ui->tableExpenses->setModel(mSet->mdlExpense);
-    ui->tableIncomes->setModel(mSet->mdlIncome);
+    ui->tableExpenses->setModel(mSet->proxyExpense);
+    ui->tableExpenses->horizontalHeader()->setStretchLastSection(true);
+    ui->tableIncomes->setModel(mSet->proxyIncome);
+    ui->tableExpenses->horizontalHeader()->setStretchLastSection(true);
+
     updateStat();
     ui->btnAddAlias->setShortcut(Qt::Key_Insert);
     /*
@@ -106,6 +110,18 @@ PostImportDialog::ActiveTab PostImportDialog::activeTab()
     }
 }
 
+int PostImportDialog::mappedCurrentRow()
+{
+    QModelIndexList proxySelection = activeView->selectionModel()->selectedRows();
+    if (proxySelection.count()==0)
+        return -1;
+    QSortFilterProxyModel* selectedProxy = dynamic_cast<QSortFilterProxyModel*>(activeView->model());
+    if (!selectedProxy)
+        return -1;
+    QModelIndex firstSelected = selectedProxy->mapToSource(proxySelection.first());
+    return firstSelected.row();
+}
+
 void PostImportDialog::setOkAccessibility()
 {
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(mSet->canImport());
@@ -116,14 +132,15 @@ void PostImportDialog::setAddAliasAccessibility()
     activeTab();
     if (!activeModel || !activeView)
         return;
-    int r = activeView->currentIndex().row();
+
+    int r = mappedCurrentRow();
     ui->btnAddAlias->setEnabled(activeModel->cand(r)->needAddAlias());
 }
 
 void PostImportDialog::on_actExpCandState_triggered()
 {
     activeTab();
-    int r = activeView->currentIndex().row();
+    int r = mappedCurrentRow();
     ImpRecCandidate* c = activeModel->cand(r);
     QMessageBox::information(0, S_INFORM,
         tr("Row %1: source line %2\%3\nState: %4")
@@ -137,7 +154,7 @@ void PostImportDialog::on_btnAddAlias_clicked()
     HwDatabase::AliasType alType;
     QString alS, alHint = "";
     activeTab();
-    int r = activeView->currentIndex().row();
+    int r = mappedCurrentRow();
     ImpRecCandidate* c = activeModel->cand(r);
     bool isIncome = c->type==ImpRecCandidate::Income;
     switch(c->state) {
@@ -190,7 +207,7 @@ void PostImportDialog::on_actAddAlias_triggered()
 void PostImportDialog::on_actAddDefaultUnit_triggered()
 {
     activeTab();
-    int r = activeView->currentIndex().row();
+    int r = mappedCurrentRow();
     ImpRecCandidate* c = activeModel->cand(r);
     if (c->subcatName.isEmpty()) {
         QMessageBox::critical(0, S_ERROR, S_ERR_NO_SUBCAT);
@@ -208,5 +225,18 @@ void PostImportDialog::on_actAddDefaultUnit_triggered()
     d->addDefaultUnit(c->idSubcat, c->subcatName, c->type==ImpRecCandidate::Expense);
     // Update candidates and its view
     updateView();
+}
+
+void PostImportDialog::on_btnQuickFilter_clicked()
+{
+    activeTab();
+    QSortFilterProxyModel* proxy = dynamic_cast<QSortFilterProxyModel*>(activeView->model());
+    if (!proxy)
+        return;
+    QString filterText = ui->leQuickFilter->text();
+    if (filterText.isEmpty())
+        proxy->setFilterWildcard("");
+    else
+        proxy->setFilterWildcard(filterText);
 }
 

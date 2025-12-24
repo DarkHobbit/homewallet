@@ -42,10 +42,15 @@ ImportModelSet::ImportModelSet(ImpCandidates *cands, QObject *parent)
     }
     // Create models
     mdlIncome = new ImportCandidatesModel(ImpRecCandidate::Income, refsIncome, this);
+    proxyIncome = makeProxy(mdlIncome);
     mdlExpense = new ImportCandidatesModel(ImpRecCandidate::Expense, refsExpense, this);
+    proxyExpense = makeProxy(mdlExpense);
     mdlTransfer = new ImportCandidatesModel(ImpRecCandidate::Transfer, refsTransfer, this);
+    proxyTransfer = makeProxy(mdlTransfer);
     mdlDebAndCred = new ImportCandidatesModel(ImpRecCandidate::Debtor, refsDebAndCred, this);
+    proxyDebAndCred = makeProxy(mdlDebAndCred);
     mdlUnknown = new ImportCandidatesModel(ImpRecCandidate::Unknown, refsUnknown, this);
+    proxyUnknown = makeProxy(mdlUnknown);
 }
 
 QString ImportModelSet::stat()
@@ -70,7 +75,16 @@ bool ImportModelSet::canImport()
         (refsIncome.count()==incReadyCount) &&
         (refsTransfer.count()==trfReadyCount) &&
         (refsDebAndCred.count()==dncReadyCount) &&
-        (refsUnknown.count()==0);
+            (refsUnknown.count()==0);
+}
+
+QSortFilterProxyModel *ImportModelSet::makeProxy(ImportCandidatesModel *source)
+{
+    QSortFilterProxyModel *proxy = new QSortFilterProxyModel(this);
+    proxy->setSourceModel(source);
+    proxy->setFilterKeyColumn(-1);
+    proxy->setFilterCaseSensitivity(Qt::CaseInsensitive); // Driver == driver
+    return proxy;
 }
 
 void ImportModelSet::calcCounts(CandRefs &refs, int &readyCount, int &possiblyDupsCount)

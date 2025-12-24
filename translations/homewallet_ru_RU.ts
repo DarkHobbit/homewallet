@@ -360,13 +360,13 @@
 <context>
     <name>ImportModelSet</name>
     <message>
-        <location filename="../model/importmodelset.cpp" line="54"/>
+        <location filename="../model/importmodelset.cpp" line="59"/>
         <source>Candidates (all/ready): expenses %1/%2, incomes %3/%4, transfer %5/%6, debit-credit %7/%8, unknown %9
 </source>
         <translation>Кандидаты (все/готово): расходы %1/%2, доходы %3/%4, переносы %5/%6, долги-кредиты %7/%8, неизвестные %9</translation>
     </message>
     <message>
-        <location filename="../model/importmodelset.cpp" line="60"/>
+        <location filename="../model/importmodelset.cpp" line="65"/>
         <source>Possibly duplicates: expenses %1, incomes %2, transfer %3, debit-credit %4</source>
         <translation>Возможных дубликатов: расходы %1, доходы %2, переносы %3, долги-кредиты %4</translation>
     </message>
@@ -630,6 +630,12 @@
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
+        <location filename="../app/mainwindow.cpp" line="384"/>
+        <source>Format require dialog, but dialog not provided. Contact author</source>
+        <translation>Формат требует диалоговое окно, но программа его не обеспечивает.
+Свяжитесь с автором</translation>
+    </message>
+    <message>
         <source>Can&apos;t remove records from this table</source>
         <translation type="obsolete">Из этой таблицы нельзя удалять записи</translation>
     </message>
@@ -644,7 +650,7 @@ at record %1 from %2</source>
 в записи %1 из %2</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="436"/>
+        <location filename="../app/mainwindow.cpp" line="438"/>
         <source>Restart program to apply language change</source>
         <translation>Язык сменится после перезапуска программы</translation>
     </message>
@@ -672,18 +678,23 @@ at record %1 from %2</source>
         <translation>Не готово</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="67"/>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="94"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="77"/>
+        <source>Quick filter</source>
+        <translation>Быстрофильтр</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="84"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="111"/>
         <source>Add alias</source>
         <translation>Добавить псевдоним</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="86"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="103"/>
         <source>State</source>
         <translation>Состояние</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="102"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="119"/>
         <source>Add default unit</source>
         <translation>Добавить единицу измерения по умолчанию</translation>
     </message>
@@ -692,14 +703,14 @@ at record %1 from %2</source>
         <translation type="obsolete">Строка %1: строка исходного файла %2, состояние: %3</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="129"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="146"/>
         <source>Row %1: source line %2%3
 State: %4</source>
         <translation>Запись %1: исходная строка %2%3
 Состояние %4</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="174"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="191"/>
         <source>No unknown aliases in this row</source>
         <translation>В этой строке нет неизвестных псевдонимов</translation>
     </message>
@@ -949,8 +960,8 @@ Rebuild SQLite with ICU support or provide ICU library as extension</source>
         <translation>Не могу проверить наличие ICU</translation>
     </message>
     <message>
-        <location filename="../core/hwdatabase.cpp" line="249"/>
-        <location filename="../core/hwdatabase.cpp" line="320"/>
+        <location filename="../core/hwdatabase.cpp" line="258"/>
+        <location filename="../core/hwdatabase.cpp" line="329"/>
         <source>No subcategory</source>
         <translation>Нет подкатегории</translation>
     </message>
@@ -1467,7 +1478,7 @@ Found: %1</source>
         <translation>готово к импорту</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhwfile.cpp" line="42"/>
+        <location filename="../core/formats/xmlhwfile.cpp" line="41"/>
         <source>HomeWallet XML (*.xml *.XML)</source>
         <translation>HomeWallet XML (*.xml *.XML)</translation>
     </message>

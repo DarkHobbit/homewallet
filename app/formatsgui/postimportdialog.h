@@ -54,6 +54,7 @@ private:
 
     virtual void showEvent(QShowEvent*);
     ActiveTab activeTab();
+    int mappedCurrentRow();
     void updateView();
     void updateStat();
 private slots:
@@ -63,6 +64,7 @@ private slots:
     void on_btnAddAlias_clicked();
     void on_actAddAlias_triggered();
     void on_actAddDefaultUnit_triggered();
+    void on_btnQuickFilter_clicked();
 };
 
 #endif // POSTIMPORTDIALOG_H
