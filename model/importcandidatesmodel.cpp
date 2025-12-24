@@ -38,17 +38,17 @@ int ImportCandidatesModel::rowCount(const QModelIndex&) const
 
 // Income/Expense:
 // 0 date, 1 source 2 amount, 3 curr, 4 acc, 5 alias,
-// 6 cat, 7 subcat,8 qty, 9 unit, 10 descr, 11 button
+// 6 cat, 7 subcat,8 qty, 9 unit, 10 descr
 // Transfer:
-// 0 date, 1 source 2 amount, 3 curr, 4 accfrom, 5 accto, 6 type, 7 descr, 8 button
+// 0 date, 1 source 2 amount, 3 curr, 4 accfrom, 5 accto, 6 type, 7 descr
 int ImportCandidatesModel::columnCount(const QModelIndex&) const
 {
     switch(candType) {
     case ImpRecCandidate::Expense:
     case ImpRecCandidate::Income:
-        return 12;
+        return 11;
     case ImpRecCandidate::Transfer:
-        return 9;
+        return 8;
         // TODO
     default: return 1;
     }
@@ -72,7 +72,6 @@ QVariant ImportCandidatesModel::headerData(int section, Qt::Orientation orientat
             case 8:  return S_COL_QUANTITY;
             case 9:  return S_COL_UNIT;
             case 10: return S_COL_DESCRIPTION;
-            //case 11: return S_COL_DATE; button?
             default: return QAbstractItemModel::headerData(section, orientation, role);
             }
         case ImpRecCandidate::Transfer:
