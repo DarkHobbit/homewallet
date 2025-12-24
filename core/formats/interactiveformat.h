@@ -90,6 +90,7 @@ struct ImpCandidates: public QList<ImpRecCandidate>
     GenericDatabase::DictColl collAcc, collCurr, collUnit;
     GenericDatabase::DictColl collInCat, collInAllSubCat, collExCat, collExAllSubCat;
     GenericDatabase::DictColl collInCatBySubcat, collExCatBySubcat;
+    GenericDatabase::RevDictColl collInSubcatToDescr, collExSubcatToDescr;
     bool readyToImport();
 };
 
@@ -107,6 +108,7 @@ private:
     bool findAccount(HwDatabase &db, ImpRecCandidate& c, QString &accName, int &idAcc);
     bool findCurrency(HwDatabase &db, ImpRecCandidate& c, QString &currAbbr, int &idCurr);
     bool findUnit(HwDatabase &db, ImpRecCandidate& c, QString& name, int& idUn);
+    void completeDescr(ImpRecCandidate& c, const GenericDatabase::RevDictColl& collDescr, int idSubcat);
 };
 
 #endif // INTERACTIVEFORMAT_H

@@ -610,7 +610,7 @@ void MainWindow::on_tabWidgetTransferAndExchange_currentChanged(int)
     updateTabsAndFilters();
 }
 
-void MainWindow::on_tabWidgetLendAndBorrow_currentChanged(int index)
+void MainWindow::on_tabWidgetLendAndBorrow_currentChanged(int)
 {
     updateTabsAndFilters();
 }

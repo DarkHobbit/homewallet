@@ -31,6 +31,7 @@ class GenericDatabase
 public:
     typedef QMap<QString, int> DictColl; // key - dictionary item name, value -  id
     typedef QMap<QString, DictColl> SubDictColl;
+    typedef QMap<int, QString> RevDictColl; // key - id, value - dictionary item name
     GenericDatabase();
     ~GenericDatabase();
     virtual QString fileName()=0;
@@ -52,6 +53,9 @@ public:
     bool collectSubDict(const DictColl& coll, SubDictColl& subColl, const QString& tableName,
         const QString& fieldName = "name", const QString& idFieldName = "id",
         const QString& upIdFieldName = "");
+    bool collectRevDict(RevDictColl& coll, const QString& tableName,
+        const QString& fieldName = "name", const QString& idFieldName = "id",
+        const QString& where = "");
     bool isTableEmpty(const QString& tableName,
         const QString& fieldName = "name", const QString& idFieldName = "id");
 

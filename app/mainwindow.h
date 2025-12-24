@@ -67,7 +67,7 @@ private slots:
     void on_cbDateTo_stateChanged(int);
     void on_tabWidgetMain_currentChanged(int);
     void on_tabWidgetTransferAndExchange_currentChanged(int);
-    void on_tabWidgetLendAndBorrow_currentChanged(int index);
+    void on_tabWidgetLendAndBorrow_currentChanged(int);
     void on_cbCategory_activated(int);
     void processModelError(const QString& message);
     void on_btn_Add_clicked();

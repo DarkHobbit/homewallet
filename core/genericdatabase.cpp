@@ -145,6 +145,26 @@ bool GenericDatabase::collectSubDict(const DictColl &coll, SubDictColl &subColl,
     return true;
 }
 
+bool GenericDatabase::collectRevDict(RevDictColl &coll, const QString &tableName, const QString &fieldName, const QString &idFieldName, const QString &where)
+{
+    QSqlQuery sqlColl(sqlDb);
+    if (!sqlColl.prepare(QString("select %1, %2 from %3 %4 order by %2;")
+          .arg(idFieldName).arg(fieldName).arg(tableName).arg(where))) {
+        _lastError = sqlColl.lastError().text();
+        return false;
+    }
+    if (!sqlColl.exec()) {
+        _lastError = sqlColl.lastError().text();
+        return false;
+    }
+    sqlColl.first();
+    while (sqlColl.isValid()) {
+        coll[sqlColl.value(0).toInt()] = sqlColl.value(1).toString();
+        sqlColl.next();
+    }
+    return true;
+}
+
 bool GenericDatabase::isTableEmpty(const QString &tableName, const QString &fieldName, const QString &idFieldName)
 {
     DictColl coll;

@@ -66,20 +66,24 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
     db.collectDict(candidates.collCurr, "hw_alias", "pattern", "id_cur", "where id_cur is not null");
     candidates.collUnit.clear();
     db.collectDict(candidates.collUnit, "hw_alias", "pattern", "id_un", "where id_un is not null");
-    candidates.collInCat.clear();
     // - incomes
+    candidates.collInCat.clear();
     db.collectDict(candidates.collInCat, "hw_alias", "pattern", "id_icat", "where id_icat is not null");
     candidates.collInAllSubCat.clear();
     db.collectDict(candidates.collInAllSubCat, "hw_alias", "pattern", "id_isubcat", "where id_isubcat is not null");
     candidates.collInCatBySubcat.clear();
     db.collectDict(candidates.collInCatBySubcat, "hw_in_subcat", "name", "id_icat");
-    candidates.collExCat.clear();
+    candidates.collInSubcatToDescr.clear();
+    db.collectRevDict(candidates.collInSubcatToDescr, "hw_alias", "to_descr", "id_isubcat", "where id_isubcat is not null");
     // - expenses
+    candidates.collExCat.clear();
     db.collectDict(candidates.collExCat, "hw_alias", "pattern", "id_ecat", "where id_ecat is not null");
     candidates.collExAllSubCat.clear();
     db.collectDict(candidates.collExAllSubCat, "hw_alias", "pattern", "id_esubcat", "where id_esubcat is not null");
     candidates.collExCatBySubcat.clear();
     db.collectDict(candidates.collExCatBySubcat, "hw_ex_subcat", "name", "id_ecat");
+    candidates.collExSubcatToDescr.clear();
+    db.collectRevDict(candidates.collExSubcatToDescr, "hw_alias", "to_descr", "id_esubcat", "where id_esubcat is not null");
     // TODO transfer types
 
     // See candidates
@@ -110,6 +114,7 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                     // Alias for subcategory
                     if (candidates.collExAllSubCat.keys().contains(c.subcatName)) {
                         c.idSubcat = candidates.collExAllSubCat[c.subcatName];
+                        completeDescr(c, candidates.collExSubcatToDescr, c.idSubcat);
                     }
                     else {
                         c.state = ImpRecCandidate::UnknownSubCategory;
@@ -152,6 +157,7 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                     if (candidates.collExAllSubCat.keys().contains(c.alias)) {
                         c.idSubcat = candidates.collExAllSubCat[c.alias];
                         c.subcatName = db.expenseSubCategoryById(c.idSubcat);
+                        completeDescr(c, candidates.collExSubcatToDescr, c.idSubcat);
                         c.idCat = candidates.collExCatBySubcat[c.subcatName];
                         c.catName = db.expenseCategoryById(c.idCat);
                         c.state = ImpRecCandidate::ReadyToImport;
@@ -302,6 +308,18 @@ bool InteractiveFormat::findUnit(HwDatabase &db, ImpRecCandidate &c, QString &na
         return false;
     }
     return true;
+}
+
+void InteractiveFormat::completeDescr(ImpRecCandidate &c, const GenericDatabase::RevDictColl &collDescr, int idSubcat)
+{
+    if (collDescr.keys().contains(idSubcat)) {
+        QString toDescr = collDescr[idSubcat];
+        if (!toDescr.isEmpty()) {
+            if (!c.descr.isEmpty())
+                c.descr += " ";
+            c.descr += toDescr;
+        }
+    }
 }
 
 ImpRecCandidate::ImpRecCandidate(const QString &_source, const QString &_uid, int _lineNumber, const QDateTime& _opDT)

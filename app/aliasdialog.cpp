@@ -72,6 +72,7 @@ void AliasDialog::setSubdictEnabled(bool state)
 void AliasDialog::setType(HwDatabase::AliasType alType)
 {
     GenericDatabase::DictColl coll;
+    ui->teToDescr->setEnabled(false);
     switch (alType) {
     case HwDatabase::Account:
         setWindowTitle(tr("Account alias"));
@@ -110,6 +111,7 @@ void AliasDialog::setType(HwDatabase::AliasType alType)
     case HwDatabase::ExpenseSubCat: {
         setWindowTitle(tr("Subcategory alias"));
         setSubdictEnabled(true);
+        ui->teToDescr->setEnabled(true);
         ui->lbDict->setText(tr("Category"));
         ui->lbSubDict->setText(tr("Subcategory"));
         if (alType==HwDatabase::IncomeSubCat) {
