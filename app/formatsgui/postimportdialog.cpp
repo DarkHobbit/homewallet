@@ -161,10 +161,12 @@ void PostImportDialog::on_actExpCandState_triggered()
     activeTab();
     int r = mappedCurrentRow();
     ImpRecCandidate* c = activeModel->cand(r);
-    QMessageBox::information(0, S_INFORM,
-        tr("Row %1: source line %2\%3\nState: %4")
-        .arg(r).arg(c->lineNumber).arg(c->source)
-        .arg(c->stateString[c->state]));
+    QString s = tr("Row %1: source line %2\%3\nState: %4")
+            .arg(r).arg(c->lineNumber).arg(c->source)
+            .arg(c->stateString[c->state]);
+    if (c->state==ImpRecCandidate::AmbiguousSubCategory)
+        s += "\n\n" + tr("Category candidates:") + "\n" + c->ambigCategoriesCandidates(*db).join("\n");
+    QMessageBox::information(0, S_INFORM, s);
 }
 
 void PostImportDialog::on_btnAddAlias_clicked()

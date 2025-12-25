@@ -717,14 +717,19 @@ at record %1 from %2</source>
         <translation type="obsolete">Строка %1: строка исходного файла %2, состояние: %3</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="165"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="164"/>
         <source>Row %1: source line %2%3
 State: %4</source>
         <translation>Запись %1: исходная строка %2%3
-Состояние %4</translation>
+Состояние: %4</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="210"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="168"/>
+        <source>Category candidates:</source>
+        <translation>Кандидаты на категорию:</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="212"/>
         <source>No unknown aliases in this row</source>
         <translation>В этой строке нет неизвестных псевдонимов</translation>
     </message>

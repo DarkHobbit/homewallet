@@ -81,6 +81,7 @@ struct ImpRecCandidate
     ImpRecCandidate* parent; // for receipt items
     ImpRecCandidate(const QString& _source, const QString& _uid, int _lineNumber, const QDateTime& _opDT);
     bool needAddAlias();
+    QStringList ambigCategoriesCandidates(HwDatabase &db);
 };
 
 struct ImpCandidates: public QList<ImpRecCandidate>

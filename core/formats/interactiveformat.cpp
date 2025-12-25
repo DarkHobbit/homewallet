@@ -346,3 +346,30 @@ bool ImpRecCandidate::needAddAlias()
         || state==UnknownCategory
         || state==UnknownTransType;
 }
+
+#define Q_SEL_IN_AMBIG_CANDIDATES \
+    "select c.name as catname from hw_in_cat c, hw_in_subcat sc" \
+    " where sc.id_icat=c.id and upper(sc.name)=upper(:subname)" \
+    " order by catname"
+
+#define Q_SEL_EX_AMBIG_CANDIDATES \
+    "select c.name as catname from hw_ex_cat c, hw_ex_subcat sc" \
+    " where sc.id_ecat=c.id and upper(sc.name)=upper(:subname)" \
+    " order by catname"
+
+QStringList ImpRecCandidate::ambigCategoriesCandidates(HwDatabase &db)
+{
+    QSqlQuery q(db.sqlDbRef());
+    if (!q.prepare(type==Expense ? Q_SEL_EX_AMBIG_CANDIDATES : Q_SEL_IN_AMBIG_CANDIDATES))
+        return QStringList() << "BADLIST1";
+    q.bindValue(":subname", alias);
+    if (!q.exec())
+        return QStringList() << "BADLIST2";
+    q.first();
+    QStringList res;
+    while (q.isValid()) {
+        res << q.value(0).toString();
+        q.next();
+    }
+    return res;
+}
