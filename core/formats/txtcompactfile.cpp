@@ -140,6 +140,7 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
                 c.accName = reIncExp.cap(5);
                 c.accName.remove('@');
                 c.alias = reIncExp.cap(6);
+                c.alias = c.alias.trimmed(); // 2+ leading spaces added to alias, i don't know why (https://regex101.com/ parsed it correctly)
                 int slashPos = c.alias.indexOf('/');
                 if (slashPos>-1) {
                     c.catName = c.alias.left(slashPos);
