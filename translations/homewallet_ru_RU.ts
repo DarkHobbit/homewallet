@@ -90,53 +90,53 @@
         <translation>Добавка к описанию</translation>
     </message>
     <message>
-        <location filename="../app/aliasdialog.cpp" line="77"/>
+        <location filename="../app/aliasdialog.cpp" line="78"/>
         <source>Account alias</source>
         <translation>Псевдоним для счёта</translation>
     </message>
     <message>
-        <location filename="../app/aliasdialog.cpp" line="79"/>
+        <location filename="../app/aliasdialog.cpp" line="80"/>
         <source>Account</source>
         <translation>Счёт</translation>
     </message>
     <message>
-        <location filename="../app/aliasdialog.cpp" line="84"/>
+        <location filename="../app/aliasdialog.cpp" line="85"/>
         <source>Currency alias</source>
         <translation>Псевдоним для валюты</translation>
     </message>
     <message>
-        <location filename="../app/aliasdialog.cpp" line="86"/>
+        <location filename="../app/aliasdialog.cpp" line="87"/>
         <source>Currency</source>
         <translation>Валюта</translation>
     </message>
     <message>
-        <location filename="../app/aliasdialog.cpp" line="91"/>
+        <location filename="../app/aliasdialog.cpp" line="92"/>
         <source>Unit alias</source>
         <translation>Псевдоним для единицы измерения</translation>
     </message>
     <message>
-        <location filename="../app/aliasdialog.cpp" line="93"/>
+        <location filename="../app/aliasdialog.cpp" line="94"/>
         <source>Unit</source>
         <translation>Ед.</translation>
     </message>
     <message>
-        <location filename="../app/aliasdialog.cpp" line="99"/>
+        <location filename="../app/aliasdialog.cpp" line="100"/>
         <source>Category alias</source>
         <translation>Псевдоним для категории</translation>
     </message>
     <message>
-        <location filename="../app/aliasdialog.cpp" line="111"/>
+        <location filename="../app/aliasdialog.cpp" line="112"/>
         <source>Subcategory alias</source>
         <translation>Псевдоним для подкатегории</translation>
     </message>
     <message>
-        <location filename="../app/aliasdialog.cpp" line="101"/>
-        <location filename="../app/aliasdialog.cpp" line="113"/>
+        <location filename="../app/aliasdialog.cpp" line="102"/>
+        <location filename="../app/aliasdialog.cpp" line="115"/>
         <source>Category</source>
         <translation>Категория</translation>
     </message>
     <message>
-        <location filename="../app/aliasdialog.cpp" line="114"/>
+        <location filename="../app/aliasdialog.cpp" line="116"/>
         <source>Subcategory</source>
         <translation>Подкатегория</translation>
     </message>
@@ -361,14 +361,18 @@
     <name>ImportModelSet</name>
     <message>
         <location filename="../model/importmodelset.cpp" line="59"/>
-        <source>Candidates (all/ready): expenses %1/%2, incomes %3/%4, transfer %5/%6, debit-credit %7/%8, unknown %9
-</source>
+        <source>Candidates (all/ready): expenses %1/%2, incomes %3/%4, transfer %5/%6, debit-credit %7/%8, unknown %9</source>
         <translation>Кандидаты (все/готово): расходы %1/%2, доходы %3/%4, переносы %5/%6, долги-кредиты %7/%8, неизвестные %9</translation>
     </message>
     <message>
-        <location filename="../model/importmodelset.cpp" line="65"/>
+        <location filename="../model/importmodelset.cpp" line="66"/>
         <source>Possibly duplicates: expenses %1, incomes %2, transfer %3, debit-credit %4</source>
-        <translation>Возможных дубликатов: расходы %1, доходы %2, переносы %3, долги-кредиты %4</translation>
+        <translation>Возможные дубликаты: расходы %1, доходы %2, переносы %3, долги-кредиты %4</translation>
+    </message>
+    <message>
+        <location filename="../model/importmodelset.cpp" line="70"/>
+        <source>Ambiguous subcategories: expenses %1, incomes %2</source>
+        <translation>Неоднозначные категории: расходы %1, доходы %2</translation>
     </message>
 </context>
 <context>
@@ -699,18 +703,28 @@ at record %1 from %2</source>
         <translation>Добавить единицу измерения по умолчанию</translation>
     </message>
     <message>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="127"/>
+        <source>Filter</source>
+        <translation>Фильтр</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="130"/>
+        <source>Ctrl+F</source>
+        <translation>Ctrl+F</translation>
+    </message>
+    <message>
         <source>Row %1: source line %2, state - %3</source>
         <translation type="obsolete">Строка %1: строка исходного файла %2, состояние: %3</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="146"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="165"/>
         <source>Row %1: source line %2%3
 State: %4</source>
         <translation>Запись %1: исходная строка %2%3
 Состояние %4</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="191"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="210"/>
         <source>No unknown aliases in this row</source>
         <translation>В этой строке нет неизвестных псевдонимов</translation>
     </message>
@@ -936,12 +950,12 @@ or manually add it to %2.</source>
         <translation>нет</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="306"/>
+        <location filename="../core/genericdatabase.cpp" line="326"/>
         <source>Can&apos;t enable extension load, code: %1</source>
         <translation>Не могу разрешить загрузку расширений, код: %1</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="312"/>
+        <location filename="../core/genericdatabase.cpp" line="332"/>
         <source>Can&apos;t load ICU extension, code %1:
 %2
 Rebuild SQLite with ICU support or provide ICU library as extension</source>
@@ -950,12 +964,12 @@ Rebuild SQLite with ICU support or provide ICU library as extension</source>
 Пересоберите SQLite с поддержкой ICU или добавьте библиотеку ICU как расширение</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="320"/>
+        <location filename="../core/genericdatabase.cpp" line="340"/>
         <source>ICU extension load failed</source>
         <translation>Ошибка загрузки расширения ICU</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="339"/>
+        <location filename="../core/genericdatabase.cpp" line="359"/>
         <source>Can&apos;t check ICU presence</source>
         <translation>Не могу проверить наличие ICU</translation>
     </message>
@@ -1413,7 +1427,7 @@ Found: %1</source>
         <translation>Неверный день для этого месяца: %1. Последняя дата: %2</translation>
     </message>
     <message>
-        <location filename="../core/formats/txtcompactfile.cpp" line="203"/>
+        <location filename="../core/formats/txtcompactfile.cpp" line="204"/>
         <source>Too long money sum fractional part: %1,%2</source>
         <translation>Слишком длинная дробная часть денежной суммы: %1,%2</translation>
     </message>

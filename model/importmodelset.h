@@ -36,10 +36,12 @@ public:
         refsDebAndCred, refsUnknown;
     int incReadyCount, expReadyCount, trfReadyCount, dncReadyCount;
     int incPossDupCount, expPossDupCount, trfPossDupCount, dncPossDupCount;
+    int incAmbigCount, expAmbigCount;
 
 private:
     QSortFilterProxyModel* makeProxy(ImportCandidatesModel* source);
     void calcCounts(CandRefs& refs, int& readyCount, int& possiblyDupsCount);
+    void calcAmbigCount(CandRefs& refs, int& ambigCount);
     void calcAllCounts();
 
 signals:

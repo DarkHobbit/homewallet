@@ -56,15 +56,19 @@ ImportModelSet::ImportModelSet(ImpCandidates *cands, QObject *parent)
 QString ImportModelSet::stat()
 {
     calcAllCounts();
-    return tr("Candidates (all/ready): expenses %1/%2, incomes %3/%4, transfer %5/%6, debit-credit %7/%8, unknown %9\n")
+    return tr("Candidates (all/ready): expenses %1/%2, incomes %3/%4, transfer %5/%6, debit-credit %7/%8, unknown %9")
             .arg(refsExpense.count()).arg(expReadyCount)
             .arg(refsIncome.count()).arg(incReadyCount)
             .arg(refsTransfer.count()).arg(trfReadyCount)
             .arg(refsDebAndCred.count()).arg(dncReadyCount)
             .arg(refsUnknown.count())
+          + "\n"
           + tr("Possibly duplicates: expenses %1, incomes %2, transfer %3, debit-credit %4")
             .arg(expPossDupCount).arg(incPossDupCount)
-            .arg(trfPossDupCount).arg(dncPossDupCount);
+            .arg(trfPossDupCount).arg(dncPossDupCount)
+          + "\n"
+            + tr("Ambiguous subcategories: expenses %1, incomes %2")
+              .arg(expAmbigCount).arg(incAmbigCount);
 }
 
 bool ImportModelSet::canImport()
@@ -99,10 +103,21 @@ void ImportModelSet::calcCounts(CandRefs &refs, int &readyCount, int &possiblyDu
     }
 }
 
+void ImportModelSet::calcAmbigCount(CandRefs &refs, int& ambigCount)
+{
+    ambigCount = 0;
+    for (ImpRecCandidate* cand: refs) {
+        if (cand->state==ImpRecCandidate::AmbiguousSubCategory)
+            ambigCount++;
+    }
+}
+
 void ImportModelSet::calcAllCounts()
 {
     calcCounts(refsIncome, incReadyCount, incPossDupCount);
+    calcAmbigCount(refsIncome, incAmbigCount);
     calcCounts(refsExpense, expReadyCount, expPossDupCount);
+    calcAmbigCount(refsExpense, expAmbigCount);
     calcCounts(refsTransfer, trfReadyCount, trfPossDupCount);
     calcCounts(refsDebAndCred, dncReadyCount, dncPossDupCount);
 }
