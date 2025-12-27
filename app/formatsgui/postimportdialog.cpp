@@ -98,10 +98,8 @@ void PostImportDialog::showEvent(QShowEvent*)
 void PostImportDialog::updateView()
 {
     intFile->analyzeCandidates(*db);
-    activeModel->update();
+    mSet->updateModels();
     updateStat();
-    // TODO if works, write ImportModelSet::updateModels() and move to
-    // (for accs, units, currs need updates all)
 }
 
 void PostImportDialog::updateStat()

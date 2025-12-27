@@ -24,6 +24,7 @@ class ImportModelSet : public QObject
     Q_OBJECT
 public:
     explicit ImportModelSet(ImpCandidates* cands, QObject *parent = 0);
+    void updateModels();
     QString stat();
     bool canImport();
     ImportCandidatesModel
@@ -32,13 +33,13 @@ public:
     QSortFilterProxyModel
         *proxyIncome, *proxyExpense, *proxyTransfer,
         *proxyDebAndCred, *proxyUnknown;
+
+private:
     CandRefs refsIncome, refsExpense, refsTransfer,
         refsDebAndCred, refsUnknown;
     int incReadyCount, expReadyCount, trfReadyCount, dncReadyCount;
     int incPossDupCount, expPossDupCount, trfPossDupCount, dncPossDupCount;
     int incAmbigCount, expAmbigCount;
-
-private:
     QSortFilterProxyModel* makeProxy(ImportCandidatesModel* source);
     void calcCounts(CandRefs& refs, int& readyCount, int& possiblyDupsCount);
     void calcAmbigCount(CandRefs& refs, int& ambigCount);

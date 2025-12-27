@@ -91,6 +91,15 @@ QSortFilterProxyModel *ImportModelSet::makeProxy(ImportCandidatesModel *source)
     return proxy;
 }
 
+void ImportModelSet::updateModels()
+{
+    mdlIncome->update();
+    mdlExpense->update();
+    mdlTransfer->update();
+    mdlDebAndCred->update();
+    mdlUnknown->update();
+}
+
 void ImportModelSet::calcCounts(CandRefs &refs, int &readyCount, int &possiblyDupsCount)
 {
     readyCount = 0;
