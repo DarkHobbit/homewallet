@@ -276,6 +276,15 @@ int HwDatabase::incomeCategoryId(const QString &name)
     return dictId(sqlSel);
 }
 
+QString HwDatabase::incomeCategoryById(int idCat)
+{
+    QSqlQuery sqlSel(sqlDb);
+    if (!prepQuery(sqlSel, "select name from hw_in_cat where id=:id"))
+        return "";
+    sqlSel.bindValue(":id", idCat);
+    return dictName(sqlSel);
+}
+
 int HwDatabase::addIncomeSubCategory(int idParentCat, const QString &name, const QString &descr)
 {
     QSqlQuery sqlIns(sqlDb);
@@ -308,6 +317,15 @@ int HwDatabase::incomeSubCategoryId(int idParentCat, const QString &name)
     }
     sqlSel.bindValue(":id_icat", idParentCat);
     return dictId(sqlSel);
+}
+
+QString HwDatabase::incomeSubCategoryById(int idSubCat)
+{
+    QSqlQuery sqlSel(sqlDb);
+    if (!prepQuery(sqlSel, "select name from hw_in_subcat where id=:id"))
+        return "";
+    sqlSel.bindValue(":id", idSubCat);
+    return dictName(sqlSel);
 }
 
 int HwDatabase::addExpenseCategory(const QString &name, const QString &descr)

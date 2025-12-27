@@ -33,6 +33,9 @@ PostImportDialog::PostImportDialog(QWidget *parent) :
     ui->tableExpenses->insertAction(0, ui->actExpCandState);
     ui->tableExpenses->insertAction(0, ui->actAddAlias);
     ui->tableExpenses->insertAction(0, ui->actAddDefaultUnit);
+    ui->tableIncomes->insertAction(0, ui->actExpCandState);
+    ui->tableIncomes->insertAction(0, ui->actAddAlias);
+    ui->tableIncomes->insertAction(0, ui->actAddDefaultUnit);
     // Filter
     ui->leQuickFilter->installEventFilter(this);
     addAction(ui->actFilter);

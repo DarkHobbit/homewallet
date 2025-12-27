@@ -71,8 +71,10 @@ public:
     // Categories
     int addIncomeCategory(const QString& name, const QString& descr);
     int incomeCategoryId(const QString& name);
+    QString incomeCategoryById(int idCat);
     int addIncomeSubCategory(int idParentCat, const QString& name, const QString& descr);
     int incomeSubCategoryId(int idParentCat, const QString& name);
+    QString incomeSubCategoryById(int idSubCat);
     int addExpenseCategory(const QString& name, const QString& descr);
     int expenseCategoryId(const QString& name);
     QString expenseCategoryById(int idCat);

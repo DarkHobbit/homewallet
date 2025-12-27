@@ -91,30 +91,37 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
         switch(c.type) {
         case ImpRecCandidate::Unknown:
             continue;
-        case ImpRecCandidate::Expense:
+        case ImpRecCandidate::Income:
+        case ImpRecCandidate::Expense: {
+            bool isIncome = c.type==ImpRecCandidate::Income;
+            const GenericDatabase::DictColl& collCat = isIncome ? candidates.collInCat : candidates.collExCat;
+            const GenericDatabase::DictColl& collAllSubCat = isIncome ? candidates.collInAllSubCat : candidates.collExAllSubCat;
+            const GenericDatabase::DictColl& collCatBySubcat = isIncome ? candidates.collInCatBySubcat : candidates.collExCatBySubcat;
+            const GenericDatabase::RevDictColl& collSubcatToDescr = isIncome ? candidates.collInSubcatToDescr : candidates.collExSubcatToDescr;
+
             if (!findAccount(db, c, c.accName, c.idAcc))
                 continue;
             // TODO name to abbr!!!
             if (!findCurrency(db, c, c.currName, c.idCur))
                 continue;
             if (!c.subcatName.isEmpty()) { // Full-qualified subcategory
-                c.idCat = db.expenseCategoryId(c.catName);
+                c.idCat = isIncome ? db.incomeCategoryId(c.catName) : db.expenseCategoryId(c.catName);
                 if (c.idCat==-1) {
                     // Alias for category
-                    if (candidates.collExCat.keys().contains(c.catName)) {
-                        c.idCat = candidates.collExCat[c.catName];
+                    if (collCat.keys().contains(c.catName)) {
+                        c.idCat = collCat[c.catName];
                     }
                     else {
                         c.state = ImpRecCandidate::UnknownCategory;
                         continue;
                     }
                 }
-                c.idSubcat = db.expenseSubCategoryId(c.idCat, c.subcatName);
+                c.idSubcat = isIncome ? db.incomeSubCategoryId(c.idCat, c.subcatName) : db.expenseSubCategoryId(c.idCat, c.subcatName);
                 if (c.idSubcat==-1) {
                     // Alias for subcategory
-                    if (candidates.collExAllSubCat.keys().contains(c.subcatName)) {
-                        c.idSubcat = candidates.collExAllSubCat[c.subcatName];
-                        completeDescr(c, candidates.collExSubcatToDescr, c.idSubcat);
+                    if (collAllSubCat.keys().contains(c.subcatName)) {
+                        c.idSubcat = collAllSubCat[c.subcatName];
+                        completeDescr(c, collSubcatToDescr, c.idSubcat);
                     }
                     else {
                         c.state = ImpRecCandidate::UnknownSubCategory;
@@ -122,13 +129,15 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                     }
                 }
                 // Correct upper/low case and decode from aliases
-                c.catName = db.expenseCategoryById(c.idCat);
-                c.subcatName = db.expenseSubCategoryById(c.idSubcat);
+                c.catName = isIncome ? db.incomeCategoryById(c.idCat) : db.expenseCategoryById(c.idCat);
+                c.subcatName = isIncome ? db.incomeSubCategoryById(c.idSubcat) : db.expenseSubCategoryById(c.idSubcat);
                 c.state = ImpRecCandidate::ReadyToImport;
             }
             else { // Partially-qualified subcategory or alias
                 QSqlQuery q;
-                DB_CHK(q.prepare("select id, id_ecat from hw_ex_subcat where upper(name)=:name"));
+                QString sqlPart = isIncome ? "select id, id_icat from hw_in_subcat where upper(name)=:name"
+                                           : "select id, id_ecat from hw_ex_subcat where upper(name)=:name";
+                DB_CHK(q.prepare(sqlPart));
                 q.bindValue(":name", c.alias.toUpper());
                 DB_CHK(q.exec());
                 bool needSearchAlias = false;
@@ -138,15 +147,17 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                     break;
                 case 1:
                     q.first();
-                    c.idCat = q.value("id_ecat").toInt();
-                    c.idSubcat = q.value("id").toInt();
+                    c.idCat = q.value(1).toInt();
+                    c.idSubcat = q.value(0).toInt();
                     // Find category name and correct case
-                    DB_CHK(q.prepare("select name from hw_ex_cat where id=:id"));
+                    sqlPart = isIncome ? "select name from hw_in_cat where id=:id"
+                                       : "select name from hw_ex_cat where id=:id";
+                    DB_CHK(q.prepare(sqlPart));
                     q.bindValue(":id", c.idCat);
                     DB_CHK(q.exec());
                     q.first();
                     c.catName = q.value("name").toString();
-                    c.subcatName = db.expenseSubCategoryById(c.idSubcat);
+                    c.subcatName = isIncome ? db.incomeSubCategoryById(c.idSubcat) : db.expenseSubCategoryById(c.idSubcat);
                     c.state = ImpRecCandidate::ReadyToImport;
                     break;
                 default:
@@ -154,12 +165,12 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                     continue;
                 }
                 if (needSearchAlias) { // Alias!
-                    if (candidates.collExAllSubCat.keys().contains(c.alias)) {
-                        c.idSubcat = candidates.collExAllSubCat[c.alias];
-                        c.subcatName = db.expenseSubCategoryById(c.idSubcat);
-                        completeDescr(c, candidates.collExSubcatToDescr, c.idSubcat);
-                        c.idCat = candidates.collExCatBySubcat[c.subcatName];
-                        c.catName = db.expenseCategoryById(c.idCat);
+                    if (collAllSubCat.keys().contains(c.alias)) {
+                        c.idSubcat = collAllSubCat[c.alias];
+                        c.subcatName = isIncome ? db.incomeSubCategoryById(c.idSubcat) : db.expenseSubCategoryById(c.idSubcat);
+                        completeDescr(c, collSubcatToDescr, c.idSubcat);
+                        c.idCat = collCatBySubcat[c.subcatName];
+                        c.catName = isIncome ? db.incomeCategoryById(c.idCat) : db.expenseCategoryById(c.idCat);
                         c.state = ImpRecCandidate::ReadyToImport;
                         break;
                     }
@@ -190,9 +201,7 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                     continue;
             }
             break;
-        case ImpRecCandidate::Income:
-            // TODO
-            break;
+        }
         case ImpRecCandidate::Transfer:
             if (!findAccount(db, c, c.accName, c.idAcc))
                 continue;
