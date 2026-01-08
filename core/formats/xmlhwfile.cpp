@@ -68,14 +68,27 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
     QDomElement elRoot = documentElement();
     if (elRoot.nodeName()!="homewallet")
         return false;
+    // Order matter! Accounts, categories, inc/exp/trans, aliases
+    _processedRecordsCount = 0;
+    QDomElement e = elRoot.firstChildElement("accounts");
+    if (!e.isNull()) {
+        if (!importAccounts(e, db))
+            return false;
+    }
+
+    // TODO
+    e = elRoot.firstChildElement("aliases");
+    if (!e.isNull()) {
+        if (!importAliases(e, db))
+            return false;
+    }
+    // Check for unknown elements (e.g. from newer HW version)
     for (QDomElement e=elRoot.firstChildElement(); !e.isNull(); e=e.nextSiblingElement())
     {
-        if (e.nodeName()=="aliases") {
-            if (!importAliases(e, db))
-                return false;
-        }
-        // TODO
-        else if (e.nodeName()!="metadata")
+        QString nn = e.nodeName();
+        if (nn!="metadata" && nn!="accounts"
+                // TODO
+                && nn!="aliases")
             _errors << S_ERR_UNK_ELEM.arg(e.nodeName());
     }
     return true;
@@ -122,6 +135,32 @@ bool XmlHwFile::exportRecords(const QString &path, HwDatabase &db, SubTypeFlags 
         UP_CHK(exportImportReferences(db, elRoot));
 
     return endCreateXml(path);
+}
+
+bool XmlHwFile::importAccounts(const QDomElement &e, HwDatabase &db)
+{
+    ChildRecMap accInits;
+    bool res = importDbRecordsGroup(db, e, "ac", "hw_account",
+        QStringList() << "name" << "descr" << "foundation",
+        "SSD", "MOO",
+        QStringList() << "n" << "d" << "fd",
+        HwDatabase::SubDictColl(),
+        QVariantList(), &accInits);
+    if (!res)
+        return false;
+    HwDatabase::SubDictColl colls;
+    DB_CHK(db.collectDict(colls["cur"], "hw_currency", "abbr"));
+    for (int idAcc: accInits.keys()) {
+        const QDomElement eIn = accInits[idAcc];
+        res = importDbRecordsGroup(db, eIn, "init", "hw_acc_init",
+            QStringList() << "init_sum" << "id_cur" << "id_ac",
+            "IRI", "OMO",
+            QStringList() << "init_sum" << "cur", colls,
+            QVariantList() << QVariant(idAcc));
+        if (!res)
+            return false;
+    }
+    return true;
 }
 
 bool XmlHwFile::importAliases(const QDomElement &e, HwDatabase &db)

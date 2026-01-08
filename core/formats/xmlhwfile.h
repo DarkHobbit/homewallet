@@ -30,6 +30,7 @@ public:
     virtual bool importRecords(const QString &path, HwDatabase& db);
     virtual bool exportRecords(const QString &path, HwDatabase& db, FileFormat::SubTypeFlags subTypes);
 private:
+    bool importAccounts(const QDomElement& e, HwDatabase& db);
     bool importAliases(const QDomElement& e, HwDatabase& db);
 
     bool exportAccounts(HwDatabase& db, QDomElement& elRoot);
