@@ -19,6 +19,8 @@
 
 // Common import errors
 #define S_ERR_DATE_IMP QObject::tr("Can't convert date string to date: %1")
+#define S_ERR_INT_IMP QObject::tr("Can't convert string to integer: %1")
+#define S_ERR_FLOAT_IMP QObject::tr("Can't convert string to float: %1")
 #define S_ERR_QTY_IMP QObject::tr("Can't convert quantity to number: %1")
 #define S_ERR_AMO_IMP QObject::tr("Can't convert amount to number: %1")
 #define S_ERR_PERC_IMP QObject::tr("Can't convert percents to number: %1")

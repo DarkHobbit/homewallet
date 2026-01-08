@@ -11,11 +11,13 @@
  *
  */
 
+#include <iostream>
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QTextStream>
 
 #include "commonexpimpdef.h"
+#include "globals.h"
 #include "xmlfile.h"
 
 XmlFile::XmlFile()
@@ -71,6 +73,139 @@ QDomElement XmlFile::addElem(QDomElement &elParent, const QString &name)
     QDomElement elem = createElement(name);
     elParent.appendChild(elem);
     return elem;
+}
+
+bool XmlFile::importDbRecordsGroup(HwDatabase &db,
+    const QDomElement &elGroup, const QString &elemName,
+    const QString &tableName, const QStringList &fieldNames,
+    const QString &fieldTypes,  const QString &fieldOptionality,
+    const QStringList &attrNames,
+    const HwDatabase::SubDictColl &refAttrs,
+    const QVariantList &extraValues,
+    ChildRecMap *children)
+{
+    if (attrNames.count()+extraValues.count()!=fieldTypes.length()) {
+        _fatalError = S_INTERNAL_ERR+"\n"
+           + QObject::tr("Field count mismatch (%1+%2<>%3)")
+           .arg(attrNames.count())
+           .arg(extraValues.count())
+           .arg(fieldTypes.length());
+        return false;
+    }
+    if (fieldTypes.length()!=fieldNames.length()) {
+        _fatalError = S_INTERNAL_ERR+"\n"
+           + QObject::tr("Field name count mismatch (%1<>%2)")
+           .arg(fieldTypes.length())
+           .arg(fieldNames.length());
+        return false;
+    }
+    if (fieldTypes.length()!=fieldOptionality.length()) {
+        _fatalError = S_INTERNAL_ERR+"\n"
+           + QObject::tr("Field type count mismatch (%1<>%2)")
+           .arg(fieldTypes.length())
+           .arg(fieldOptionality.length());
+        return false;
+    }
+    QString sql = QString("insert into %1 (%2) values (:%3)")
+        .arg(tableName)
+        .arg(fieldNames.join(", "))
+        .arg(fieldNames.join(", :"));
+    for (QDomElement e=elGroup.firstChildElement(elemName); !e.isNull(); e=e.nextSiblingElement(elemName))
+    {
+        int fldIndex = 0;
+        QVariantList values;
+        // 1. Attribute-based fields
+        for(const QString& attrName: attrNames) {
+            bool ok = false;
+            if (e.hasAttribute(attrName)) {
+                QString a = e.attribute(attrName);
+                char t = fieldTypes[fldIndex].toLatin1();
+                switch (t) {
+                case 'S': // string
+                    values << QVariant(a);
+                    break;
+                case 'I': // integer
+                    values << QVariant(a.toInt(&ok));
+                    if (!ok) {
+                        _fatalError = S_ERR_INT_IMP.arg(a);
+                        return false;
+                    }
+                    break;
+                case 'F': // float
+                    values << QVariant(a.toInt(&ok));
+                    if (!ok) {
+                        _fatalError = S_ERR_FLOAT_IMP.arg(a);
+                        return false;
+                    }
+                    break;
+                case 'D': { // ISO datetime
+                    QDateTime dt = QDateTime::fromString(a, Qt::ISODate);
+                    if (!dt.isValid()) {
+                        _fatalError = S_ERR_DATE_IMP.arg(a);
+                        return false;
+                    }
+                    values << QVariant(dt);
+                    break;
+                }
+                case 'R': { // ID reference
+                    if (!refAttrs.keys().contains(attrName)) {
+                        _fatalError = QObject::tr("No ref to attr %1").arg(attrName);
+                        return false;
+                    }
+                    const HwDatabase::DictColl& coll = refAttrs[attrName];
+                    if (!coll.keys().contains(a)) {
+                        // TODO pass message through coll
+                        _fatalError = QObject::tr("Unknown ref: %1").arg(a);
+                        return false;
+                    }
+                    values << QVariant(coll[a]);
+                    break;
+                }
+                default:
+                    _fatalError = QObject::tr("Unknown field type: %1").arg(t);
+                    return false;
+                }
+            }
+            else {
+                char op = fieldOptionality[fldIndex].toLatin1();
+                switch (op) { // may be NULL?
+                case 'O':
+                    values << "null";
+                    break;
+                case 'M':
+                    _fatalError = S_ERR_ATTR_NOT_FOUND
+                         .arg(elemName+"||"+attrName).arg(e.lineNumber());
+                    return false;
+                default:
+                    _fatalError = QObject::tr("Unknown field optionality: %1").arg(op);
+                    return false;
+                }
+            }
+            fldIndex++;
+        }
+        // 2. Extra fields
+        for (const QVariant& extra: extraValues)
+            values << extra;
+        // 3. Insert!
+        QSqlQuery q(db.sqlDbRef());
+        DB_CHK(q.prepare(sql))
+        fldIndex = 0;
+        for (const QVariant& val: values) {
+           q.bindValue(QString(":")+fieldNames[fldIndex], val);
+           fldIndex++;
+        }
+        DB_CHK(q.exec())
+
+        int id = db.getLastSequenceValue(tableName);
+        // 4. Save id into map
+        if (children)
+            (*children)[id] = e;
+        _processedRecordsCount++;
+        if (_processedRecordsCount%100==0)
+            std::cout << "Rec " << _processedRecordsCount << " processed" << std::endl;
+    }
+    std::cout << "Rec " << _processedRecordsCount << " processed" << std::endl;
+    return true;
 }
 
 bool XmlFile::exportElemsFromQuery(HwDatabase &db, QDomElement &elParent,

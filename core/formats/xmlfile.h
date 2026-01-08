@@ -45,6 +45,14 @@ protected:
     bool exportDbRecordsGroup(HwDatabase& db, const QString& qs, QDomElement& elGroup,
         const QString& reqElemName, ChildRecMap* children = 0);
     // Read
+    bool importDbRecordsGroup(HwDatabase& db,
+        const QDomElement& elGroup, const QString& elemName,
+        const QString& tableName, const QStringList &fieldNames,
+        const QString &fieldTypes, const QString &fieldOptionality,
+        const QStringList& attrNames,
+        const HwDatabase::SubDictColl &refAttrs = HwDatabase::SubDictColl(),
+        const QVariantList& extraValues = QVariantList(),
+        ChildRecMap* children = 0);
     bool readFromFile(const QString &path);
     bool readDoubleVal(const QDomElement& el, const QString& attrName, double& res, const QString& errorMessageTemplate);
     bool readDateVal(const QDomElement& el, const QString& attrName, QDateTime& res, const QString& format, const QString& errorMessageTemplate);
