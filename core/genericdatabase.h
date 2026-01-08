@@ -14,6 +14,7 @@
 #ifndef GENERICDATABASE_H
 #define GENERICDATABASE_H
 
+#include <sqlite3.h>
 #include <QDateTime>
 #include <QMap>
 #include <QSqlDatabase>
@@ -58,12 +59,14 @@ public:
         const QString& where = "");
     bool isTableEmpty(const QString& tableName,
         const QString& fieldName = "name", const QString& idFieldName = "id");
+    int getLastSequenceValue(const QString& tableName);
 
 protected:
     QSqlDatabase sqlDb;
     QString _lastError;
     QStringList _warnings;
     bool isICUSupported;
+    sqlite3 *handle;
     bool loadSqlFile(const QString& filePath);
     bool checkTablePresence(const QString& tableName);
     //bool checkFieldPresence(const QString& tableName);

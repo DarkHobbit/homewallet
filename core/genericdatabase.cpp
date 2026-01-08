@@ -12,7 +12,6 @@
  */
 
 #include <iostream>
-#include <sqlite3.h>
 
 #include <QDir>
 #include <QFile>
@@ -24,6 +23,7 @@
 #include "globals.h"
 
 GenericDatabase::GenericDatabase()
+    :_lastError(""), isICUSupported(false), handle(0)
 {
     sqlDb = QSqlDatabase::addDatabase("QSQLITE");
 }
@@ -174,6 +174,16 @@ bool GenericDatabase::isTableEmpty(const QString &tableName, const QString &fiel
     return coll.isEmpty();
 }
 
+int GenericDatabase::getLastSequenceValue(const QString& /*tableName*/)
+{
+    if (sqlDb.driverName()=="QSQLITE") {
+        return sqlite3_last_insert_rowid(handle);
+    }
+    else // Client-server based DBMS, e.g. PostgreSQL
+        // TODO
+        return 1; //===>
+}
+
 bool GenericDatabase::loadSqlFile(const QString& filePath)
 {
     QStringList queries;
@@ -318,7 +328,7 @@ bool GenericDatabase::checkForICU()
             return true;
         }
         // Try load ICU extension
-        sqlite3 *handle = *static_cast<sqlite3 **>(sqlDb.driver()->handle().data());
+        handle = *static_cast<sqlite3 **>(sqlDb.driver()->handle().data());
 #ifdef WITH_SQLITE_EXTENSIONS
         if (handle) {
             int res = sqlite3_enable_load_extension(handle, 1);

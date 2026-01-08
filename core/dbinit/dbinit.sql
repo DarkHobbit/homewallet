@@ -15,7 +15,7 @@
 
 -- Currency unit
 create table hw_currency (
-    id integer not null,
+    id integer primary key autoincrement,
     full_name char(64) not null, -- US dollar
     short_name char(32) not null, -- dollar
     abbr char(4) not null, -- $
@@ -24,69 +24,62 @@ create table hw_currency (
     is_main integer not null, -- 1 if main, 0 otherwise
     is_unit integer not null, -- 1 if other currency calc through this, 0 if this calc through other currency
     descr char(256),
-    constraint pk_cur primary key(id),
     constraint uk_cur1 unique(full_name),
     constraint uk_cur2 unique(abbr),
     constraint uk_cur3 unique(code)
 );
 
 create table hw_curr_rate (
-    id integer not null,
+    id integer primary key autoincrement,
     ch_date date not null,
     id_cur_low integer null,
     id_cur_high integer null,
     rate double,
-    constraint pk_cr primary key(id),
     constraint fk_crcurl foreign key(id_cur_low) references hw_currency(id),
     constraint fk_crcurh foreign key(id_cur_high) references hw_currency(id)
 );
 
 -- Units (kg, liter, day, etc.)
 create table hw_unit (
-    id integer not null,
+    id integer primary key autoincrement,
     name char(64) not null,
     short_name char(16) not null,
     descr char(256),
-    constraint pk_un primary key(id),
     constraint uk_un1 unique(name),
     constraint uk_un2 unique(short_name)
     );
 
 -- Incomes categories & subcategories
 create table hw_in_cat (
-    id integer not null,
+    id integer primary key autoincrement,
     name char(64) not null,
     descr char(256),
-    constraint pk_icat primary key(id),
     constraint uk_icat unique(name)
 );
 
 create table hw_in_subcat (
-    id integer not null,
+    id integer primary key autoincrement,
     id_icat integer not null,
     name char(64) not null,
     descr char(256),
-    constraint pk_iscat primary key(id),
     constraint uk_iscat unique(id_icat, name),
     constraint fk_iscat foreign key(id_icat) references hw_in_cat(id)
 );
 
 -- Expenses categories & subcategories
 create table hw_ex_cat (
-    id integer not null,
+    id integer primary key autoincrement,
     name char(64) not null,
     descr char(256),
-    constraint pk_ecat primary key(id),
     constraint uk_ecat unique(name)
 );
 
 create table hw_ex_subcat (
-    id integer not null,
+    id integer primary key autoincrement,
     id_ecat integer not null,
     name char(64) not null,
     descr char(256),
     id_un_default integer null,
-    constraint pk_escat primary key(id),
     constraint uk_escat unique(id_ecat, name),
     constraint fk_escat foreign key(id_ecat) references hw_ex_cat(id),
     constraint fk_esund foreign key(id_un_default) references hw_unit(id)
@@ -95,48 +88,44 @@ create table hw_ex_subcat (
 -- Accounts (various cards, hard cash, etc.)
 -- TODO meta-account (всегда вводить "основной" - на нужном языке)
 create table hw_account (
-    id integer not null,
+    id integer primary key autoincrement,
     name char(64) not null,
     descr char(256),
     foundation date null,  -- may be null if imported from hb
-    constraint pk_ac primary key(id),
     constraint uk_ac unique(name)
 );
 
 create table hw_acc_init ( -- Start balance for various currencies
-    id integer not null,
+    id integer primary key autoincrement,
     id_ac integer not null,
     id_cur integer null,
     init_sum integer null, -- in low units (cent, kopeck, pfennig etc.)
-    constraint pk_ai primary key(id),
     constraint uk_ai unique(id_ac, id_cur),
     constraint fk_aiac foreign key(id_ac) references hw_account(id),
     constraint fk_aicur foreign key(id_cur) references hw_currency(id)
 );
 
 create table hw_acc_hist ( -- account history
-    id integer not null,
+    id integer primary key autoincrement,
     ch_date date not null,
     id_ai integer not null,
     sum integer null, -- in low units
-    constraint pk_ah primary key(id),
     constraint uk_ah unique(ch_date, id_ai),
     constraint fk_ahai foreign key(id_ai) references hw_acc_init(id)
 );
 
 -- Import & audit
 create table hw_imp_file (
-    id integer not null,
+    id integer primary key autoincrement,
     imp_date date not null,
     filename char(128) not null,
     filetype char(8) not null, -- XMHWA, XMHBK, JSFNS, XLS, TXTCF, QIF...
     descr char(256),
-    constraint pk_imp primary key(id),
     constraint uk_imp unique(filename)
 );
 
 create table hw_alias (
-    id integer not null,
+    id integer primary key autoincrement,
     -- ONE of next ids will be not null
     id_ac integer null,
     id_cur integer null,
@@ -149,7 +138,6 @@ create table hw_alias (
     -- END of ids
     pattern char(64) not null,
     to_descr char(64) not null,
-    constraint pk_ali primary key(id),
     constraint uk_ali unique(pattern)
 );
 
@@ -157,7 +145,7 @@ create table hw_alias (
 
 -- Incomes
 create table hw_in_op (
-    id integer not null,
+    id integer primary key autoincrement,
     op_date date not null,
     quantity double,
     -- price integer not null, -- in low units
@@ -172,7 +160,6 @@ create table hw_in_op (
     uid_imp char(64), -- _id for JSON, line after date for TXT...
     id_imp_verify integer null,
     uid_imp_verify char(64), -- see uid_imp
-    constraint pk_iop primary key(id),
     constraint fk_inac foreign key(id_ac) references hw_account(id),
     constraint fk_incur foreign key(id_cur) references hw_currency(id),
     constraint fk_insub foreign key(id_isubcat) references hw_in_subcat(id),
@@ -183,7 +170,7 @@ create table hw_in_op (
 
 -- Expenses
 create table hw_receipt ( -- in shop, rus. чек
-    id integer not null,
+    id integer primary key autoincrement,
     note char(32),
     total_amount integer not null, -- in low units, on all ex_op in receipt
     id_ac integer not null,
@@ -192,7 +179,6 @@ create table hw_receipt ( -- in shop, rus. чек
     uid_imp char(64), -- _id for JSON, line after date for TXT...
     id_imp_verify integer null,
     uid_imp_verify char(64), -- see uid_imp
-    constraint pk_rc primary key(id),
     constraint fk_rcac foreign key(id_ac) references hw_account(id),
     constraint fk_rccur foreign key(id_cur) references hw_currency(id),
     constraint fk_rcimp foreign key(id_imp) references hw_imp_file(id)
@@ -200,7 +186,7 @@ create table hw_receipt ( -- in shop, rus. чек
 );
 
 create table hw_ex_op (
-    id integer not null,
+    id integer primary key autoincrement,
     op_date date not null,
     quantity double,
     -- price integer not null, -- in low units
@@ -217,7 +203,6 @@ create table hw_ex_op (
     uid_imp char(64), -- _id for JSON, line after date for TXT...
     id_imp_verify integer null,
     uid_imp_verify char(64), -- see uid_imp
-    constraint pk_eop primary key(id),
     constraint fk_exac foreign key(id_ac) references hw_account(id),
     constraint fk_excur foreign key(id_cur) references hw_currency(id),
     constraint fk_exsub foreign key(id_esubcat) references hw_ex_subcat(id),
@@ -229,15 +214,14 @@ create table hw_ex_op (
 
 -- Transfer & currency exchange
 create table hw_transfer_type ( -- deposit into ATM, withdraw from ATM, buy to parents...
-    id integer not null,
+    id integer primary key autoincrement,
     name char(64) not null,
     descr char(256),
-    constraint pk_tt primary key(id),
     constraint uk_tt unique(name)
 );
 
 create table hw_transfer (
-    id integer not null,
+    id integer primary key autoincrement,
     op_date date not null,
     amount integer not null, -- in low units
     id_cur integer not null,
@@ -249,7 +233,6 @@ create table hw_transfer (
     uid_imp char(64), -- _id for JSON, line after date for TXT...
     id_imp_verify integer null,
     uid_imp_verify char(64), -- see uid_imp
-    constraint pk_tr primary key(id),
     constraint fk_trcur foreign key(id_cur) references hw_currency(id),
     constraint fk_trac_in foreign key(id_ac_in) references hw_account(id),
     constraint fk_trac_out foreign key(id_ac_out) references hw_account(id),
@@ -259,7 +242,7 @@ create table hw_transfer (
 );
 
 create table hw_curr_exch (
-    id integer not null,
+    id integer primary key autoincrement,
     op_date date not null,
     id_ac integer not null,
     id_cur_in integer not null,
@@ -271,7 +254,6 @@ create table hw_curr_exch (
     uid_imp char(64), -- _id for JSON, line after date for TXT...
     id_imp_verify integer null,
     uid_imp_verify char(64), -- see uid_imp
-    constraint pk_ce primary key(id),
     constraint fk_ceac foreign key(id_ac) references hw_account(id),
     constraint fk_cecur_in foreign key(id_cur_in) references hw_currency(id),
     constraint fk_cecur_out foreign key(id_cur_out) references hw_currency(id),
@@ -281,14 +263,13 @@ create table hw_curr_exch (
 
 -- Debtors, Creditors, their names
 create table hw_correspondent ( -- debtor or creditor
-    id integer not null,
+    id integer primary key autoincrement,
     name char(64) not null,
-    descr char(256),
-    constraint pk_crs primary key(id)
+    descr char(256)
 );
 
 create table hw_credit ( -- lend or borrow
-    id integer not null,
+    id integer primary key autoincrement,
     op_date date not null,
     close_date date,
     remind_date date,
@@ -310,7 +291,6 @@ create table hw_credit ( -- lend or borrow
     uid_imp char(64), -- _id for JSON, line after date for TXT...
     id_imp_verify integer null,
     uid_imp_verify char(64), -- see uid_imp
-    constraint pk_crd primary key(id),
     constraint fk_crdcrs foreign key(id_crs) references hw_correspondent(id),
     constraint fk_crdac foreign key(id_ac) references hw_account(id),
     constraint fk_crdcur foreign key(id_cur) references hw_currency(id),
@@ -322,7 +302,7 @@ create table hw_credit ( -- lend or borrow
 
 -- TODO payout table
 create table hw_repayment (
-    id integer not null,
+    id integer primary key autoincrement,
     id_crd integer not null,
     op_date date not null,
     amount integer not null, -- in low units
@@ -331,7 +311,6 @@ create table hw_repayment (
     uid_imp char(64), -- _id for JSON, line after date for TXT...
     id_imp_verify integer null,
     uid_imp_verify char(64), -- see uid_imp
-    constraint pk_crp primary key(id),
     constraint fk_crpcrd foreign key(id_crd) references hw_credit(id),
     constraint fk_crpimp foreign key(id_imp) references hw_imp_file(id),
     constraint fk_crpimp_v foreign key(id_imp_verify) references hw_imp_file(id)
