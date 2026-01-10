@@ -62,8 +62,10 @@ create table hw_in_subcat (
     id_icat integer not null,
     name char(64) not null,
     descr char(256),
+    id_un_default integer null,
     constraint uk_iscat unique(id_icat, name),
-    constraint fk_iscat foreign key(id_icat) references hw_in_cat(id)
+    constraint fk_iscat foreign key(id_icat) references hw_in_cat(id),
+    constraint fk_isund foreign key(id_un_default) references hw_unit(id)
 );
 
 -- Expenses categories & subcategories
