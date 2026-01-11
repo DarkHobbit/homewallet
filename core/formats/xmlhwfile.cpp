@@ -11,6 +11,7 @@
  *
  */
 
+#include <iostream>
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QDir>
@@ -68,15 +69,17 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
     QDomElement elRoot = documentElement();
     if (elRoot.nodeName()!="homewallet")
         return false;
-    // Order matter! Accounts, categories, inc/exp/trans, aliases
+    // Order matter! Accounts, categories (at first, units), inc/exp/trans, aliases
     _processedRecordsCount = 0;
     QDomElement e = elRoot.firstChildElement("accounts");
     if (!e.isNull()) {
         if (!importAccounts(e, db))
             return false;
     }
+    if (!importCategories(elRoot, db))
+        return false;
 
-    // TODO
+    // TODO operations
     e = elRoot.firstChildElement("aliases");
     if (!e.isNull()) {
         if (!importAliases(e, db))
@@ -86,11 +89,14 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
     for (QDomElement e=elRoot.firstChildElement(); !e.isNull(); e=e.nextSiblingElement())
     {
         QString nn = e.nodeName();
-        if (nn!="metadata" && nn!="accounts"
+        if (nn!="metadata" && nn!="accounts" && nn!="units"
+                && nn!="expensecategories"  && nn!="incomecategories"
+                && nn!="transfertypes"  && nn!="correspondents"
                 // TODO
                 && nn!="aliases")
             _errors << S_ERR_UNK_ELEM.arg(e.nodeName());
     }
+    std::cout << "Rec " << _processedRecordsCount << " processed" << std::endl;
     return true;
 }
 
@@ -151,14 +157,88 @@ bool XmlHwFile::importAccounts(const QDomElement &e, HwDatabase &db)
     HwDatabase::SubDictColl colls;
     DB_CHK(db.collectDict(colls["cur"], "hw_currency", "abbr"));
     for (int idAcc: accInits.keys()) {
-        const QDomElement eIn = accInits[idAcc];
+        const QDomElement& eIn = accInits[idAcc];
         res = importDbRecordsGroup(db, eIn, "init", "hw_acc_init",
             QStringList() << "init_sum" << "id_cur" << "id_ac",
-            "IRI", "OMO",
+            "IRI", "OOM",
             QStringList() << "init_sum" << "cur", colls,
             QVariantList() << QVariant(idAcc));
         if (!res)
             return false;
+    }
+    return true;
+}
+
+bool XmlHwFile::importCategories(const QDomElement &elRoot, HwDatabase &db)
+{
+    QDomElement e = elRoot.firstChildElement("units");
+    if (!e.isNull()) {
+        if (!importDbRecordsGroup(db, e, "un", "hw_unit",
+                QStringList() << "name" << "short_name" << "descr",
+                "SSS", "MMO",
+                QStringList() << "n" << "sn" << "d"))
+            return false;
+    }
+    e = elRoot.firstChildElement("expensecategories");
+    if (!e.isNull()) {
+        if (!importCategoryTree(e, db, true))
+            return false;
+    }
+    e = elRoot.firstChildElement("incomecategories");
+    if (!e.isNull()) {
+        if (!importCategoryTree(e, db, false))
+            return false;
+    }
+    e = elRoot.firstChildElement("transfertypes");
+    if (!e.isNull()) {
+        if (!importDbRecordsGroup(db, e, "tt", "hw_transfer_type",
+                QStringList() << "name" << "descr", "SS", "MO",
+                QStringList() << "n" << "d",
+                HwDatabase::SubDictColl(), QVariantList()))
+            return false;
+    }
+    e = elRoot.firstChildElement("correspondents");
+    if (!e.isNull()) {
+        if (!importDbRecordsGroup(db, e, "cor", "hw_correspondent",
+                QStringList() << "name" << "descr", "SS", "MO",
+                QStringList() << "n" << "d",
+                HwDatabase::SubDictColl(), QVariantList()))
+            return false;
+    }
+    return true;
+}
+
+bool XmlHwFile::importCategoryTree(const QDomElement &e, HwDatabase &db, bool forExpenses)
+{
+    ChildRecMap eCats;
+    QString primaryTable = forExpenses ? "hw_ex_cat" : "hw_in_cat";
+    QString secondaryTable = forExpenses ? "hw_ex_subcat" : "hw_in_subcat";
+    QString fldParent = forExpenses ? "id_ecat" : "id_icat";
+    bool res = importDbRecordsGroup(db, e, "cat", primaryTable,
+        QStringList() << "name" << "descr", "SS", "MO",
+        QStringList() << "n" << "d",
+        HwDatabase::SubDictColl(), QVariantList(), &eCats);
+    if (!res)
+        return false;
+    HwDatabase::SubDictColl colls;
+    DB_CHK(db.collectDict(colls["und"], "hw_unit", "short_name"));
+    for (int idCat: eCats.keys()) {
+        ChildRecMap eSubCats;
+        bool res = importDbRecordsGroup(db, eCats[idCat], "cat", secondaryTable,
+            QStringList() << "name" << "descr" << "id_un_default" << fldParent,
+            "SSRI", "MOOM",
+            QStringList() << "n" << "d" << "und", colls,
+            QVariantList() << QVariant(idCat), &eSubCats);
+        if (!res)
+            return false;
+        for (int idSubCat: eSubCats.keys()) {
+            if (!eSubCats[idSubCat].childNodes().isEmpty()) {
+                _fatalError = QObject::tr("This version of HomeWallet not support third category level: %1::%2")
+                    .arg(eCats[idCat].attribute("n"))
+                    .arg(eSubCats[idSubCat].attribute("n"));
+                return false;
+            }
+        }
     }
     return true;
 }
@@ -309,6 +389,10 @@ bool XmlHwFile::importAliasesGroup(HwDatabase &db, const QDomElement& elAliGr, H
     return true;
 }
 
+#define Q_SEL_UNIT \
+"select id, name as n, short_name as sn, descr as d" \
+    " from hw_unit order by name;"
+
 #define Q_SEL_IN_CAT \
 "select id, name as n, descr as d" \
     " from hw_in_cat order by name;"
@@ -342,9 +426,14 @@ bool XmlHwFile::importAliasesGroup(HwDatabase &db, const QDomElement& elAliGr, H
 bool XmlHwFile::exportCategories(HwDatabase &db, QDomElement &elRoot)
 {
     ChildRecMap children;
+    // Units
+    QDomElement elUnGroup = addElem(elRoot, "units");
+    bool res = exportDbRecordsGroup(db, Q_SEL_UNIT, elUnGroup, "un");
+    if (!res)
+        return false;
     // Income categories
     QDomElement elICGroup = addElem(elRoot, "incomecategories");
-    bool res = exportDbRecordsGroup(db, Q_SEL_IN_CAT, elICGroup, "cat", &children);
+    res = exportDbRecordsGroup(db, Q_SEL_IN_CAT, elICGroup, "cat", &children);
     if (!res)
         return false;
     foreach (int idInCat, children.keys())

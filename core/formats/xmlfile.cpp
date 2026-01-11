@@ -201,10 +201,9 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
         if (children)
             (*children)[id] = e;
         _processedRecordsCount++;
-        if (_processedRecordsCount%100==0)
+        if (_processedRecordsCount%200==0)
             std::cout << "Rec " << _processedRecordsCount << " processed" << std::endl;
     }
-    std::cout << "Rec " << _processedRecordsCount << " processed" << std::endl;
     return true;
 }
 
