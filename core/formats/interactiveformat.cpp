@@ -137,9 +137,9 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                 QSqlQuery q;
                 QString sqlPart = isIncome ? "select id, id_icat from hw_in_subcat where upper(name)=:name"
                                            : "select id, id_ecat from hw_ex_subcat where upper(name)=:name";
-                DB_CHK(q.prepare(sqlPart));
+                DB_CHK(db.prepQuery(q, sqlPart));
                 q.bindValue(":name", c.alias.toUpper());
-                DB_CHK(q.exec());
+                DB_CHK(db.execQuery(q));
                 bool needSearchAlias = false;
                 switch(db.queryRecCount(q)) {
                 case 0:
@@ -152,9 +152,9 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                     // Find category name and correct case
                     sqlPart = isIncome ? "select name from hw_in_cat where id=:id"
                                        : "select name from hw_ex_cat where id=:id";
-                    DB_CHK(q.prepare(sqlPart));
+                    DB_CHK(db.prepQuery(q, sqlPart));
                     q.bindValue(":id", c.idCat);
-                    DB_CHK(q.exec());
+                    DB_CHK(db.execQuery(q));
                     q.first();
                     c.catName = q.value("name").toString();
                     c.subcatName = isIncome ? db.incomeSubCategoryById(c.idSubcat) : db.expenseSubCategoryById(c.idSubcat);
@@ -184,9 +184,9 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
             if (c.unitName.isEmpty()) {
                 // Try to use default unit
                 QSqlQuery qDefUnit;
-                DB_CHK(qDefUnit.prepare(SQL_GET_DEF_EXP_UNIT));
+                DB_CHK(db.prepQuery(qDefUnit, SQL_GET_DEF_EXP_UNIT));
                 qDefUnit.bindValue(":id", c.idSubcat);
-                DB_CHK(qDefUnit.exec());
+                DB_CHK(db.execQuery(qDefUnit));
                 if (db.queryRecCount(qDefUnit)>0) {
                     c.unitName = qDefUnit.value(0).toString();
                     c.idUnit = qDefUnit.value(1).toInt();

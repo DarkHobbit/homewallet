@@ -188,13 +188,13 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
             values << extra;
         // 3. Insert!
         QSqlQuery q(db.sqlDbRef());
-        DB_CHK(q.prepare(sql))
+        DB_CHK(db.prepQuery(q, sql))
         fldIndex = 0;
         for (const QVariant& val: values) {
            q.bindValue(QString(":")+fieldNames[fldIndex], val);
            fldIndex++;
         }
-        DB_CHK(q.exec())
+        DB_CHK(db.execQuery(q))
 
         int id = db.getLastSequenceValue(tableName);
         // 4. Save id into map
