@@ -39,11 +39,10 @@ protected:
     QDomElement beginCreateXml(const QString& rootElementName);
     bool endCreateXml(const QString& path);
     QDomElement addElem(QDomElement& elParent, const QString& name);
-    bool exportElemsFromQuery(HwDatabase &db, QDomElement& elParent,
-        const QString& groupElemName, const QString& recElemName, const QString& query,
-        const QStringList& fieldNames);
     bool exportDbRecordsGroup(HwDatabase& db, const QString& qs, QDomElement& elGroup,
         const QString& reqElemName, ChildRecMap* children = 0);
+    bool exportDbRecordsGroupWithParent(HwDatabase& db, const QString& qs, QDomElement& elParent,
+        const QString& groupElemName,  const QString& reqElemName, ChildRecMap* children = 0);
     // Read
     bool importDbRecordsGroup(HwDatabase& db,
         const QDomElement& elGroup, const QString& elemName,

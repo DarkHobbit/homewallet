@@ -207,29 +207,6 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
     return true;
 }
 
-bool XmlFile::exportElemsFromQuery(HwDatabase &db, QDomElement &elParent,
-    const QString &groupElemName, const QString &recElemName, const QString &query,
-    const QStringList& fieldNames)
-{
-    QSqlQuery sqlSel(db.sqlDbRef());
-    if (!db.prepQuery(sqlSel, query))
-        return false;
-    if (!db.execQuery(sqlSel))
-        return false;
-    if (db.queryRecCount(sqlSel)==0)
-        return true;
-    QDomElement elGroup = addElem(elParent, groupElemName);
-    sqlSel.first();
-    while (sqlSel.isValid()) {
-        QDomElement elRec = addElem(elGroup, recElemName);
-        for (int i=0; i<fieldNames.count(); i++)
-            elRec.setAttribute(fieldNames[i], sqlSel.value(i).toString());
-        _processedRecordsCount++;
-        sqlSel.next();
-    }
-    return true;
-}
-
 bool XmlFile::exportDbRecordsGroup(HwDatabase &db, const QString &qs, QDomElement &elGroup,
     const QString &reqElemName, ChildRecMap* children)
 {
@@ -257,6 +234,12 @@ bool XmlFile::exportDbRecordsGroup(HwDatabase &db, const QString &qs, QDomElemen
         _processedRecordsCount += elGroup.childNodes().count();
     }
     return true;
+}
+
+bool XmlFile::exportDbRecordsGroupWithParent(HwDatabase &db, const QString &qs, QDomElement &elParent, const QString &groupElemName, const QString &reqElemName, ChildRecMap *children)
+{
+    QDomElement elGroup = addElem(elParent, groupElemName);
+    return exportDbRecordsGroup(db, qs, elGroup, reqElemName, children);
 }
 
 bool XmlFile::readFromFile(const QString &path)

@@ -351,20 +351,14 @@ bool XmlHwFile::exportAccounts(HwDatabase &db, QDomElement &elRoot)
 bool XmlHwFile::exportAliases(HwDatabase &db, QDomElement &elRoot)
 {
     QDomElement elList = addElem(elRoot, "aliases");
-    DB_CHK(exportElemsFromQuery(db, elList, "foraccounts", "ali", Q_SEL_ALIAS_ACC,
-        QStringList() << "pattern" << "to_descr" << "ref"));
-    DB_CHK(exportElemsFromQuery(db, elList, "forcurrency", "ali", Q_SEL_ALIAS_CUR,
-        QStringList() << "pattern" << "to_descr" << "ref"));
-    DB_CHK(exportElemsFromQuery(db, elList, "forunit", "ali", Q_SEL_ALIAS_UN,
-        QStringList() << "pattern" << "to_descr" << "ref"));
-    DB_CHK(exportElemsFromQuery(db, elList, "forincomecategories", "ali", Q_SEL_ALIAS_ICAT,
-        QStringList() << "pattern" << "to_descr" << "ref"));
-    DB_CHK(exportElemsFromQuery(db, elList, "forincomesubcategories", "ali", Q_SEL_ALIAS_ISUBCAT,
-        QStringList() << "pattern" << "to_descr" << "ref"));
-    DB_CHK(exportElemsFromQuery(db, elList, "forexpensecategories", "ali", Q_SEL_ALIAS_ECAT,
-        QStringList() << "pattern" << "to_descr" << "ref"));
-    DB_CHK(exportElemsFromQuery(db, elList, "forexpensesubcategories", "ali", Q_SEL_ALIAS_ESUBCAT,
-        QStringList() << "pattern" << "to_descr" << "ref"));
+
+    DB_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_ACC, elList, "foraccounts", "ali"));
+    DB_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_CUR, elList, "forcurrency", "ali"));
+    DB_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_UN, elList, "forunit", "ali"));
+    DB_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_ICAT, elList, "forincomecategories", "ali"));
+    DB_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_ISUBCAT, elList, "forincomesubcategories", "ali"));
+    DB_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_ECAT, elList, "forexpensecategories", "ali"));
+    DB_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_ESUBCAT, elList, "forexpensesubcategories", "ali"));
     // TODO transfer type
     return true;
 }
