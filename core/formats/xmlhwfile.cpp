@@ -78,7 +78,6 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
     }
     if (!importCategories(elRoot, db))
         return false;
-
     // TODO operations
     e = elRoot.firstChildElement("aliases");
     if (!e.isNull()) {
@@ -150,18 +149,18 @@ bool XmlHwFile::importAccounts(const QDomElement &e, HwDatabase &db)
         QStringList() << "name" << "descr" << "foundation",
         "SSD", "MOO",
         QStringList() << "n" << "d" << "fd",
-        HwDatabase::SubDictColl(),
+        HwDatabase::TableRefColl(),
         QVariantList(), &accInits);
     if (!res)
         return false;
-    HwDatabase::SubDictColl colls;
-    DB_CHK(db.collectDict(colls["cur"], "hw_currency", "abbr"));
+    HwDatabase::TableRefColl tRefs;
+    DB_CHK(db.collectDict(tRefs["cur"], "hw_currency", "abbr"));
     for (int idAcc: accInits.keys()) {
         const QDomElement& eIn = accInits[idAcc];
         res = importDbRecordsGroup(db, eIn, "init", "hw_acc_init",
             QStringList() << "init_sum" << "id_cur" << "id_ac",
             "IRI", "OOM",
-            QStringList() << "init_sum" << "cur", colls,
+            QStringList() << "init_sum" << "cur", tRefs,
             QVariantList() << QVariant(idAcc));
         if (!res)
             return false;
@@ -193,16 +192,14 @@ bool XmlHwFile::importCategories(const QDomElement &elRoot, HwDatabase &db)
     if (!e.isNull()) {
         if (!importDbRecordsGroup(db, e, "tt", "hw_transfer_type",
                 QStringList() << "name" << "descr", "SS", "MO",
-                QStringList() << "n" << "d",
-                HwDatabase::SubDictColl(), QVariantList()))
+                QStringList() << "n" << "d"))
             return false;
     }
     e = elRoot.firstChildElement("correspondents");
     if (!e.isNull()) {
         if (!importDbRecordsGroup(db, e, "cor", "hw_correspondent",
                 QStringList() << "name" << "descr", "SS", "MO",
-                QStringList() << "n" << "d",
-                HwDatabase::SubDictColl(), QVariantList()))
+                QStringList() << "n" << "d"))
             return false;
     }
     return true;
@@ -217,17 +214,17 @@ bool XmlHwFile::importCategoryTree(const QDomElement &e, HwDatabase &db, bool fo
     bool res = importDbRecordsGroup(db, e, "cat", primaryTable,
         QStringList() << "name" << "descr", "SS", "MO",
         QStringList() << "n" << "d",
-        HwDatabase::SubDictColl(), QVariantList(), &eCats);
+        HwDatabase::TableRefColl(), QVariantList(), &eCats);
     if (!res)
         return false;
-    HwDatabase::SubDictColl colls;
-    DB_CHK(db.collectDict(colls["und"], "hw_unit", "short_name"));
+    HwDatabase::TableRefColl tRefs;
+    DB_CHK(db.collectDict(tRefs["und"], "hw_unit", "short_name"));
     for (int idCat: eCats.keys()) {
         ChildRecMap eSubCats;
         bool res = importDbRecordsGroup(db, eCats[idCat], "cat", secondaryTable,
             QStringList() << "name" << "descr" << "id_un_default" << fldParent,
             "SSRI", "MOOM",
-            QStringList() << "n" << "d" << "und", colls,
+            QStringList() << "n" << "d" << "und", tRefs,
             QVariantList() << QVariant(idCat), &eSubCats);
         if (!res)
             return false;

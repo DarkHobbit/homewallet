@@ -80,7 +80,7 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
     const QString &tableName, const QStringList &fieldNames,
     const QString &fieldTypes,  const QString &fieldOptionality,
     const QStringList &attrNames,
-    const HwDatabase::SubDictColl &refAttrs,
+    const HwDatabase::TableRefColl &refAttrs,
     const QVariantList &extraValues,
     ChildRecMap *children)
 {

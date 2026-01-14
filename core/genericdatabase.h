@@ -32,6 +32,7 @@ class GenericDatabase
 public:
     typedef QMap<QString, int> DictColl; // key - dictionary item name, value -  id
     typedef QMap<QString, DictColl> SubDictColl;
+    typedef QMap<QString, DictColl> TableRefColl;
     typedef QMap<int, QString> RevDictColl; // key - id, value - dictionary item name
     GenericDatabase();
     ~GenericDatabase();

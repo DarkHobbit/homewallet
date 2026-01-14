@@ -49,7 +49,7 @@ protected:
         const QString& tableName, const QStringList &fieldNames,
         const QString &fieldTypes, const QString &fieldOptionality,
         const QStringList& attrNames,
-        const HwDatabase::SubDictColl &refAttrs = HwDatabase::SubDictColl(),
+        const HwDatabase::TableRefColl &refAttrs = HwDatabase::TableRefColl(),
         const QVariantList& extraValues = QVariantList(),
         ChildRecMap* children = 0);
     bool readFromFile(const QString &path);
