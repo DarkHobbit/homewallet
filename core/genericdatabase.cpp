@@ -116,15 +116,11 @@ bool GenericDatabase::collectDict(GenericDatabase::DictColl& coll, const QString
     const QString &fieldName, const QString& idFieldName, const QString& where)
 {
     QSqlQuery sqlColl(sqlDb);
-    if (!sqlColl.prepare(QString("select %1, %2 from %3 %4 order by %2;")
-          .arg(idFieldName).arg(fieldName).arg(tableName).arg(where))) {
-        _lastError = sqlColl.lastError().text();
+    if (!prepQuery(sqlColl, QString("select %1, %2 from %3 %4 order by %2;")
+          .arg(idFieldName).arg(fieldName).arg(tableName).arg(where)))
         return false;
-    }
-    if (!sqlColl.exec()) {
-        _lastError = sqlColl.lastError().text();
+    if (!execQuery(sqlColl))
         return false;
-    }
     sqlColl.first();
     while (sqlColl.isValid()) {
         coll[sqlColl.value(1).toString()] = sqlColl.value(0).toInt();
@@ -163,6 +159,24 @@ bool GenericDatabase::collectRevDict(RevDictColl &coll, const QString &tableName
         sqlColl.next();
     }
     return true;
+}
+
+bool GenericDatabase::collectTwoLevelCat(DictColl &coll, const QString &parentTable, const QString &childTable, const QString &refIdFieldName)
+{
+    QString sql = "select ch.id as chid, pt.name||'::'||ch.name as compname from %1 ch left join %2 pt on pt.id=ch.%3 order by pt.name, ch.name";
+    sql = sql.arg(childTable).arg(parentTable).arg(refIdFieldName);
+    QSqlQuery sqlColl(sqlDb);
+    if (!prepQuery(sqlColl, sql))
+        return false;
+    if (!execQuery(sqlColl))
+        return false;
+    sqlColl.first();
+    while (sqlColl.isValid()) {
+        coll[sqlColl.value(1).toString()] = sqlColl.value(0).toInt();
+        sqlColl.next();
+    }
+    return true;
+
 }
 
 bool GenericDatabase::isTableEmpty(const QString &tableName, const QString &fieldName, const QString &idFieldName)

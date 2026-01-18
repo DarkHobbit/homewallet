@@ -84,10 +84,15 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
     const QVariantList &extraValues,
     ChildRecMap *children)
 {
-    if (attrNames.count()+extraValues.count()!=fieldTypes.length()) {
+    int uidCount = 0;
+    for (int i=0; i<fieldTypes.count(); i++)
+        if (fieldTypes[i]=='Z')
+            uidCount++;
+    if (attrNames.count()+uidCount+extraValues.count()!=fieldTypes.length()) {
         _fatalError = S_INTERNAL_ERR+"\n"
-           + QObject::tr("Field count mismatch (%1+%2<>%3)")
+           + QObject::tr("Field count mismatch (%1+%2+%3<>%4)")
            .arg(attrNames.count())
+           .arg(uidCount)
            .arg(extraValues.count())
            .arg(fieldTypes.length());
         return false;
@@ -132,7 +137,7 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
                     }
                     break;
                 case 'F': // float
-                    values << QVariant(a.toInt(&ok));
+                    values << QVariant(a.toDouble(&ok));
                     if (!ok) {
                         _fatalError = S_ERR_FLOAT_IMP.arg(a);
                         return false;
@@ -147,18 +152,33 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
                     values << QVariant(dt);
                     break;
                 }
-                case 'R': { // ID reference
+                case 'R': // ID reference
+                case 'Z': // ID reference with additional uid
+                {
                     if (!refAttrs.keys().contains(attrName)) {
                         _fatalError = QObject::tr("No ref to attr %1").arg(attrName);
                         return false;
                     }
+                    QString refName = a;
+                    int sepPos = a.indexOf("::");
+                    if (t=='Z') {
+                        if (sepPos==-1 || sepPos==0 || sepPos==a.length()-2) {
+                            _fatalError = QObject::tr(
+                                "Attribute %1 must be in form filename::uid. Actual value is:\n%2\At line %3")
+                                    .arg(attrName).arg(a).arg(e.lineNumber());
+                            return false;
+                        }
+                        refName = a.left(sepPos);
+                    }
                     const HwDatabase::DictColl& coll = refAttrs[attrName];
-                    if (!coll.keys().contains(a)) {
+                    if (!coll.keys().contains(refName)) {
                         // TODO pass message through coll
-                        _fatalError = QObject::tr("Unknown ref: %1").arg(a);
+                        _fatalError = QObject::tr("Unknown ref: %1").arg(refName);
                         return false;
                     }
-                    values << QVariant(coll[a]);
+                    values << QVariant(coll[refName]);
+                    if (t=='Z') //uid
+                        values << a.mid(sepPos+2);
                     break;
                 }
                 default:

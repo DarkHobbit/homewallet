@@ -58,6 +58,7 @@ public:
     bool collectRevDict(RevDictColl& coll, const QString& tableName,
         const QString& fieldName = "name", const QString& idFieldName = "id",
         const QString& where = "");
+    bool collectTwoLevelCat(DictColl& coll, const QString& parentTable, const QString& childTable, const QString& refIdFieldName);
     bool isTableEmpty(const QString& tableName,
         const QString& fieldName = "name", const QString& idFieldName = "id");
     int getLastSequenceValue(const QString& tableName);

@@ -33,6 +33,8 @@ private:
     bool importAccounts(const QDomElement& e, HwDatabase& db);
     bool importCategories(const QDomElement& elRoot, HwDatabase& db);
     bool importCategoryTree(const QDomElement& e, HwDatabase& db, bool forExpenses);
+    bool importImportReferences(const QDomElement& e, HwDatabase& db);
+    bool importIncomes(const QDomElement& e, HwDatabase& db);
     bool importAliases(const QDomElement& e, HwDatabase& db);
 
     bool exportAccounts(HwDatabase& db, QDomElement& elRoot);
@@ -40,6 +42,7 @@ private:
 
     bool importAliasesGroup(HwDatabase &db, const QDomElement& elAliGr, HwDatabase::AliasType alType,
          const QString& errorMessageIfRefMissing, HwDatabase::DictColl& alColl, HwDatabase::DictColl& srcColl);
+
     bool exportCategories(HwDatabase& db, QDomElement& elRoot);
     bool exportExpenses(HwDatabase& db, QDomElement& elRoot);
     bool exportIncomes(HwDatabase& db, QDomElement& elRoot);

@@ -71,13 +71,29 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
         return false;
     // Order matter! Accounts, categories (at first, units), inc/exp/trans, aliases
     _processedRecordsCount = 0;
+    // Accounts
     QDomElement e = elRoot.firstChildElement("accounts");
     if (!e.isNull()) {
         if (!importAccounts(e, db))
             return false;
     }
+    // Categories
     if (!importCategories(elRoot, db))
         return false;
+
+    // TODO import refs
+    e = elRoot.firstChildElement("importfiles");
+    if (!e.isNull()) {
+        if (!importImportReferences(e, db))
+            return false;
+    }
+    // Incomes
+    e = elRoot.firstChildElement("incomes");
+    if (!e.isNull()) {
+        if (!importIncomes(e, db))
+            return false;
+    }
+
     // TODO operations
     e = elRoot.firstChildElement("aliases");
     if (!e.isNull()) {
@@ -91,8 +107,9 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
         if (nn!="metadata" && nn!="accounts" && nn!="units"
                 && nn!="expensecategories"  && nn!="incomecategories"
                 && nn!="transfertypes"  && nn!="correspondents"
+                && nn!="incomes"  && nn!="expenses"
                 // TODO
-                && nn!="aliases")
+                && nn!="importfiles" && nn!="aliases")
             _errors << S_ERR_UNK_ELEM.arg(e.nodeName());
     }
     std::cout << "Rec " << _processedRecordsCount << " processed" << std::endl;
@@ -238,6 +255,35 @@ bool XmlHwFile::importCategoryTree(const QDomElement &e, HwDatabase &db, bool fo
         }
     }
     return true;
+}
+
+bool XmlHwFile::importImportReferences(const QDomElement &e, HwDatabase &db)
+{
+    return importDbRecordsGroup(db, e, "imf", "hw_imp_file",
+               QStringList() << "imp_date" << "filename" << "filetype" << "descr",
+               "DSSS", "MMMO",
+               QStringList() << "dt" << "fn" << "ft" << "d");
+}
+
+bool XmlHwFile::importIncomes(const QDomElement &e, HwDatabase &db)
+{
+    HwDatabase::TableRefColl tRefs;
+    DB_CHK(db.collectDict(tRefs["ac"], "hw_account"));
+    DB_CHK(db.collectDict(tRefs["cu"], "hw_currency", "abbr"));
+    DB_CHK(db.collectTwoLevelCat(tRefs["ca"], "hw_in_cat", "hw_in_subcat", "id_icat"));
+    DB_CHK(db.collectDict(tRefs["u"], "hw_unit", "short_name")); // optional
+    DB_CHK(db.collectDict(tRefs["imp"], "hw_imp_file","filename")); // optional
+    DB_CHK(db.collectDict(tRefs["vfy"], "hw_imp_file","filename")); // optional
+    return importDbRecordsGroup(db, e, "inc", "hw_in_op",
+        QStringList() << "op_date" << "quantity" << "amount"
+                      << "id_ac" << "id_cur" << "id_isubcat" << "id_un"
+                      << "attention" << "descr"
+                      << "id_imp" << "uid_imp" << "id_imp_verify" << "uid_imp_verify",
+        "DFIRRRRISZSZS", "MOMMMMOOOOOOO",
+        QStringList() << "dt" << "q" << "a"
+                      << "ac" << "cu" << "ca" << "u"
+                      << "at" << "d" << "imp" << "vfy",
+        tRefs);
 }
 
 bool XmlHwFile::importAliases(const QDomElement &e, HwDatabase &db)
@@ -599,6 +645,5 @@ bool XmlHwFile::exportCredits(HwDatabase &db, QDomElement &elRoot, const QString
 
 bool XmlHwFile::exportImportReferences(HwDatabase &db, QDomElement &elRoot)
 {
-    QDomElement elImpGroup = addElem(elRoot, "importfiles");
-    return exportDbRecordsGroup(db, Q_SEL_IMP_FILES, elImpGroup, "imf");
+    return exportDbRecordsGroupWithParent(db, Q_SEL_IMP_FILES, elRoot, "importfiles", "imf");
 }

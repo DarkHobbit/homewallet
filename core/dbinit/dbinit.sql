@@ -156,7 +156,7 @@ create table hw_in_op (
     id_cur integer not null, -- only one currency, in hb - many
     id_isubcat integer not null,
     id_un integer null,
-    attention integer not null, -- 1 if star setted, 0 if ordinary record
+    attention integer null, -- 1 if star setted, 0 if ordinary record
     descr char(256),
     id_imp integer null,
     uid_imp char(64), -- _id for JSON, line after date for TXT...
