@@ -80,11 +80,16 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
     // Categories
     if (!importCategories(elRoot, db))
         return false;
-
-    // TODO import refs
+    // Import refs
     e = elRoot.firstChildElement("importfiles");
     if (!e.isNull()) {
         if (!importImportReferences(e, db))
+            return false;
+    }
+    // Expenses
+    e = elRoot.firstChildElement("expenses");
+    if (!e.isNull()) {
+        if (!importExpenses(e, db))
             return false;
     }
     // Incomes
@@ -262,7 +267,30 @@ bool XmlHwFile::importImportReferences(const QDomElement &e, HwDatabase &db)
     return importDbRecordsGroup(db, e, "imf", "hw_imp_file",
                QStringList() << "imp_date" << "filename" << "filetype" << "descr",
                "DSSS", "MMMO",
-               QStringList() << "dt" << "fn" << "ft" << "d");
+               QStringList() << "dt" << "fn" << "ft" << "d",
+               HwDatabase::TableRefColl(), QVariantList(), 0,
+               QStringList() << "filename");
+}
+
+bool XmlHwFile::importExpenses(const QDomElement &e, HwDatabase &db)
+{
+    HwDatabase::TableRefColl tRefs;
+    DB_CHK(db.collectDict(tRefs["ac"], "hw_account"));
+    DB_CHK(db.collectDict(tRefs["cu"], "hw_currency", "abbr"));
+    DB_CHK(db.collectTwoLevelCat(tRefs["ca"], "hw_ex_cat", "hw_ex_subcat", "id_ecat"));
+    DB_CHK(db.collectDict(tRefs["u"], "hw_unit", "short_name")); // optional
+    DB_CHK(db.collectDict(tRefs["imp"], "hw_imp_file","filename")); // optional
+    DB_CHK(db.collectDict(tRefs["vfy"], "hw_imp_file","filename")); // optional
+    return importDbRecordsGroup(db, e, "exp", "hw_ex_op",
+        QStringList() << "op_date" << "quantity" << "amount"
+                      << "id_ac" << "id_cur" << "id_esubcat" << "id_un"
+                      << "discount" << "attention" << "descr"
+                      << "id_imp" << "uid_imp" << "id_imp_verify" << "uid_imp_verify",
+        "DFIRRRRIISZSZS", "MOMMMMOOOOOOOO",
+        QStringList() << "dt" << "q" << "a"
+                      << "ac" << "cu" << "ca" << "u"
+                      << "di" << "at" << "d" << "imp" << "vfy",
+        tRefs);
 }
 
 bool XmlHwFile::importIncomes(const QDomElement &e, HwDatabase &db)

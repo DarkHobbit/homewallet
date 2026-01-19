@@ -51,7 +51,8 @@ protected:
         const QStringList& attrNames,
         const HwDatabase::TableRefColl &refAttrs = HwDatabase::TableRefColl(),
         const QVariantList& extraValues = QVariantList(),
-        ChildRecMap* children = 0);
+        ChildRecMap* children = 0,
+        const QStringList& fieldsForUniqueCheck = QStringList());
     bool readFromFile(const QString &path);
     bool readDoubleVal(const QDomElement& el, const QString& attrName, double& res, const QString& errorMessageTemplate);
     bool readDateVal(const QDomElement& el, const QString& attrName, QDateTime& res, const QString& format, const QString& errorMessageTemplate);

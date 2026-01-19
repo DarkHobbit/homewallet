@@ -82,7 +82,8 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
     const QStringList &attrNames,
     const HwDatabase::TableRefColl &refAttrs,
     const QVariantList &extraValues,
-    ChildRecMap *children)
+    ChildRecMap *children,
+    const QStringList& fieldsForUniqueCheck)
 {
     int uidCount = 0;
     for (int i=0; i<fieldTypes.count(); i++)
@@ -111,15 +112,28 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
            .arg(fieldOptionality.length());
         return false;
     }
+    // Query text for insert
     QString sql = QString("insert into %1 (%2) values (:%3)")
         .arg(tableName)
         .arg(fieldNames.join(", "))
         .arg(fieldNames.join(", :"));
+    // Query text for unique check
+    int fldIndex = 0;
+    QString sqlCheck = QString("select count(id) from %1 where ")
+        .arg(tableName);
+    for (const QString& fld: fieldsForUniqueCheck) {
+        if (fldIndex>0)
+            sqlCheck += " and ";
+        sqlCheck += fld+"=:"+fld;
+        fldIndex++;
+    }
+    // Go through all the records
     for (QDomElement e=elGroup.firstChildElement(elemName); !e.isNull(); e=e.nextSiblingElement(elemName))
     {
-        int fldIndex = 0;
+        fldIndex = 0;
         QVariantList values;
         // 1. Attribute-based fields
+        QMap<QString, QVariant> valuesForUniqueCheck;
         for(const QString& attrName: attrNames) {
             bool ok = false;
             if (e.hasAttribute(attrName)) {
@@ -164,7 +178,7 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
                     if (t=='Z') {
                         if (sepPos==-1 || sepPos==0 || sepPos==a.length()-2) {
                             _fatalError = QObject::tr(
-                                "Attribute %1 must be in form filename::uid. Actual value is:\n%2\At line %3")
+                                "Attribute %1 must be in form filename::uid. Actual value is:\n%2\nAt line %3")
                                     .arg(attrName).arg(a).arg(e.lineNumber());
                             return false;
                         }
@@ -177,14 +191,18 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
                         return false;
                     }
                     values << QVariant(coll[refName]);
-                    if (t=='Z') //uid
+                    if (t=='Z') {//uid
                         values << a.mid(sepPos+2);
+                        fldIndex++;
+                    }
                     break;
                 }
                 default:
                     _fatalError = QObject::tr("Unknown field type: %1").arg(t);
                     return false;
                 }
+                if (fieldsForUniqueCheck.contains(fieldNames[fldIndex]))
+                    valuesForUniqueCheck[fieldNames[fldIndex]] = values.last();
             }
             else {
                 char op = fieldOptionality[fldIndex].toLatin1();
@@ -206,7 +224,20 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
         // 2. Extra fields
         for (const QVariant& extra: extraValues)
             values << extra;
-        // 3. Insert!
+        // 3. Check for unique, if needed
+        if (!valuesForUniqueCheck.keys().isEmpty()) {
+            QSqlQuery qChk(db.sqlDbRef());
+            DB_CHK(db.prepQuery(qChk, sqlCheck));
+            for (const QString& fld: valuesForUniqueCheck.keys())
+                qChk.bindValue(QString(":")+fld, valuesForUniqueCheck[fld]);
+            DB_CHK(db.execQuery(qChk));
+            qChk.first();
+            if (qChk.value(0).toInt()>0) {
+                std::cout << "Skipped 1 record in " << tableName.toUtf8().data() << std::endl;
+                continue;
+            }
+        }
+        // 4. Insert!
         QSqlQuery q(db.sqlDbRef());
         DB_CHK(db.prepQuery(q, sql))
         fldIndex = 0;
@@ -217,7 +248,7 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
         DB_CHK(db.execQuery(q))
 
         int id = db.getLastSequenceValue(tableName);
-        // 4. Save id into map
+        // 5. Save id into map
         if (children)
             (*children)[id] = e;
         _processedRecordsCount++;

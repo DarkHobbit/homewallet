@@ -34,6 +34,7 @@ private:
     bool importCategories(const QDomElement& elRoot, HwDatabase& db);
     bool importCategoryTree(const QDomElement& e, HwDatabase& db, bool forExpenses);
     bool importImportReferences(const QDomElement& e, HwDatabase& db);
+    bool importExpenses(const QDomElement& e, HwDatabase& db);
     bool importIncomes(const QDomElement& e, HwDatabase& db);
     bool importAliases(const QDomElement& e, HwDatabase& db);
 
