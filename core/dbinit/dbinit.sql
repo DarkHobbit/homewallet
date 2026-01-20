@@ -199,7 +199,7 @@ create table hw_ex_op (
     id_un integer null,
     id_rc integer null, -- expence may be separate, but may be contained in receipt
     discount integer, -- absolute value in low units (not percent)
-    attention integer not null, -- 1 if star setted, 0 if ordinary record
+    attention integer null, -- 1 if star setted, 0 if ordinary record
     descr char(256),
     id_imp integer null,
     uid_imp char(64), -- _id for JSON, line after date for TXT...

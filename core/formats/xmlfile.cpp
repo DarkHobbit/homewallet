@@ -208,7 +208,7 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
                 char op = fieldOptionality[fldIndex].toLatin1();
                 switch (op) { // may be NULL?
                 case 'O':
-                    values << "null";
+                    values << QVariant(); // null
                     break;
                 case 'M':
                     _fatalError = S_ERR_ATTR_NOT_FOUND
