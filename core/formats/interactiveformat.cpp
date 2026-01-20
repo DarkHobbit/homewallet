@@ -156,7 +156,7 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                     q.bindValue(":id", c.idCat);
                     DB_CHK(db.execQuery(q));
                     q.first();
-                    c.catName = q.value("name").toString();
+                    c.catName = q.value(0).toString();
                     c.subcatName = isIncome ? db.incomeSubCategoryById(c.idSubcat) : db.expenseSubCategoryById(c.idSubcat);
                     c.state = ImpRecCandidate::ReadyToImport;
                     break;
