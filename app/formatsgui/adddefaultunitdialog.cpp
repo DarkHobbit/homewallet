@@ -48,7 +48,8 @@ void AddDefaultUnitDialog::addDefaultUnit(int idSubCat, const QString& subCatNam
     if (db->queryRecCount(q)>0) {
         q.first();
         int res = QMessageBox::question(0, S_CONFIRM,
-            S_CONFIRM_DEF_UNIT_EXIST.arg(subCatName).arg(q.value(0).toString()));
+            S_CONFIRM_DEF_UNIT_EXIST.arg(subCatName).arg(q.value(0).toString()),
+            QMessageBox::Yes, QMessageBox::No);
         if (res==QMessageBox::No)
             return;
     }

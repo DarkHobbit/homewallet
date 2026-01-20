@@ -120,7 +120,8 @@ MainWindow::MainWindow(QWidget *parent) :
         return;
     case HwDatabase::NeedUpgrade:
         if (QMessageBox::question(0, S_CONFIRM,
-                S_NEED_UPGRADE.arg(dbPath).arg(db.lastError()))==QMessageBox::Yes)
+                S_NEED_UPGRADE.arg(dbPath).arg(db.lastError()),
+                QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
             db.upgrade(dbPath);
         else
             return;
@@ -358,7 +359,8 @@ void MainWindow::on_action_Import_triggered()
         QFileInfo fi(path);
         int idImp = db.findImportFile(fi.fileName());
         if (idImp>-1) {
-            if (QMessageBox::question(0, S_CONFIRM, S_REPEAT_IMPORT.arg(fi.fileName()))!=QMessageBox::Yes)
+            if (QMessageBox::question(0, S_CONFIRM, S_REPEAT_IMPORT.arg(fi.fileName()),
+                              QMessageBox::Yes, QMessageBox::No)!=QMessageBox::Yes)
                 return;
         }
         else
