@@ -197,7 +197,9 @@ bool XmlHwFile::importCategories(const QDomElement &elRoot, HwDatabase &db)
         if (!importDbRecordsGroup(db, e, "un", "hw_unit",
                 QStringList() << "name" << "short_name" << "descr",
                 "SSS", "MMO",
-                QStringList() << "n" << "sn" << "d"))
+                QStringList() << "n" << "sn" << "d",
+                HwDatabase::TableRefColl(), QVariantList(), 0,
+                QStringList() << "short_name"))
             return false;
     }
     e = elRoot.firstChildElement("expensecategories");
@@ -214,14 +216,18 @@ bool XmlHwFile::importCategories(const QDomElement &elRoot, HwDatabase &db)
     if (!e.isNull()) {
         if (!importDbRecordsGroup(db, e, "tt", "hw_transfer_type",
                 QStringList() << "name" << "descr", "SS", "MO",
-                QStringList() << "n" << "d"))
+                QStringList() << "n" << "d",
+                HwDatabase::TableRefColl(), QVariantList(), 0,
+                QStringList() << "name"))
             return false;
     }
     e = elRoot.firstChildElement("correspondents");
     if (!e.isNull()) {
         if (!importDbRecordsGroup(db, e, "cor", "hw_correspondent",
                 QStringList() << "name" << "descr", "SS", "MO",
-                QStringList() << "n" << "d"))
+                QStringList() << "n" << "d",
+                HwDatabase::TableRefColl(), QVariantList(), 0,
+                QStringList() << "name"))
             return false;
     }
     return true;
@@ -236,7 +242,8 @@ bool XmlHwFile::importCategoryTree(const QDomElement &e, HwDatabase &db, bool fo
     bool res = importDbRecordsGroup(db, e, "cat", primaryTable,
         QStringList() << "name" << "descr", "SS", "MO",
         QStringList() << "n" << "d",
-        HwDatabase::TableRefColl(), QVariantList(), &eCats);
+        HwDatabase::TableRefColl(), QVariantList(), &eCats,
+        QStringList() << "name");
     if (!res)
         return false;
     HwDatabase::TableRefColl tRefs;
@@ -247,7 +254,8 @@ bool XmlHwFile::importCategoryTree(const QDomElement &e, HwDatabase &db, bool fo
             QStringList() << "name" << "descr" << "id_un_default" << fldParent,
             "SSRI", "MOOM",
             QStringList() << "n" << "d" << "und", tRefs,
-            QVariantList() << QVariant(idCat), &eSubCats);
+            QVariantList() << QVariant(idCat), &eSubCats,
+            QStringList() << fldParent << "name");
         if (!res)
             return false;
         for (int idSubCat: eSubCats.keys()) {
