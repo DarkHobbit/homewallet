@@ -20,7 +20,7 @@ TransferModel::TransferModel(QObject *parent)
     visibleFieldNames
         << "t.op_date"
           << lowUnitFunction("t.amount", "cur.abbr")
-          << "cur.abbr" << "ai.name" << "ao.name"
+          << "cur.abbr" << "ao.name" << "ai.name"
           << "c.name" << "t.descr";
     visibleFieldTypes
               << 'D' << 'M' << 'G' << 'G' << 'G' << 'G' << 'G';
