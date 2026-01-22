@@ -36,6 +36,8 @@ private:
     bool importImportReferences(const QDomElement& e, HwDatabase& db);
     bool importExpenses(const QDomElement& e, HwDatabase& db);
     bool importIncomes(const QDomElement& e, HwDatabase& db);
+    bool importTransfer(const QDomElement& e, HwDatabase& db);
+    bool importCurrencyConversion(const QDomElement& e, HwDatabase& db);
     bool importAliases(const QDomElement& e, HwDatabase& db);
 
     bool exportAccounts(HwDatabase& db, QDomElement& elRoot);

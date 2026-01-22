@@ -98,8 +98,22 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
         if (!importIncomes(e, db))
             return false;
     }
+    // Transfer
+    e = elRoot.firstChildElement("transfer");
+    if (!e.isNull()) {
+        if (!importTransfer(e, db))
+            return false;
+    }
 
-    // TODO operations
+    // Currency exchange
+    e = elRoot.firstChildElement("currencyexchange");
+    if (!e.isNull()) {
+        if (!importCurrencyConversion(e, db))
+            return false;
+    }
+
+    // TODO debtors/creditors
+
     e = elRoot.firstChildElement("aliases");
     if (!e.isNull()) {
         if (!importAliases(e, db))
@@ -113,7 +127,7 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
                 && nn!="expensecategories"  && nn!="incomecategories"
                 && nn!="transfertypes"  && nn!="correspondents"
                 && nn!="incomes"  && nn!="expenses"
-                // TODO
+                && nn!="transfer" && nn!="currencyexchange"
                 && nn!="importfiles" && nn!="aliases")
             _errors << S_ERR_UNK_ELEM.arg(e.nodeName());
     }
@@ -288,7 +302,7 @@ bool XmlHwFile::importExpenses(const QDomElement &e, HwDatabase &db)
     DB_CHK(db.collectTwoLevelCat(tRefs["ca"], "hw_ex_cat", "hw_ex_subcat", "id_ecat"));
     DB_CHK(db.collectDict(tRefs["u"], "hw_unit", "short_name")); // optional
     DB_CHK(db.collectDict(tRefs["imp"], "hw_imp_file","filename")); // optional
-    DB_CHK(db.collectDict(tRefs["vfy"], "hw_imp_file","filename")); // optional
+    tRefs["vfy"] = tRefs["imp"];
     return importDbRecordsGroup(db, e, "exp", "hw_ex_op",
         QStringList() << "op_date" << "quantity" << "amount"
                       << "id_ac" << "id_cur" << "id_esubcat" << "id_un"
@@ -309,7 +323,7 @@ bool XmlHwFile::importIncomes(const QDomElement &e, HwDatabase &db)
     DB_CHK(db.collectTwoLevelCat(tRefs["ca"], "hw_in_cat", "hw_in_subcat", "id_icat"));
     DB_CHK(db.collectDict(tRefs["u"], "hw_unit", "short_name")); // optional
     DB_CHK(db.collectDict(tRefs["imp"], "hw_imp_file","filename")); // optional
-    DB_CHK(db.collectDict(tRefs["vfy"], "hw_imp_file","filename")); // optional
+    tRefs["vfy"] = tRefs["imp"];
     return importDbRecordsGroup(db, e, "inc", "hw_in_op",
         QStringList() << "op_date" << "quantity" << "amount"
                       << "id_ac" << "id_cur" << "id_isubcat" << "id_un"
@@ -319,6 +333,45 @@ bool XmlHwFile::importIncomes(const QDomElement &e, HwDatabase &db)
         QStringList() << "dt" << "q" << "a"
                       << "ac" << "cu" << "ca" << "u"
                       << "at" << "d" << "imp" << "vfy",
+        tRefs);
+}
+
+bool XmlHwFile::importTransfer(const QDomElement &e, HwDatabase &db)
+{
+    HwDatabase::TableRefColl tRefs;
+    DB_CHK(db.collectDict(tRefs["cu"], "hw_currency", "abbr"));
+    DB_CHK(db.collectDict(tRefs["ao"], "hw_account"));
+    tRefs["ai"] = tRefs["ao"]; // :)
+    DB_CHK(db.collectDict(tRefs["t"], "hw_transfer_type"));
+    DB_CHK(db.collectDict(tRefs["imp"], "hw_imp_file","filename")); // optional
+    tRefs["vfy"] = tRefs["imp"];
+
+    return importDbRecordsGroup(db, e, "tr", "hw_transfer",
+        QStringList() << "op_date" << "amount" << "id_cur"
+                      << "id_ac_in" << "id_ac_out" << "id_tt" << "descr"
+                      << "id_imp" << "uid_imp" << "id_imp_verify" << "uid_imp_verify",
+        "DIRRRRSZSZS", "MMMMMMOOOOO",
+        QStringList() << "dt" << "a" << "cu" << "ai" << "ao"
+                      << "t" << "d" << "imp" << "vfy",
+        tRefs);
+}
+
+bool XmlHwFile::importCurrencyConversion(const QDomElement &e, HwDatabase &db)
+{
+    HwDatabase::TableRefColl tRefs;
+    DB_CHK(db.collectDict(tRefs["ac"], "hw_account"));
+    DB_CHK(db.collectDict(tRefs["ci"], "hw_currency", "abbr"));
+    tRefs["co"] = tRefs["ci"];
+    DB_CHK(db.collectDict(tRefs["imp"], "hw_imp_file","filename")); // optional
+    tRefs["vfy"] = tRefs["imp"];
+
+    return importDbRecordsGroup(db, e, "ce", "hw_curr_exch",
+        QStringList() << "op_date" << "id_ac" << "id_cur_in" << "id_cur_out"
+            << "amount_in" << "amount_out" << "descr"
+            << "id_imp" << "uid_imp" << "id_imp_verify" << "uid_imp_verify",
+        "DRRRIISZSZS", "MMMMMMOOOOO",
+        QStringList() << "dt" << "ac" << "ci" << "co"
+                      << "ami" << "amo" << "d" << "imp" << "vfy",
         tRefs);
 }
 
@@ -591,7 +644,7 @@ bool XmlHwFile::exportIncomes(HwDatabase &db, QDomElement &elRoot)
 }
 
 #define Q_SEL_TR \
-    "select tr.id, tr.op_date as dt, cur.abbr as cur," \
+    "select tr.id, tr.op_date as dt, tr.amount as a, cur.abbr as cu," \
     " acci.name as ai, acco.name as ao, tt.name as t," \
     " tr.descr as d," \
     " fim.filename||'::'||uid_imp as imp," \
