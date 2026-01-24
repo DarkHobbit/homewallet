@@ -136,9 +136,9 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
         QMap<QString, QVariant> valuesForUniqueCheck;
         for(const QString& attrName: attrNames) {
             bool ok = false;
+            char t = fieldTypes[fldIndex].toLatin1();
             if (e.hasAttribute(attrName)) {
                 QString a = e.attribute(attrName);
-                char t = fieldTypes[fldIndex].toLatin1();
                 switch (t) {
                 case 'S': // string
                     values << QVariant(a);
@@ -164,6 +164,17 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
                         return false;
                     }
                     values << QVariant(dt);
+                    break;
+                }
+                case 'B': { // bool: yes/no to 0/1
+                    int iBoolVal = 0;
+                    if (a.toLower()=="yes")
+                        iBoolVal = 1;
+                    else if (a.toLower()!="no") {
+                        _fatalError = S_ERR_ENUM_IMP.arg(a).arg("yes, no"); // Don't translate yes, no!
+                        return false;
+                    }
+                    values << QVariant(iBoolVal);
                     break;
                 }
                 case 'R': // ID reference
@@ -209,6 +220,10 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
                 switch (op) { // may be NULL?
                 case 'O':
                     values << QVariant(); // null
+                    if (t=='Z') { //uid
+                        values << QVariant(); // yet another null
+                        fldIndex++;
+                    }
                     break;
                 case 'M':
                     _fatalError = S_ERR_ATTR_NOT_FOUND
