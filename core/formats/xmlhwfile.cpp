@@ -112,8 +112,21 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
             return false;
     }
 
-    // TODO debtors/creditors
+    // Debtors
+    e = elRoot.firstChildElement("lendto");
+    if (!e.isNull()) {
+        if (!importCredits(e, db, "ln", true))
+            return false;
+    }
 
+    // Creditors
+    e = elRoot.firstChildElement("borrowfrom");
+    if (!e.isNull()) {
+        if (!importCredits(e, db, "br", false))
+            return false;
+    }
+
+    // Aliases
     e = elRoot.firstChildElement("aliases");
     if (!e.isNull()) {
         if (!importAliases(e, db))
@@ -128,6 +141,7 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
                 && nn!="transfertypes"  && nn!="correspondents"
                 && nn!="incomes"  && nn!="expenses"
                 && nn!="transfer" && nn!="currencyexchange"
+                && nn!="lendto" && nn!="borrowfrom"
                 && nn!="importfiles" && nn!="aliases")
             _errors << S_ERR_UNK_ELEM.arg(e.nodeName());
     }
@@ -373,6 +387,42 @@ bool XmlHwFile::importCurrencyConversion(const QDomElement &e, HwDatabase &db)
         QStringList() << "dt" << "ac" << "ci" << "co"
                       << "ami" << "amo" << "d" << "imp" << "vfy",
         tRefs);
+}
+
+bool XmlHwFile::importCredits(const QDomElement &e, HwDatabase &db, const QString& elName, bool isLend)
+{
+    HwDatabase::TableRefColl tRefs;
+    ChildRecMap elCreds;
+    DB_CHK(db.collectDict(tRefs["ac"],  "hw_account"));
+    DB_CHK(db.collectDict(tRefs["cu"],  "hw_currency", "abbr"));
+    DB_CHK(db.collectDict(tRefs["crs"], "hw_correspondent"));
+    tRefs["pu"]["eternal"] = 0; // period unit
+    tRefs["pu"]["month"] = 1;
+    tRefs["pu"]["year"] = 2;
+    DB_CHK(db.collectDict(tRefs["imp"], "hw_imp_file","filename")); // optional
+    tRefs["vfy"] = tRefs["imp"];
+    int isLendNum = isLend ? 1 : 0;
+
+    bool res = importDbRecordsGroup(db, e, elName, "hw_credit",
+        QStringList() << "op_date" << "close_date" << "remind_date" << "id_crs"
+                      << "amount" << "down_pay" << "money_back" << "money_remaining_debt"
+                      << "id_ac" << "id_cur" << "rate" << "is_rate_onetime"
+                      << "period" << "period_unit" << "is_closed" << "descr"
+                      << "id_imp" << "uid_imp" << "id_imp_verify" << "uid_imp_verify"
+                      << "is_lend",
+        "DDDRIIIIRRFBIRBSZSZSI", "MOOMMOMMMMOMOMMOOOOOM",
+        QStringList() << "dt" << "dtc" << "dtr" << "crs"
+                      << "a" << "dp" << "mb" << "mrd"
+                      << "ac" << "cu" << "r" << "ot"
+                      << "p" << "pu" << "cls"  << "d" << "imp" << "vfy",
+        tRefs,
+        QVariantList() << QVariant(isLendNum),
+        &elCreds);
+    foreach (int idCred, elCreds.keys())
+    {
+// TODO repayment
+    }
+    return res;
 }
 
 bool XmlHwFile::importAliases(const QDomElement &e, HwDatabase &db)
@@ -690,7 +740,9 @@ bool XmlHwFile::exportCurrencyConversion(HwDatabase &db, QDomElement &elRoot)
     "select cr.id, cr.op_date as dt, cr.close_date as dtc, remind_date as dtr," \
     " cs.name as crs, cr.amount as a, cr.down_pay as dp, cr.money_back as mb, cr.money_remaining_debt as mrd," \
     " cur.abbr as cu, acc.name as ac," \
-    " cr.rate as r, cr.is_rate_onetime as ot, period as p," \
+    " cr.rate as r" \
+    " case cr.is_rate_onetime when 1 then 'yes' else 'no' end as ot," \
+    " period as p," \
     " case period_unit" \
     "  when 0 then 'eternal'" \
     "  when 1 then 'month'" \
@@ -718,7 +770,7 @@ bool XmlHwFile::exportCredits(HwDatabase &db, QDomElement &elRoot, const QString
     bool res = exportDbRecordsGroup(db, QString(Q_SEL_CRED).arg(isLend ? "true" : "false"),
                elGroup, elName, &elCreds);
     if (res) {
-        // TODO возврат, уточнить, возврат это RETURN или что-то ещё
+        // TODO repayment
         /*
         foreach (int idCred, elCreds.keys())
             if (!exportDbRecordsGroup(db, QString(Q_SEL_CRED_RET).arg(idCred), elCreds[idCred], "???"))

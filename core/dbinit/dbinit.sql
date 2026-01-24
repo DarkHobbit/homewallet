@@ -276,7 +276,7 @@ create table hw_credit ( -- lend or borrow
     close_date date,
     remind_date date,
     is_lend integer not null, -- 1 if lend, 0 if borrow
-    id_crs integer null,      -- correspondent: debtor or creditor
+    id_crs integer not null,      -- correspondent: debtor or creditor
     amount integer not null, -- in low units
     down_pay integer, -- in low units
     money_back integer not null, -- in low units
