@@ -451,9 +451,30 @@ bool XmlHwFile::importAliases(const QDomElement &e, HwDatabase &db)
             if (!importAliasesGroup(db, elAliGr, HwDatabase::Unit, S_ERR_UNIT_NOT_FOUND, alColl, srcColl))
                 return false;
         }
-
-
-        // TODO
+        else if (noName=="forincomecategories") {
+            DB_CHK(db.collectDict(alColl, "hw_alias", "pattern", "id", "where id_icat is not null"));
+            DB_CHK(db.collectDict(srcColl, "hw_in_cat"));
+            if (!importAliasesGroup(db, elAliGr, HwDatabase::IncomeCat, S_ERR_CAT_NOT_FOUND, alColl, srcColl))
+                return false;
+        }
+        else if (noName=="forincomesubcategories") {
+            DB_CHK(db.collectDict(alColl, "hw_alias", "pattern", "id", "where id_isubcat is not null"));
+            DB_CHK(db.collectTwoLevelCat(srcColl, "hw_in_cat", "hw_in_subcat", "id_icat"));
+            if (!importAliasesGroup(db, elAliGr, HwDatabase::IncomeSubCat, S_ERR_SUBCAT_NOT_FOUND, alColl, srcColl))
+                return false;
+        }
+        else if (noName=="forexpensecategories") {
+            DB_CHK(db.collectDict(alColl, "hw_alias", "pattern", "id", "where id_ecat is not null"));
+            DB_CHK(db.collectDict(srcColl, "hw_ex_cat"));
+            if (!importAliasesGroup(db, elAliGr, HwDatabase::ExpenseCat, S_ERR_CAT_NOT_FOUND, alColl, srcColl))
+                return false;
+        }
+        else if (noName=="forexpensesubcategories") {
+            DB_CHK(db.collectDict(alColl, "hw_alias", "pattern", "id", "where id_esubcat is not null"));
+            DB_CHK(db.collectTwoLevelCat(srcColl, "hw_ex_cat", "hw_ex_subcat", "id_ecat"));
+            if (!importAliasesGroup(db, elAliGr, HwDatabase::ExpenseSubCat, S_ERR_SUBCAT_NOT_FOUND, alColl, srcColl))
+                return false;
+        }
         else
             _errors << S_ERR_UNK_ELEM.arg(elAliGr.nodeName());
     }

@@ -29,6 +29,8 @@
 #define S_ERR_CUR_NOT_FOUND QObject::tr("Currency not found: %1")
 #define S_ERR_UNIT_NOT_FOUND QObject::tr("Unit not found: %1")
 #define S_ERR_ACC_NOT_FOUND QObject::tr("Account not found: %1")
+#define S_ERR_CAT_NOT_FOUND QObject::tr("Category not found: %1")
+#define S_ERR_SUBCAT_NOT_FOUND QObject::tr("Subcategory not found: %1")
 #define S_ERR_ATTR_NOT_FOUND QObject::tr("Attribute %1 not found at line %2")
 
 #define S_ERR_NO_SUBCAT QObject::tr("At first, define subcategory for this record")
