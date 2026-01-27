@@ -10,15 +10,14 @@
     <height>291</height>
    </rect>
   </property>
+  <property name="toolTip">
+   <string>Copy alias text as addition to description</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="lbAlias">
-       <property name="text">
-        <string>Alias</string>
-       </property>
-      </widget>
+     <item row="2" column="1" colspan="2">
+      <widget class="QComboBox" name="cbSubDict"/>
      </item>
      <item row="0" column="1">
       <widget class="QLineEdit" name="leAlias"/>
@@ -30,7 +29,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item row="1" column="1" colspan="2">
       <widget class="QComboBox" name="cbDict"/>
      </item>
      <item row="2" column="0">
@@ -40,8 +39,23 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QComboBox" name="cbSubDict"/>
+     <item row="0" column="0">
+      <widget class="QLabel" name="lbAlias">
+       <property name="text">
+        <string>Alias</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QToolButton" name="btnCopyToDescr">
+       <property name="text">
+        <string notr="true">V</string>
+       </property>
+       <property name="icon">
+        <iconset resource="homewallet.qrc">
+         <normaloff>:/img/32x32/add_32x32.png</normaloff>:/img/32x32/add_32x32.png</iconset>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -67,7 +81,17 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <tabstops>
+  <tabstop>leAlias</tabstop>
+  <tabstop>btnCopyToDescr</tabstop>
+  <tabstop>cbDict</tabstop>
+  <tabstop>cbSubDict</tabstop>
+  <tabstop>teToDescr</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
+ <resources>
+  <include location="homewallet.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

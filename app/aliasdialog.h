@@ -34,6 +34,8 @@ public:
 private slots:
     void on_cbDict_currentTextChanged(const QString &catName);
 
+    void on_btnCopyToDescr_clicked();
+
 private:
     Ui::AliasDialog *ui;
     HwDatabase* db;

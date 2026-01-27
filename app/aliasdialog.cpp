@@ -137,3 +137,11 @@ void AliasDialog::on_cbDict_currentTextChanged(const QString &catName)
         fillComboByDict(ui->cbSubDict, subCats[catName], false);
 }
 
+
+void AliasDialog::on_btnCopyToDescr_clicked()
+{
+    QString prevText = ui->teToDescr->toPlainText();
+    if (!prevText.isEmpty())
+        prevText += " ";
+    ui->teToDescr->setText(prevText+ui->leAlias->text());
+}
