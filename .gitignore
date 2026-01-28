@@ -3,4 +3,6 @@ Makefile*
 *.qm
 *.moc
 *.obj
+*.so
 qrc_*.cpp
+build-*
