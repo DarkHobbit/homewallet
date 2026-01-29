@@ -17,6 +17,7 @@
 IncomeModel::IncomeModel(QObject *parent)
     : CategoriesBasedQueryModel(parent)
 {
+    mainTableName = "hw_in_op";
     visibleFieldNames
         << "i.op_date"
         << "c.name" << "sc.name" << "i.quantity" << "u.name"

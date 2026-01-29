@@ -152,6 +152,42 @@ bool FilteredQueryModel::removeAnyRows(QModelIndexList &indices)
     return true;
 }
 
+QString FilteredQueryModel::techInfo(const QModelIndex &recIndex)
+{
+    int id = QSqlQueryModel::data(index(recIndex.row(), 0), Qt::DisplayRole).toInt();
+    QString info = tr("Record id: %1").arg(id);
+    QSqlQuery q;
+    if (q.prepare(QString("select id_imp, uid_imp, id_imp_verify, uid_imp_verify from %1 where id=%2").arg(mainTableName).arg(id)))
+    {
+        if (q.exec()) {
+            q.first();
+            if (!q.value(0).isNull()) {
+                info += tr("\nImported from %1").arg(refFileInfo(q.value(0).toInt(), q.value(1).toInt()));
+            }
+            if (!q.value(2).isNull()) {
+                info += tr("\nVerified from %1").arg(refFileInfo(q.value(2).toInt(), q.value(3).toInt()));
+            }
+        }
+    }
+    return info;
+}
+
+QString FilteredQueryModel::refFileInfo(int idRef, int uid)
+{
+    QSqlQuery q;
+    QString res = "ERR";
+    if (q.prepare(QString("select imp_date, filename, filetype from hw_imp_file where id=%1").arg(idRef)))
+    {
+        if (q.exec()) {
+            q.first();
+            res = tr("%1::%2 (%3) at %4").arg(q.value(1).toString())
+                .arg(uid).arg(q.value(2).toString())
+                .arg(q.value(0).toDateTime().toString(gd.dateFormat));
+        }
+    }
+    return res;
+}
+
 void FilteredQueryModel::updateData(const QString &sql, bool insertWhere)
 {
     // Fields

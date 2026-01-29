@@ -418,6 +418,14 @@
     <string>Ctrl+F</string>
    </property>
   </action>
+  <action name="actionTechInfo">
+   <property name="text">
+    <string>Technical information</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>

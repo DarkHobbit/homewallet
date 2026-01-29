@@ -17,6 +17,7 @@
 ExpenseModel::ExpenseModel(QObject *parent)
     : CategoriesBasedQueryModel(parent)
 {
+    mainTableName = "hw_ex_op";
     visibleFieldNames
         << "e.op_date"
 //        << "strftime('%d.%m.%Y', e.op_date)" // SQLite-ism! TODO both variants for slow devices

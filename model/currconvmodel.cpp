@@ -17,6 +17,7 @@
 CurrConvModel::CurrConvModel(QObject *parent)
     : FilteredQueryModel(parent)
 {
+    mainTableName = "hw_curr_exch";
     visibleFieldNames
         << "e.op_date" << "ac.name"
         << lowUnitFunction("e.amount_out", "curo.abbr") << "curo.abbr"

@@ -45,7 +45,10 @@ public:
     QStringList getVisibleColumns();
     QStringList getAllColumns();
     bool removeAnyRows(QModelIndexList& indices);
+    QString techInfo(const QModelIndex& recIndex);
+    QString refFileInfo(int idRef, int uid);
 protected:
+    QString mainTableName;
     ModelColumnList visibleColumns;
     QStringList visibleFieldNames;
     QList<char> visibleFieldTypes;

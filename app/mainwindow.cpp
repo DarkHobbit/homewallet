@@ -471,6 +471,8 @@ void MainWindow::prepareModel(FilteredQueryModel *source, QSortFilterProxyModel 
 //    view->horizontalHeader()->setResizeContentsPrecision(64);
     view->horizontalHeader()->setStretchLastSection(true);
     view->setObjectName(QString("tv")+nameForDebug);
+    view->setContextMenuPolicy(Qt::ActionsContextMenu);
+    view->insertAction(0, ui->actionTechInfo);
     // Error handling
     connect(source, SIGNAL(modelError(QString)), this, SLOT(processModelError(QString)));
 }
@@ -772,5 +774,13 @@ bool MainWindow::checkSelection(bool errorIfNoSelected, bool onlyOneRowAllowed)
     foreach(QModelIndex index, proxySelection)
         selection << selectedProxy->mapToSource(index);
     return true;
+}
+
+
+void MainWindow::on_actionTechInfo_triggered()
+{
+    activeTab();
+    if (!checkSelection(true, true)) return;
+    QMessageBox::information(0, S_INFORM, activeModel->techInfo(selection.first()));
 }
 

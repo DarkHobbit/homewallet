@@ -17,6 +17,7 @@
 TransferModel::TransferModel(QObject *parent)
     : CategoriesBasedQueryModel(parent)
 {
+    mainTableName = "hw_transfer";
     visibleFieldNames
         << "t.op_date"
           << lowUnitFunction("t.amount", "cur.abbr")

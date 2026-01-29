@@ -80,12 +80,17 @@
 <context>
     <name>AliasDialog</name>
     <message>
-        <location filename="../app/aliasdialog.ui" line="19"/>
+        <location filename="../app/aliasdialog.ui" line="14"/>
+        <source>Copy alias text as addition to description</source>
+        <translation>Копировать псевдоним в дополнение к описанию</translation>
+    </message>
+    <message>
+        <location filename="../app/aliasdialog.ui" line="45"/>
         <source>Alias</source>
         <translation>Псевдоним</translation>
     </message>
     <message>
-        <location filename="../app/aliasdialog.ui" line="51"/>
+        <location filename="../app/aliasdialog.ui" line="65"/>
         <source>Addition to descripion</source>
         <translation>Добавка к описанию</translation>
     </message>
@@ -144,12 +149,12 @@
 <context>
     <name>CreditModel</name>
     <message>
-        <location filename="../model/creditmodel.cpp" line="69"/>
+        <location filename="../model/creditmodel.cpp" line="70"/>
         <source>Lend</source>
         <translation>Долги</translation>
     </message>
     <message>
-        <location filename="../model/creditmodel.cpp" line="69"/>
+        <location filename="../model/creditmodel.cpp" line="70"/>
         <source>Borrow</source>
         <translation>Кредиты</translation>
     </message>
@@ -157,7 +162,7 @@
 <context>
     <name>CurrConvModel</name>
     <message>
-        <location filename="../model/currconvmodel.cpp" line="57"/>
+        <location filename="../model/currconvmodel.cpp" line="58"/>
         <source>Currency conversion</source>
         <translation>Обмен валют</translation>
     </message>
@@ -205,7 +210,7 @@
         <translation type="obsolete">Описание</translation>
     </message>
     <message>
-        <location filename="../model/expensemodel.cpp" line="65"/>
+        <location filename="../model/expensemodel.cpp" line="66"/>
         <source>Expenses</source>
         <translation>Расходы</translation>
     </message>
@@ -347,12 +352,36 @@
 <context>
     <name>FilteredQueryModel</name>
     <message>
-        <location filename="../model/filteredquerymodel.cpp" line="167"/>
+        <location filename="../model/filteredquerymodel.cpp" line="158"/>
+        <source>Record id: %1</source>
+        <translation>ID записи: %1</translation>
+    </message>
+    <message>
+        <location filename="../model/filteredquerymodel.cpp" line="165"/>
+        <source>
+Imported from %1</source>
+        <translation>
+Импортировано из %1</translation>
+    </message>
+    <message>
+        <location filename="../model/filteredquerymodel.cpp" line="168"/>
+        <source>
+Verified from %1</source>
+        <translation>
+Проверено из %1</translation>
+    </message>
+    <message>
+        <location filename="../model/filteredquerymodel.cpp" line="183"/>
+        <source>%1::%2 (%3) at %4</source>
+        <translation>%1::%2 (%3) на %4</translation>
+    </message>
+    <message>
+        <location filename="../model/filteredquerymodel.cpp" line="203"/>
         <source>Incorrect column index found, see Settings-&gt;Columns</source>
         <translation>Обнаружен некорректный индекс столбца, см. Настройки-&gt;Столбцы</translation>
     </message>
     <message>
-        <location filename="../model/filteredquerymodel.cpp" line="230"/>
+        <location filename="../model/filteredquerymodel.cpp" line="266"/>
         <source>Can&apos;t remove records from this table</source>
         <translation>Из этой таблицы нельзя удалять записи</translation>
     </message>
@@ -378,7 +407,7 @@
 <context>
     <name>IncomeModel</name>
     <message>
-        <location filename="../model/incomemodel.cpp" line="64"/>
+        <location filename="../model/incomemodel.cpp" line="65"/>
         <source>Incomes</source>
         <translation>Доходы</translation>
     </message>
@@ -599,42 +628,47 @@
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="139"/>
+        <location filename="../app/mainwindow.ui" line="423"/>
+        <source>Technical information</source>
+        <translation>Техническая информация</translation>
+    </message>
+    <message>
+        <location filename="../app/mainwindow.cpp" line="140"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="143"/>
+        <location filename="../app/mainwindow.cpp" line="144"/>
         <source>Database not empty for testing</source>
         <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="198"/>
+        <location filename="../app/mainwindow.cpp" line="199"/>
         <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="257"/>
+        <location filename="../app/mainwindow.cpp" line="258"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="257"/>
+        <location filename="../app/mainwindow.cpp" line="258"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="268"/>
+        <location filename="../app/mainwindow.cpp" line="269"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="285"/>
+        <location filename="../app/mainwindow.cpp" line="286"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="384"/>
+        <location filename="../app/mainwindow.cpp" line="386"/>
         <source>Format require dialog, but dialog not provided. Contact author</source>
         <translation>Формат требует диалоговое окно, но программа его не обеспечивает.
 Свяжитесь с автором</translation>
@@ -654,7 +688,7 @@ at record %1 from %2</source>
 в записи %1 из %2</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="438"/>
+        <location filename="../app/mainwindow.cpp" line="440"/>
         <source>Restart program to apply language change</source>
         <translation>Язык сменится после перезапуска программы</translation>
     </message>
@@ -677,38 +711,38 @@ at record %1 from %2</source>
         <translation>Доходы</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="58"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="61"/>
         <source>Not Ready</source>
         <translation>Не готово</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="77"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="80"/>
         <source>Quick filter</source>
         <translation>Быстрофильтр</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="84"/>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="111"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="87"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="114"/>
         <source>Add alias</source>
         <translation>Добавить псевдоним</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="103"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="106"/>
         <source>State</source>
         <translation>Состояние</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="119"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="122"/>
         <source>Add default unit</source>
         <translation>Добавить единицу измерения по умолчанию</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="127"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="130"/>
         <source>Filter</source>
         <translation>Фильтр</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="130"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="133"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
@@ -717,19 +751,19 @@ at record %1 from %2</source>
         <translation type="obsolete">Строка %1: строка исходного файла %2, состояние: %3</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="164"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="165"/>
         <source>Row %1: source line %2%3
 State: %4</source>
         <translation>Запись %1: исходная строка %2%3
 Состояние: %4</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="168"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="169"/>
         <source>Category candidates:</source>
         <translation>Кандидаты на категорию:</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="212"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="213"/>
         <source>No unknown aliases in this row</source>
         <translation>В этой строке нет неизвестных псевдонимов</translation>
     </message>
@@ -743,61 +777,88 @@ State: %4</source>
     </message>
     <message>
         <location filename="../core/formats/commonexpimpdef.h" line="22"/>
+        <source>Can&apos;t convert string to integer: %1</source>
+        <translation>Не могу привести строку к целому: %1</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/commonexpimpdef.h" line="23"/>
+        <source>Can&apos;t convert string to float: %1</source>
+        <translation>Не могу привести строку к действительному: %1</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/commonexpimpdef.h" line="24"/>
+        <source>Can&apos;t convert string to enum: %1
+Valid values: %2</source>
+        <translation>Не могу привести строку к перечислению: %1
+Корректные значения: :2</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/commonexpimpdef.h" line="25"/>
         <source>Can&apos;t convert quantity to number: %1</source>
         <translation>Не могу привести количество к числу: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/commonexpimpdef.h" line="23"/>
+        <location filename="../core/formats/commonexpimpdef.h" line="26"/>
         <source>Can&apos;t convert amount to number: %1</source>
         <translation>Не могу привести сумму к числу: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/commonexpimpdef.h" line="24"/>
+        <location filename="../core/formats/commonexpimpdef.h" line="27"/>
         <source>Can&apos;t convert percents to number: %1</source>
         <translation>Не могу привести проценты к числу: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/commonexpimpdef.h" line="26"/>
+        <location filename="../core/formats/commonexpimpdef.h" line="29"/>
         <source>Currency not found: %1</source>
         <translation>Валюта не найдена: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/commonexpimpdef.h" line="27"/>
+        <location filename="../core/formats/commonexpimpdef.h" line="30"/>
         <source>Unit not found: %1</source>
         <translation>Единица измерения не найдена: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/commonexpimpdef.h" line="28"/>
+        <location filename="../core/formats/commonexpimpdef.h" line="31"/>
         <source>Account not found: %1</source>
         <translation>Счёт не найден: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/commonexpimpdef.h" line="29"/>
+        <location filename="../core/formats/commonexpimpdef.h" line="32"/>
+        <source>Category not found: %1</source>
+        <translation>Категория не найдена: %1</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/commonexpimpdef.h" line="33"/>
+        <source>Subcategory not found: %1</source>
+        <translation>Податегория не найдена: %1</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/commonexpimpdef.h" line="34"/>
         <source>Attribute %1 not found at line %2</source>
         <translation>Атрибут %1 не найден в строке %2</translation>
     </message>
     <message>
-        <location filename="../core/formats/commonexpimpdef.h" line="31"/>
+        <location filename="../core/formats/commonexpimpdef.h" line="36"/>
         <source>At first, define subcategory for this record</source>
         <translation>Сперва задайте подкатегорию для этой записи</translation>
     </message>
     <message>
-        <location filename="../core/formats/commonexpimpdef.h" line="32"/>
+        <location filename="../core/formats/commonexpimpdef.h" line="37"/>
         <source>Unit isn&apos;t empty</source>
         <translation>Единица измерения уже задана</translation>
     </message>
     <message>
-        <location filename="../core/formats/commonexpimpdef.h" line="33"/>
+        <location filename="../core/formats/commonexpimpdef.h" line="38"/>
         <source>It isn&apos;t neither income, nor expense</source>
         <translation>Это ни доход, ни расход</translation>
     </message>
     <message>
-        <location filename="../core/formats/commonexpimpdef.h" line="34"/>
+        <location filename="../core/formats/commonexpimpdef.h" line="39"/>
         <source>No units found in database</source>
         <translation>В БД нет единиц измерения</translation>
     </message>
     <message>
-        <location filename="../core/formats/commonexpimpdef.h" line="37"/>
+        <location filename="../core/formats/commonexpimpdef.h" line="42"/>
         <source>Subcategory %1 already have default unit: %2. Are you really want replace it?</source>
         <translation>У подкатегории %1 уже есть единица измерения по умолчанию: %2. Вы действительно хотите её заменить?</translation>
     </message>
@@ -955,12 +1016,12 @@ or manually add it to %2.</source>
         <translation>нет</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="326"/>
+        <location filename="../core/genericdatabase.cpp" line="350"/>
         <source>Can&apos;t enable extension load, code: %1</source>
         <translation>Не могу разрешить загрузку расширений, код: %1</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="332"/>
+        <location filename="../core/genericdatabase.cpp" line="356"/>
         <source>Can&apos;t load ICU extension, code %1:
 %2
 Rebuild SQLite with ICU support or provide ICU library as extension</source>
@@ -969,18 +1030,18 @@ Rebuild SQLite with ICU support or provide ICU library as extension</source>
 Пересоберите SQLite с поддержкой ICU или добавьте библиотеку ICU как расширение</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="340"/>
+        <location filename="../core/genericdatabase.cpp" line="364"/>
         <source>ICU extension load failed</source>
         <translation>Ошибка загрузки расширения ICU</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="359"/>
+        <location filename="../core/genericdatabase.cpp" line="383"/>
         <source>Can&apos;t check ICU presence</source>
         <translation>Не могу проверить наличие ICU</translation>
     </message>
     <message>
         <location filename="../core/hwdatabase.cpp" line="258"/>
-        <location filename="../core/hwdatabase.cpp" line="329"/>
+        <location filename="../core/hwdatabase.cpp" line="347"/>
         <source>No subcategory</source>
         <translation>Нет подкатегории</translation>
     </message>
@@ -1105,21 +1166,21 @@ or manually add it to %4.</source>
         <translation>Это планы расходов</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.h" line="25"/>
+        <location filename="../core/genericdatabase.h" line="26"/>
         <source>Cannot create database in %1:
 %2</source>
         <translation>Не могу создать БД в %1:
 %2</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.h" line="26"/>
+        <location filename="../core/genericdatabase.h" line="27"/>
         <source>Cannot open database in %1:
 %2</source>
         <translation>Не могу открыть БД в %1:
 %2</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.h" line="27"/>
+        <location filename="../core/genericdatabase.h" line="28"/>
         <source>Database create file is empty, contact author:
 %1</source>
         <translation>Файл создания БД пуст, свяжитесь с автором:
@@ -1497,9 +1558,56 @@ Found: %1</source>
         <translation>готово к импорту</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhwfile.cpp" line="41"/>
+        <location filename="../core/formats/xmlhwfile.cpp" line="42"/>
         <source>HomeWallet XML (*.xml *.XML)</source>
         <translation>HomeWallet XML (*.xml *.XML)</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhwfile.cpp" line="291"/>
+        <source>This version of HomeWallet not support third category level: %1::%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlfile.cpp" line="94"/>
+        <source>Field count mismatch (%1+%2+%3&lt;&gt;%4)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlfile.cpp" line="103"/>
+        <source>Field name count mismatch (%1&lt;&gt;%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlfile.cpp" line="110"/>
+        <source>Field type count mismatch (%1&lt;&gt;%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlfile.cpp" line="184"/>
+        <source>No ref to attr %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlfile.cpp" line="191"/>
+        <source>Attribute %1 must be in form filename::uid. Actual value is:
+%2
+At line %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlfile.cpp" line="201"/>
+        <source>Unknown ref: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlfile.cpp" line="212"/>
+        <source>Unknown field type: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlfile.cpp" line="233"/>
+        <source>Unknown field optionality: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1672,7 +1780,7 @@ Found: %1</source>
 <context>
     <name>TransferModel</name>
     <message>
-        <location filename="../model/transfermodel.cpp" line="58"/>
+        <location filename="../model/transfermodel.cpp" line="59"/>
         <source>Transfer</source>
         <translation>Переносы</translation>
     </message>

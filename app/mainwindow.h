@@ -72,7 +72,9 @@ private slots:
     void processModelError(const QString& message);
     void on_btn_Add_clicked();
     void on_btn_Edit_clicked();
-    void on_btn_Delete_clicked();    
+    void on_btn_Delete_clicked();
+
+    void on_actionTechInfo_triggered();
 
 private:
     Ui::MainWindow *ui;

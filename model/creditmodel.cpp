@@ -17,6 +17,7 @@
 CreditModel::CreditModel(QObject *parent, bool _isLend)
     : FilteredQueryModel(parent), isLend(_isLend)
 {
+    mainTableName = "hw_credit";
     visibleFieldNames
         << "crd.op_date" << "crd.close_date" << "crd.remind_date" << "crs.name"
         << lowUnitFunction("crd.amount", "cur.abbr")
