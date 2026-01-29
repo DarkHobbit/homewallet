@@ -472,6 +472,11 @@ void MainWindow::prepareModel(FilteredQueryModel *source, QSortFilterProxyModel 
     view->horizontalHeader()->setStretchLastSection(true);
     view->setObjectName(QString("tv")+nameForDebug);
     view->setContextMenuPolicy(Qt::ActionsContextMenu);
+    view->insertAction(0, ui->actionEdit);
+    view->insertAction(0, ui->actionDelete);
+    QAction* actSep = new QAction(this);
+    actSep->setSeparator(true);
+    view->insertAction(0, actSep);
     view->insertAction(0, ui->actionTechInfo);
     // Error handling
     connect(source, SIGNAL(modelError(QString)), this, SLOT(processModelError(QString)));
@@ -782,5 +787,17 @@ void MainWindow::on_actionTechInfo_triggered()
     activeTab();
     if (!checkSelection(true, true)) return;
     QMessageBox::information(0, S_INFORM, activeModel->techInfo(selection.first()));
+}
+
+
+void MainWindow::on_actionEdit_triggered()
+{
+    on_btn_Edit_clicked();
+}
+
+
+void MainWindow::on_actionDelete_triggered()
+{
+    on_btn_Delete_clicked();
 }
 

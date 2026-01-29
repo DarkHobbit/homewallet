@@ -76,6 +76,10 @@ private slots:
 
     void on_actionTechInfo_triggered();
 
+    void on_actionEdit_triggered();
+
+    void on_actionDelete_triggered();
+
 private:
     Ui::MainWindow *ui;
     ExpenseModel* mdlExpenses;
