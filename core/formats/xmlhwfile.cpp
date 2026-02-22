@@ -761,7 +761,7 @@ bool XmlHwFile::exportCurrencyConversion(HwDatabase &db, QDomElement &elRoot)
     "select cr.id, cr.op_date as dt, cr.close_date as dtc, remind_date as dtr," \
     " cs.name as crs, cr.amount as a, cr.down_pay as dp, cr.money_back as mb, cr.money_remaining_debt as mrd," \
     " cur.abbr as cu, acc.name as ac," \
-    " cr.rate as r" \
+    " cr.rate as r," \
     " case cr.is_rate_onetime when 1 then 'yes' else 'no' end as ot," \
     " period as p," \
     " case period_unit" \
