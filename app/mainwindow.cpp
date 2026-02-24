@@ -773,7 +773,7 @@ void MainWindow::on_actionShowRepaymentHistory_triggered()
     tabRep->setModel(mdlRep);
     tabRep->horizontalHeader()->setStretchLastSection(true);
     tabRep->resizeColumnsToContents();
-    updateTableConfig(tabRep);
+    updateTableConfig(tabRep); // TODO sorting
     wRep->setGeometry(this->x()+this->width()/2, this->y()+this->height()/2, -1, -1);
     wRep->show();
 }
