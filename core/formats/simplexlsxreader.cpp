@@ -1,4 +1,18 @@
+/* Home wallet
+ *
+ * Module: Simple XLSX format reader using quazip and QtXml
+ *
+ * Copyright 2026 Mikhail Y. Zvyozdochkin aka DarkHobbit <pub@zvyozdochkin.ru>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version. See COPYING file for more details.
+ *
+ */
+
 #include <iostream>
+#include "globals.h"
 #include "simplexlsxreader.h"
 #include "quazipfile.h"
 
@@ -12,7 +26,6 @@ bool SimpleXlsxReader::read()
     // Read XLSX via QuaZip
     QuaZip arc(path);
     if (!arc.open(QuaZip::mdUnzip)) {
-const QString S_READ_ERR = QString("file open error %1"); //===>
         error = S_READ_ERR.arg(path);
         return false;
     }

@@ -60,7 +60,7 @@ protected:
     virtual void makeFilter();
     virtual bool removeById(int id); // dafault implementation,
     void updateData(const QString& sql, bool insertWhere);
-    QString lowUnitFunction(const QString& fieldName, const QString& currFieldName = "");
+    static QString lowUnitFunction(const QString& fieldName, const QString& currFieldName = "");
 signals:
     void modelError(const QString& message);
 };

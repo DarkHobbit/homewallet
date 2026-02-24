@@ -36,6 +36,15 @@
     } \
 }
 
+#define CUST_CHK(action, message) \
+{ \
+        if (!(action)) \
+    { \
+            _fatalError = message; \
+            return false; \
+    } \
+}
+
 class FileFormat
 {
 public:
