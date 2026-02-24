@@ -293,6 +293,7 @@ create table hw_credit ( -- lend or borrow
     uid_imp char(64), -- _id for JSON, line after date for TXT...
     id_imp_verify integer null,
     uid_imp_verify char(64), -- see uid_imp
+    constraint uk_crd unique(op_date, id_crs),
     constraint fk_crdcrs foreign key(id_crs) references hw_correspondent(id),
     constraint fk_crdac foreign key(id_ac) references hw_account(id),
     constraint fk_crdcur foreign key(id_cur) references hw_currency(id),
@@ -308,6 +309,8 @@ create table hw_repayment (
     id_crd integer not null,
     op_date date not null,
     amount integer not null, -- in low units
+    id_ac integer not null,
+    id_cur integer not null,
     descr char(256),
     id_imp integer null,
     uid_imp char(64), -- _id for JSON, line after date for TXT...

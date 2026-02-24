@@ -11,6 +11,9 @@
  *
  */
 
+#include <QSqlError>
+#include <QSqlQuery>
+
 #include "globals.h"
 #include "creditmodel.h"
 
@@ -68,4 +71,61 @@ void CreditModel::update()
 QString CreditModel::localizedName()
 {
     return isLend ? tr("Lend") : tr("Borrow");
+}
+
+QString CreditModel::recordLabel(const QModelIndex &recIndex)
+{
+    int id = QSqlQueryModel::data(index(recIndex.row(), 0), Qt::DisplayRole).toInt();
+    QString label = "";
+    QString sql = QString(
+            "select crs.name, crd.op_date" \
+            " from hw_credit crd, hw_correspondent crs" \
+            " where crd.id_crs=crs.id" \
+            " and crd.id=%1").arg(id);
+    QSqlQuery q;
+    if (q.prepare(sql)) {
+        if (q.exec()) {
+            q.first();
+            label = QString("%1, %2")
+                .arg(q.value(0).toString())
+                .arg(q.value(1).toDateTime().toString(gd.dateFormat));
+        }
+    }
+    return label;
+}
+
+QSqlQueryModel *CreditModel::createRepaymentModelForRecord(const QModelIndex &recIndex)
+{
+    int id = QSqlQueryModel::data(index(recIndex.row(), 0), Qt::DisplayRole).toInt();
+    // TODO convert date format string from Qt to SQL notation
+    QString sql = QString(
+         "select strftime('%d.%m.%Y', crp.op_date), %1, %2 ac.name, crp.descr" \
+         " from hw_repayment crp" \
+         "   left join hw_account ac on crp.id_ac=ac.id" \
+         "   left join hw_currency cur on crp.id_cur=cur.id" \
+         " where id_crd=%3 order by op_date")
+         .arg(FilteredQueryModel::lowUnitFunction("crp.amount", "cur.abbr"))
+         .arg(gd.showSumsWithCurrency ? "" : "cur.abbr, ")
+         .arg(id);
+    // TODO если в lowUnitFunction отключен вывод валюты, подсовывать отдельный столбец
+    QSqlQuery q;
+    if (!q.prepare(sql)) {
+        emit modelError(q.lastError().text());
+        return 0;
+    }
+    q.exec();
+    QSqlQueryModel* m = new QSqlQueryModel(this);
+    m->setQuery(sql);
+    m->setHeaderData(0, Qt::Horizontal, S_COL_DATE);
+    m->setHeaderData(1, Qt::Horizontal, S_COL_SUM);
+    if (gd.showSumsWithCurrency) {
+        m->setHeaderData(2, Qt::Horizontal, S_COL_ACCOUNT);
+        m->setHeaderData(3, Qt::Horizontal, S_COL_DESCRIPTION);
+    }
+    else {
+        m->setHeaderData(2, Qt::Horizontal, S_COL_CURRENCY);
+        m->setHeaderData(3, Qt::Horizontal, S_COL_ACCOUNT);
+        m->setHeaderData(4, Qt::Horizontal, S_COL_DESCRIPTION);
+    }
+    return m;
 }

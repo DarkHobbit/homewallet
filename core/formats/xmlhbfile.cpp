@@ -21,10 +21,8 @@
 
 XmlHbFile::XmlHbFile()
     : XmlFile(),
-    _fileSubType(Unknown), _categorySamples(""),
-    hbMoneySum("^([0-9\\s]*[.,]?[0-9\\s]+)(\\S+)$") // 11 900,00Є
-{
-}
+    _fileSubType(Unknown), _categorySamples(""), hb(&_fatalError)
+{}
 
 QIODevice::OpenMode XmlHbFile::supportedModes()
 {
@@ -43,7 +41,7 @@ FileFormat::SubTypeFlags XmlHbFile::supportedExportSubTypes()
 
 void XmlHbFile::clear()
 {
-    QDomDocument::clear();
+    XmlFile::clear();
     _fileSubType = Unknown;
     _categorySamples = "";
 }
@@ -122,10 +120,8 @@ bool XmlHbFile::isDialogRequired()
 bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
 {
     QDomDocument::clear();
-    if (!hbMoneySum.isValid()) {
-        _fatalError = hbMoneySum.errorString();
+    if (!hb.isValid())
         return false;
-    }
     // Was detected?
     if (_fileSubType==Unknown) {
         _fatalError = QObject::tr("Unknown Home Bookkeeping file subtype.\nContact author.");
@@ -207,7 +203,7 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
                     return false;
                 HwDatabase::MultiCurrById moneyIds;
                 for (const QString& moneyChar: money.keys()) {
-                    int idCur = importCurrencyByChar(moneyChar, db);
+                    int idCur = hb.importCurrencyByChar(moneyChar, db);
                     if (idCur==-1)
                         return false;
                     moneyIds[idCur] = money[moneyChar];
@@ -264,7 +260,7 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
                 return false;
             }
             QString moneyChar = money.keys().first();
-            int idCur = importCurrencyByChar(moneyChar, db);
+            int idCur = hb.importCurrencyByChar(moneyChar, db);
             if (idCur==-1)
                 return false;
             // Categories an subcategories
@@ -335,10 +331,10 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
                 _fatalError = S_ERR_ATTR_NOT_FOUND.arg("MoneyStr").arg(elRow.lineNumber());
                 return false;
             }
-            int sum = importOneMoneyAttr(val, moneyChar);
+            int sum = hb.importOneMoneyAttr(val, moneyChar);
             if (!_fatalError.isEmpty())
                 return false;
-            int idCur = importCurrencyByChar(moneyChar, db);
+            int idCur = hb.importCurrencyByChar(moneyChar, db);
             if (idCur==-1)
                 return false;
             // Insert!
@@ -365,10 +361,10 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
                     .arg(elRow.lineNumber());
                 return false;
             }
-            int idCurFrom = importCurrencyByChar(moneyFrom.keys().first(), db);
+            int idCurFrom = hb.importCurrencyByChar(moneyFrom.keys().first(), db);
             if (idCurFrom==-1)
                 return false;
-            int idCurTo = importCurrencyByChar(moneyTo.keys().first(), db);
+            int idCurTo = hb.importCurrencyByChar(moneyTo.keys().first(), db);
             if (idCurTo==-1)
                 return false;
             bool ok = db.addCurrencyConv(dt, idAcc,
@@ -478,7 +474,7 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             int moneyBackVal = moneyBack.isEmpty() ? 0 : moneyBack.values().first();
             int moneyRemainingVal = moneyRemaining.isEmpty() ? 0 : moneyRemaining.values().first();
             QString moneyChar = money.keys().first();
-            int idCur = importCurrencyByChar(moneyChar, db);
+            int idCur = hb.importCurrencyByChar(moneyChar, db);
             if (idCur==-1)
                 return false;
             // Insert!
@@ -583,7 +579,7 @@ bool XmlHbFile::importMoneyGroup(HwDatabase::MultiCurrByChar& values, const QStr
             continue;
         // Extract digits and moneychars
         QString sCur;
-        int sum = importOneMoneyAttr(val, sCur);
+        int sum = hb.importOneMoneyAttr(val, sCur);
         if (!_fatalError.isEmpty())
             return false;
         if ((!sum) && skipNulls)
@@ -596,36 +592,6 @@ bool XmlHbFile::importMoneyGroup(HwDatabase::MultiCurrByChar& values, const QStr
         return false;
     }
     return true;
-}
-
-int XmlHbFile::importOneMoneyAttr(const QString &val, QString& sCur)
-{
-    if (!hbMoneySum.exactMatch(val)) {
-        _fatalError = QObject::tr("Money sum doesn't match: %1").arg(val);
-        return 0;
-    }
-    QString sSum = prepareDoubleImport(hbMoneySum.cap(1));
-    sCur = hbMoneySum.cap(2);
-    bool ok;
-    int sum = sSum.toFloat(&ok)*100;
-    if (!ok) {
-        _fatalError = S_ERR_AMO_IMP.arg(sSum);
-        return 0;
-    }
-    return sum;
-}
-
-int XmlHbFile::importCurrencyByChar(const QString &moneyChar, HwDatabase& db)
-{
-    QString _moneyChar = moneyChar;
-    if (_moneyChar==QString::fromUtf8("р"))
-        _moneyChar = QString::fromUtf8("₽"); // exception for old RUR symbol, appears in HB files
-    int idCur = db.currencyIdByAbbr(_moneyChar);
-    if (idCur==-1) {
-        _fatalError = S_ERR_CUR_NOT_FOUND.arg(_moneyChar);
-        return -1;
-    }
-    return idCur;
 }
 
 // Flags for credit status (closed/not closed) in HBK are language-specific

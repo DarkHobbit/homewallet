@@ -107,6 +107,9 @@ public:
         int period, int periodUnit,
         bool isClosed, const QString& descr,
         int idImp=-1, const QString& uid="");
+    bool addRepayment(int idCrd, const QDateTime& opDT, int amount,
+        int idAcc, int idCur, const QString& descr,
+        int idImp=-1, const QString& uid="");
 };
 
 #endif // HWDATABASE_H

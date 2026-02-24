@@ -615,3 +615,25 @@ bool HwDatabase::addCredit(const QDateTime &opDT, const QDateTime &closeDT, cons
     return execQuery(sqlIns);
 }
 
+bool HwDatabase::addRepayment(int idCrd, const QDateTime &opDT, int amount, int idAcc, int idCur, const QString &descr, int idImp, const QString &uid)
+{
+    QSqlQuery sqlIns(sqlDb);
+    if (!prepQuery(sqlIns,
+      "insert into hw_repayment(" \
+      " id_crd, op_date, amount, id_ac, id_cur, descr," \
+      " id_imp, uid_imp" \
+      ") values (" \
+      " :id_crd, :op_date, :amount, :id_ac, :id_cur, :descr," \
+      " :id_imp, :uid_imp)"))
+        return false;
+    sqlIns.bindValue(":id_crd", idCrd);
+    sqlIns.bindValue(":op_date", opDT);
+    sqlIns.bindValue(":id_ac", idAcc);
+    sqlIns.bindValue(":id_cur", idCur);
+    sqlIns.bindValue(":amount", amount);
+    sqlIns.bindValue(":descr", strOrNull(descr));
+    sqlIns.bindValue(":id_imp", idOrNull(idImp));
+    sqlIns.bindValue(":uid_imp", strOrNull(uid));
+    return execQuery(sqlIns);
+}
+

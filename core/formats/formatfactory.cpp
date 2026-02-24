@@ -19,6 +19,7 @@
 #include "txtcompactfile.h"
 #include "xmlhbfile.h"
 #include "xmlhwfile.h"
+#include "xlsxrepaymentfile.h"
 
 FormatFactory::FormatFactory()
     :error("")
@@ -26,7 +27,8 @@ FormatFactory::FormatFactory()
     formats
         << new XmlHbFile()
         << new XmlHwFile()
-        << new TxtCompactFile();
+        << new TxtCompactFile()
+        << new XlsxRepaymentFile();
     // ...here add new formats
     for (FileFormat* ff: formats)
         for (const QString& filter: ff->supportedFilters())

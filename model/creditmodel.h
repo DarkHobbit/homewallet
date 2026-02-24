@@ -24,6 +24,8 @@ public:
     virtual void setDefaultVisibleColumns();
     virtual void update();
     virtual QString localizedName();
+    QString recordLabel(const QModelIndex &recIndex);
+    QSqlQueryModel* createRepaymentModelForRecord(const QModelIndex &recIndex);
 private:
     bool isLend;
 };

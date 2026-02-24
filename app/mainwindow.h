@@ -80,6 +80,8 @@ private slots:
 
     void on_actionDelete_triggered();
 
+    void on_actionShowRepaymentHistory_triggered();
+
 private:
     Ui::MainWindow *ui;
     ExpenseModel* mdlExpenses;

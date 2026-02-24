@@ -14,7 +14,7 @@
 #ifndef XMLHBFILE_H
 #define XMLHBFILE_H
 
-#include <QRegExp>
+#include "hbhelper.h"
 #include "xmlfile.h"
 
 #define S_HB_SELECT_AMBIG_TITLE QObject::tr("Ambiguous file type")
@@ -71,7 +71,7 @@ public:
 private:
     SubType _fileSubType;
     QString _categorySamples;
-    const QRegExp hbMoneySum;
+    HbHelper hb;
     QStringList
         debtClosedValues, debtNotClosedValues,
         yearPercentValues, yearPeriodValues, monthPeriodValues;
@@ -79,8 +79,6 @@ private:
     int importAccount(const QString& attr, const QDomElement& elRow, HwDatabase::DictColl& accs, HwDatabase& db);
     bool importMoneyGroup(HwDatabase::MultiCurrByChar& values, const QString& attrPrefix, const QDomElement& elRow,
         bool skipNulls, bool failIfAllNulls=true);
-    int importOneMoneyAttr(const QString& val, QString& sCur);
-    int importCurrencyByChar(const QString& moneyChar, HwDatabase& db);
     bool prepareImportValues(const QString& hbkImpValPath);
 };
 

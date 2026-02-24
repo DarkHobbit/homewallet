@@ -27,6 +27,7 @@ SOURCES += \
     aboutdialog.cpp \
     aliasdialog.cpp \
     formatsgui/adddefaultunitdialog.cpp \
+    formatsgui/preimporthbguihelper.cpp \
     helpers.cpp \
     languageselectdialog.cpp \
     logwindow.cpp \
@@ -40,6 +41,7 @@ HEADERS  += \
     aboutdialog.h \
     aliasdialog.h \
     formatsgui/adddefaultunitdialog.h \
+    formatsgui/preimporthbguihelper.h \
     helpers.h \
     languageselectdialog.h \
     logwindow.h \

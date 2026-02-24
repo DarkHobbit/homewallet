@@ -149,12 +149,12 @@
 <context>
     <name>CreditModel</name>
     <message>
-        <location filename="../model/creditmodel.cpp" line="70"/>
+        <location filename="../model/creditmodel.cpp" line="73"/>
         <source>Lend</source>
         <translation>Долги</translation>
     </message>
     <message>
-        <location filename="../model/creditmodel.cpp" line="70"/>
+        <location filename="../model/creditmodel.cpp" line="73"/>
         <source>Borrow</source>
         <translation>Кредиты</translation>
     </message>
@@ -633,6 +633,21 @@ Verified from %1</source>
         <translation>Техническая информация</translation>
     </message>
     <message>
+        <location filename="../app/mainwindow.ui" line="431"/>
+        <source>Edit</source>
+        <translation>Редактировать</translation>
+    </message>
+    <message>
+        <location filename="../app/mainwindow.ui" line="439"/>
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../app/mainwindow.ui" line="447"/>
+        <source>Show repayment history</source>
+        <translation>Показать историю платежей</translation>
+    </message>
+    <message>
         <location filename="../app/mainwindow.cpp" line="140"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
@@ -668,10 +683,15 @@ Verified from %1</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="386"/>
+        <location filename="../app/mainwindow.cpp" line="336"/>
         <source>Format require dialog, but dialog not provided. Contact author</source>
         <translation>Формат требует диалоговое окно, но программа его не обеспечивает.
 Свяжитесь с автором</translation>
+    </message>
+    <message>
+        <location filename="../app/mainwindow.cpp" line="768"/>
+        <source>Repayment history for: </source>
+        <translation>История платежей для: </translation>
     </message>
     <message>
         <source>Can&apos;t remove records from this table</source>
@@ -688,7 +708,7 @@ at record %1 from %2</source>
 в записи %1 из %2</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="440"/>
+        <location filename="../app/mainwindow.cpp" line="390"/>
         <source>Restart program to apply language change</source>
         <translation>Язык сменится после перезапуска программы</translation>
     </message>
@@ -884,71 +904,71 @@ line %3, col %4
 </translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="36"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="34"/>
         <source>Home Bookkeeping XML (*.xml *.XML)</source>
         <translation>XML Домашней Бухгалтерии (*.xml *.XML)</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="61"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="59"/>
         <source>Metadata not found. Probably it isn&apos;t Home Bookkeeping file</source>
         <translation>Метаданные не найдены. Возможно, это не файл Домашней бухгалтерии</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="68"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="66"/>
         <source>Metadata is empty. Probably it isn&apos;t Home Bookkeeping file</source>
         <translation>Метаданные пусты. Возможно, это не файл Домашней бухгалтерии</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="131"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="127"/>
         <source>Unknown Home Bookkeeping file subtype.
 Contact author.</source>
         <translation>Неизвестный подтип файла Домашней бухгалтерии.
 Свяжитесь с автором.</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="136"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="132"/>
         <source>Ambiguous Home Bookkeeping file subtype wasn&apos;t resolved.
 Contact author.</source>
         <translation>Неоднозначность подтипа файла Домашней бухгалтерии не разрешена.
 Свяжитесь с автором.</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="363"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="359"/>
         <source>For currency conversion strongly 1 MoneyOut* and 1 MoneyIn* attributes needed at line %1</source>
         <translation>Для обмена валют необходимо строго по одной записи MoneyOut* и MoneyIn*, строка %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="417"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="413"/>
         <source>rate type</source>
         <translation>тип ставки</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="419"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="415"/>
         <source>rate type text</source>
         <translation>текст типа ставки</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="431"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="427"/>
         <source>Period unit not specified: %1</source>
         <translation>Единица периода не задана</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="442"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="438"/>
         <source>period unit</source>
         <translation>единица периода</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="444"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="440"/>
         <source>period unit text</source>
         <translation>текст единицы периода</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="458"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="454"/>
         <source>debt status</source>
         <translation>статус долга</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="460"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="456"/>
         <source>status text for repaid and not repaid loans</source>
         <translation>тексты статусов для погашенных и непогашенных долгов</translation>
     </message>
@@ -961,7 +981,7 @@ or manually add it to %2.</source>
 или вручную добавьте их в %2.</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="571"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="567"/>
         <source>Account %1 not found, inserted automatically</source>
         <translation>Счёт %1 не найден, добавлен автоматически</translation>
     </message>
@@ -976,17 +996,17 @@ or manually add it to %2.</source>
         <translation>Эта версия Домашнего кошелька не поддерживает мультивалютных доходов и расходов, позиция с %1, валюты: %2</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="518"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="514"/>
         <source>Skipped %1 records</source>
         <translation>Пропущено записей: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="594"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="590"/>
         <source>Money attributes not found: line %1</source>
         <translation>Денежные атрибуты не найдены в строке %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="604"/>
+        <location filename="../core/formats/hbhelper.cpp" line="34"/>
         <source>Money sum doesn&apos;t match: %1</source>
         <translation>Денежная сумма не соответствует шаблону: %1</translation>
     </message>
@@ -1459,12 +1479,12 @@ at record %1 from %2</source>
         <translation>Прочее</translation>
     </message>
     <message>
-        <location filename="../core/formats/formatfactory.cpp" line="63"/>
+        <location filename="../core/formats/formatfactory.cpp" line="65"/>
         <source>Empty file name</source>
         <translation>Пустое имя файла</translation>
     </message>
     <message>
-        <location filename="../core/formats/formatfactory.cpp" line="73"/>
+        <location filename="../core/formats/formatfactory.cpp" line="75"/>
         <source>Unknown file format:
 %1</source>
         <translation>Неизвестный формат файла:
@@ -1565,48 +1585,174 @@ Found: %1</source>
     <message>
         <location filename="../core/formats/xmlhwfile.cpp" line="291"/>
         <source>This version of HomeWallet not support third category level: %1::%2</source>
-        <translation type="unfinished"></translation>
+        <translation>Эта версия Домашнего кошелька не поддерживает третий уровень категорий: %1::%2</translation>
     </message>
     <message>
         <location filename="../core/formats/xmlfile.cpp" line="94"/>
         <source>Field count mismatch (%1+%2+%3&lt;&gt;%4)</source>
-        <translation type="unfinished"></translation>
+        <translation>Несоответствие счётчика полей (%1+%2+%3&lt;&gt;%4)</translation>
     </message>
     <message>
         <location filename="../core/formats/xmlfile.cpp" line="103"/>
         <source>Field name count mismatch (%1&lt;&gt;%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Несоответствие счётчика имён полей (%1&lt;&gt;%2)</translation>
     </message>
     <message>
         <location filename="../core/formats/xmlfile.cpp" line="110"/>
         <source>Field type count mismatch (%1&lt;&gt;%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Несоответствие счётчика полей (%1&lt;&gt;%2)</translation>
     </message>
     <message>
         <location filename="../core/formats/xmlfile.cpp" line="184"/>
         <source>No ref to attr %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет ссылок для атрибута %1</translation>
     </message>
     <message>
         <location filename="../core/formats/xmlfile.cpp" line="191"/>
         <source>Attribute %1 must be in form filename::uid. Actual value is:
 %2
 At line %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Атрибут %1 должен иметь форму filename::uid. Текущее значение:
+%2
+в строке %3</translation>
     </message>
     <message>
         <location filename="../core/formats/xmlfile.cpp" line="201"/>
         <source>Unknown ref: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестная ссылка: %1</translation>
     </message>
     <message>
         <location filename="../core/formats/xmlfile.cpp" line="212"/>
         <source>Unknown field type: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестный тип поля: %1</translation>
     </message>
     <message>
         <location filename="../core/formats/xmlfile.cpp" line="233"/>
         <source>Unknown field optionality: %1</source>
+        <translation>Неизвестный признак обязательности поля: %1</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/preimporthbguihelper.cpp" line="138"/>
+        <source>Select credit or debt for this file</source>
+        <translation>Выберите кредит или долг для этого файла</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/simplexlsxreader.cpp" line="43"/>
+        <source>si without t in sharedStrings.xml</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/simplexlsxreader.cpp" line="64"/>
+        <source>Element %1 is missing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/simplexlsxreader.cpp" line="71"/>
+        <source>This version of SimpleXlsxReader doesn&apos;t support inconsquent rows, r=%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/simplexlsxreader.cpp" line="80"/>
+        <source>Attribute r not found or too small at row %1, col %2: r=%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/simplexlsxreader.cpp" line="85"/>
+        <source>Attribute r first character must be a capital letter at row %1, col %2: r=%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/simplexlsxreader.cpp" line="88"/>
+        <source>This version of SimpleXlsxReader doesn&apos;t support more than 26 columns at row %1, col %2:  r=%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/simplexlsxreader.cpp" line="92"/>
+        <source>This version of SimpleXlsxReader doesn&apos;t support inconsquent columns at row %1, col %2:  r=%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/simplexlsxreader.cpp" line="108"/>
+        <source>Not nubmer shared index: %1 at row %2, col %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/simplexlsxreader.cpp" line="112"/>
+        <source>Shared index too big: %1&gt;=%2 at row %3, col %4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/simplexlsxreader.cpp" line="125"/>
+        <source>Unknown cell type: %1 at row %2, col %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/simplexlsxreader.cpp" line="190"/>
+        <source>Root node of %1 must be %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xlsxrepaymentfile.cpp" line="37"/>
+        <source>Home Bookkeeping XLSX repayment sheet size must be at least 15x11</source>
+        <translation>Таблица XLSX платежей Домашней Бухгалтерии должна быть размером как минимум 15x11</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xlsxrepaymentfile.cpp" line="41"/>
+        <source>URL keepsoft.ru not found</source>
+        <translation>Адрес keepsoft.ru не найден</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xlsxrepaymentfile.cpp" line="69"/>
+        <source>Home Bookkeeping Repayment XLSX (*.xlsx *.XLSX)</source>
+        <translation>Таблица платежей Домашней Бухгалтерии XLSX (*.xlsx *.XLSX)</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xlsxrepaymentfile.h" line="21"/>
+        <source>No credit or debt record in database to bind this file</source>
+        <translation>В БД нет записей о долгах и кредитах, к которым можно привязать этот файл</translation>
+    </message>
+</context>
+<context>
+    <name>QuaGzipFile</name>
+    <message>
+        <location filename="../3rdparty/quazip/quazip/quagzipfile.cpp" line="60"/>
+        <source>QIODevice::Append is not supported for GZIP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/quazip/quazip/quagzipfile.cpp" line="66"/>
+        <source>Opening gzip for both reading and writing is not supported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/quazip/quazip/quagzipfile.cpp" line="74"/>
+        <source>You can open a gzip either for reading or for writing. Which is it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/quazip/quazip/quagzipfile.cpp" line="80"/>
+        <source>Could not gzopen() file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QuaZIODevice</name>
+    <message>
+        <location filename="../3rdparty/quazip/quazip/quaziodevice.cpp" line="147"/>
+        <source>QIODevice::Append is not supported for QuaZIODevice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/quazip/quazip/quaziodevice.cpp" line="152"/>
+        <source>QIODevice::ReadWrite is not supported for QuaZIODevice</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QuaZipFile</name>
+    <message>
+        <location filename="../3rdparty/quazip/quazip/quazipfile.cpp" line="247"/>
+        <source>ZIP/UNZIP API error %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -16,11 +16,9 @@
 #include <QHeaderView>
 #include <QInputDialog>
 #include <QMessageBox>
-#include <QPushButton>
 #include <QResizeEvent>
 #include <QSqlError>
 #include <QTime>
-#include <QVBoxLayout>
 
 #include "aboutdialog.h"
 #include "configmanager.h"
@@ -32,8 +30,8 @@
 #include "testmanager.h"
 #include "ui_mainwindow.h"
 #include "formats/interactiveformat.h"
-#include "formats/xmlhbfile.h"
 #include "formatsgui/exportdialog.h"
+#include "formatsgui/preimporthbguihelper.h"
 #include "formatsgui/postimportdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -85,9 +83,11 @@ MainWindow::MainWindow(QWidget *parent) :
     mdlLend = new CreditModel(this, true);
     proxyLend = new QSortFilterProxyModel(this);
     prepareModel(mdlLend, proxyLend, ui->tvLend, "Lend");
+    ui->tvLend->insertAction(0, ui->actionShowRepaymentHistory);
     mdlBorrow = new CreditModel(this, false);
     proxyBorrow = new QSortFilterProxyModel(this);
     prepareModel(mdlBorrow, proxyBorrow, ui->tvBorrow, "Borrow");
+    ui->tvBorrow->insertAction(0, ui->actionShowRepaymentHistory);
     // Table columns
     for (FilteredQueryModel* mdl: dbModels)
         configManager.readTableConfig(mdl);
@@ -300,61 +300,11 @@ void MainWindow::on_action_Import_triggered()
             QMessageBox::critical(0, S_ERROR, impFile->fatalError());
             return;
         }
+
         // HB-specific stuff
-        XmlHbFile* hbFile = dynamic_cast<XmlHbFile*>(impFile);
-        if (hbFile) {
-            XmlHbFile::SubType sType = hbFile->fileSubType();
-            if (hbFile->isAmbiguous()) {
-                QString categorySamples = hbFile->categorySamples();
-                if (categorySamples.isEmpty()) {
-                    QMessageBox::critical(0, S_ERROR, S_EMPTY_FILE.arg(path));
-                    return;
-                }
-                else {
-                    // Ambiguous HB file subtype
-                    QString altType, alt1, alt2;
-                    XmlHbFile::SubType res1, res2;
-                    switch (sType) {
-                    case XmlHbFile::IncomesOrExpenses:
-                        altType = S_HB_SELECT_AMBIG_IE;
-                        alt1 = S_TREAT_AS_INCOMES;
-                        alt2 = S_TREAT_AS_EXPENSES;
-                        res1 = XmlHbFile::Incomes;
-                        res2 = XmlHbFile::Expenses;
-                        break;
-                    case XmlHbFile::DebtorsOrCreditors:
-                        altType = S_HB_SELECT_AMBIG_DC;
-                        alt1 = S_TREAT_AS_DEBTORS;
-                        alt2 = S_TREAT_AS_CREDITORS;
-                        res1 = XmlHbFile::Debtors;
-                        res2 = XmlHbFile::Creditors;
-                        break;
-                    case XmlHbFile::IncomeOrExpensePlan:
-                    default:
-                        altType = S_HB_SELECT_AMBIG_PIE;
-                        alt1 = S_TREAT_AS_INC_PLAN;
-                        alt2 = S_TREAT_AS_EXP_PLAN;
-                        res1 = XmlHbFile::IncomePlan;
-                        res2 = XmlHbFile::ExpensePlan;
-                        break;
-                    }
-                    QMessageBox mbAmbig(QMessageBox::Question,
-                        S_HB_SELECT_AMBIG_TITLE,
-                        S_HB_SELECT_AMBIG_ASK
-                            .arg(altType).arg(categorySamples));
-                    QPushButton* btnAlt1 = mbAmbig.addButton(alt1, QMessageBox::YesRole);
-                    mbAmbig.addButton(alt2, QMessageBox::NoRole);
-                    QPushButton* btnCancel = mbAmbig.addButton(QMessageBox::Cancel);
-                    mbAmbig.exec();
-                    QAbstractButton* btnRes = mbAmbig.clickedButton();
-                    if (btnRes==btnCancel) {
-                        delete impFile;
-                        return;
-                    }
-                    hbFile->setFileSubType((btnRes==btnAlt1) ? res1 : res2);
-                }
-            }
-        }
+        if (!PreImportHbGuiHelper::check(path, impFile, db))
+            return;
+
         // Check if already
         QFileInfo fi(path);
         int idImp = db.findImportFile(fi.fileName());
@@ -471,6 +421,7 @@ void MainWindow::prepareModel(FilteredQueryModel *source, QSortFilterProxyModel 
 //    view->horizontalHeader()->setResizeContentsPrecision(64);
     view->horizontalHeader()->setStretchLastSection(true);
     view->setObjectName(QString("tv")+nameForDebug);
+    // Context menu
     view->setContextMenuPolicy(Qt::ActionsContextMenu);
     view->insertAction(0, ui->actionEdit);
     view->insertAction(0, ui->actionDelete);
@@ -799,5 +750,31 @@ void MainWindow::on_actionEdit_triggered()
 void MainWindow::on_actionDelete_triggered()
 {
     on_btn_Delete_clicked();
+}
+
+void MainWindow::on_actionShowRepaymentHistory_triggered()
+{
+    activeTab();
+    if (!checkSelection(true, true)) return;
+    CreditModel* mdl = dynamic_cast<CreditModel*>(activeModel);
+    if (!mdl)
+        return;
+    QWidget* wRep = new QWidget(0);
+    QVBoxLayout* l = new QVBoxLayout(wRep);
+    QTableView* tabRep = new QTableView(this);
+    l->addWidget(tabRep);
+    wRep->setMinimumWidth(640);
+    wRep->setMinimumHeight(480);
+    wRep->setWindowTitle(tr("Repayment history for: ")+mdl->recordLabel(selection.first()));
+    QSqlQueryModel* mdlRep = mdl->createRepaymentModelForRecord(selection.first());
+    if (!mdlRep)
+        return;
+    mdlRep->setParent(wRep);
+    tabRep->setModel(mdlRep);
+    tabRep->horizontalHeader()->setStretchLastSection(true);
+    tabRep->resizeColumnsToContents();
+    updateTableConfig(tabRep);
+    wRep->setGeometry(this->x()+this->width()/2, this->y()+this->height()/2, -1, -1);
+    wRep->show();
 }
 
