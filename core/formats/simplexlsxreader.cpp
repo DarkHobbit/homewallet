@@ -68,7 +68,7 @@ bool SimpleXlsxReader::read()
     int i=1;
     for(QDomElement elR=elSd.firstChildElement("row"); !elR.isNull(); elR=elR.nextSiblingElement("row")) {
         if (elR.attribute("r").toInt()!=i) {
-            error = QObject::tr("This version of SimpleXlsxReader doesn't support inconsquent rows, r=%1").arg(elR.attribute("r"));
+            error = QObject::tr("This version of SimpleXlsxReader doesn't support inconsequent rows, r=%1").arg(elR.attribute("r"));
             return false;
         }
         QVariantList strValues;

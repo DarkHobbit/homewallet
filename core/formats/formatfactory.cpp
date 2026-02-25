@@ -64,15 +64,23 @@ FileFormat *FormatFactory::getObject(const QString &url, QIODevice::OpenModeFlag
     if (url.isEmpty()) {
         error = QObject::tr("Empty file name");
         return 0;
-    }    
+    }
+    QStringList fmtErrors;
     for (FileFormat* ff: formats)
         if (ff->supportedModes().testFlag(mode)) {
             ff->clear();
             if (ff->detect(url))
-                return ff;
+                return ff; // success
+            if (matchExtension(url, ff))
+                fmtErrors << ff->supportedFilters().join("; ") + ": " + ff->fatalError();
         }
     // Sad but true
-    error = QObject::tr("Unknown file format:\n%1").arg(url);
+    if (fmtErrors.isEmpty())
+        error = QObject::tr("Unknown file format:\n%1").arg(url);
+    else
+        error = S_READ_ERR.arg(url) + "\n\n"
+                + QObject::tr("Candidates error messages:") + "\n"
+                + fmtErrors.join("\n");
     return 0;
 }
 
@@ -84,4 +92,12 @@ FileFormat *FormatFactory::formatByFilter(const QString &filter)
     }
     else
         return 0;
+}
+
+bool FormatFactory::matchExtension(const QString &path, FileFormat *ff)
+{
+    for (const QString& candidate: ff->supportedExtensions())
+        if (path.endsWith(candidate))
+            return true;
+    return false;
 }

@@ -31,6 +31,7 @@ public:
 private:
     QList<FileFormat*> formats;
     QMap<QString, FileFormat*> formatsByFilter;
+    bool matchExtension(const QString& path, FileFormat* ff);
 
 };
 

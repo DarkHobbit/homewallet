@@ -1484,11 +1484,16 @@ at record %1 from %2</source>
         <translation>Пустое имя файла</translation>
     </message>
     <message>
-        <location filename="../core/formats/formatfactory.cpp" line="75"/>
+        <location filename="../core/formats/formatfactory.cpp" line="79"/>
         <source>Unknown file format:
 %1</source>
         <translation>Неизвестный формат файла:
 %1</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/formatfactory.cpp" line="82"/>
+        <source>Candidates error messages:</source>
+        <translation>Ошибки кандидатов в форматы:</translation>
     </message>
     <message>
         <location filename="../core/formats/txtcompactfile.cpp" line="19"/>
@@ -1648,7 +1653,7 @@ At line %3</source>
     </message>
     <message>
         <location filename="../core/formats/simplexlsxreader.cpp" line="71"/>
-        <source>This version of SimpleXlsxReader doesn&apos;t support inconsquent rows, r=%1</source>
+        <source>This version of SimpleXlsxReader doesn&apos;t support inconsequent rows, r=%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
