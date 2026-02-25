@@ -414,13 +414,24 @@ bool XmlHwFile::importCredits(const QDomElement &e, HwDatabase &db, const QStrin
         QStringList() << "dt" << "dtc" << "dtr" << "crs"
                       << "a" << "dp" << "mb" << "mrd"
                       << "ac" << "cu" << "r" << "ot"
-                      << "p" << "pu" << "cls"  << "d" << "imp" << "vfy",
+                      << "p" << "pu" << "cls" << "d" << "imp" << "vfy",
         tRefs,
         QVariantList() << QVariant(isLendNum),
         &elCreds);
+    if (res)
     foreach (int idCred, elCreds.keys())
     {
-// TODO repayment
+        // Repayments
+        res = importDbRecordsGroup(db, elCreds[idCred], "rep", "hw_repayment",
+             QStringList() << "op_date" << "amount" << "id_ac" << "id_cur" << "descr"
+                           << "id_imp" << "uid_imp" << "id_imp_verify" << "uid_imp_verify"
+                           << "id_crd",
+             "DIRRSZSZSI", "MMMMOOOOOM",
+             QStringList() << "dt" << "a" << "ac" << "cu" << "d" << "imp" << "vfy",
+             tRefs,
+             QVariantList() << QVariant(idCred));
+        if (!res)
+            return false;
     }
     return res;
 }
@@ -784,19 +795,29 @@ bool XmlHwFile::exportCurrencyConversion(HwDatabase &db, QDomElement &elRoot)
     " where is_lend=%1" \
     " order by dt;"
 
+#define Q_SEL_CRED_RET \
+    "select crp.id, crp.op_date as dt, crp.amount as a, cur.abbr as cu, acc.name as ac, crp.descr as d," \
+    " fim.filename||'::'||uid_imp as imp," \
+    " fvf.filename||'::'||uid_imp_verify as vfy" \
+    " from hw_repayment crp" \
+    " left join hw_currency cur on cur.id=crp.id_cur" \
+    " left join hw_account acc on acc.id=crp.id_ac" \
+    " left join hw_imp_file fim on fim.id=crp.id_imp" \
+    " left join hw_imp_file fvf on fvf.id=crp.id_imp_verify" \
+    " where id_crd=%1" \
+    " order by dt;"
+
 bool XmlHwFile::exportCredits(HwDatabase &db, QDomElement &elRoot, const QString& groupName, const QString& elName, bool isLend)
 {
     ChildRecMap elCreds;
     QDomElement elGroup = addElem(elRoot, groupName);
-    bool res = exportDbRecordsGroup(db, QString(Q_SEL_CRED).arg(isLend ? "true" : "false"),
+    bool res = exportDbRecordsGroup(db, QString(Q_SEL_CRED).arg(isLend ? "1" : "0"),
                elGroup, elName, &elCreds);
     if (res) {
-        // TODO repayment
-        /*
+        // Repayments
         foreach (int idCred, elCreds.keys())
-            if (!exportDbRecordsGroup(db, QString(Q_SEL_CRED_RET).arg(idCred), elCreds[idCred], "???"))
+            if (!exportDbRecordsGroup(db, QString(Q_SEL_CRED_RET).arg(idCred), elCreds[idCred], "rep"))
                 return false;
-                */
     }
     return res;
 }
