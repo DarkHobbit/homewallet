@@ -49,7 +49,7 @@ bool XlsxRepaymentFile::detect(const QString &path)
     QRegExp reDateAndCorr("[^:]+:\\s(\\S+)\\.\\s[^:]+:\\s(.*)");
     if (reDateAndCorr.exactMatch(credSummary)) {
         estimatedOpDate = QDateTime::fromString(reDateAndCorr.cap(1), "dd.MM.yyyy");
-        estimatedCorrName = reDateAndCorr.cap(2);
+        estimatedCorrName = reDateAndCorr.cap(2).trimmed();
     }
     return true;
 }
