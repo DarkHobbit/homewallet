@@ -26,6 +26,8 @@ public:
     virtual QString localizedName();
     QString recordLabel(const QModelIndex &recIndex);
     QSqlQueryModel* createRepaymentModelForRecord(const QModelIndex &recIndex);
+protected:
+    virtual bool removeById(int id);
 private:
     bool isLend;
 };

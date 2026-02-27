@@ -129,3 +129,21 @@ QSqlQueryModel *CreditModel::createRepaymentModelForRecord(const QModelIndex &re
     }
     return m;
 }
+
+bool CreditModel::removeById(int id)
+{
+    // At first, remove repayment records
+    QSqlQuery q;
+    QString sql = "delete from hw_repayment where id_crd=:id_crd";
+    if (!q.prepare(sql)) {
+        emit modelError(QString("Children deletion prepare error: ")+q.lastError().text());
+        return false;
+    }
+    q.bindValue(":id_crd", id);
+    if (!q.exec()) {
+        emit modelError(QString("Children deletion execute error: ")+q.lastError().text());
+        return false;
+    }
+    // At second, remove credit record
+    return FilteredQueryModel::removeById(id);
+}
