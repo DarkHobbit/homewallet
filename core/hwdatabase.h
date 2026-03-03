@@ -46,6 +46,7 @@ public:
     };
     typedef QMap<QString, int> MultiCurrByChar; // key - $ (etc), value - sum
     typedef QMap<int, int> MultiCurrById; // key - id, value - sum
+    typedef QMap<int, int> CurrRateDirections; // key - id, value - 1 if is unit for main
     HwDatabase();
     ~HwDatabase();
     // Entire database actions
@@ -61,6 +62,7 @@ public:
     // Subject area
     virtual QString fileName();
     void getCounts(int& totalInCount, int& totalExpCount);
+    // Account, currency, unit
     int addAccount(const QString& name, const QString& descr,
                     const QDateTime& foundation=QDateTime(), const MultiCurrById& startBalance=MultiCurrById());
     int accountId(const QString& name, Qt::CaseSensitivity cs = Qt::CaseInsensitive);
@@ -68,6 +70,10 @@ public:
     int unitId(const QString& name);
     QString unitById(int idUnit);
     int currencyIdByAbbr(const QString& abbr);
+    int defaultCurrencyId();
+    bool collectCurrencyRateDirections(CurrRateDirections& rateDirections);
+    bool addCurrencyRate(const QDateTime& chDT, int idCur, int idCurDefault,
+            const CurrRateDirections& rateDirections, double rate);
     // Categories
     int addIncomeCategory(const QString& name, const QString& descr);
     int incomeCategoryId(const QString& name);

@@ -44,6 +44,8 @@ void XmlHbFile::clear()
     XmlFile::clear();
     _fileSubType = Unknown;
     _categorySamples = "";
+    _minCurrIndex = 0;
+    _maxCurrIndex = 0;
 }
 
 bool XmlHbFile::detect(const QString &path)
@@ -67,19 +69,50 @@ bool XmlHbFile::detect(const QString &path)
         closeFile();
     }
     // 1. Accounts
-    if (fieldNames.contains("Expense1")) {
-        if (fieldNames.contains("StartBalans1") && fieldNames.contains("Note"))
+    if (hasStringAndNumber(fieldNames, "Expense")) {
+        if (hasStringAndNumber(fieldNames, "StartBalans") && fieldNames.contains("Note"))
             _fileSubType = AccountsInBrief;
         else
             _fileSubType = AccountsInDetail;
     }
     // 2. Currency rate
-    else if ((fieldNames.contains("Rate2") || fieldNames.contains("Rate1"))
-    && !fieldNames.contains("Money1"))
+    else if (hasStringAndNumber(fieldNames, "Rate") && !hasStringAndNumber(fieldNames, "Money")) {
         _fileSubType = CurrencyRate;
+        // Define range of currencies
+        _minCurrIndex = _maxCurrIndex = 0;
+        bool indexWasFound = false;
+        QDomNodeList records = elementsByTagName("RECORD");
+        for (int i=0; i<records.count(); i++) {
+            QDomElement elRow = records.at(i).firstChildElement("ROW");
+            QDomNamedNodeMap attrs = elRow.attributes();
+            for (int j=0; j<attrs.count(); j++) {
+                QString attr = attrs.item(j).nodeName();
+                if (attr.startsWith("Rate")) {
+                    bool ok;
+                    int currIndex = attr.mid(4).toInt(&ok);
+                    if (!ok) {
+                        _errors << QObject::tr("Unknown Rate attribute %1 at line %2")
+                            .arg(attr).arg(elRow.lineNumber());
+                        continue;
+                    }
+                    if (indexWasFound) {
+                        if (currIndex<_minCurrIndex)
+                            _minCurrIndex = currIndex;
+                        if (currIndex>_maxCurrIndex)
+                            _maxCurrIndex = currIndex;
+                    }
+                    else {
+                        _minCurrIndex = currIndex;
+                        _maxCurrIndex = currIndex;
+                    }
+                    indexWasFound = true;
+                }
+            }
+        }
+    }
     // 3. Expenses or Income, Debtors or Creditors, Plan Incomes or Expenses
-    else if (fieldNames.contains("Money1")) {
-        if (fieldNames.contains("Rate2") || fieldNames.contains("Rate1")) {
+    else if (hasStringAndNumber(fieldNames, "Money")) {
+        if (hasStringAndNumber(fieldNames, "Rate")) {
             _fileSubType = IncomesOrExpenses; // ambiguous, need to specify
             collectCatSamples(3, "Category");
         }
@@ -149,7 +182,13 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
     HwDatabase::DictColl cats;
     HwDatabase::SubDictColl subcats;
     int idTransferTypeOther = -1;
-    if (_fileSubType==Incomes || _fileSubType==IncomePlan) {
+    int idMainCurrency = -1;
+    HwDatabase::CurrRateDirections rateDirections;
+    if (_fileSubType==CurrencyRate) { // TODO convert to switch
+        idMainCurrency = db.defaultCurrencyId();
+        DB_CHK(db.collectCurrencyRateDirections(rateDirections))
+    }
+    else if (_fileSubType==Incomes || _fileSubType==IncomePlan) {
         DB_CHK(db.collectDict(cats, "hw_in_cat"))
         DB_CHK(db.collectSubDict(cats, subcats, "hw_in_subcat", "name", "id", "id_icat"))
     }
@@ -232,10 +271,20 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
                 minDates[accName] = dt;
             break;
         }
-        case CurrencyRate:
-
-            // TODO
+        case CurrencyRate: {
+            QDateTime dt;
+            if (!readDateVal(elRow, "MyDate", dt, "yyyyMMdd", S_ERR_DATE_IMP))
+                return false;
+            for(int j=_minCurrIndex; j<=_maxCurrIndex; j++) {
+                QString rateAttr = QString("Rate%1").arg(j);
+                if (elRow.hasAttribute(rateAttr)) {
+                    bool ok;
+                    double rate = prepareDoubleImport(elRow.attribute(rateAttr)).toDouble(&ok);
+                    DB_CHK(db.addCurrencyRate(dt, _currIds[j], idMainCurrency, rateDirections, rate))
+                }
+            }
             break;
+        }
         case Incomes:
         case Expenses: {
             bool isExp = _fileSubType==Expenses;
@@ -538,6 +587,20 @@ QString XmlHbFile::categorySamples()
     return _categorySamples;
 }
 
+bool XmlHbFile::getCurrenciesRange(int& minInd, int& maxInd)
+{
+    if (_fileSubType!=FileFormat::CurrencyRate)
+        return false;
+    minInd = _minCurrIndex;
+    maxInd = _maxCurrIndex;
+    return (minInd>0);
+}
+
+void XmlHbFile::setCurrIdsByInd(const CurrIdsByInd& currIds)
+{
+    _currIds = currIds;
+}
+
 void XmlHbFile::collectCatSamples(short maxRecordCount, const QString &fieldName)
 {
     QDomNodeList records = elementsByTagName("RECORD");
@@ -650,4 +713,18 @@ bool XmlHbFile::prepareImportValues(const QString& hbkImpValPath)
     for (QDomElement elP=elMonthPrdFlags.firstChildElement("mprd"); !elP.isNull(); elP=elP.nextSiblingElement("mprd"))
         monthPeriodValues << elP.attribute("val");
     return true;
+}
+
+bool XmlHbFile::hasStringAndNumber(const QStringList &fieldNames, const QString &starter)
+{
+    int numPos = starter.length();
+    for(const QString& fld: fieldNames) {
+        if (fld.startsWith(starter)) {
+            bool ok;
+            fld.mid(numPos).toInt(&ok);
+            if (ok)
+                return true;
+        }
+    }
+    return false;
 }

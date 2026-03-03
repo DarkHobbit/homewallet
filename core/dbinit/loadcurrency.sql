@@ -13,10 +13,10 @@ insert into hw_currency (id, full_name, short_name, abbr, code, seq_order, is_ma
     values(1, 'Российский рубль', 'Рубль', '₽', 'RUR', 1, 1, 0);
 
 insert into hw_currency (id, full_name, short_name, abbr, code, seq_order, is_main, is_unit)
-    values(2, 'Доллар США', 'Доллары', '$', 'USD', 2, 0, 0);
+    values(2, 'Доллар США', 'Доллары', '$', 'USD', 2, 0, 1);
 
 insert into hw_currency (id, full_name, short_name, abbr, code, seq_order, is_main, is_unit)
-    values(3, 'Евро', 'Евро', 'Є', 'EUR', 3, 0, 0);
+    values(3, 'Евро', 'Евро', 'Є', 'EUR', 3, 0, 1);
 
 insert into hw_currency (id, full_name, short_name, abbr, code, seq_order, is_main, is_unit)
     values(4, 'Юань Ренминби', 'Юани', '¥', 'CNY', 4, 0, 0);

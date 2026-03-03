@@ -909,66 +909,71 @@ line %3, col %4
         <translation>XML Домашней Бухгалтерии (*.xml *.XML)</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="59"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="61"/>
         <source>Metadata not found. Probably it isn&apos;t Home Bookkeeping file</source>
         <translation>Метаданные не найдены. Возможно, это не файл Домашней бухгалтерии</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="66"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="68"/>
         <source>Metadata is empty. Probably it isn&apos;t Home Bookkeeping file</source>
         <translation>Метаданные пусты. Возможно, это не файл Домашней бухгалтерии</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="127"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="94"/>
+        <source>Unknown Rate attribute %1 at line %2</source>
+        <translation>Неизвестный Rate-атрибут %1 в строке %2</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/xmlhbfile.cpp" line="160"/>
         <source>Unknown Home Bookkeeping file subtype.
 Contact author.</source>
         <translation>Неизвестный подтип файла Домашней бухгалтерии.
 Свяжитесь с автором.</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="132"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="165"/>
         <source>Ambiguous Home Bookkeeping file subtype wasn&apos;t resolved.
 Contact author.</source>
         <translation>Неоднозначность подтипа файла Домашней бухгалтерии не разрешена.
 Свяжитесь с автором.</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="359"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="408"/>
         <source>For currency conversion strongly 1 MoneyOut* and 1 MoneyIn* attributes needed at line %1</source>
         <translation>Для обмена валют необходимо строго по одной записи MoneyOut* и MoneyIn*, строка %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="413"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="462"/>
         <source>rate type</source>
         <translation>тип ставки</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="415"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="464"/>
         <source>rate type text</source>
         <translation>текст типа ставки</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="427"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="476"/>
         <source>Period unit not specified: %1</source>
         <translation>Единица периода не задана</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="438"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="487"/>
         <source>period unit</source>
         <translation>единица периода</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="440"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="489"/>
         <source>period unit text</source>
         <translation>текст единицы периода</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="454"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="503"/>
         <source>debt status</source>
         <translation>статус долга</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="456"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="505"/>
         <source>status text for repaid and not repaid loans</source>
         <translation>тексты статусов для погашенных и непогашенных долгов</translation>
     </message>
@@ -981,7 +986,7 @@ or manually add it to %2.</source>
 или вручную добавьте их в %2.</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="567"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="630"/>
         <source>Account %1 not found, inserted automatically</source>
         <translation>Счёт %1 не найден, добавлен автоматически</translation>
     </message>
@@ -996,12 +1001,12 @@ or manually add it to %2.</source>
         <translation>Эта версия Домашнего кошелька не поддерживает мультивалютных доходов и расходов, позиция с %1, валюты: %2</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="514"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="563"/>
         <source>Skipped %1 records</source>
         <translation>Пропущено записей: %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhbfile.cpp" line="590"/>
+        <location filename="../core/formats/xmlhbfile.cpp" line="653"/>
         <source>Money attributes not found: line %1</source>
         <translation>Денежные атрибуты не найдены в строке %1</translation>
     </message>
@@ -1060,8 +1065,8 @@ Rebuild SQLite with ICU support or provide ICU library as extension</source>
         <translation>Не могу проверить наличие ICU</translation>
     </message>
     <message>
-        <location filename="../core/hwdatabase.cpp" line="258"/>
-        <location filename="../core/hwdatabase.cpp" line="347"/>
+        <location filename="../core/hwdatabase.cpp" line="302"/>
+        <location filename="../core/hwdatabase.cpp" line="391"/>
         <source>No subcategory</source>
         <translation>Нет подкатегории</translation>
     </message>
@@ -1637,7 +1642,32 @@ At line %3</source>
         <translation>Неизвестный признак обязательности поля: %1</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/preimporthbguihelper.cpp" line="138"/>
+        <location filename="../app/formatsgui/preimporthbguihelper.cpp" line="98"/>
+        <source>Currency rates not found in file</source>
+        <translation>Курсы валют в файле не найдены</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/preimporthbguihelper.cpp" line="104"/>
+        <source>Select Currency sequence in Home Bookkeeping file</source>
+        <translation>Выберите порядок валют в файле Домашней бухгалтерии</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/preimporthbguihelper.cpp" line="107"/>
+        <source>Currency order, main unit and rate directions must be identical!</source>
+        <translation>Порядок валют, главная валюта и направления пересчёта должны совпадать!</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/preimporthbguihelper.cpp" line="114"/>
+        <source>Order</source>
+        <translation>Порядок</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/preimporthbguihelper.cpp" line="115"/>
+        <source>HB currency</source>
+        <translation>Валюта ДБ</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/preimporthbguihelper.cpp" line="194"/>
         <source>Select credit or debt for this file</source>
         <translation>Выберите кредит или долг для этого файла</translation>
     </message>

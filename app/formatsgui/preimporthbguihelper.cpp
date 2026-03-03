@@ -11,22 +11,28 @@
  *
  */
 
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QHeaderView>
 #include <QInputDialog>
+#include <QLabel>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QComboBox>
 #include <QSqlError>
+#include <QTableWidget>
 #include <QVBoxLayout>
 
+#include "genericdatabase.h"
 #include "globals.h"
+#include "helpers.h"
 #include "preimporthbguihelper.h"
 #include "formats/xmlhbfile.h"
 #include "formats/xlsxrepaymentfile.h"
 
 
 PreImportHbGuiHelper::PreImportHbGuiHelper()
-{
-
-}
+{}
 
 bool PreImportHbGuiHelper::check(const QString& path, FileFormat *impFile, HwDatabase& db)
 {
@@ -34,6 +40,7 @@ bool PreImportHbGuiHelper::check(const QString& path, FileFormat *impFile, HwDat
     XmlHbFile* hbFile = dynamic_cast<XmlHbFile*>(impFile);
     if (hbFile) {
         XmlHbFile::SubType sType = hbFile->fileSubType();
+        // Amiguous subType resolve
         if (hbFile->isAmbiguous()) {
             QString categorySamples = hbFile->categorySamples();
             if (categorySamples.isEmpty()) {
@@ -83,6 +90,55 @@ bool PreImportHbGuiHelper::check(const QString& path, FileFormat *impFile, HwDat
                 }
                 hbFile->setFileSubType((btnRes==btnAlt1) ? res1 : res2);
             }
+        }
+        // Currency indicies resolve
+        if (sType==XmlHbFile::CurrencyRate) {
+            int minCurrIndex, maxCurrIndex;
+            if (!hbFile->getCurrenciesRange(minCurrIndex, maxCurrIndex)) {
+                QMessageBox::critical(0, S_ERROR, QObject::tr("Currency rates not found in file"));
+                return false;
+            }
+            GenericDatabase::DictColl currs;
+            db.collectDict(currs, "hw_currency", "full_name");
+            QDialog* d = new QDialog(0);
+            d->setWindowTitle(QObject::tr("Select Currency sequence in Home Bookkeeping file"));
+            QVBoxLayout* l = new QVBoxLayout();
+            d->setLayout(l);
+            QLabel* lbWarn = new QLabel(QObject::tr("Currency order, main unit and rate directions must be identical!"));
+            l->addWidget(lbWarn);
+            QTableWidget* tb = new QTableWidget(0);
+            tb->setColumnCount(2);
+            tb->setRowCount(maxCurrIndex-minCurrIndex+1);
+            tb->horizontalHeader()->setStretchLastSection(true);
+            tb->setHorizontalHeaderLabels(QStringList()
+                << QObject::tr("Order")
+                << QObject::tr("HB currency"));
+            tb->verticalHeader()->setVisible(false);
+            for (int i=0; i<tb->rowCount(); i++) {
+                tb->setItem(i, 0, new QTableWidgetItem(QString::number(minCurrIndex+i)));
+                QComboBox* cbC = new QComboBox(0);
+                fillComboByDict(cbC, currs, false);
+                tb->setCellWidget(i, 1, cbC);
+            }
+            l->addWidget(tb);
+            QDialogButtonBox* bb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+            QObject::connect(bb, SIGNAL(accepted()), d, SLOT(accept()));
+            QObject::connect(bb, SIGNAL(rejected()), d, SLOT(reject()));
+            l->addWidget(bb);
+            int res = d->exec();
+            if (res==QDialog::Rejected) {
+                delete d;
+                return false;
+            }
+            XmlHbFile::CurrIdsByInd ids;
+            for (int i=0; i<tb->rowCount(); i++) {
+                QComboBox* cbC = dynamic_cast<QComboBox*>(tb->cellWidget(i, 1));
+                ids[minCurrIndex+i] = currs[cbC->currentText()];
+            }
+            hbFile->setCurrIdsByInd(ids);
+            delete d;
+            if (res==QDialog::Rejected)
+                return false;
         }
     }
     // HB-specific stuff (repayment files)

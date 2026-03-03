@@ -47,6 +47,7 @@
 class XmlHbFile: public XmlFile
 {
 public:
+    typedef QMap<int, int> CurrIdsByInd;
     XmlHbFile();
     virtual QIODevice::OpenMode supportedModes();
     virtual QStringList supportedFilters();
@@ -68,9 +69,13 @@ public:
             _fileSubType==IncomeOrExpensePlan;
 
     }
+    bool getCurrenciesRange(int& minInd, int& maxInd);
+    void setCurrIdsByInd(const CurrIdsByInd& currIds);
 private:
     SubType _fileSubType;
     QString _categorySamples;
+    int _minCurrIndex, _maxCurrIndex;
+    CurrIdsByInd _currIds;
     HbHelper hb;
     QStringList
         debtClosedValues, debtNotClosedValues,
@@ -80,6 +85,7 @@ private:
     bool importMoneyGroup(HwDatabase::MultiCurrByChar& values, const QString& attrPrefix, const QDomElement& elRow,
         bool skipNulls, bool failIfAllNulls=true);
     bool prepareImportValues(const QString& hbkImpValPath);
+    bool hasStringAndNumber(const QStringList& fieldNames, const QString& starter);
 };
 
 #endif // XMLHBFILE_H

@@ -22,7 +22,7 @@ create table hw_currency (
     code char(4) not null, -- USD
     seq_order integer, -- human-readable order
     is_main integer not null, -- 1 if main, 0 otherwise
-    is_unit integer not null, -- 1 if other currency calc through this, 0 if this calc through other currency
+    is_unit integer not null, -- 1 if rate set as "1 this = R main", 0 if "1 main=R this"
     descr char(256),
     constraint uk_cur1 unique(full_name),
     constraint uk_cur2 unique(abbr),
@@ -32,11 +32,11 @@ create table hw_currency (
 create table hw_curr_rate (
     id integer primary key autoincrement,
     ch_date date not null,
-    id_cur_low integer null,
-    id_cur_high integer null,
+    id_cur_unit integer null, -- 1 "unit" = rate "rated"
+    id_cur_rated integer null,
     rate double,
-    constraint fk_crcurl foreign key(id_cur_low) references hw_currency(id),
-    constraint fk_crcurh foreign key(id_cur_high) references hw_currency(id)
+    constraint fk_crcuru foreign key(id_cur_unit) references hw_currency(id),
+    constraint fk_crcurr foreign key(id_cur_rated) references hw_currency(id)
 );
 
 -- Units (kg, liter, day, etc.)

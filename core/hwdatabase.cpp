@@ -240,6 +240,50 @@ int HwDatabase::currencyIdByAbbr(const QString &abbr)
     return dictId(sqlSel);
 }
 
+int HwDatabase::defaultCurrencyId()
+{
+    QSqlQuery sqlSel(sqlDb);
+    if (!prepQuery(sqlSel, "select id from hw_currency where is_main=1"))
+        return -1;
+    return dictId(sqlSel);
+}
+
+bool HwDatabase::collectCurrencyRateDirections(CurrRateDirections &rateDirections)
+{
+    QSqlQuery sqlColl(sqlDb);
+    if (!prepQuery(sqlColl, "select id, is_unit from hw_currency order by seq_order;"))
+        return false;
+    if (!execQuery(sqlColl))
+        return false;
+    sqlColl.first();
+    while (sqlColl.isValid()) {
+        rateDirections[sqlColl.value(0).toInt()] = sqlColl.value(1).toInt();
+        sqlColl.next();
+    }
+    return true;
+}
+
+bool HwDatabase::addCurrencyRate(const QDateTime &chDT, int idCur, int idCurDefault,
+    const CurrRateDirections &rateDirections, double rate)
+{
+    QSqlQuery sqlIns(sqlDb);
+    if (!prepQuery(sqlIns,
+      "insert into hw_curr_rate(ch_date, id_cur_unit, id_cur_rated, rate) " \
+      "values (:ch_date, :id_cur_unit, :id_cur_rated, :rate)"))
+        return 0;
+    sqlIns.bindValue(":ch_date", chDT);
+    if (rateDirections[idCur]==1) {
+        sqlIns.bindValue(":id_cur_unit", idCur);
+        sqlIns.bindValue(":id_cur_rated", idCurDefault);
+    }
+    else {
+        sqlIns.bindValue(":id_cur_unit", idCurDefault);
+        sqlIns.bindValue(":id_cur_rated", idCur);
+    }
+    sqlIns.bindValue(":rate", rate);
+    return execQuery(sqlIns);
+}
+
 int HwDatabase::addIncomeCategory(const QString &name, const QString &descr)
 {
     QSqlQuery sqlIns(sqlDb);
