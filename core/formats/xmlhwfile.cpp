@@ -136,7 +136,8 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
     for (QDomElement e=elRoot.firstChildElement(); !e.isNull(); e=e.nextSiblingElement())
     {
         QString nn = e.nodeName();
-        if (nn!="metadata" && nn!="accounts" && nn!="units"
+        if (nn!="metadata" && nn!="accounts"
+                && nn!="currencies" && nn!="units"
                 && nn!="expensecategories"  && nn!="incomecategories"
                 && nn!="transfertypes"  && nn!="correspondents"
                 && nn!="incomes"  && nn!="expenses"
@@ -220,7 +221,20 @@ bool XmlHwFile::importAccounts(const QDomElement &e, HwDatabase &db)
 
 bool XmlHwFile::importCategories(const QDomElement &elRoot, HwDatabase &db)
 {
-    QDomElement e = elRoot.firstChildElement("units");
+    // Currencies
+    QDomElement e = elRoot.firstChildElement("currencies");
+    if (!e.isNull()) {
+        if (!importDbRecordsGroup(db, e, "cr", "hw_currency",
+                QStringList() << "full_name" << "short_name"
+                              << "abbr" << "code" << "seq_order"
+                              << "is_main" << "is_unit" << "descr",
+                "SSSSIBBS", "MMMMOOMO",
+                QStringList() << "fn" << "sn" << "a" << "c" << "seq"
+                              << "m" << "u" << "d"))
+            return false;
+    }
+    // Units
+    e = elRoot.firstChildElement("units");
     if (!e.isNull()) {
         if (!importDbRecordsGroup(db, e, "un", "hw_unit",
                 QStringList() << "name" << "short_name" << "descr",
@@ -230,16 +244,19 @@ bool XmlHwFile::importCategories(const QDomElement &elRoot, HwDatabase &db)
                 QStringList() << "short_name"))
             return false;
     }
+    // Expense categories
     e = elRoot.firstChildElement("expensecategories");
     if (!e.isNull()) {
         if (!importCategoryTree(e, db, true))
             return false;
     }
+    // Income categories
     e = elRoot.firstChildElement("incomecategories");
     if (!e.isNull()) {
         if (!importCategoryTree(e, db, false))
             return false;
     }
+    // Transfer types
     e = elRoot.firstChildElement("transfertypes");
     if (!e.isNull()) {
         if (!importDbRecordsGroup(db, e, "tt", "hw_transfer_type",
@@ -249,6 +266,7 @@ bool XmlHwFile::importCategories(const QDomElement &elRoot, HwDatabase &db)
                 QStringList() << "name"))
             return false;
     }
+    // Correspondents (debtors/creditors)
     e = elRoot.firstChildElement("correspondents");
     if (!e.isNull()) {
         if (!importDbRecordsGroup(db, e, "cor", "hw_correspondent",
@@ -597,6 +615,14 @@ bool XmlHwFile::importAliasesGroup(HwDatabase &db, const QDomElement& elAliGr, H
     return true;
 }
 
+#define Q_SEL_CURR \
+"select id, full_name as fn, short_name as sn," \
+" abbr as a, code as c, seq_order as seq," \
+" case is_main when 1 then 'yes' else null end as m," \
+" case is_unit when 1 then 'yes' else 'no' end as u," \
+" descr as d" \
+    " from hw_currency order by seq_order;"
+
 #define Q_SEL_UNIT \
 "select id, name as n, short_name as sn, descr as d" \
     " from hw_unit order by name;"
@@ -634,9 +660,14 @@ bool XmlHwFile::importAliasesGroup(HwDatabase &db, const QDomElement& elAliGr, H
 bool XmlHwFile::exportCategories(HwDatabase &db, QDomElement &elRoot)
 {
     ChildRecMap children;
+    // Currencies
+    QDomElement elCurrGroup = addElem(elRoot, "currencies");
+    bool res = exportDbRecordsGroup(db, Q_SEL_CURR, elCurrGroup, "cr");
+    if (!res)
+        return false;
     // Units
     QDomElement elUnGroup = addElem(elRoot, "units");
-    bool res = exportDbRecordsGroup(db, Q_SEL_UNIT, elUnGroup, "un");
+    res = exportDbRecordsGroup(db, Q_SEL_UNIT, elUnGroup, "un");
     if (!res)
         return false;
     // Income categories

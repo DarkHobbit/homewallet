@@ -21,7 +21,7 @@ create table hw_currency (
     abbr char(4) not null, -- $
     code char(4) not null, -- USD
     seq_order integer, -- human-readable order
-    is_main integer not null, -- 1 if main, 0 otherwise
+    is_main integer, -- 1 if main, 0 otherwise
     is_unit integer not null, -- 1 if rate set as "1 this = R main", 0 if "1 main=R this"
     descr char(256),
     constraint uk_cur1 unique(full_name),

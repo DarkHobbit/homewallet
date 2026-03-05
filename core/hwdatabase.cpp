@@ -73,8 +73,10 @@ bool HwDatabase::create(const QString &dir)
     // Load SQL files
     if (!loadSqlFile(pathManager.dbCreateScriptPath()+QDir::separator()+"dbinit.sql"))
         return false;
+    /*
     if (!loadSqlFile(pathManager.dbCreateScriptPath()+QDir::separator()+"loadcurrency.sql"))
         return false;
+    */
     // Close before reopen
     close();
     return true;
