@@ -29,12 +29,18 @@ create table hw_currency (
     constraint uk_cur3 unique(code)
 );
 
+create table hw_curr_rate_session (
+    id integer primary key autoincrement,
+    ch_date date not null
+);
+
 create table hw_curr_rate (
     id integer primary key autoincrement,
-    ch_date date not null,
+    id_css integer not null,
     id_cur_unit integer null, -- 1 "unit" = rate "rated"
     id_cur_rated integer null,
     rate double,
+    constraint fk_crcss foreign key(id_css) references hw_curr_rate_session(id),
     constraint fk_crcuru foreign key(id_cur_unit) references hw_currency(id),
     constraint fk_crcurr foreign key(id_cur_rated) references hw_currency(id)
 );

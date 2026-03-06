@@ -275,12 +275,14 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             QDateTime dt;
             if (!readDateVal(elRow, "MyDate", dt, "yyyyMMdd", S_ERR_DATE_IMP))
                 return false;
+            int idSes = db.addCurrencyRateSession(dt);
+            DB_CHK(idSes>-1)
             for(int j=_minCurrIndex; j<=_maxCurrIndex; j++) {
                 QString rateAttr = QString("Rate%1").arg(j);
                 if (elRow.hasAttribute(rateAttr)) {
                     bool ok;
                     double rate = prepareDoubleImport(elRow.attribute(rateAttr)).toDouble(&ok);
-                    DB_CHK(db.addCurrencyRate(dt, _currIds[j], idMainCurrency, rateDirections, rate))
+                    DB_CHK(db.addCurrencyRate(idSes, _currIds[j], idMainCurrency, rateDirections, rate))
                 }
             }
             break;

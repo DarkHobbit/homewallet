@@ -72,7 +72,8 @@ public:
     int currencyIdByAbbr(const QString& abbr);
     int defaultCurrencyId();
     bool collectCurrencyRateDirections(CurrRateDirections& rateDirections);
-    bool addCurrencyRate(const QDateTime& chDT, int idCur, int idCurDefault,
+    int addCurrencyRateSession(const QDateTime& chDT);
+    bool addCurrencyRate(int idSes, int idCur, int idCurDefault,
             const CurrRateDirections& rateDirections, double rate);
     // Categories
     int addIncomeCategory(const QString& name, const QString& descr);

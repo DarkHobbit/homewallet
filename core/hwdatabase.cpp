@@ -265,15 +265,26 @@ bool HwDatabase::collectCurrencyRateDirections(CurrRateDirections &rateDirection
     return true;
 }
 
-bool HwDatabase::addCurrencyRate(const QDateTime &chDT, int idCur, int idCurDefault,
+int HwDatabase::addCurrencyRateSession(const QDateTime &chDT)
+{
+    QSqlQuery sqlIns(sqlDb);
+    if (!prepQuery(sqlIns,
+      "insert into hw_curr_rate_session(ch_date) " \
+      "values (:ch_date)"))
+        return 0;
+    sqlIns.bindValue(":ch_date", chDT);
+    return execQuery(sqlIns) ? getLastSequenceValue("hw_curr_rate_session") : -1;
+}
+
+bool HwDatabase::addCurrencyRate(int idSes, int idCur, int idCurDefault,
     const CurrRateDirections &rateDirections, double rate)
 {
     QSqlQuery sqlIns(sqlDb);
     if (!prepQuery(sqlIns,
-      "insert into hw_curr_rate(ch_date, id_cur_unit, id_cur_rated, rate) " \
-      "values (:ch_date, :id_cur_unit, :id_cur_rated, :rate)"))
+      "insert into hw_curr_rate(id_css, id_cur_unit, id_cur_rated, rate) " \
+      "values (:id_css, :id_cur_unit, :id_cur_rated, :rate)"))
         return 0;
-    sqlIns.bindValue(":ch_date", chDT);
+    sqlIns.bindValue(":id_css", idSes);
     if (rateDirections[idCur]==1) {
         sqlIns.bindValue(":id_cur_unit", idCur);
         sqlIns.bindValue(":id_cur_rated", idCurDefault);
