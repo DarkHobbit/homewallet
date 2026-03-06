@@ -26,6 +26,7 @@ TEMPLATE = app
 SOURCES += \
     aboutdialog.cpp \
     aliasdialog.cpp \
+    currencywindow.cpp \
     formatsgui/adddefaultunitdialog.cpp \
     formatsgui/preimporthbguihelper.cpp \
     helpers.cpp \
@@ -40,6 +41,7 @@ SOURCES += \
 HEADERS  += \
     aboutdialog.h \
     aliasdialog.h \
+    currencywindow.h \
     formatsgui/adddefaultunitdialog.h \
     formatsgui/preimporthbguihelper.h \
     helpers.h \
@@ -53,6 +55,7 @@ HEADERS  += \
 FORMS    += \
     aboutdialog.ui \
     aliasdialog.ui \
+    currencywindow.ui \
     formatsgui/adddefaultunitdialog.ui \
     languageselectdialog.ui \
     logwindow.ui \

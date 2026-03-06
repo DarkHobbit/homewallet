@@ -33,7 +33,7 @@
            </font>
           </property>
           <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectRows</enum>
+           <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
           </property>
           <property name="sortingEnabled">
            <bool>true</bool>
@@ -55,7 +55,7 @@
            </font>
           </property>
           <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectRows</enum>
+           <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
           </property>
          </widget>
         </item>
@@ -79,7 +79,7 @@
             <item>
              <widget class="QTableView" name="tvTransfer">
               <property name="selectionBehavior">
-               <enum>QAbstractItemView::SelectRows</enum>
+               <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
               </property>
              </widget>
             </item>
@@ -93,7 +93,7 @@
             <item>
              <widget class="QTableView" name="tvExchange">
               <property name="selectionBehavior">
-               <enum>QAbstractItemView::SelectRows</enum>
+               <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
               </property>
              </widget>
             </item>
@@ -121,7 +121,7 @@
             <item>
              <widget class="QTableView" name="tvLend">
               <property name="selectionBehavior">
-               <enum>QAbstractItemView::SelectRows</enum>
+               <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
               </property>
              </widget>
             </item>
@@ -135,7 +135,7 @@
             <item>
              <widget class="QTableView" name="tvBorrow">
               <property name="selectionBehavior">
-               <enum>QAbstractItemView::SelectRows</enum>
+               <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
               </property>
              </widget>
             </item>
@@ -319,7 +319,7 @@
      <x>0</x>
      <y>0</y>
      <width>1087</width>
-     <height>23</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -336,6 +336,7 @@
      <string>&amp;View</string>
     </property>
     <addaction name="action_Categories"/>
+    <addaction name="actionCurrencies"/>
     <addaction name="separator"/>
     <addaction name="actionFilter"/>
     <addaction name="action_Settings"/>
@@ -423,7 +424,7 @@
     <string>Technical information</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="actionEdit">
@@ -431,7 +432,7 @@
     <string>Edit</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="actionDelete">
@@ -439,12 +440,17 @@
     <string>Delete</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="actionShowRepaymentHistory">
    <property name="text">
     <string>Show repayment history</string>
+   </property>
+  </action>
+  <action name="actionCurrencies">
+   <property name="text">
+    <string>Currencies</string>
    </property>
   </action>
  </widget>

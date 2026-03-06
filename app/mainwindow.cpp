@@ -22,6 +22,7 @@
 
 #include "aboutdialog.h"
 #include "configmanager.h"
+#include "currencywindow.h"
 #include "globals.h"
 #include "helpers.h"
 #include "logwindow.h"
@@ -776,5 +777,12 @@ void MainWindow::on_actionShowRepaymentHistory_triggered()
     updateTableConfig(tabRep); // TODO sorting
     wRep->setGeometry(this->x()+this->width()/2, this->y()+this->height()/2, -1, -1);
     wRep->show();
+}
+
+
+void MainWindow::on_actionCurrencies_triggered()
+{
+    CurrencyWindow* w = new CurrencyWindow(0, db);
+    w->show();
 }
 

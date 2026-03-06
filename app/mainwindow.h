@@ -82,6 +82,8 @@ private slots:
 
     void on_actionShowRepaymentHistory_triggered();
 
+    void on_actionCurrencies_triggered();
+
 private:
     Ui::MainWindow *ui;
     ExpenseModel* mdlExpenses;
