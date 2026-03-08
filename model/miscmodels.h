@@ -17,7 +17,16 @@
 #include <QSqlQueryModel>
 #include "hwdatabase.h"
 
-class CurrencyRateModel: public QSqlQueryModel {
+class SimpleQueryModel: public QSqlQueryModel {
+public:
+    SimpleQueryModel(QObject* parent);
+    bool isValid();
+    QString lastError();
+protected:
+    QString _error;
+};
+
+class CurrencyRateModel: public SimpleQueryModel {
 public:
     CurrencyRateModel(QObject* parent, HwDatabase& db);
 };

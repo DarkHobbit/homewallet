@@ -10,7 +10,10 @@
  * (at your option) any later version. See COPYING file for more details.
  *
  */
+#include <QMessageBox>
+
 #include "currencywindow.h"
+#include "globals.h"
 #include "miscmodels.h"
 #include "ui_currencywindow.h"
 
@@ -19,7 +22,10 @@ CurrencyWindow::CurrencyWindow(QWidget *parent, HwDatabase& db)
     , ui(new Ui::CurrencyWindow)
 {
     ui->setupUi(this);
-    ui->tvRates->setModel(new CurrencyRateModel(this, db));
+    CurrencyRateModel* mdlRate = new CurrencyRateModel(this, db);
+    ui->tvRates->setModel(mdlRate);
+    if (!mdlRate->isValid())
+        QMessageBox::critical(0, S_ERROR, mdlRate->lastError());
 }
 
 CurrencyWindow::~CurrencyWindow()
