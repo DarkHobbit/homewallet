@@ -22,10 +22,20 @@ CurrencyWindow::CurrencyWindow(QWidget *parent, HwDatabase& db)
     , ui(new Ui::CurrencyWindow)
 {
     ui->setupUi(this);
+
+    CurrencyModel* mdlCurr = new CurrencyModel(this, db);
+    ui->tvCurrencies->setModel(mdlCurr);
+    if (!mdlCurr->isValid())
+        QMessageBox::critical(0, S_ERROR, mdlCurr->lastError());
+    ui->tvCurrencies->horizontalHeader()->setStretchLastSection(true);
+    ui->tvCurrencies->resizeColumnsToContents();
+
     CurrencyRateModel* mdlRate = new CurrencyRateModel(this, db);
     ui->tvRates->setModel(mdlRate);
     if (!mdlRate->isValid())
         QMessageBox::critical(0, S_ERROR, mdlRate->lastError());
+    ui->tvRates->horizontalHeader()->setStretchLastSection(true);
+    ui->tvRates->resizeColumnsToContents();
 }
 
 CurrencyWindow::~CurrencyWindow()

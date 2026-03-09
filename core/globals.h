@@ -63,6 +63,9 @@
 #define SortStringRole Qt::UserRole
 // Model common column names
 #define S_COL_DATE QObject::tr("Date")
+#define S_COL_ORDER_NUM QObject::tr("#")
+#define S_COL_NAME QObject::tr("Name")
+#define S_COL_SHORT_NAME QObject::tr("Sh.name")
 #define S_COL_CATEGORY QObject::tr("Category")
 #define S_COL_SUBCATEGORY QObject::tr("Subcategory")
 #define S_COL_QUANTITY QObject::tr("Qty.")

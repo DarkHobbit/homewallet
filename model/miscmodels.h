@@ -26,6 +26,11 @@ protected:
     QString _error;
 };
 
+class CurrencyModel: public SimpleQueryModel {
+public:
+    CurrencyModel(QObject* parent, HwDatabase& db);
+};
+
 class CurrencyRateModel: public SimpleQueryModel {
 public:
     CurrencyRateModel(QObject* parent, HwDatabase& db);

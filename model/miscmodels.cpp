@@ -28,6 +28,35 @@ QString SimpleQueryModel::lastError()
     return _error;
 }
 
+#define SQL_CURR \
+"select" \
+"   seq_order, full_name, short_name, abbr, code," \
+"   case is_main when 1 then '✔' else '' end as main," \
+"   case is_unit when 1 then '✔' else '' end as unit," \
+"   descr" \
+" from hw_currency order by seq_order"
+
+CurrencyModel::CurrencyModel(QObject *parent, HwDatabase &db)
+    :SimpleQueryModel(parent)
+{
+    QSqlQuery q(db.sqlDbRef());
+    QString sql = SQL_CURR;
+    if (!q.prepare(sql)) {
+        _error = q.lastError().text();
+        return;
+    }
+    q.exec();
+    setQuery(q);
+    setHeaderData(0, Qt::Horizontal, S_COL_ORDER_NUM);
+    setHeaderData(1, Qt::Horizontal, S_COL_NAME);
+    setHeaderData(2, Qt::Horizontal, S_COL_SHORT_NAME);
+    setHeaderData(3, Qt::Horizontal, QObject::tr("Abbr."));
+    setHeaderData(4, Qt::Horizontal, QObject::tr("Code"));
+    setHeaderData(5, Qt::Horizontal, QObject::tr("Mn."));
+    setHeaderData(6, Qt::Horizontal, S_COL_UNIT);
+    setHeaderData(7, Qt::Horizontal, S_COL_DESCRIPTION);
+}
+
 #define SQL_RATE_PROTO \
 "select strftime('%d.%m.%Y', d.ch_date), r2.rate as rate2, r3.rate as rate3, r4.rate as rate4" \
 " from" \
@@ -114,4 +143,3 @@ CurrencyRateModel::CurrencyRateModel(QObject* parent, HwDatabase &db)
     for (int i=1; i<columnCount(); i++)
         setHeaderData(i, Qt::Horizontal, headers[i-1]);
 }
-
