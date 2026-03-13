@@ -145,45 +145,32 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
                     break;
                 case 'I': // integer
                     values << QVariant(a.toInt(&ok));
-                    if (!ok) {
-                        _fatalError = S_ERR_INT_IMP.arg(a);
-                        return false;
-                    }
+                    CUST_CHK(ok, S_ERR_INT_IMP.arg(a))
                     break;
                 case 'F': // float
                     values << QVariant(a.toDouble(&ok));
-                    if (!ok) {
-                        _fatalError = S_ERR_FLOAT_IMP.arg(a);
-                        return false;
-                    }
+                    CUST_CHK(ok,  S_ERR_FLOAT_IMP.arg(a))
                     break;
                 case 'D': { // ISO datetime
                     QDateTime dt = QDateTime::fromString(a, Qt::ISODate);
-                    if (!dt.isValid()) {
-                        _fatalError = S_ERR_DATE_IMP.arg(a);
-                        return false;
-                    }
+                    CUST_CHK(dt.isValid(), S_ERR_DATE_IMP.arg(a))
                     values << QVariant(dt);
                     break;
                 }
                 case 'B': { // bool: yes/no to 0/1
                     int iBoolVal = 0;
                     if (a.toLower()=="yes")
-                        iBoolVal = 1;
-                    else if (a.toLower()!="no") {
-                        _fatalError = S_ERR_ENUM_IMP.arg(a).arg("yes, no"); // Don't translate yes, no!
-                        return false;
-                    }
+                        iBoolVal = 1; // Don't translate yes, no!
+                    else
+                        CUST_CHK(a.toLower()=="no", S_ERR_ENUM_IMP.arg(a).arg("yes, no"))
                     values << QVariant(iBoolVal);
                     break;
                 }
                 case 'R': // ID reference
                 case 'Z': // ID reference with additional uid
                 {
-                    if (!refAttrs.keys().contains(attrName)) {
-                        _fatalError = QObject::tr("No ref to attr %1").arg(attrName);
-                        return false;
-                    }
+                    CUST_CHK(refAttrs.keys().contains(attrName),
+                        QObject::tr("No ref to attr %1").arg(attrName))
                     QString refName = a;
                     int sepPos = a.indexOf("::");
                     if (t=='Z') {
@@ -196,11 +183,7 @@ bool XmlFile::importDbRecordsGroup(HwDatabase &db,
                         refName = a.left(sepPos);
                     }
                     const HwDatabase::DictColl& coll = refAttrs[attrName];
-                    if (!coll.keys().contains(refName)) {
-                        // TODO pass message through coll
-                        _fatalError = QObject::tr("Unknown ref: %1").arg(refName);
-                        return false;
-                    }
+                    CUST_CHK(coll.keys().contains(refName), QObject::tr("Unknown ref: %1").arg(refName))  // TODO pass message through coll
                     values << QVariant(coll[refName]);
                     if (t=='Z') {//uid
                         values << a.mid(sepPos+2);
@@ -347,15 +330,9 @@ bool XmlFile::readPercentVal(const QDomElement &el, const QString &attrName, dou
     bool ok;
     QString sPercRate = el.attribute(attrName);
     int percPos = sPercRate.indexOf("%");
-    if (percPos==-1) {
-        _fatalError = errorMessageTemplate.arg(sPercRate);
-        return false;
-    }
+    CUST_CHK(percPos!=-1, errorMessageTemplate.arg(sPercRate))
     res = prepareDoubleImport(sPercRate.left(percPos)).toDouble(&ok);
-    if (!ok) {
-        _fatalError = errorMessageTemplate.arg(sPercRate);
-        return false;
-    }
+    CUST_CHK(ok, errorMessageTemplate.arg(sPercRate))
     tail = sPercRate.mid(percPos+1).trimmed();
     return ok;
 }

@@ -49,15 +49,9 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
     // TODO default account either from DB, or from lua script
 
     candidates.idCurDefault = db.currencyIdByAbbr(candidates.curDefault);
-    if (candidates.idCurDefault == -1) {
-        _fatalError = S_ERR_CUR_NOT_FOUND.arg(candidates.curDefault);
-        return false;
-    }
+    CUST_CHK(candidates.idCurDefault!=-1, S_ERR_CUR_NOT_FOUND.arg(candidates.curDefault))
     candidates.idAccDefault = db.accountId(candidates.accDefault);
-    if (candidates.idAccDefault == -1) {
-        _fatalError = S_ERR_ACC_NOT_FOUND.arg(candidates.accDefault);
-        return false;
-    }
+    CUST_CHK(candidates.idAccDefault!=-1, S_ERR_ACC_NOT_FOUND.arg(candidates.accDefault))
     // Dictionaries
     // - general: account, currency, unit
     candidates.collAcc.clear();

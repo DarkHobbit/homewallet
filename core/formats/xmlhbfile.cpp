@@ -156,15 +156,9 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
     if (!hb.isValid())
         return false;
     // Was detected?
-    if (_fileSubType==Unknown) {
-        _fatalError = QObject::tr("Unknown Home Bookkeeping file subtype.\nContact author.");
-        return false;
-    }
-    if (isAmbiguous()) {
-        // Internal error, will not appear if caller class is correct
-        _fatalError = QObject::tr("Ambiguous Home Bookkeeping file subtype wasn't resolved.\nContact author.");
-        return false;
-    }
+    CUST_CHK(_fileSubType!=Unknown, QObject::tr("Unknown Home Bookkeeping file subtype.\nContact author."))
+    // Internal error, will not appear if caller class is correct
+    CUST_CHK(!isAmbiguous(), QObject::tr("Ambiguous Home Bookkeeping file subtype wasn't resolved.\nContact author."))
     // Read XML
     if (!readFromFile(path))
         return false;
@@ -259,10 +253,7 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             QDateTime dt;
             if (!readDateVal(elRow, "MyDate", dt, "yyyyMMdd", S_ERR_DATE_IMP))
                 return false;
-            if (!accs.keys().contains(accName)) {
-                _fatalError = S_ERR_ACC_NOT_FOUND.arg(accName) + "\n" + S_ERR_ACC_DET_SEQ;
-                return false;
-            }
+            CUST_CHK(accs.keys().contains(accName), S_ERR_ACC_NOT_FOUND.arg(accName) + "\n" + S_ERR_ACC_DET_SEQ)
             if (minDates.contains(accName)) {
                 if (dt<minDates[accName])
                     minDates[accName] = dt;
@@ -302,14 +293,8 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             HwDatabase::MultiCurrByChar money;
             if (!importMoneyGroup(money, "Money", elRow, true))
                 return false;
-            if (money.count()==0) {
-                _fatalError = S_ERR_ACC_EMPTY_SUM.arg(dt.toString());
-                return false;
-            }
-            else if (money.count()>1) {
-                _fatalError = S_ERR_MULTI_ACC_NOT_SUPPORTED.arg(dt.toString()).arg(money.count());
-                return false;
-            }
+            CUST_CHK(money.count()>0, S_ERR_ACC_EMPTY_SUM.arg(dt.toString()))
+            CUST_CHK(money.count()==1, S_ERR_MULTI_ACC_NOT_SUPPORTED.arg(dt.toString()).arg(money.count()))
             QString moneyChar = money.keys().first();
             int idCur = hb.importCurrencyByChar(moneyChar, db);
             if (idCur==-1)
@@ -378,10 +363,7 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
             // Money
             QString moneyChar;
             QString val = elRow.attribute("MoneyStr", moneyChar);
-            if (val.isEmpty()) {
-                _fatalError = S_ERR_ATTR_NOT_FOUND.arg("MoneyStr").arg(elRow.lineNumber());
-                return false;
-            }
+            CUST_CHK(!val.isEmpty(), S_ERR_ATTR_NOT_FOUND.arg("MoneyStr").arg(elRow.lineNumber()))
             int sum = hb.importOneMoneyAttr(val, moneyChar);
             if (!_fatalError.isEmpty())
                 return false;
@@ -514,10 +496,7 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
               ||!importMoneyGroup(moneyBack, "MoneyBack", elRow, true, false)
               ||!importMoneyGroup(moneyRemaining, "Total", elRow, true, false))
                 return false;
-            if (money.count()==0) {
-                _fatalError = S_ERR_ACC_EMPTY_SUM.arg(dtOp.toString());
-                return false;
-            }
+            CUST_CHK(money.count()>0, S_ERR_ACC_EMPTY_SUM.arg(dtOp.toString()))
             if (money.count()>1 || moneyBack.count()>1 || moneyRemaining.count()>1) {
                 _fatalError = S_ERR_MULTI_ACC_NOT_SUPPORTED.arg(dtOp.toString()).arg(42);
                 return false;
@@ -673,19 +652,13 @@ bool XmlHbFile::prepareImportValues(const QString& hbkImpValPath)
     int err_line, err_col;
     bool res = hivDoc.setContent(&hivF, &err_msg, &err_line, &err_col);
     hivF.close();
-    if (!res) {
-        _fatalError = S_ERR_READ_CONTENT.arg(hbkImpValPath).arg(err_msg).arg(err_line).arg(err_col);
-        return false;
-    }
+    CUST_CHK(res, S_ERR_READ_CONTENT.arg(hbkImpValPath).arg(err_msg).arg(err_line).arg(err_col))
     if (hivDoc.documentElement().nodeName()!="hbk_import_values") {
         _fatalError = S_ERR_UNK_ELEM.arg(hivDoc.documentElement().nodeName());
         return false;
     }
     QDomElement elDebtFlags = hivDoc.documentElement().firstChildElement("debt_status_flags");
-    if (elDebtFlags.isNull()) {
-        _fatalError = S_ELEM_MISSING.arg("debt_status_flags");
-        return false;
-    }
+    CUST_CHK(!elDebtFlags.isNull(), S_ELEM_MISSING.arg("debt_status_flags"))
     debtClosedValues.clear();
     debtNotClosedValues.clear();
     for (QDomElement elF=elDebtFlags.firstChildElement("dsf"); !elF.isNull(); elF=elF.nextSiblingElement("dsf")) {
@@ -693,25 +666,16 @@ bool XmlHbFile::prepareImportValues(const QString& hbkImpValPath)
         debtNotClosedValues << elF.attribute("not_closed_val");
     }
     QDomElement elPercFlags = hivDoc.documentElement().firstChildElement("year_percent_flags");
-    if (elPercFlags.isNull()) {
-        _fatalError = S_ELEM_MISSING.arg("year_percent_flags");
-        return false;
-    }
+    CUST_CHK(!elPercFlags.isNull(), S_ELEM_MISSING.arg("year_percent_flags"))
     yearPercentValues.clear();
     for (QDomElement elP=elPercFlags.firstChildElement("yperc"); !elP.isNull(); elP=elP.nextSiblingElement("yperc"))
         yearPercentValues << elP.attribute("val");
     QDomElement elYearPrdFlags = hivDoc.documentElement().firstChildElement("year_period_flags");
-    if (elYearPrdFlags.isNull()) {
-        _fatalError = S_ELEM_MISSING.arg("year_period_flags");
-        return false;
-    }
+    CUST_CHK(!elYearPrdFlags.isNull(), S_ELEM_MISSING.arg("year_period_flags"))
     for (QDomElement elP=elYearPrdFlags.firstChildElement("yprd"); !elP.isNull(); elP=elP.nextSiblingElement("yprd"))
         yearPeriodValues << elP.attribute("val");
     QDomElement elMonthPrdFlags = hivDoc.documentElement().firstChildElement("month_period_flags");
-    if (elMonthPrdFlags.isNull()) {
-        _fatalError = S_ELEM_MISSING.arg("month_period_flags");
-        return false;
-    }
+    CUST_CHK(!elMonthPrdFlags.isNull(), S_ELEM_MISSING.arg("month_period_flags"))
     for (QDomElement elP=elMonthPrdFlags.firstChildElement("mprd"); !elP.isNull(); elP=elP.nextSiblingElement("mprd"))
         monthPeriodValues << elP.attribute("val");
     return true;
