@@ -39,6 +39,9 @@
 #define S_SEEK_ERR QObject::tr("Can't seek to %1 in file\n%2")
 #define S_REC_NOT_SEL QObject::tr("Record not selected")
 #define S_ONLY_ONE_REC QObject::tr("Group operation not implemented, select one record")
+#define S_REC_NOT_REMOVABLE QObject::tr("Can't remove records from this table")
+#define S_PREP_ERR QObject::tr("Prepare error: %1")
+#define S_EXEC_ERR QObject::tr("Execute error: %1")
 #define S_INTERNAL_ERR QObject::tr("Internal error")
 #define S_REMOVE_CONFIRM QObject::tr("Do you really want to delete the selected items?")
 // Common import/export messages

@@ -58,7 +58,7 @@ protected:
     QStringList filters;
     QDate dtFrom, dtTo;
     virtual void makeFilter();
-    virtual bool removeById(int id); // dafault implementation,
+    virtual bool removeById(int id); // default implementation
     void updateData(const QString& sql, bool insertWhere);
     static QString lowUnitFunction(const QString& fieldName, const QString& currFieldName = "");
 signals:

@@ -73,15 +73,10 @@ private slots:
     void on_btn_Add_clicked();
     void on_btn_Edit_clicked();
     void on_btn_Delete_clicked();
-
     void on_actionTechInfo_triggered();
-
     void on_actionEdit_triggered();
-
     void on_actionDelete_triggered();
-
     void on_actionShowRepaymentHistory_triggered();
-
     void on_actionCurrencies_triggered();
 
 private:

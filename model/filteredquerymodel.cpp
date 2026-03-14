@@ -263,17 +263,17 @@ void FilteredQueryModel::makeFilter()
 bool FilteredQueryModel::removeById(int id)
 {
     if (deleteQuery.isEmpty()) {
-        emit modelError(tr("Can't remove records from this table"));
+        emit modelError(S_REC_NOT_REMOVABLE);
         return false;
     }
     QSqlQuery q;
     if (!q.prepare(deleteQuery)) {
-        emit modelError(QString("Deletion prepare error: ")+q.lastError().text());
+        emit modelError(S_PREP_ERR.arg(q.lastError().text()));
         return false;
     }
     q.bindValue(":id", id);
     if (!q.exec()) {
-        emit modelError(QString("Deletion execute error: ")+q.lastError().text());
+        emit modelError(S_EXEC_ERR.arg(q.lastError().text()));
         return false;
     }
     return true;

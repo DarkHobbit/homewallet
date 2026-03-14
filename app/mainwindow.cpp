@@ -712,7 +712,6 @@ void MainWindow::on_btn_Delete_clicked()
     }
 }
 
-
 bool MainWindow::checkSelection(bool errorIfNoSelected, bool onlyOneRowAllowed)
 {
     QModelIndexList proxySelection = activeView->selectionModel()->selectedRows();
@@ -733,7 +732,6 @@ bool MainWindow::checkSelection(bool errorIfNoSelected, bool onlyOneRowAllowed)
     return true;
 }
 
-
 void MainWindow::on_actionTechInfo_triggered()
 {
     activeTab();
@@ -741,12 +739,10 @@ void MainWindow::on_actionTechInfo_triggered()
     QMessageBox::information(0, S_INFORM, activeModel->techInfo(selection.first()));
 }
 
-
 void MainWindow::on_actionEdit_triggered()
 {
     on_btn_Edit_clicked();
 }
-
 
 void MainWindow::on_actionDelete_triggered()
 {
@@ -779,10 +775,8 @@ void MainWindow::on_actionShowRepaymentHistory_triggered()
     wRep->show();
 }
 
-
 void MainWindow::on_actionCurrencies_triggered()
 {
     CurrencyWindow* w = new CurrencyWindow(0, db);
     w->show();
 }
-
