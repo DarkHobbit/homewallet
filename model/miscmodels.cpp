@@ -18,6 +18,19 @@ SimpleQueryModel::SimpleQueryModel(QObject *parent)
     :QSqlQueryModel(parent), _error("")
 {}
 
+int SimpleQueryModel::columnCount(const QModelIndex &parent) const
+{
+    return QSqlQueryModel::columnCount(parent)-1;
+}
+
+QVariant SimpleQueryModel::data(const QModelIndex &index, int role) const
+{
+    if (index.column()>=0 && index.column()<columnCount())
+        return QSqlQueryModel::data(this->index(index.row(), index.column()+1), role);
+    else
+        return QSqlQueryModel::data(index, role);
+}
+
 bool SimpleQueryModel::isValid()
 {
     return _error.isEmpty();
@@ -30,7 +43,7 @@ QString SimpleQueryModel::lastError()
 
 #define SQL_CURR \
 "select" \
-"   seq_order, full_name, short_name, abbr, code," \
+"   id, seq_order, full_name, short_name, abbr, code," \
 "   case is_main when 1 then '✔' else '' end as main," \
 "   case is_unit when 1 then '✔' else '' end as unit," \
 "   descr" \
@@ -67,7 +80,7 @@ CurrencyModel::CurrencyModel(QObject *parent, HwDatabase &db)
 " order by d.ch_date"
 
 #define SQL_RATE \
-    "select strftime('%d.%m.%Y', d.ch_date), %1" \
+    "select d.id, strftime('%d.%m.%Y', d.ch_date), %1" \
     " from" \
     " hw_curr_rate_session d" \
     " %2" \

@@ -20,6 +20,8 @@
 class SimpleQueryModel: public QSqlQueryModel {
 public:
     SimpleQueryModel(QObject* parent);
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role) const;
     bool isValid();
     QString lastError();
 protected:
