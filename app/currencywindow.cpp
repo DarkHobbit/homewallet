@@ -27,14 +27,12 @@ CurrencyWindow::CurrencyWindow(QWidget *parent, HwDatabase& db)
     ui->tvCurrencies->setModel(mdlCurr);
     if (!mdlCurr->isValid())
         QMessageBox::critical(0, S_ERROR, mdlCurr->lastError());
-    ui->tvCurrencies->horizontalHeader()->setStretchLastSection(true);
     ui->tvCurrencies->resizeColumnsToContents();
 
     CurrencyRateModel* mdlRate = new CurrencyRateModel(this, db);
     ui->tvRates->setModel(mdlRate);
     if (!mdlRate->isValid())
         QMessageBox::critical(0, S_ERROR, mdlRate->lastError());
-    ui->tvRates->horizontalHeader()->setStretchLastSection(true);
     ui->tvRates->resizeColumnsToContents();
 }
 
