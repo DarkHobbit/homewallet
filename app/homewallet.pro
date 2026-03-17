@@ -11,8 +11,10 @@
 
 QT       += core gui
 
-# For older GCCs, such as gcc 4.7.2 (also work on modern gcc, don't work on Mac with clang 7.0.2 aka 700.1.81)
-# QMAKE_CXXFLAGS += -std=c++0x -fpermissive
+contains(QMAKE_CXX, g++) {
+    # For older GCCs, such as gcc 4.7.2 (also work on modern gcc, don't work on Mac with clang 7.0.2 aka 700.1.81)
+    QMAKE_CXXFLAGS += -std=c++0x -fpermissive
+}
 
 include(../core/core.pri)
 include(../model/model.pri)
