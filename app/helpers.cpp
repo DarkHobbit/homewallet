@@ -107,13 +107,14 @@ bool SelecTables::checkSelection(bool errorIfNoSelected, bool onlyOneRowAllowed)
     return true;
 }
 
-void SelecTables::prepareModel(QSqlQueryModel *source, QSortFilterProxyModel *proxy, QTableView *view, const QString &nameForDebug)
+void SelecTables::prepareModel(QSqlQueryModel *source, QSortFilterProxyModel *proxy, QTableView *view, const QString &nameForDebug, bool customSorting)
 {
     source->setObjectName(QString("mdl")+nameForDebug);
     proxy->setSourceModel(source);
     proxy->setFilterKeyColumn(-1);
     proxy->setFilterCaseSensitivity(Qt::CaseInsensitive); // Driver == driver
-    proxy->setSortRole(SortStringRole);
+    if (customSorting)
+        proxy->setSortRole(SortStringRole);
     proxy->setObjectName(QString("proxy")+nameForDebug);
     view->setModel(proxy);
 //    view->horizontalHeader()->setResizeContentsPrecision(64);
