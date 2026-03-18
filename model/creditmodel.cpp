@@ -136,12 +136,12 @@ bool CreditModel::removeById(int id)
     QSqlQuery q;
     QString sql = "delete from hw_repayment where id_crd=:id_crd";
     if (!q.prepare(sql)) {
-        emit modelError(QString("Children deletion prepare error: ")+q.lastError().text());
+        emit modelError(S_PREP_ERR.arg(q.lastError().text()));
         return false;
     }
     q.bindValue(":id_crd", id);
     if (!q.exec()) {
-        emit modelError(QString("Children deletion execute error: ")+q.lastError().text());
+        emit modelError(S_EXEC_ERR.arg(q.lastError().text()));
         return false;
     }
     // At second, remove credit record

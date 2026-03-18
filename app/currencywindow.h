@@ -14,8 +14,10 @@
 #define CURRENCYWINDOW_H
 
 #include <QWidget>
+
 #include "helpers.h"
 #include "hwdatabase.h"
+#include "miscmodels.h"
 
 namespace Ui {
 class CurrencyWindow;
@@ -32,8 +34,17 @@ public:
 protected:
     void changeEvent(QEvent *e);
 
+private slots:
+    void on_btn_Delete_clicked();
+
 private:
+    CurrencyModel* mdlCurr;
+    CurrencyRateModel* mdlRate;
+    // Potentially unsafe pointers (covered by activeTab() in all changed)
+    SimpleQueryModel* activeModel;
+    // End of potentially unsafe pointers
     Ui::CurrencyWindow *ui;
+    void activeTab();
 };
 
 #endif // CURRENCYWINDOW_H

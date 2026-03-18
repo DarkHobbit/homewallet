@@ -101,6 +101,10 @@ bool SelecTables::checkSelection(bool errorIfNoSelected, bool onlyOneRowAllowed)
     }
     // Map indices from proxy to source
     QSortFilterProxyModel* selectedProxy = dynamic_cast<QSortFilterProxyModel*>(activeView->model());
+    if (!selectedProxy) {
+        QMessageBox::critical(0, S_ERROR, S_INTERNAL_ERR);
+        return false;
+    }
     selection.clear();
     foreach(QModelIndex index, proxySelection)
         selection << selectedProxy->mapToSource(index);

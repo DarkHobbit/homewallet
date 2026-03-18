@@ -22,10 +22,14 @@ public:
     SimpleQueryModel(QObject* parent);
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
+    bool update();
+    bool removeAnyRows(QModelIndexList& indices);
     bool isValid();
     QString lastError();
 protected:
     QString _error;
+    QString deleteQuery;
+    virtual bool removeById(int id); // default implementation
 };
 
 class CurrencyModel: public SimpleQueryModel {
@@ -36,6 +40,8 @@ public:
 class CurrencyRateModel: public SimpleQueryModel {
 public:
     CurrencyRateModel(QObject* parent, HwDatabase& db);
+protected:
+    virtual bool removeById(int id);
 };
 
 #endif // MISCMODELS_H

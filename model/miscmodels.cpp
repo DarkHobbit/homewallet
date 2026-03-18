@@ -31,6 +31,29 @@ QVariant SimpleQueryModel::data(const QModelIndex &index, int role) const
         return QSqlQueryModel::data(index, role);
 }
 
+bool SimpleQueryModel::update()
+{
+    QSqlQuery q = query();
+    if (!q.exec())
+        return false;
+    setQuery(q);
+    return true;
+}
+
+bool SimpleQueryModel::removeAnyRows(QModelIndexList &indices)
+{
+    std::sort(indices.begin(), indices.end());
+    // foreach not usable here - reverse order needed
+    beginRemoveRows (QModelIndex(), 0, indices.count()-1);
+    for (int i=indices.count()-1; i>=0; i--) {
+        int id = QSqlQueryModel::data(index(indices[i].row(), 0), Qt::DisplayRole).toInt();
+        if (!removeById(id))
+            return false;
+    }
+    endRemoveRows();
+    return true;
+}
+
 bool SimpleQueryModel::isValid()
 {
     return _error.isEmpty();
@@ -39,6 +62,25 @@ bool SimpleQueryModel::isValid()
 QString SimpleQueryModel::lastError()
 {
     return _error;
+}
+
+bool SimpleQueryModel::removeById(int id)
+{
+    if (deleteQuery.isEmpty()) {
+        _error = S_REC_NOT_REMOVABLE;
+        return false;
+    }
+    QSqlQuery q;
+    if (!q.prepare(deleteQuery)) {
+        _error = S_PREP_ERR.arg(q.lastError().text());
+        return false;
+    }
+    q.bindValue(":id", id);
+    if (!q.exec()) {
+        _error = S_EXEC_ERR.arg(q.lastError().text());
+        return false;
+    }
+    return true;
 }
 
 #define SQL_CURR \
@@ -68,6 +110,7 @@ CurrencyModel::CurrencyModel(QObject *parent, HwDatabase &db)
     setHeaderData(5, Qt::Horizontal, QObject::tr("Mn."));
     setHeaderData(6, Qt::Horizontal, S_COL_UNIT);
     setHeaderData(7, Qt::Horizontal, S_COL_DESCRIPTION);
+    deleteQuery = "delete from hw_currency where id=:id";
 }
 
 #define SQL_RATE_PROTO \
@@ -155,4 +198,23 @@ CurrencyRateModel::CurrencyRateModel(QObject* parent, HwDatabase &db)
     setHeaderData(0, Qt::Horizontal, S_COL_DATE);
     for (int i=1; i<columnCount(); i++)
         setHeaderData(i, Qt::Horizontal, headers[i-1]);
+    deleteQuery = "delete from hw_curr_rate_session where id=:id";
+}
+
+bool CurrencyRateModel::removeById(int id)
+{
+    // At first, remove rate records
+    QSqlQuery q;
+    QString sql = "delete from hw_curr_rate where id_css=:id_css";
+    if (!q.prepare(sql)) {
+        _error = S_PREP_ERR.arg(q.lastError().text());
+        return false;
+    }
+    q.bindValue(":id_css", id);
+    if (!q.exec()) {
+        _error = S_EXEC_ERR.arg(q.lastError().text());
+        return false;
+    }
+    // At second, remove session record
+    return SimpleQueryModel::removeById(id);
 }

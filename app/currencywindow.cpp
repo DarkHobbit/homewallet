@@ -14,7 +14,6 @@
 
 #include "currencywindow.h"
 #include "globals.h"
-#include "miscmodels.h"
 #include "ui_currencywindow.h"
 
 CurrencyWindow::CurrencyWindow(QWidget *parent, HwDatabase& db)
@@ -22,7 +21,7 @@ CurrencyWindow::CurrencyWindow(QWidget *parent, HwDatabase& db)
     , ui(new Ui::CurrencyWindow)
 {
     ui->setupUi(this);
-    CurrencyModel* mdlCurr = new CurrencyModel(this, db);
+    mdlCurr = new CurrencyModel(this, db);
     QSortFilterProxyModel* proxyCurr = new QSortFilterProxyModel(this);
     prepareModel(mdlCurr, proxyCurr, ui->tvCurrencies, "Curr", false);
     if (!mdlCurr->isValid())
@@ -30,10 +29,9 @@ CurrencyWindow::CurrencyWindow(QWidget *parent, HwDatabase& db)
     ui->tvCurrencies->resizeColumnsToContents();
     updateTableConfig(ui->tvCurrencies);
 
-    CurrencyRateModel* mdlRate = new CurrencyRateModel(this, db);
+    mdlRate = new CurrencyRateModel(this, db);
     QSortFilterProxyModel* proxyRate = new QSortFilterProxyModel(this);
-    prepareModel(mdlRate, proxyRate, ui->tvRates, "Rate", false);
-    ui->tvRates->setModel(mdlRate);
+    prepareModel(mdlRate, proxyRate, ui->tvRates, "Rate", true); // TODO false
     if (!mdlRate->isValid())
         QMessageBox::critical(0, S_ERROR, mdlRate->lastError());
     ui->tvRates->resizeColumnsToContents();
@@ -56,3 +54,31 @@ void CurrencyWindow::changeEvent(QEvent *e)
         break;
     }
 }
+
+void CurrencyWindow::activeTab()
+{
+    if (ui->tabWidget->currentWidget()==ui->tabCurrencies) {
+        activeView = ui->tvCurrencies;
+        activeModel = mdlCurr;
+    }
+    else {
+        activeView = ui->tvRates;
+        activeModel = mdlRate;
+    }
+}
+
+void CurrencyWindow::on_btn_Delete_clicked()
+{
+    activeTab();
+    if (!checkSelection()) return;
+    if (QMessageBox::question(0, S_CONFIRM, S_REMOVE_CONFIRM,
+                              QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
+    {
+        if (activeModel->removeAnyRows(selection)) {
+            mdlCurr->update();
+            mdlRate->update();
+            // TODO restore prev position from removes
+        }
+    }
+}
+
