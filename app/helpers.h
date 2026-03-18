@@ -14,8 +14,11 @@
 #ifndef HELPERS_H
 #define HELPERS_H
 
+#include <QAbstractItemModel>
 #include <QComboBox>
 #include <QListWidget>
+#include <QSortFilterProxyModel>
+#include <QSqlQueryModel>
 #include <QStringList>
 #include <QTableView>
 
@@ -39,5 +42,17 @@ void setSimilarComboText(QComboBox* combo, const QString& pattern);
 // Set color/font for each table view
 void updateTableConfig(QTableView* table);
 void updateOneView(QTableView* view, bool isDatabaseView);
+
+// Second base class for widgets with QTableView-s and proxy models
+// Can be used with QMainWindow, QWidget, etc.
+class SelecTables {
+protected:
+    // Potentially unsafe pointers (covered by activeTab() in all changed)
+    QTableView* activeView;
+    // End of potentially unsafe pointers
+    QModelIndexList selection;
+    void prepareModel(QSqlQueryModel* source, QSortFilterProxyModel *proxy, QTableView* view, const QString& nameForDebug);
+    bool checkSelection(bool errorIfNoSelected = true, bool onlyOneRowAllowed = false);
+};
 
 #endif // HELPERS_H

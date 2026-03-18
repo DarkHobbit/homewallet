@@ -25,6 +25,7 @@
 #include "currconvmodel.h"
 #include "filteredquerymodel.h"
 #include "expensemodel.h"
+#include "helpers.h"
 #include "incomemodel.h"
 #include "transfermodel.h"
 
@@ -32,7 +33,7 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, public SelecTables
 {
     Q_OBJECT
 
@@ -91,10 +92,8 @@ private:
         *proxyLend, *proxyBorrow;
     FQMlist dbModels;
     // Potentially unsafe pointers (covered by activeTab() in all changed)
-    QTableView* activeView;
     FilteredQueryModel* activeModel;
     // End of potentially unsafe pointers
-    QModelIndexList selection;
 
     QLabel *lbCounts;
     enum ActiveTab {
@@ -111,7 +110,6 @@ private:
     void updateConfig();
     void updateTabsAndFilters();
     ActiveTab activeTab();
-    bool checkSelection(bool errorIfNoSelected = true, bool onlyOneRowAllowed = false);
     void processImpExErrors(FileFormat* f, bool res, const QString& path);
     void processImpExSuccess(FileFormat* f);
 };

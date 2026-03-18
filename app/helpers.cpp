@@ -13,6 +13,7 @@
 
 #include <QFont>
 #include <QHeaderView>
+#include <QMessageBox>
 
 #include "globals.h"
 #include "helpers.h"
@@ -84,4 +85,38 @@ void setSimilarComboText(QComboBox *combo, const QString &pattern)
         }
     }
     combo->setCurrentIndex(combo->count()-1);
+}
+
+bool SelecTables::checkSelection(bool errorIfNoSelected, bool onlyOneRowAllowed)
+{
+    QModelIndexList proxySelection = activeView->selectionModel()->selectedRows();
+    if (proxySelection.count()==0) {
+        if (errorIfNoSelected)
+            QMessageBox::critical(0, S_ERROR, S_REC_NOT_SEL);
+        return false;
+    }
+    if (onlyOneRowAllowed && (proxySelection.count()>1)) {
+        QMessageBox::critical(0, S_ERROR, S_ONLY_ONE_REC);
+        return false;
+    }
+    // Map indices from proxy to source
+    QSortFilterProxyModel* selectedProxy = dynamic_cast<QSortFilterProxyModel*>(activeView->model());
+    selection.clear();
+    foreach(QModelIndex index, proxySelection)
+        selection << selectedProxy->mapToSource(index);
+    return true;
+}
+
+void SelecTables::prepareModel(QSqlQueryModel *source, QSortFilterProxyModel *proxy, QTableView *view, const QString &nameForDebug)
+{
+    source->setObjectName(QString("mdl")+nameForDebug);
+    proxy->setSourceModel(source);
+    proxy->setFilterKeyColumn(-1);
+    proxy->setFilterCaseSensitivity(Qt::CaseInsensitive); // Driver == driver
+    proxy->setSortRole(SortStringRole);
+    proxy->setObjectName(QString("proxy")+nameForDebug);
+    view->setModel(proxy);
+//    view->horizontalHeader()->setResizeContentsPrecision(64);
+    view->horizontalHeader()->setStretchLastSection(true);
+    view->setObjectName(QString("tv")+nameForDebug);
 }
