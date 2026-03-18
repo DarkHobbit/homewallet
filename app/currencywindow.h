@@ -14,13 +14,14 @@
 #define CURRENCYWINDOW_H
 
 #include <QWidget>
+#include "helpers.h"
 #include "hwdatabase.h"
 
 namespace Ui {
 class CurrencyWindow;
 }
 
-class CurrencyWindow : public QWidget
+class CurrencyWindow : public QWidget, public SelecTables
 {
     Q_OBJECT
 
