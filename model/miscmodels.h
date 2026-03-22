@@ -14,22 +14,21 @@
 #ifndef MISCMODELS_H
 #define MISCMODELS_H
 
-#include <QSqlQueryModel>
+#include "filteredquerymodel.h"
 #include "hwdatabase.h"
 
-class SimpleQueryModel: public QSqlQueryModel {
+class SimpleQueryModel: public FilteredQueryModel {
 public:
     SimpleQueryModel(QObject* parent);
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role) const;
-    bool update();
-    bool removeAnyRows(QModelIndexList& indices);
     bool isValid();
     QString lastError();
+    virtual void setDefaultVisibleColumns();
+    virtual void update();
+    virtual QString localizedName();
 protected:
+    QString mainQuery;
     QString _error;
-    QString deleteQuery;
-    virtual bool removeById(int id); // default implementation
+    virtual void reportError(const QString& msg);
 };
 
 class CurrencyModel: public SimpleQueryModel {

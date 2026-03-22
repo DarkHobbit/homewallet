@@ -21,21 +21,26 @@ CurrencyWindow::CurrencyWindow(QWidget *parent, HwDatabase& db)
     , ui(new Ui::CurrencyWindow)
 {
     ui->setupUi(this);
+
     mdlCurr = new CurrencyModel(this, db);
     QSortFilterProxyModel* proxyCurr = new QSortFilterProxyModel(this);
-    prepareModel(mdlCurr, proxyCurr, ui->tvCurrencies, "Curr", false);
+    prepareModel(mdlCurr, proxyCurr, ui->tvCurrencies, "Curr", true);
+    mdlCurr->update();
     if (!mdlCurr->isValid())
         QMessageBox::critical(0, S_ERROR, mdlCurr->lastError());
     ui->tvCurrencies->resizeColumnsToContents();
     updateTableConfig(ui->tvCurrencies);
+    updateOneView(ui->tvCurrencies, true);
 
     mdlRate = new CurrencyRateModel(this, db);
     QSortFilterProxyModel* proxyRate = new QSortFilterProxyModel(this);
-    prepareModel(mdlRate, proxyRate, ui->tvRates, "Rate", true); // TODO false
+    prepareModel(mdlRate, proxyRate, ui->tvRates, "Rate", true);
+    mdlRate->update();
     if (!mdlRate->isValid())
         QMessageBox::critical(0, S_ERROR, mdlRate->lastError());
     ui->tvRates->resizeColumnsToContents();
     updateTableConfig(ui->tvRates);
+    updateOneView(ui->tvRates, true);
 }
 
 CurrencyWindow::~CurrencyWindow()

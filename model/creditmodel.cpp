@@ -110,7 +110,7 @@ QSqlQueryModel *CreditModel::createRepaymentModelForRecord(const QModelIndex &re
     // TODO если в lowUnitFunction отключен вывод валюты, подсовывать отдельный столбец
     QSqlQuery q;
     if (!q.prepare(sql)) {
-        emit modelError(q.lastError().text());
+        reportError(q.lastError().text());
         return 0;
     }
     q.exec();
@@ -136,12 +136,12 @@ bool CreditModel::removeById(int id)
     QSqlQuery q;
     QString sql = "delete from hw_repayment where id_crd=:id_crd";
     if (!q.prepare(sql)) {
-        emit modelError(S_PREP_ERR.arg(q.lastError().text()));
+        reportError(S_PREP_ERR.arg(q.lastError().text()));
         return false;
     }
     q.bindValue(":id_crd", id);
     if (!q.exec()) {
-        emit modelError(S_EXEC_ERR.arg(q.lastError().text()));
+        reportError(S_EXEC_ERR.arg(q.lastError().text()));
         return false;
     }
     // At second, remove credit record

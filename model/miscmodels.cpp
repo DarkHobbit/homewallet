@@ -15,44 +15,8 @@
 #include "miscmodels.h"
 
 SimpleQueryModel::SimpleQueryModel(QObject *parent)
-    :QSqlQueryModel(parent), _error("")
+    :FilteredQueryModel(parent), _error("")
 {}
-
-int SimpleQueryModel::columnCount(const QModelIndex &parent) const
-{
-    return QSqlQueryModel::columnCount(parent)-1;
-}
-
-QVariant SimpleQueryModel::data(const QModelIndex &index, int role) const
-{
-    if (index.column()>=0 && index.column()<columnCount())
-        return QSqlQueryModel::data(this->index(index.row(), index.column()+1), role);
-    else
-        return QSqlQueryModel::data(index, role);
-}
-
-bool SimpleQueryModel::update()
-{
-    QSqlQuery q = query();
-    if (!q.exec())
-        return false;
-    setQuery(q);
-    return true;
-}
-
-bool SimpleQueryModel::removeAnyRows(QModelIndexList &indices)
-{
-    std::sort(indices.begin(), indices.end());
-    // foreach not usable here - reverse order needed
-    beginRemoveRows (QModelIndex(), 0, indices.count()-1);
-    for (int i=indices.count()-1; i>=0; i--) {
-        int id = QSqlQueryModel::data(index(indices[i].row(), 0), Qt::DisplayRole).toInt();
-        if (!removeById(id))
-            return false;
-    }
-    endRemoveRows();
-    return true;
-}
 
 bool SimpleQueryModel::isValid()
 {
@@ -64,23 +28,26 @@ QString SimpleQueryModel::lastError()
     return _error;
 }
 
-bool SimpleQueryModel::removeById(int id)
+void SimpleQueryModel::setDefaultVisibleColumns()
 {
-    if (deleteQuery.isEmpty()) {
-        _error = S_REC_NOT_REMOVABLE;
-        return false;
-    }
-    QSqlQuery q;
-    if (!q.prepare(deleteQuery)) {
-        _error = S_PREP_ERR.arg(q.lastError().text());
-        return false;
-    }
-    q.bindValue(":id", id);
-    if (!q.exec()) {
-        _error = S_EXEC_ERR.arg(q.lastError().text());
-        return false;
-    }
-    return true;
+    visibleColumns.clear();
+    for (int i=0; i<visibleFieldNames.count(); i++)
+        visibleColumns << i;
+}
+
+void SimpleQueryModel::update()
+{
+    updateData(mainQuery, false);
+}
+
+QString SimpleQueryModel::localizedName()
+{
+    return "";
+}
+
+void SimpleQueryModel::reportError(const QString& msg)
+{
+    _error = msg;
 }
 
 #define SQL_CURR \
@@ -94,22 +61,16 @@ bool SimpleQueryModel::removeById(int id)
 CurrencyModel::CurrencyModel(QObject *parent, HwDatabase &db)
     :SimpleQueryModel(parent)
 {
-    QSqlQuery q(db.sqlDbRef());
-    QString sql = SQL_CURR;
-    if (!q.prepare(sql)) {
-        _error = q.lastError().text();
-        return;
-    }
-    q.exec();
-    setQuery(q);
-    setHeaderData(0, Qt::Horizontal, S_COL_ORDER_NUM);
-    setHeaderData(1, Qt::Horizontal, S_COL_NAME);
-    setHeaderData(2, Qt::Horizontal, S_COL_SHORT_NAME);
-    setHeaderData(3, Qt::Horizontal, QObject::tr("Abbr."));
-    setHeaderData(4, Qt::Horizontal, QObject::tr("Code"));
-    setHeaderData(5, Qt::Horizontal, QObject::tr("Mn."));
-    setHeaderData(6, Qt::Horizontal, S_COL_UNIT);
-    setHeaderData(7, Qt::Horizontal, S_COL_DESCRIPTION);
+    mainQuery = SQL_CURR;
+    visibleFieldNames
+        << "seq_order" << "full_name" << "short_name"
+        << "abbr" << "code" << "main" << "unit" << "descr";
+    visibleFieldTypes
+        << "G" << "G" << "G" << "G" << "G" << "G" << "G" << "G";
+    columnHeaders
+        << S_COL_ORDER_NUM << S_COL_NAME<< S_COL_SHORT_NAME
+        << QObject::tr("Abbr.") << QObject::tr("Code")
+        << QObject::tr("Mn.") << S_COL_UNIT << S_COL_DESCRIPTION;
     deleteQuery = "delete from hw_currency where id=:id";
 }
 
@@ -123,7 +84,7 @@ CurrencyModel::CurrencyModel(QObject *parent, HwDatabase &db)
 " order by d.ch_date"
 
 #define SQL_RATE \
-    "select d.id, strftime('%d.%m.%Y', d.ch_date), %1" \
+    "select d.id, strftime('%d.%m.%Y', d.ch_date) as dt, %1" \
     " from" \
     " hw_curr_rate_session d" \
     " %2" \
@@ -162,9 +123,12 @@ CurrencyRateModel::CurrencyRateModel(QObject* parent, HwDatabase &db)
     }
     if (db.queryRecCount(qRatedC)==0)
         return;
-    QStringList fields, tables, headers;
+    QStringList fields, tables;
     qRatedC.first();
     int cNum = 2;
+    visibleFieldNames << "dt";
+    visibleFieldTypes << "D";
+    columnHeaders << S_COL_DATE;
     while (qRatedC.isValid()) {
         int idRatedCurr = qRatedC.value(0).toInt();
         QString abbrRatedCurr = qRatedC.value(1).toString();
@@ -174,30 +138,24 @@ CurrencyRateModel::CurrencyRateModel(QObject* parent, HwDatabase &db)
             tables << QString(
                 "left join (select id_css, rate from hw_curr_rate where id_cur_unit=%1) r%2 on d.id=r%3.id_css")
                 .arg(idRatedCurr).arg(cNum).arg(cNum);
-            headers << QString("%1 (1%2=...)").arg(abbrRatedCurr).arg(abbrRatedCurr);
+            visibleFieldNames << QString("rate%1").arg(cNum);
+            visibleFieldTypes << 'G';
+            columnHeaders << QString("%1 (1%2=...)").arg(abbrRatedCurr).arg(abbrRatedCurr);
         }
         else {
             fields << QString("r%1.rate||'%2' as rate%3").arg(cNum).arg(abbrRatedCurr).arg(cNum);
             tables << QString(
                 "left join (select id_css, rate from hw_curr_rate where id_cur_rated=%1) r%2 on d.id=r%3.id_css")
                 .arg(idRatedCurr).arg(cNum).arg(cNum);
-            headers << QString("%1 (1%2=...)").arg(abbrRatedCurr).arg(abbrMainCurr);
+            visibleFieldNames << QString("rate%1").arg(cNum);
+            visibleFieldTypes << 'G';
+            columnHeaders << QString("%1 (1%2=...)").arg(abbrRatedCurr).arg(abbrMainCurr);
         }
         qRatedC.next();
         cNum++;
     }
     // Query!
-    QSqlQuery q(db.sqlDbRef());
-    QString sql = QString(SQL_RATE).arg(fields.join(", ")).arg(tables.join("\n "));
-    if (!q.prepare(sql)) {
-        _error = q.lastError().text();
-        return;
-    }
-    q.exec();
-    setQuery(q);
-    setHeaderData(0, Qt::Horizontal, S_COL_DATE);
-    for (int i=1; i<columnCount(); i++)
-        setHeaderData(i, Qt::Horizontal, headers[i-1]);
+    mainQuery = QString(SQL_RATE).arg(fields.join(", ")).arg(tables.join("\n "));
     deleteQuery = "delete from hw_curr_rate_session where id=:id";
 }
 

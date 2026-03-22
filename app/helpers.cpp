@@ -111,8 +111,9 @@ bool SelecTables::checkSelection(bool errorIfNoSelected, bool onlyOneRowAllowed)
     return true;
 }
 
-void SelecTables::prepareModel(QSqlQueryModel *source, QSortFilterProxyModel *proxy, QTableView *view, const QString &nameForDebug, bool customSorting)
+void SelecTables::prepareModel(FilteredQueryModel *source, QSortFilterProxyModel *proxy, QTableView *view, const QString &nameForDebug, bool customSorting)
 {
+    source->setDefaultVisibleColumns();
     source->setObjectName(QString("mdl")+nameForDebug);
     proxy->setSourceModel(source);
     proxy->setFilterKeyColumn(-1);

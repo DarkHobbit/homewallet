@@ -200,7 +200,7 @@ void FilteredQueryModel::updateData(const QString &sql, bool insertWhere)
             int fieldIndex = visibleColumns[i];
             if (fieldIndex>=visibleFieldNames.count()) {
                 fieldIndex = 0; // failback if incorrect settings
-                emit modelError(tr("Incorrect column index found, see Settings->Columns"));
+                reportError(tr("Incorrect column index found, see Settings->Columns"));
             }
             fields += ", " + visibleFieldNames[fieldIndex];
         }
@@ -220,7 +220,7 @@ void FilteredQueryModel::updateData(const QString &sql, bool insertWhere)
             fetchMore();
     }
     else
-        emit modelError(q.lastError().text());
+        reportError(q.lastError().text());
 }
 
 QString FilteredQueryModel::lowUnitFunction(const QString& fieldName, const QString& currFieldName)
@@ -263,18 +263,23 @@ void FilteredQueryModel::makeFilter()
 bool FilteredQueryModel::removeById(int id)
 {
     if (deleteQuery.isEmpty()) {
-        emit modelError(S_REC_NOT_REMOVABLE);
+        reportError(S_REC_NOT_REMOVABLE);
         return false;
     }
     QSqlQuery q;
     if (!q.prepare(deleteQuery)) {
-        emit modelError(S_PREP_ERR.arg(q.lastError().text()));
+        reportError(S_PREP_ERR.arg(q.lastError().text()));
         return false;
     }
     q.bindValue(":id", id);
     if (!q.exec()) {
-        emit modelError(S_EXEC_ERR.arg(q.lastError().text()));
+        reportError(S_EXEC_ERR.arg(q.lastError().text()));
         return false;
     }
     return true;
+}
+
+void FilteredQueryModel::reportError(const QString& msg)
+{
+    emit modelError(msg);
 }

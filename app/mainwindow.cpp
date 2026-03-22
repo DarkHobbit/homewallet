@@ -408,7 +408,6 @@ void MainWindow::on_actionFilter_triggered()
 
 void MainWindow::prepareModel(FilteredQueryModel *source, QSortFilterProxyModel *proxy, QTableView *view, const QString& nameForDebug)
 {
-    source->setDefaultVisibleColumns();
     SelecTables::prepareModel(source, proxy, view, nameForDebug, true);
     dbModels << source;
     // Context menu

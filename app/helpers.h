@@ -22,6 +22,7 @@
 #include <QStringList>
 #include <QTableView>
 
+#include "filteredquerymodel.h"
 #include "genericdatabase.h"
 
 #define GUI_DB_CHK(action, q) \
@@ -51,7 +52,7 @@ protected:
     QTableView* activeView;
     // End of potentially unsafe pointers
     QModelIndexList selection;
-    void prepareModel(QSqlQueryModel* source, QSortFilterProxyModel *proxy, QTableView* view, const QString& nameForDebug, bool customSorting);
+    void prepareModel(FilteredQueryModel* source, QSortFilterProxyModel *proxy, QTableView* view, const QString& nameForDebug, bool customSorting);
     bool checkSelection(bool errorIfNoSelected = true, bool onlyOneRowAllowed = false);
 };
 
