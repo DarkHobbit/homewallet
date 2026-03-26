@@ -47,7 +47,8 @@ FileFormat::SubTypeFlags XmlHwFile::supportedExportSubTypes()
     return (FileFormat::SubTypeFlags)
         (AccountsInBrief | Aliases | Categories
          | Expenses | Incomes | Transfer
-         | CurrencyConversion | Debtors | Creditors
+         | CurrencyConversion | CurrencyRate
+         | Debtors | Creditors
         );
 }
 
@@ -112,6 +113,13 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
             return false;
     }
 
+    // Currency rate
+    e = elRoot.firstChildElement("currencyrate");
+    if (!e.isNull()) {
+        if (!importCurrencyRate(e, db))
+            return false;
+    }
+
     // Debtors
     e = elRoot.firstChildElement("lendto");
     if (!e.isNull()) {
@@ -136,8 +144,8 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
     for (QDomElement e=elRoot.firstChildElement(); !e.isNull(); e=e.nextSiblingElement())
     {
         QString nn = e.nodeName();
-        if (nn!="metadata" && nn!="accounts"
-                && nn!="currencies" && nn!="units"
+        if (nn!="metadata" && nn!="accounts" && nn!="units"
+                && nn!="currencies" && nn!="currencyrate"
                 && nn!="expensecategories"  && nn!="incomecategories"
                 && nn!="transfertypes"  && nn!="correspondents"
                 && nn!="incomes"  && nn!="expenses"
@@ -174,6 +182,8 @@ bool XmlHwFile::exportRecords(const QString &path, HwDatabase &db, SubTypeFlags 
         UP_CHK(exportTransfer(db, elRoot));
     if (subTypes.testFlag(FileFormat::CurrencyConversion))
         UP_CHK(exportCurrencyConversion(db, elRoot));
+    if (subTypes.testFlag(FileFormat::CurrencyRate))
+        UP_CHK(exportCurrencyRate(db, elRoot));
     if (subTypes.testFlag(FileFormat::Debtors))
         UP_CHK(exportCredits(db, elRoot, "lendto", "ln", true));
     if (subTypes.testFlag(FileFormat::Creditors))
@@ -404,7 +414,32 @@ bool XmlHwFile::importCurrencyConversion(const QDomElement &e, HwDatabase &db)
         "DRRRIISZSZS", "MMMMMMOOOOO",
         QStringList() << "dt" << "ac" << "ci" << "co"
                       << "ami" << "amo" << "d" << "imp" << "vfy",
-        tRefs);
+                                tRefs);
+}
+
+bool XmlHwFile::importCurrencyRate(const QDomElement &e, HwDatabase &db)
+{
+    ChildRecMap elSessions;
+    HwDatabase::TableRefColl tRefs;
+    DB_CHK(db.collectDict(tRefs["cu"], "hw_currency", "abbr"));
+    tRefs["cr"] = tRefs["cu"];
+    bool res = importDbRecordsGroup(db, e, "ses", "hw_curr_rate_session",
+        QStringList() << "ch_date", "D", "M",
+        QStringList() << "dt", HwDatabase::TableRefColl(),
+        QVariantList(), &elSessions);
+    if (res) {
+        foreach (int idSes, elSessions.keys()) {
+            res = importDbRecordsGroup(db, elSessions[idSes], "rt", "hw_curr_rate",
+                QStringList() << "id_cur_unit" << "id_cur_rated" << "rate" << "id_css",
+                "RRFI", "MMMM",
+                QStringList() << "cu" << "cr" << "rt",
+                tRefs, QVariantList() << QVariant(idSes));
+            if (!res)
+                return false;
+        }
+    }
+    return res;
+
 }
 
 bool XmlHwFile::importCredits(const QDomElement &e, HwDatabase &db, const QString& elName, bool isLend)
@@ -797,6 +832,30 @@ bool XmlHwFile::exportCurrencyConversion(HwDatabase &db, QDomElement &elRoot)
 {
     QDomElement elCeGroup = addElem(elRoot, "currencyexchange");
     return exportDbRecordsGroup(db, Q_SEL_CUR_EXCH, elCeGroup, "ce");
+}
+
+#define Q_SEL_CUR_RATE_SES \
+    "select id, ch_date as dt from hw_curr_rate_session" \
+    " order by dt;"
+
+#define Q_SEL_CUR_RATE \
+    "select r.id, cuu.abbr as cu, cur.abbr as cr, r.rate as rt" \
+    " from hw_curr_rate r" \
+    " left join hw_currency cuu on cuu.id=r.id_cur_unit" \
+    " left join hw_currency cur on cur.id=r.id_cur_rated" \
+    " where r.id_css=%1" \
+    " order by cur.seq_order, cuu.seq_order;"
+
+bool XmlHwFile::exportCurrencyRate(HwDatabase &db, QDomElement &elRoot)
+{
+    ChildRecMap children;
+    QDomElement elCrGroup = addElem(elRoot, "currencyrate");
+    if (!exportDbRecordsGroup(db, Q_SEL_CUR_RATE_SES, elCrGroup, "ses", &children))
+        return false;
+    foreach (int idSes, children.keys())
+        if (!exportDbRecordsGroup(db, QString(Q_SEL_CUR_RATE).arg(idSes), children[idSes], "rt"))
+            return false;
+    return true;
 }
 
 #define Q_SEL_CRED \

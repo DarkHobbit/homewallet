@@ -38,6 +38,7 @@ private:
     bool importIncomes(const QDomElement& e, HwDatabase& db);
     bool importTransfer(const QDomElement& e, HwDatabase& db);
     bool importCurrencyConversion(const QDomElement& e, HwDatabase& db);
+    bool importCurrencyRate(const QDomElement& e, HwDatabase& db);
     bool importCredits(const QDomElement& e, HwDatabase& db, const QString& elName, bool isLend);
     bool importAliases(const QDomElement& e, HwDatabase& db);
 
@@ -52,6 +53,7 @@ private:
     bool exportIncomes(HwDatabase& db, QDomElement& elRoot);
     bool exportTransfer(HwDatabase& db, QDomElement& elRoot);
     bool exportCurrencyConversion(HwDatabase& db, QDomElement& elRoot);
+    bool exportCurrencyRate(HwDatabase& db, QDomElement& elRoot);
     bool exportCredits(HwDatabase& db, QDomElement& elRoot, const QString& groupName, const QString& elName, bool isLend);
 
     bool exportImportReferences(HwDatabase& db, QDomElement& elRoot);
