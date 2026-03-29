@@ -45,13 +45,15 @@ QStringList FormatFactory::supportedFilters(QIODevice::OpenModeFlag mode, bool i
 {
     QStringList allTypes;
     // Known formats
-    QString allSupported;
+    QStringList supportedExts;
     for (FileFormat* ff: formats)
         if (ff->supportedModes().testFlag(mode)) {
-            allSupported += "*." + ff->supportedExtensions().join(" *.");
+            for (const QString& ext: ff->supportedExtensions())
+                if (!supportedExts.contains(ext))
+                    supportedExts << ext;
             allTypes << ff->supportedFilters();
-
         }
+    QString allSupported = "*." + supportedExts.join(" *.");
     if (mode==QIODevice::ReadOnly) {
         allTypes.insert(0, S_ALL_SUPPORTED.arg(allSupported));
         allTypes << S_ALL_FILES;
