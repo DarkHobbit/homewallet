@@ -69,6 +69,7 @@ private slots:
     void on_actAddDefaultUnit_triggered();
     void on_btnQuickFilter_clicked();
     void on_actFilter_triggered();
+    void on_actResolveAmbiguity_triggered();
 };
 
 #endif // POSTIMPORTDIALOG_H

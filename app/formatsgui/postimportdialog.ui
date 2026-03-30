@@ -125,6 +125,14 @@
     <enum>QAction::NoRole</enum>
    </property>
   </action>
+  <action name="actResolveAmbiguity">
+   <property name="text">
+    <string>Resolve ambiguity</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
   <action name="actFilter">
    <property name="text">
     <string>Filter</string>

@@ -12,6 +12,7 @@
  */
 
 #include <QDialogButtonBox>
+#include <QInputDialog>
 #include <QKeyEvent>
 #include <QMessageBox>
 #include <QPushButton>
@@ -33,9 +34,11 @@ PostImportDialog::PostImportDialog(QWidget *parent) :
     ui->tableExpenses->insertAction(0, ui->actExpCandState);
     ui->tableExpenses->insertAction(0, ui->actAddAlias);
     ui->tableExpenses->insertAction(0, ui->actAddDefaultUnit);
+    ui->tableExpenses->insertAction(0, ui->actResolveAmbiguity);
     ui->tableIncomes->insertAction(0, ui->actExpCandState);
     ui->tableIncomes->insertAction(0, ui->actAddAlias);
     ui->tableIncomes->insertAction(0, ui->actAddDefaultUnit);
+    ui->tableIncomes->insertAction(0, ui->actResolveAmbiguity);
     // Filter
     ui->leQuickFilter->installEventFilter(this);
     addAction(ui->actFilter);
@@ -266,5 +269,29 @@ void PostImportDialog::on_btnQuickFilter_clicked()
 void PostImportDialog::on_actFilter_triggered()
 {
     ui->leQuickFilter->setFocus();
+}
+
+
+void PostImportDialog::on_actResolveAmbiguity_triggered()
+{
+    activeTab();
+    int r = mappedCurrentRow();
+    ImpRecCandidate* c = activeModel->cand(r);
+    if (c->type!=ImpRecCandidate::Income && c->type!=ImpRecCandidate::Expense) {
+        QMessageBox::critical(0, S_ERROR, S_ERR_NOT_INC_NOT_EXP);
+        return;
+    }
+    if (c->state!=ImpRecCandidate::AmbiguousSubCategory) {
+        QMessageBox::critical(0, S_ERROR, tr("No ambiguous subcategory at this record"));
+        return;
+    }
+    bool ok;
+    QString cat = QInputDialog::getItem(0, tr("Select category"), "",
+        c->ambigCategoriesCandidates(*db), 0, false, &ok);
+    if (ok) {
+        c->catName = cat;
+        c->subcatName = c->alias;
+        updateView();
+    }
 }
 

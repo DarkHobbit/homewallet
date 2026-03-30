@@ -176,22 +176,22 @@
         <translation>Валюты</translation>
     </message>
     <message>
-        <location filename="../app/currencywindow.ui" line="34"/>
+        <location filename="../app/currencywindow.ui" line="41"/>
         <source>Rates</source>
         <translation>Курсы валют</translation>
     </message>
     <message>
-        <location filename="../app/currencywindow.ui" line="68"/>
+        <location filename="../app/currencywindow.ui" line="79"/>
         <source>Add...</source>
         <translation>Добавить...</translation>
     </message>
     <message>
-        <location filename="../app/currencywindow.ui" line="85"/>
+        <location filename="../app/currencywindow.ui" line="96"/>
         <source>Edit...</source>
         <translation>Редактировать...</translation>
     </message>
     <message>
-        <location filename="../app/currencywindow.ui" line="102"/>
+        <location filename="../app/currencywindow.ui" line="113"/>
         <source>Delete...</source>
         <translation>Удалить...</translation>
     </message>
@@ -681,48 +681,48 @@ Verified from %1</source>
         <translation>Валюты</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="141"/>
+        <location filename="../app/mainwindow.cpp" line="140"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="145"/>
+        <location filename="../app/mainwindow.cpp" line="144"/>
         <source>Database not empty for testing</source>
         <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="200"/>
+        <location filename="../app/mainwindow.cpp" line="199"/>
         <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="259"/>
+        <location filename="../app/mainwindow.cpp" line="258"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="259"/>
+        <location filename="../app/mainwindow.cpp" line="258"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="270"/>
+        <location filename="../app/mainwindow.cpp" line="269"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="287"/>
+        <location filename="../app/mainwindow.cpp" line="286"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="337"/>
+        <location filename="../app/mainwindow.cpp" line="336"/>
         <source>Format require dialog, but dialog not provided. Contact author</source>
         <translation>Формат требует диалоговое окно, но программа его не обеспечивает.
 Свяжитесь с автором</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="765"/>
+        <location filename="../app/mainwindow.cpp" line="733"/>
         <source>Repayment history for: </source>
         <translation>История платежей для: </translation>
     </message>
@@ -741,7 +741,7 @@ at record %1 from %2</source>
 в записи %1 из %2</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="391"/>
+        <location filename="../app/mainwindow.cpp" line="390"/>
         <source>Restart program to apply language change</source>
         <translation>Язык сменится после перезапуска программы</translation>
     </message>
@@ -791,11 +791,16 @@ at record %1 from %2</source>
     </message>
     <message>
         <location filename="../app/formatsgui/postimportdialog.ui" line="130"/>
+        <source>Resolve ambiguity</source>
+        <translation>Разрешить неоднозначность</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="138"/>
         <source>Filter</source>
         <translation>Фильтр</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="133"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="141"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
@@ -804,21 +809,31 @@ at record %1 from %2</source>
         <translation type="obsolete">Строка %1: строка исходного файла %2, состояние: %3</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="165"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="168"/>
         <source>Row %1: source line %2%3
 State: %4</source>
         <translation>Запись %1: исходная строка %2%3
 Состояние: %4</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="169"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="172"/>
         <source>Category candidates:</source>
         <translation>Кандидаты на категорию:</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="213"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="216"/>
         <source>No unknown aliases in this row</source>
         <translation>В этой строке нет неизвестных псевдонимов</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="285"/>
+        <source>No ambiguous subcategory at this record</source>
+        <translation>У этой записи нет неоднозначной подкатегории</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="289"/>
+        <source>Select category</source>
+        <translation>Выберите категорию</translation>
     </message>
 </context>
 <context>
@@ -1547,19 +1562,19 @@ at record %1 from %2</source>
         <translation>Прочее</translation>
     </message>
     <message>
-        <location filename="../core/formats/formatfactory.cpp" line="65"/>
+        <location filename="../core/formats/formatfactory.cpp" line="67"/>
         <source>Empty file name</source>
         <translation>Пустое имя файла</translation>
     </message>
     <message>
-        <location filename="../core/formats/formatfactory.cpp" line="79"/>
+        <location filename="../core/formats/formatfactory.cpp" line="81"/>
         <source>Unknown file format:
 %1</source>
         <translation>Неизвестный формат файла:
 %1</translation>
     </message>
     <message>
-        <location filename="../core/formats/formatfactory.cpp" line="82"/>
+        <location filename="../core/formats/formatfactory.cpp" line="84"/>
         <source>Candidates error messages:</source>
         <translation>Ошибки кандидатов в форматы:</translation>
     </message>
@@ -1656,7 +1671,7 @@ Found: %1</source>
         <translation>HomeWallet XML (*.xml *.XML)</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhwfile.cpp" line="309"/>
+        <location filename="../core/formats/xmlhwfile.cpp" line="319"/>
         <source>This version of HomeWallet not support third category level: %1::%2</source>
         <translation>Эта версия Домашнего кошелька не поддерживает третий уровень категорий: %1::%2</translation>
     </message>
@@ -1810,22 +1825,22 @@ At line %3</source>
         <translation>В БД нет записей о долгах и кредитах, к которым можно привязать этот файл</translation>
     </message>
     <message>
-        <location filename="../model/miscmodels.cpp" line="53"/>
+        <location filename="../model/miscmodels.cpp" line="72"/>
         <source>Abbr.</source>
         <translation>Сокр.</translation>
     </message>
     <message>
-        <location filename="../model/miscmodels.cpp" line="54"/>
+        <location filename="../model/miscmodels.cpp" line="72"/>
         <source>Code</source>
         <translation>Код</translation>
     </message>
     <message>
-        <location filename="../model/miscmodels.cpp" line="55"/>
+        <location filename="../model/miscmodels.cpp" line="73"/>
         <source>Mn.</source>
         <translation>Гл.</translation>
     </message>
     <message>
-        <location filename="../model/miscmodels.cpp" line="93"/>
+        <location filename="../model/miscmodels.cpp" line="110"/>
         <source>Main currency not found</source>
         <translation>Главная валюта не найдена</translation>
     </message>
