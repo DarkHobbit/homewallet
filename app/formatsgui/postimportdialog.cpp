@@ -33,12 +33,16 @@ PostImportDialog::PostImportDialog(QWidget *parent) :
     ui->setupUi(this);
     ui->tableExpenses->insertAction(0, ui->actExpCandState);
     ui->tableExpenses->insertAction(0, ui->actAddAlias);
-    ui->tableExpenses->insertAction(0, ui->actAddDefaultUnit);
+    ui->tableExpenses->insertAction(0, ui->actAddDefaultUnit);    
     ui->tableExpenses->insertAction(0, ui->actResolveAmbiguity);
+
     ui->tableIncomes->insertAction(0, ui->actExpCandState);
     ui->tableIncomes->insertAction(0, ui->actAddAlias);
     ui->tableIncomes->insertAction(0, ui->actAddDefaultUnit);
     ui->tableIncomes->insertAction(0, ui->actResolveAmbiguity);
+
+    ui->tableUnknown->insertAction(0, ui->actExpCandState);
+
     // Filter
     ui->leQuickFilter->installEventFilter(this);
     addAction(ui->actFilter);
@@ -56,9 +60,8 @@ void PostImportDialog::setData(InteractiveFormat* _intFile, HwDatabase* _db)
 
     mSet = new ImportModelSet(&_intFile->candidates, this);
     ui->tableExpenses->setModel(mSet->proxyExpense);
-    ui->tableExpenses->horizontalHeader()->setStretchLastSection(true);
     ui->tableIncomes->setModel(mSet->proxyIncome);
-    ui->tableExpenses->horizontalHeader()->setStretchLastSection(true);
+    ui->tableUnknown->setModel(mSet->proxyUnknown);
 
     updateStat();
     ui->btnAddAlias->setShortcut(Qt::Key_Insert);
@@ -89,11 +92,14 @@ void PostImportDialog::showEvent(QShowEvent*)
 {
     updateTableConfig(ui->tableExpenses);
     updateTableConfig(ui->tableIncomes);
+    updateTableConfig(ui->tableUnknown);
     updateOneView(ui->tableExpenses, false);
     updateOneView(ui->tableIncomes, false);
+    updateOneView(ui->tableUnknown, false);
     ui->tableExpenses->resizeColumnsToContents();
     ui->tableIncomes->resizeColumnsToContents();
-    // Try to reuce source string
+    ui->tableUnknown->resizeColumnsToContents();
+    // Try to reduce source string
     ui->tableExpenses->setColumnWidth(1, ui->tableExpenses->columnWidth(5));
     ui->tableIncomes->setColumnWidth(1, ui->tableIncomes->columnWidth(5));
 }
@@ -124,6 +130,11 @@ PostImportDialog::ActiveTab PostImportDialog::activeTab()
         activeModel = mSet->mdlIncome;
         activeView = ui->tableIncomes;
         return atIncomes;
+    }
+    else if (curW==ui->tabUnknown) {
+        activeModel = mSet->mdlUnknown;
+        activeView = ui->tableUnknown;
+        return atUnknown;
     }
     // TODO other tabs
     else {

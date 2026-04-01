@@ -759,48 +759,53 @@ at record %1 from %2</source>
         <translation>Расходы</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="41"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="44"/>
         <source>Incomes</source>
         <translation>Доходы</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="61"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="64"/>
+        <source>Unknown</source>
+        <translation>Неизвестные</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="87"/>
         <source>Not Ready</source>
         <translation>Не готово</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="80"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="106"/>
         <source>Quick filter</source>
         <translation>Быстрофильтр</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="87"/>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="114"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="113"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="140"/>
         <source>Add alias</source>
         <translation>Добавить псевдоним</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="106"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="132"/>
         <source>State</source>
         <translation>Состояние</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="122"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="148"/>
         <source>Add default unit</source>
         <translation>Добавить единицу измерения по умолчанию</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="130"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="156"/>
         <source>Resolve ambiguity</source>
         <translation>Разрешить неоднозначность</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="138"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="164"/>
         <source>Filter</source>
         <translation>Фильтр</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="141"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="167"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
@@ -809,29 +814,29 @@ at record %1 from %2</source>
         <translation type="obsolete">Строка %1: строка исходного файла %2, состояние: %3</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="168"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="179"/>
         <source>Row %1: source line %2%3
 State: %4</source>
         <translation>Запись %1: исходная строка %2%3
 Состояние: %4</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="172"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="183"/>
         <source>Category candidates:</source>
         <translation>Кандидаты на категорию:</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="216"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="227"/>
         <source>No unknown aliases in this row</source>
         <translation>В этой строке нет неизвестных псевдонимов</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="285"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="296"/>
         <source>No ambiguous subcategory at this record</source>
         <translation>У этой записи нет неоднозначной подкатегории</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="289"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="300"/>
         <source>Select category</source>
         <translation>Выберите категорию</translation>
     </message>

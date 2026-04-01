@@ -53,6 +53,7 @@ private:
         atTransfer,
         atDebtor,
         atCreditor,
+        atUnknown
     };
 
     virtual void showEvent(QShowEvent*);

@@ -50,6 +50,8 @@ int ImportCandidatesModel::columnCount(const QModelIndex&) const
     case ImpRecCandidate::Transfer:
         return 8;
         // TODO
+    case ImpRecCandidate::Unknown:
+        return 2;
     default: return 1;
     }
 }
@@ -60,6 +62,7 @@ QVariant ImportCandidatesModel::headerData(int section, Qt::Orientation orientat
         switch(candType) {
         case ImpRecCandidate::Expense:
         case ImpRecCandidate::Income:
+        case ImpRecCandidate::Unknown:
             switch (section) {
             case 0:  return S_COL_DATE;
             case 1:  return S_COL_SOURCE;
@@ -119,6 +122,12 @@ QVariant ImportCandidatesModel::data(const QModelIndex &index, int role) const
         case ImpRecCandidate::Transfer:
             // TODO
         // TODO
+        case ImpRecCandidate::Unknown:
+            switch(index.column()) {
+            case 0:  return gd.useSystemDateTimeFormat ? c->opDT.toString() : c->opDT.toString(gd.dateFormat);
+            case 1:  return c->source;
+            default: return QVariant();
+            }
         default: return "--";
         }
     }

@@ -23,7 +23,7 @@
       <attribute name="title">
        <string>Expenses</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="layExpenses">
        <item>
         <widget class="QTableView" name="tableExpenses">
          <property name="contextMenuPolicy">
@@ -32,6 +32,9 @@
          <property name="selectionBehavior">
           <enum>QAbstractItemView::SelectRows</enum>
          </property>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
         </widget>
        </item>
       </layout>
@@ -40,7 +43,7 @@
       <attribute name="title">
        <string>Incomes</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QVBoxLayout" name="layIncomes">
        <item>
         <widget class="QTableView" name="tableIncomes">
          <property name="contextMenuPolicy">
@@ -49,6 +52,29 @@
          <property name="selectionBehavior">
           <enum>QAbstractItemView::SelectRows</enum>
          </property>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabUnknown">
+      <attribute name="title">
+       <string>Unknown</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="layUnknown">
+       <item>
+        <widget class="QTableView" name="tableUnknown">
+         <property name="contextMenuPolicy">
+          <enum>Qt::ActionsContextMenu</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
         </widget>
        </item>
       </layout>
