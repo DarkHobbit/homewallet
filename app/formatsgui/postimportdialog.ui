@@ -59,6 +59,26 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tabTransfer">
+      <attribute name="title">
+       <string>Transfer</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="layTransfer">
+       <item>
+        <widget class="QTableView" name="tableTransfer">
+         <property name="contextMenuPolicy">
+          <enum>Qt::ActionsContextMenu</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="tabUnknown">
       <attribute name="title">
        <string>Unknown</string>

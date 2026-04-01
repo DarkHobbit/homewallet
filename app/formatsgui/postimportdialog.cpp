@@ -41,6 +41,9 @@ PostImportDialog::PostImportDialog(QWidget *parent) :
     ui->tableIncomes->insertAction(0, ui->actAddDefaultUnit);
     ui->tableIncomes->insertAction(0, ui->actResolveAmbiguity);
 
+    ui->tableTransfer->insertAction(0, ui->actExpCandState);
+    ui->tableTransfer->insertAction(0, ui->actAddAlias);
+
     ui->tableUnknown->insertAction(0, ui->actExpCandState);
 
     // Filter
@@ -61,6 +64,7 @@ void PostImportDialog::setData(InteractiveFormat* _intFile, HwDatabase* _db)
     mSet = new ImportModelSet(&_intFile->candidates, this);
     ui->tableExpenses->setModel(mSet->proxyExpense);
     ui->tableIncomes->setModel(mSet->proxyIncome);
+    ui->tableTransfer->setModel(mSet->proxyTransfer);
     ui->tableUnknown->setModel(mSet->proxyUnknown);
 
     updateStat();
@@ -69,7 +73,7 @@ void PostImportDialog::setData(InteractiveFormat* _intFile, HwDatabase* _db)
     connect(mSet->mdlExpense,
             SIGNAL(dataChanged(QModelIndex,QModelIndex,QVector)),
             this, SLOT(setAddAliasAccessibility()));
-    // TODO transfer, debt, cred
+    // TODO debt, cred
     */
 }
 
@@ -130,6 +134,11 @@ PostImportDialog::ActiveTab PostImportDialog::activeTab()
         activeModel = mSet->mdlIncome;
         activeView = ui->tableIncomes;
         return atIncomes;
+    }
+    else if (curW==ui->tabTransfer) {
+        activeModel = mSet->mdlTransfer;
+        activeView = ui->tableTransfer;
+        return atTransfer;
     }
     else if (curW==ui->tabUnknown) {
         activeModel = mSet->mdlUnknown;

@@ -201,7 +201,17 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                 continue;
             if (!findAccount(db, c, c.accToName, c.idAccTo))
                 continue;
+            if (!findCurrency(db, c, c.currName, c.idCur))
+                continue;
+            if (c.catName.isEmpty()) {
+                // TODO set default value
+            }
+            else {
+                // TODO set value
+            }
             // TODO
+            c.state = ImpRecCandidate::ParseError;//===>
+
             break;
         default:
             continue;
@@ -241,6 +251,8 @@ bool InteractiveFormat::postImport(HwDatabase& db)
             break;
         case ImpRecCandidate::Transfer:
             // TODO addTransfer
+            _fatalError = "TRANSFER UNDER CONSTRUCTION"; //===>
+            return false; //===>
             break;
             // TODO other recordtypes
         default:

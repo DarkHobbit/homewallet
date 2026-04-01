@@ -74,6 +74,8 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
     QRegExp reOnlyDay(":(\\d\\d?):");
     // Тип, СумЦел, СумДроб, Источ, Кат+Подкат,  КолЦел, КолДроб, Хвост
     QRegExp reIncExp("(\\+?)(\\d+)(?:,|\\.?)(\\d*)(\\:[^@\\:\\s]+)?(@[^@\\s]+)?(?:\\s+)(\\D+)(?:\\s+)(-?\\d*[.,]?\\d*)(\\S+)?(?:\\s+)?(.*)?");
+    // СумЦел, СумДроб, Источ, >> Приём, Хвост
+    QRegExp reTransfer("(\\d+)(?:,|\\.?)(\\d*)(\\:[^@\\:\\s]+)?(@[^@\\s]+)(?:\\s+)>>(?:\\s+)(@[^@\\s]+) (.*)?");
     int line = 0;
     do {
         line++;
@@ -123,7 +125,34 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
             QString::number(line), // TODO
             line, QDateTime(lsd));
         bool ok;
+        // Transfer (before expense-income because can be detected as it)
+        if (reTransfer.exactMatch(s)) {
+            std::cout << reTransfer.capturedTexts()
+            .join("||").toUtf8().data() << std::endl;
+            c.type = ImpRecCandidate::Transfer;
+            c.amount = captureMoneySum(reTransfer.cap(1), reTransfer.cap(2), ok);
+            if (!ok)
+                c.state = ImpRecCandidate::ParseError;
+            else {
+                c.currName = reTransfer.cap(3);
+                c.currName.remove(':');
+                c.accName = reTransfer.cap(4);
+                c.accName.remove('@');
+                c.accToName = reTransfer.cap(5);
+                c.accToName.remove('@');
+                c.descr = reTransfer.cap(6);
+                int colPos  = c.descr.indexOf(":");
+                if (colPos==-1)
+                    c.catName = "";
+                else {
+                    c.catName = c.descr.left(colPos).trimmed();
+                    c.descr = c.descr.mid(colPos+1).trimmed();
+                }
+                c.state = ImpRecCandidate::UnknownCategory;
+            }
+        }
         // Expense or income without currency
+        else
         if (reIncExp.exactMatch(s)) {
 /*
             std::cout << reIncExp.capturedTexts()
@@ -160,7 +189,6 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
         }
         // Expense or income with currency ??? m.b. already
         // Receipt begin and receipt end
-        // Transfer
         // TODO Other item types
 
         // Unrecognized line

@@ -78,7 +78,17 @@ QVariant ImportCandidatesModel::headerData(int section, Qt::Orientation orientat
             default: return QAbstractItemModel::headerData(section, orientation, role);
             }
         case ImpRecCandidate::Transfer:
-            // TODO
+            switch (section) {
+            case 0:  return S_COL_DATE;
+            case 1:  return S_COL_SOURCE;
+            case 2:  return S_COL_SUM;
+            case 3:  return S_COL_CURRENCY;
+            case 4:  return S_COL_FROM;
+            case 5:  return S_COL_TO;
+            case 6:  return S_COL_CATEGORY;
+            case 7:  return S_COL_DESCRIPTION;
+            default: return QAbstractItemModel::headerData(section, orientation, role);
+            }
         // TODO
         default: return 1;
         }
@@ -120,7 +130,17 @@ QVariant ImportCandidatesModel::data(const QModelIndex &index, int role) const
         default: return QVariant();
         }
         case ImpRecCandidate::Transfer:
-            // TODO
+            switch(index.column()) {
+            case 0:  return gd.useSystemDateTimeFormat ? c->opDT.toString() : c->opDT.toString(gd.dateFormat);
+            case 1:  return c->source;
+            case 2:  return fromLowUnit(c->amount);
+            case 3:  return c->currName;
+            case 4:  return c->accName;
+            case 5:  return c->accToName;
+            case 6:  return c->catName;
+            case 7: return c->descr;
+            default: return QVariant();
+            }
         // TODO
         case ImpRecCandidate::Unknown:
             switch(index.column()) {
