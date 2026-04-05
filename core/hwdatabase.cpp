@@ -16,6 +16,7 @@
 #include <QVariant>
 //#include <iostream>
 
+#include "globals.h"
 #include "hwdatabase.h"
 #include "pathmanager.h"
 
@@ -247,7 +248,10 @@ int HwDatabase::defaultCurrencyId()
     QSqlQuery sqlSel(sqlDb);
     if (!prepQuery(sqlSel, "select id from hw_currency where is_main=1"))
         return -1;
-    return dictId(sqlSel);
+    int id = dictId(sqlSel);
+    if (id==-1 && _lastError.isEmpty())
+        _lastError = S_ERR_MAIN_CURR_MISSING;
+    return id;
 }
 
 bool HwDatabase::collectCurrencyRateDirections(CurrRateDirections &rateDirections)

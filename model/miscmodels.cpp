@@ -66,7 +66,7 @@ CurrencyModel::CurrencyModel(QObject *parent, HwDatabase &db)
         << "seq_order" << "full_name" << "short_name"
         << "abbr" << "code" << "main" << "unit" << "descr";
     visibleFieldTypes
-        << "G" << "G" << "G" << "G" << "G" << "G" << "G" << "G";
+        << 'G' << 'G' << 'G' << 'G' << 'G' << 'G' << 'G' << 'G';
     columnHeaders
         << S_COL_ORDER_NUM << S_COL_NAME<< S_COL_SHORT_NAME
         << QObject::tr("Abbr.") << QObject::tr("Code")
@@ -84,7 +84,7 @@ CurrencyModel::CurrencyModel(QObject *parent, HwDatabase &db)
 " order by d.ch_date"
 
 #define SQL_RATE \
-    "select d.id, strftime('%d.%m.%Y', d.ch_date) as dt, %1" \
+    "select d.id, d.ch_date as dt, %1" \
     " from" \
     " hw_curr_rate_session d" \
     " %2" \
@@ -107,7 +107,7 @@ CurrencyRateModel::CurrencyRateModel(QObject* parent, HwDatabase &db)
     }
     qMainC.exec();
     if (db.queryRecCount(qMainC)==0) {
-        _error =  QObject::tr("Main currency not found");
+        _error = S_ERR_MAIN_CURR_MISSING;
         return;
     }
     QString abbrMainCurr = qMainC.value(0).toString();
@@ -127,7 +127,7 @@ CurrencyRateModel::CurrencyRateModel(QObject* parent, HwDatabase &db)
     qRatedC.first();
     int cNum = 2;
     visibleFieldNames << "dt";
-    visibleFieldTypes << "D";
+    visibleFieldTypes << 'D';
     columnHeaders << S_COL_DATE;
     while (qRatedC.isValid()) {
         int idRatedCurr = qRatedC.value(0).toInt();

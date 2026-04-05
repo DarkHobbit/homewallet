@@ -180,6 +180,7 @@ bool XmlHbFile::importRecords(const QString &path, HwDatabase &db)
     HwDatabase::CurrRateDirections rateDirections;
     if (_fileSubType==CurrencyRate) { // TODO convert to switch
         idMainCurrency = db.defaultCurrencyId();
+        DB_CHK(idMainCurrency!=-1)
         DB_CHK(db.collectCurrencyRateDirections(rateDirections))
     }
     else if (_fileSubType==Incomes || _fileSubType==IncomePlan) {

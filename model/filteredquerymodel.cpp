@@ -87,8 +87,10 @@ QVariant FilteredQueryModel::data(const QModelIndex &index, int role) const
             else
                 return res.toString() + "%";
         }
-        default:
+        case 'G':
             return res;
+        default:
+            return "ERR ";
         }
     }
     else if (role==SortStringRole) {

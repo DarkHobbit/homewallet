@@ -43,6 +43,7 @@
 #define S_PREP_ERR QObject::tr("Prepare error: %1")
 #define S_EXEC_ERR QObject::tr("Execute error: %1")
 #define S_INTERNAL_ERR QObject::tr("Internal error")
+#define S_ERR_MAIN_CURR_MISSING QObject::tr("Main currency not found")
 #define S_REMOVE_CONFIRM QObject::tr("Do you really want to delete the selected items?")
 // Common import/export messages
 #define S_READ_ONLY_FORMAT QObject::tr("This format is read only")
