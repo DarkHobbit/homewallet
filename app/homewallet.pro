@@ -80,6 +80,8 @@ exists( $$dirname(QMAKE_QMAKE)/lrelease-qt4 ) {
       tr.commands = $$dirname(QMAKE_QMAKE)/lrelease-qt4  $$_PRO_FILE_
 } else:exists( $$dirname(QMAKE_QMAKE)/lrelease-qt5 ) {
       tr.commands = $$dirname(QMAKE_QMAKE)/lrelease-qt5  $$_PRO_FILE_
+} else:exists( $$dirname(QMAKE_QMAKE)/lrelease-qt6 ) {
+      tr.commands = $$dirname(QMAKE_QMAKE)/lrelease-qt6  $$_PRO_FILE_
 } else {
       tr.commands = $$dirname(QMAKE_QMAKE)/lrelease  $$_PRO_FILE_
 }
