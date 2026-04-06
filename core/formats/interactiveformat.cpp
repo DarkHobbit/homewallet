@@ -12,7 +12,9 @@
  */
 
 #include <QSqlError>
+
 #include "commonexpimpdef.h"
+#include "globals.h"
 #include "interactiveformat.h"
 
 bool ImpCandidates::readyToImport()
@@ -78,7 +80,11 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
     db.collectDict(candidates.collExCatBySubcat, "hw_ex_subcat", "name", "id_ecat");
     candidates.collExSubcatToDescr.clear();
     db.collectRevDict(candidates.collExSubcatToDescr, "hw_alias", "to_descr", "id_esubcat", "where id_esubcat is not null");
-    // TODO transfer types
+    // -- transfer types
+    int idTransferTypeOther = db.transferTypeId(S_CAT_OTHER);
+    if (idTransferTypeOther==-1)
+        idTransferTypeOther = db.addTransferType(S_CAT_OTHER, "");
+    // TODO aliases for transfer
 
     // See candidates
     for (ImpRecCandidate& c: candidates) {
@@ -204,14 +210,22 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
             if (!findCurrency(db, c, c.currName, c.idCur))
                 continue;
             if (c.catName.isEmpty()) {
-                // TODO set default value
+                c.catName = S_CAT_OTHER;
+                c.idCat = idTransferTypeOther;
             }
-            else {
-                // TODO set value
+            else
+                c.idCat = db.transferTypeId(c.catName);
+            if (c.idCat==-1) {
+                // Alias for transfer type
+                if (0) { // TODO
+                    //c.idCat = collTransType[c.catName];
+                    //completeDescr(c, collTransTypeToToDescr, c.idSubcat);
+                }
+                else
+                    c.state = ImpRecCandidate::UnknownTransType;
             }
-            // TODO
-            c.state = ImpRecCandidate::ParseError;//===>
-
+            else
+                c.state = ImpRecCandidate::ReadyToImport;
             break;
         default:
             continue;
@@ -250,8 +264,8 @@ bool InteractiveFormat::postImport(HwDatabase& db)
             // TODO check anything?
             break;
         case ImpRecCandidate::Transfer:
-            // TODO addTransfer
-            _fatalError = "TRANSFER UNDER CONSTRUCTION"; //===>
+            if (!db.addTransfer(c.opDT, c.amount, idCurActual, c.idAcc, c.idAccTo,
+                    c.idCat, c.descr,  _idImp, c.uid))
             return false; //===>
             break;
             // TODO other recordtypes
