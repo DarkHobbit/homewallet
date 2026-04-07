@@ -204,9 +204,14 @@ void PostImportDialog::on_btnAddAlias_clicked()
     bool isIncome = c->type==ImpRecCandidate::Income;
     switch(c->state) {
     case ImpRecCandidate::UnknownAccount:
+    {
         alType = HwDatabase::Account;
-        alS = c->accName;
+        bool unknownAkk =
+            db->aliasId(c->accName, HwDatabase::Account)==-1
+            && db->accountId(c->accName)==-1;
+        alS = unknownAkk ? c->accName : c->accToName;
         break;
+    }
     case ImpRecCandidate::UnknownCurrency:
         alType = HwDatabase::Currency;
         alS = c->currName;

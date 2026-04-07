@@ -35,6 +35,7 @@ public:
         Actual       // nothing to do
     };
     enum AliasType {
+        Any, // for search in DB
         Account,
         Currency,
         Unit,
@@ -59,6 +60,7 @@ public:
     int findImportFile(const QString& fileName);
     bool addAlias(const QString& pattern, const QString& toDescr,
         AliasType aType, int idSrc);
+    int aliasId(const QString& pattern, AliasType alType);
     // Subject area
     virtual QString fileName();
     void getCounts(int& totalInCount, int& totalExpCount);

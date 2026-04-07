@@ -144,6 +144,54 @@ bool HwDatabase::addAlias(const QString &pattern, const QString &toDescr,
     return execQuery(sqlIns);
 }
 
+int HwDatabase::aliasId(const QString &pattern, AliasType alType)
+{
+    const QString sType;
+    switch (alType) {
+    case Account:
+        sType = " and id_ac is not null";
+        break;
+    case Currency:
+        sType = " and id_cur is not null";
+        break;
+    case Unit:
+        sType = " and id_un is not null";
+        break;
+    case IncomeCat:
+        sType = " and id_icat is not null";
+        break;
+    case IncomeSubCat:
+        sType = " and id_isubcat is not null";
+        break;
+    case ExpenseCat:
+        sType = " and id_ecat is not null";
+        break;
+    case ExpenseSubCat:
+        sType = " and id_esubcat is not null";
+        break;
+    case TransferType:
+        sType = " and id_tt is not null";
+        break;
+    default: // Any
+        sType = "";
+        break;
+    }
+    QSqlQuery sqlSel(sqlDb);
+    if (isICUSupported) {
+        if (!prepQuery(sqlSel,
+          QString("select id from hw_alias where upper(pattern)=:pattern %1").arg(sType)))
+            return -1;
+        sqlSel.bindValue(":pattern", pattern.toUpper());
+    }
+    else {
+        if (!prepQuery(sqlSel,
+          QString("select id from hw_alias where pattern=:pattern %1").arg(sType)))
+            return -1;
+        sqlSel.bindValue(":pattern", pattern);
+    }
+    return dictId(sqlSel);
+}
+
 int HwDatabase::addAccount(const QString &name, const QString &descr,
     const QDateTime& foundation, const MultiCurrById& startBalance)
 {
