@@ -341,6 +341,12 @@
     <addaction name="actionFilter"/>
     <addaction name="action_Settings"/>
    </widget>
+   <widget class="QMenu" name="menuReports">
+    <property name="title">
+     <string>&amp;Reports</string>
+    </property>
+    <addaction name="actionDuplicates_Search"/>
+   </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
      <string>&amp;Help</string>
@@ -351,6 +357,7 @@
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_View"/>
+   <addaction name="menuReports"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -451,6 +458,11 @@
   <action name="actionCurrencies">
    <property name="text">
     <string>Currencies</string>
+   </property>
+  </action>
+  <action name="actionDuplicates_Search">
+   <property name="text">
+    <string>&amp;Duplicates Search</string>
    </property>
   </action>
  </widget>

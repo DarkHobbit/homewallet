@@ -146,7 +146,7 @@ bool HwDatabase::addAlias(const QString &pattern, const QString &toDescr,
 
 int HwDatabase::aliasId(const QString &pattern, AliasType alType)
 {
-    const QString sType;
+    QString sType;
     switch (alType) {
     case Account:
         sType = " and id_ac is not null";
@@ -744,5 +744,50 @@ bool HwDatabase::addRepayment(int idCrd, const QDateTime &opDT, int amount, int 
     sqlIns.bindValue(":id_imp", idOrNull(idImp));
     sqlIns.bindValue(":uid_imp", strOrNull(uid));
     return execQuery(sqlIns);
+}
+
+bool HwDatabase::testDateRange(QDateTime &dtMin, QDateTime &dtMax)
+{
+    auto testTableDateRange = [this, &dtMin, &dtMax](const QString& tableName)->bool
+    {
+        QSqlQuery sqlTest(sqlDb);
+        if (!prepQuery(sqlTest, QString("select op_date from %1 order by op_date").arg(tableName)))
+            return false;
+        if (!execQuery(sqlTest))
+            return false;
+        if (queryRecCount(sqlTest)==0)
+            return true;
+        sqlTest.first();
+        QDateTime dt = sqlTest.value(0).toDateTime();
+        if (dtMin.isNull())
+            dtMin = dt;
+        else if (dt<dtMin)
+            dtMin = dt;
+        sqlTest.last();
+        dt = sqlTest.value(0).toDateTime();
+        if (dtMax.isNull())
+            dtMax = dt;
+        else if (dt>dtMax)
+            dtMax = dt;
+        return true;
+    };
+    dtMin = dtMax = QDateTime();
+    if (!testTableDateRange("hw_ex_op"))
+        return false;
+    if (!testTableDateRange("hw_in_op"))
+        return false;
+    if (!testTableDateRange("hw_transfer"))
+        return false;
+    if (!testTableDateRange("hw_curr_exch"))
+        return false;
+    if (!testTableDateRange("hw_credit"))
+        return false;
+    // TODO rates? need ch_date instead op_date
+    if (dtMin.isNull() || dtMax.isNull()) {
+        _lastError = S_EMPTY_DB;
+        return false;
+    }
+    else
+        return true;
 }
 

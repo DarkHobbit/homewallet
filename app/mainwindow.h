@@ -80,6 +80,8 @@ private slots:
     void on_actionShowRepaymentHistory_triggered();
     void on_actionCurrencies_triggered();
 
+    void on_actionDuplicates_Search_triggered();
+
 private:
     Ui::MainWindow *ui;
     ExpenseModel* mdlExpenses;

@@ -27,6 +27,7 @@
 #include "logwindow.h"
 #include "mainwindow.h"
 #include "settingsdialog.h"
+#include "simplereportdialog.h"
 #include "testmanager.h"
 #include "ui_mainwindow.h"
 #include "formats/interactiveformat.h"
@@ -748,3 +749,13 @@ void MainWindow::on_actionCurrencies_triggered()
     CurrencyWindow* w = new CurrencyWindow(0, db);
     w->show();
 }
+
+void MainWindow::on_actionDuplicates_Search_triggered()
+{
+    SimpleReportDialog* d = new SimpleReportDialog(tr("Duplicates search"), &db, 0);
+    if (d->exec()==QDialog::Accepted) {
+        // TODO
+    }
+    delete d;
+}
+

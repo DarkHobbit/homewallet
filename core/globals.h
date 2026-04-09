@@ -35,6 +35,7 @@
 #define S_READ_ERR QObject::tr("Can't read file\n%1")
 #define S_WRITE_ERR QObject::tr("Can't write file\n%1")
 #define S_EMPTY_FILE QObject::tr("No records found in file\n%1")
+#define S_EMPTY_DB QObject::tr("No records found in database")
 #define S_MKDIR_ERR QObject::tr("Can't create directory\n%1")
 #define S_SEEK_ERR QObject::tr("Can't seek to %1 in file\n%2")
 #define S_REC_NOT_SEL QObject::tr("Record not selected")

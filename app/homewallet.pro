@@ -39,6 +39,7 @@ SOURCES += \
     settingsdialog.cpp \
     formatsgui/exportdialog.cpp \
     formatsgui/postimportdialog.cpp \
+    simplereportdialog.cpp
 
 HEADERS  += \
     aboutdialog.h \
@@ -53,6 +54,7 @@ HEADERS  += \
     settingsdialog.h \
     formatsgui/exportdialog.h \
     formatsgui/postimportdialog.h \
+    simplereportdialog.h
 
 FORMS    += \
     aboutdialog.ui \
@@ -65,6 +67,7 @@ FORMS    += \
     settingsdialog.ui \
     formatsgui/exportdialog.ui \
     formatsgui/postimportdialog.ui \
+    simplereportdialog.ui
 
 unix { 
     OBJECTS_DIR = .obj

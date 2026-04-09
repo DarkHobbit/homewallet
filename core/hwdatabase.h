@@ -119,6 +119,8 @@ public:
     bool addRepayment(int idCrd, const QDateTime& opDT, int amount,
         int idAcc, int idCur, const QString& descr,
         int idImp=-1, const QString& uid="");
+    // Analysis
+    bool testDateRange(QDateTime& dtMin, QDateTime& dtMax);
 };
 
 #endif // HWDATABASE_H

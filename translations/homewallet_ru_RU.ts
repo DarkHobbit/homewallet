@@ -381,31 +381,31 @@
 <context>
     <name>FilteredQueryModel</name>
     <message>
-        <location filename="../model/filteredquerymodel.cpp" line="158"/>
+        <location filename="../model/filteredquerymodel.cpp" line="160"/>
         <source>Record id: %1</source>
         <translation>ID записи: %1</translation>
     </message>
     <message>
-        <location filename="../model/filteredquerymodel.cpp" line="165"/>
+        <location filename="../model/filteredquerymodel.cpp" line="167"/>
         <source>
 Imported from %1</source>
         <translation>
 Импортировано из %1</translation>
     </message>
     <message>
-        <location filename="../model/filteredquerymodel.cpp" line="168"/>
+        <location filename="../model/filteredquerymodel.cpp" line="170"/>
         <source>
 Verified from %1</source>
         <translation>
 Проверено из %1</translation>
     </message>
     <message>
-        <location filename="../model/filteredquerymodel.cpp" line="183"/>
+        <location filename="../model/filteredquerymodel.cpp" line="185"/>
         <source>%1::%2 (%3) at %4</source>
         <translation>%1::%2 (%3) на %4</translation>
     </message>
     <message>
-        <location filename="../model/filteredquerymodel.cpp" line="203"/>
+        <location filename="../model/filteredquerymodel.cpp" line="205"/>
         <source>Incorrect column index found, see Settings-&gt;Columns</source>
         <translation>Обнаружен некорректный индекс столбца, см. Настройки-&gt;Столбцы</translation>
     </message>
@@ -586,145 +586,160 @@ Verified from %1</source>
         <translation>&amp;Вид</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="346"/>
+        <location filename="../app/mainwindow.ui" line="352"/>
         <source>&amp;Help</source>
         <translation>&amp;Справка</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="367"/>
+        <location filename="../app/mainwindow.ui" line="346"/>
+        <source>&amp;Reports</source>
+        <translation>&amp;Отчёты</translation>
+    </message>
+    <message>
+        <location filename="../app/mainwindow.ui" line="374"/>
         <source>&amp;Import</source>
         <translation>&amp;Импорт</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="370"/>
+        <location filename="../app/mainwindow.ui" line="377"/>
         <source>Alt+I</source>
         <translation>Alt+I</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="375"/>
+        <location filename="../app/mainwindow.ui" line="382"/>
         <source>&amp;Export</source>
         <translation>&amp;Экспорт</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="378"/>
+        <location filename="../app/mainwindow.ui" line="385"/>
         <source>Alt+E</source>
         <translation>Alt+E</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="383"/>
+        <location filename="../app/mainwindow.ui" line="390"/>
         <source>E&amp;xit</source>
         <translation>В&amp;ыход</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="388"/>
+        <location filename="../app/mainwindow.ui" line="395"/>
         <source>&amp;Categories</source>
         <translation>&amp;Категории</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="393"/>
+        <location filename="../app/mainwindow.ui" line="400"/>
         <source>&amp;Settings...</source>
         <translation>&amp;Настройки…</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="396"/>
+        <location filename="../app/mainwindow.ui" line="403"/>
         <source>Ctrl+P</source>
         <translation>Ctrl+P</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="401"/>
+        <location filename="../app/mainwindow.ui" line="408"/>
         <source>&amp;About</source>
         <translation>&amp;О программе</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="406"/>
+        <location filename="../app/mainwindow.ui" line="413"/>
         <source>About &amp;Qt</source>
         <translation>О Qt</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="411"/>
+        <location filename="../app/mainwindow.ui" line="418"/>
         <source>&amp;DB debug</source>
         <translation>Отладка БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="416"/>
+        <location filename="../app/mainwindow.ui" line="423"/>
         <source>&amp;Filter</source>
         <translation>Фильтр</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="419"/>
+        <location filename="../app/mainwindow.ui" line="426"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="424"/>
+        <location filename="../app/mainwindow.ui" line="431"/>
         <source>Technical information</source>
         <translation>Техническая информация</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="432"/>
+        <location filename="../app/mainwindow.ui" line="439"/>
         <source>Edit</source>
         <translation>Редактировать</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="440"/>
+        <location filename="../app/mainwindow.ui" line="447"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="448"/>
+        <location filename="../app/mainwindow.ui" line="455"/>
         <source>Show repayment history</source>
         <translation>Показать историю платежей</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="453"/>
+        <location filename="../app/mainwindow.ui" line="460"/>
         <source>Currencies</source>
         <translation>Валюты</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="140"/>
+        <location filename="../app/mainwindow.ui" line="465"/>
+        <source>&amp;Duplicates Search</source>
+        <translation>Поиск &amp;дубликатов</translation>
+    </message>
+    <message>
+        <location filename="../app/mainwindow.cpp" line="141"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="144"/>
+        <location filename="../app/mainwindow.cpp" line="145"/>
         <source>Database not empty for testing</source>
         <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="199"/>
+        <location filename="../app/mainwindow.cpp" line="200"/>
         <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="258"/>
+        <location filename="../app/mainwindow.cpp" line="259"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="258"/>
+        <location filename="../app/mainwindow.cpp" line="259"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="269"/>
+        <location filename="../app/mainwindow.cpp" line="270"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="286"/>
+        <location filename="../app/mainwindow.cpp" line="287"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="336"/>
+        <location filename="../app/mainwindow.cpp" line="337"/>
         <source>Format require dialog, but dialog not provided. Contact author</source>
         <translation>Формат требует диалоговое окно, но программа его не обеспечивает.
 Свяжитесь с автором</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="733"/>
+        <location filename="../app/mainwindow.cpp" line="734"/>
         <source>Repayment history for: </source>
         <translation>История платежей для: </translation>
+    </message>
+    <message>
+        <location filename="../app/mainwindow.cpp" line="755"/>
+        <source>Duplicates search</source>
+        <translation>Поиск дубликатов</translation>
     </message>
     <message>
         <source>Can&apos;t remove records from this table</source>
@@ -741,7 +756,7 @@ at record %1 from %2</source>
 в записи %1 из %2</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="390"/>
+        <location filename="../app/mainwindow.cpp" line="391"/>
         <source>Restart program to apply language change</source>
         <translation>Язык сменится после перезапуска программы</translation>
     </message>
@@ -831,17 +846,17 @@ State: %4</source>
         <translation>Кандидаты на категорию:</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="236"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="241"/>
         <source>No unknown aliases in this row</source>
         <translation>В этой строке нет неизвестных псевдонимов</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="305"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="310"/>
         <source>No ambiguous subcategory at this record</source>
         <translation>У этой записи нет неоднозначной подкатегории</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="309"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="314"/>
         <source>Select category</source>
         <translation>Выберите категорию</translation>
     </message>
@@ -1123,8 +1138,8 @@ Rebuild SQLite with ICU support or provide ICU library as extension</source>
         <translation>Не могу проверить наличие ICU</translation>
     </message>
     <message>
-        <location filename="../core/hwdatabase.cpp" line="319"/>
-        <location filename="../core/hwdatabase.cpp" line="408"/>
+        <location filename="../core/hwdatabase.cpp" line="367"/>
+        <location filename="../core/hwdatabase.cpp" line="456"/>
         <source>No subcategory</source>
         <translation>Нет подкатегории</translation>
     </message>
@@ -1321,67 +1336,72 @@ or manually add it to %4.</source>
     </message>
     <message>
         <location filename="../core/globals.h" line="38"/>
+        <source>No records found in database</source>
+        <translation>В БД записей не найдено</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="39"/>
         <source>Can&apos;t create directory
 %1</source>
         <translation>Не могу создать каталог
 %1</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="39"/>
+        <location filename="../core/globals.h" line="40"/>
         <source>Can&apos;t seek to %1 in file
 %2</source>
         <translation>Не могу перейти на позицию %1 в файле
 %2</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="40"/>
+        <location filename="../core/globals.h" line="41"/>
         <source>Record not selected</source>
         <translation>Выберите запись</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="41"/>
+        <location filename="../core/globals.h" line="42"/>
         <source>Group operation not implemented, select one record</source>
         <translation>Групповая операция не поддерживается, выберите одну запись</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="42"/>
+        <location filename="../core/globals.h" line="43"/>
         <source>Can&apos;t remove records from this table</source>
         <translation>Из этой таблицы нельзя удалять записи</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="43"/>
+        <location filename="../core/globals.h" line="44"/>
         <source>Prepare error: %1</source>
         <translation>Ошибка подготовки запроса: %1</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="44"/>
+        <location filename="../core/globals.h" line="45"/>
         <source>Execute error: %1</source>
         <translation>Ошибка исполнения запроса: %1</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="45"/>
+        <location filename="../core/globals.h" line="46"/>
         <source>Internal error</source>
         <translation>Внутренняя ошибка</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="47"/>
+        <location filename="../core/globals.h" line="48"/>
         <source>Do you really want to delete the selected items?</source>
         <translation>Вы действительно хотите удалить выбранные записи?</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="49"/>
+        <location filename="../core/globals.h" line="50"/>
         <source>This format is read only</source>
         <translation>Это формат только для чтения</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="51"/>
+        <location filename="../core/globals.h" line="52"/>
         <source>Warning: record %1 has %2, not supported in this format.
 Data will be lost</source>
         <translation>Предупреждение: у записи %1 есть %2, не поддерживается в этом формате.
 Данные будут потеряны</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="53"/>
+        <location filename="../core/globals.h" line="54"/>
         <source>%1 %2 will be lost at record %3</source>
         <translation>%1 %2 будет утерян у записи %3</translation>
     </message>
@@ -1390,184 +1410,184 @@ Data will be lost</source>
         <translation type="obsolete">Прочитано записей: %1</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="55"/>
+        <location filename="../core/globals.h" line="56"/>
         <source>%1 records has been processed</source>
         <translation>Обработано записей: %1</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="57"/>
+        <location filename="../core/globals.h" line="58"/>
         <source>Select at least one export information type</source>
         <translation>Выберите хотя бы один тип информации</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="59"/>
+        <location filename="../core/globals.h" line="60"/>
         <source>Unknown import/export error</source>
         <translation>Неизвестная ошибка импорта/экспорта</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="61"/>
+        <location filename="../core/globals.h" line="62"/>
         <source>
 at record %1 from %2</source>
         <translation>
 в записи %1 из %2</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="63"/>
+        <location filename="../core/globals.h" line="64"/>
         <source>Mode: </source>
         <translation>Режим: </translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="64"/>
+        <location filename="../core/globals.h" line="65"/>
         <source>sorted</source>
         <translation>сорт.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="65"/>
+        <location filename="../core/globals.h" line="66"/>
         <source>not sorted</source>
         <translation>не сорт.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="69"/>
+        <location filename="../core/globals.h" line="70"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="70"/>
+        <location filename="../core/globals.h" line="71"/>
         <source>#</source>
         <translation>№</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="71"/>
+        <location filename="../core/globals.h" line="72"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="72"/>
+        <location filename="../core/globals.h" line="73"/>
         <source>Sh.name</source>
         <translation>Кр.имя</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="73"/>
+        <location filename="../core/globals.h" line="74"/>
         <source>Category</source>
         <translation>Категория</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="74"/>
+        <location filename="../core/globals.h" line="75"/>
         <source>Subcategory</source>
         <translation>Подкатегория</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="75"/>
+        <location filename="../core/globals.h" line="76"/>
         <source>Qty.</source>
         <translation>Кол-во</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="76"/>
+        <location filename="../core/globals.h" line="77"/>
         <source>Unit</source>
         <translation>Ед.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="77"/>
+        <location filename="../core/globals.h" line="78"/>
         <source>Sum</source>
         <translation>Сумма</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="78"/>
+        <location filename="../core/globals.h" line="79"/>
         <source>Cur.</source>
         <translation>В.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="79"/>
+        <location filename="../core/globals.h" line="80"/>
         <source>Account</source>
         <translation>Счёт</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="80"/>
+        <location filename="../core/globals.h" line="81"/>
         <source>At.</source>
         <translation>★</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="81"/>
+        <location filename="../core/globals.h" line="82"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="83"/>
+        <location filename="../core/globals.h" line="84"/>
         <source>From</source>
         <translation>Откуда</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="84"/>
+        <location filename="../core/globals.h" line="85"/>
         <source>To</source>
         <translation>Куда</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="86"/>
+        <location filename="../core/globals.h" line="87"/>
         <source>Close date</source>
         <translation>Дата пог.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="87"/>
+        <location filename="../core/globals.h" line="88"/>
         <source>Remind date</source>
         <translation>Дата нап.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="88"/>
+        <location filename="../core/globals.h" line="89"/>
         <source>Debtor</source>
         <translation>Должник</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="89"/>
+        <location filename="../core/globals.h" line="90"/>
         <source>Creditor</source>
         <translation>Кредитор</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="90"/>
+        <location filename="../core/globals.h" line="91"/>
         <source>Down pay</source>
         <translation>Нач.пл.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="91"/>
+        <location filename="../core/globals.h" line="92"/>
         <source>Moneyback</source>
         <translation>Возвращено</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="92"/>
+        <location filename="../core/globals.h" line="93"/>
         <source>Remaining</source>
         <translation>Осталось</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="93"/>
+        <location filename="../core/globals.h" line="94"/>
         <source>Rate</source>
         <translation>Ставка</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="94"/>
+        <location filename="../core/globals.h" line="95"/>
         <source>Period</source>
         <translation>Период</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="95"/>
+        <location filename="../core/globals.h" line="96"/>
         <source>Closed</source>
         <translation>Закр.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="97"/>
+        <location filename="../core/globals.h" line="98"/>
         <source>Source</source>
         <translation>Источник</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="98"/>
+        <location filename="../core/globals.h" line="99"/>
         <source>Alias</source>
         <translation>Псевдоним</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="100"/>
+        <location filename="../core/globals.h" line="101"/>
         <source>&lt;All&gt;</source>
         <translation>&lt;Все&gt;</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="101"/>
+        <location filename="../core/globals.h" line="102"/>
         <source>Other</source>
         <translation>Прочее</translation>
     </message>
@@ -1850,7 +1870,7 @@ At line %3</source>
         <translation>Гл.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="46"/>
+        <location filename="../core/globals.h" line="47"/>
         <source>Main currency not found</source>
         <translation>Главная валюта не найдена</translation>
     </message>
@@ -2064,6 +2084,19 @@ At line %3</source>
         <location filename="../app/settingsdialog.cpp" line="196"/>
         <source>List must contain at least one visible column</source>
         <translation>В списке должен быть хотя бы один видимый столбец</translation>
+    </message>
+</context>
+<context>
+    <name>SimpleReportDialog</name>
+    <message>
+        <location filename="../app/simplereportdialog.ui" line="22"/>
+        <source>Date from</source>
+        <translation>Дата от</translation>
+    </message>
+    <message>
+        <location filename="../app/simplereportdialog.ui" line="32"/>
+        <source>Date to</source>
+        <translation>Дата до</translation>
     </message>
 </context>
 <context>
