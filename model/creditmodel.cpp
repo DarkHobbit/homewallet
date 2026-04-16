@@ -70,7 +70,7 @@ void CreditModel::update()
 
 QString CreditModel::localizedName()
 {
-    return isLend ? tr("Lend") : tr("Borrow");
+    return isLend ? S_DK_LEND : S_DK_BORROW;
 }
 
 QString CreditModel::recordLabel(const QModelIndex &recIndex)

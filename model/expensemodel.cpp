@@ -63,6 +63,6 @@ void ExpenseModel::update()
 
 QString ExpenseModel::localizedName()
 {
-    return tr("Expenses");
+    return S_DK_EXPENSES;
 }
 

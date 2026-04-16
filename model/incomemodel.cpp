@@ -62,5 +62,5 @@ void IncomeModel::update()
 
 QString IncomeModel::localizedName()
 {
-    return tr("Incomes");
+    return S_DK_INCOMES;
 }

@@ -64,6 +64,13 @@
 #define SS_MODE QObject::tr("Mode: ")
 #define SS_SORT_ON QObject::tr("sorted")
 #define SS_SORT_OFF QObject::tr("not sorted")
+// Data kinds
+#define S_DK_EXPENSES QObject::tr("Expenses")
+#define S_DK_INCOMES QObject::tr("Incomes")
+#define S_DK_TRANSFER QObject::tr("Transfer")
+#define S_DK_CURR_CONV QObject::tr("Currency conversion")
+#define S_DK_LEND QObject::tr("Lend")
+#define S_DK_BORROW QObject::tr("Borrow")
 // Model item roles
 #define SortStringRole Qt::UserRole
 // Model common column names

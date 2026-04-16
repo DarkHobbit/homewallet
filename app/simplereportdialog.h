@@ -28,6 +28,7 @@ class SimpleReportDialog : public QDialog
 public:
     explicit SimpleReportDialog(const QString& title, HwDatabase* db,  QWidget *parent = 0);
     ~SimpleReportDialog();
+    void getData(QDate &dtMin, QDate &dtMax);
 
 protected:
     void changeEvent(QEvent *e);

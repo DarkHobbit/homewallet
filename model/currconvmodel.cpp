@@ -55,5 +55,5 @@ void CurrConvModel::update()
 
 QString CurrConvModel::localizedName()
 {
-    return tr("Currency conversion");
+    return S_DK_CURR_CONV;
 }

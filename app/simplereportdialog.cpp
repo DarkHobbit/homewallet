@@ -29,13 +29,19 @@ SimpleReportDialog::SimpleReportDialog(const QString& title, HwDatabase* db,  QW
         QMessageBox::critical(0, S_ERROR, db->lastError());
         return;
     }
-    ui->dteFrom->setDateTime(dtFrom);
-    ui->dteTo->setDateTime(dtTo);
+    ui->deFrom->setDate(dtFrom.date());
+    ui->deTo->setDate(dtTo.date());
 }
 
 SimpleReportDialog::~SimpleReportDialog()
 {
     delete ui;
+}
+
+void SimpleReportDialog::getData(QDate &dtMin, QDate &dtMax)
+{
+    dtMin = ui->deFrom->date();
+    dtMax = ui->deTo->date();
 }
 
 void SimpleReportDialog::changeEvent(QEvent *e)

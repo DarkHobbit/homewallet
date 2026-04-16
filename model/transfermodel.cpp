@@ -56,5 +56,5 @@ void TransferModel::update()
 
 QString TransferModel::localizedName()
 {
-    return tr("Transfer");
+    return S_DK_TRANSFER;
 }

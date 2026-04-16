@@ -161,6 +161,23 @@ bool GenericDatabase::collectRevDict(RevDictColl &coll, const QString &tableName
     return true;
 }
 
+bool GenericDatabase::collectParentRevDict(RevDictColl &coll, const QString &parentTable, const QString &childTable, const QString &refIdFieldName)
+{
+    QString sql = "select ch.id, pt.name from %1 pt, %2 ch where pt.id=ch.%3 order by pt.name";
+    sql = sql.arg(parentTable).arg(childTable).arg(refIdFieldName);
+    QSqlQuery sqlColl(sqlDb);
+    if (!prepQuery(sqlColl, sql))
+        return false;
+    if (!execQuery(sqlColl))
+        return false;
+    sqlColl.first();
+    while (sqlColl.isValid()) {
+        coll[sqlColl.value(0).toInt()] = sqlColl.value(1).toString();
+        sqlColl.next();
+    }
+    return true;
+}
+
 bool GenericDatabase::collectTwoLevelCat(DictColl &coll, const QString &parentTable, const QString &childTable, const QString &refIdFieldName)
 {
     QString sql = "select ch.id as chid, pt.name||'::'||ch.name as compname from %1 ch left join %2 pt on pt.id=ch.%3 order by pt.name, ch.name";
@@ -176,7 +193,6 @@ bool GenericDatabase::collectTwoLevelCat(DictColl &coll, const QString &parentTa
         sqlColl.next();
     }
     return true;
-
 }
 
 bool GenericDatabase::isTableEmpty(const QString &tableName, const QString &fieldName, const QString &idFieldName)
