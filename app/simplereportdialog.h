@@ -15,6 +15,8 @@
 #define SIMPLEREPORTDIALOG_H
 
 #include <QDialog>
+#include <QBoxLayout>
+
 #include "hwdatabase.h"
 
 namespace Ui {
@@ -28,10 +30,15 @@ class SimpleReportDialog : public QDialog
 public:
     explicit SimpleReportDialog(const QString& title, HwDatabase* db,  QWidget *parent = 0);
     ~SimpleReportDialog();
-    void getData(QDate &dtMin, QDate &dtMax);
+    QBoxLayout* mainLayout();
+    QWidget* lastBaseWidget();
+    void getData(QString& path, QDate &dtMin, QDate &dtMax);
 
 protected:
     void changeEvent(QEvent *e);
+
+private slots:
+    void on_btnSetPath_clicked();
 
 private:
     Ui::SimpleReportDialog *ui;

@@ -13,10 +13,12 @@
 #include <QApplication>
 #include <QDialog>
 #include <QFileDialog>
+#include <QHBoxLayout>
 #include <QHeaderView>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QResizeEvent>
+#include <QSpinBox>
 #include <QSqlError>
 #include <QTime>
 
@@ -26,6 +28,8 @@
 #include "globals.h"
 #include "logwindow.h"
 #include "mainwindow.h"
+#include "reportsdata.h"
+#include "reports.h"
 #include "settingsdialog.h"
 #include "simplereportdialog.h"
 #include "testmanager.h"
@@ -753,8 +757,33 @@ void MainWindow::on_actionCurrencies_triggered()
 void MainWindow::on_actionDuplicates_Search_triggered()
 {
     SimpleReportDialog* d = new SimpleReportDialog(tr("Duplicates search"), &db, 0);
+
+    // Addidtional report controls
+    QHBoxLayout* layDelta = new QHBoxLayout();
+    layDelta->addWidget(new QLabel(tr("Amount delta")));
+    QSpinBox* sbDelta = new QSpinBox();
+    sbDelta->setValue(2);
+    layDelta->addWidget(sbDelta);
+    d->mainLayout()->insertLayout(2, layDelta);
+    d->setTabOrder(d->lastBaseWidget(), sbDelta);
+    QCheckBox* cbShowSrc = new QCheckBox(tr("Show source"));
+    d->mainLayout()->insertWidget(3, cbShowSrc);
+    d->setTabOrder(sbDelta, cbShowSrc);
+
     if (d->exec()==QDialog::Accepted) {
-        // TODO
+        ReportsData rd;
+        ReportsData::Duplicates duplicates;
+        QString path;
+        QDate dMin, dMax;
+        d->getData(path, dMin, dMax);
+        if (!rd.findDuplicates(db, dMin, dMax,
+          sbDelta->value(), cbShowSrc->isChecked(), duplicates))
+            QMessageBox::critical(0, S_ERROR, rd.fatalError());
+        else {
+            Reports rep;
+            rep.findDuplicates(path, dMin, dMax, sbDelta->value(), duplicates);
+            rep.show(path);
+        }
     }
     delete d;
 }

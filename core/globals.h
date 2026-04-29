@@ -31,6 +31,7 @@
 // File ops
 #define S_ALL_SUPPORTED QObject::tr("All supported files (%1)")
 #define S_ALL_FILES QObject::tr("All files (*.*)")
+#define S_ONE_FILETYPE QObject::tr("%1 file (%2)")
 // Common errors, warnings and questions
 #define S_READ_ERR QObject::tr("Can't read file\n%1")
 #define S_WRITE_ERR QObject::tr("Can't write file\n%1")
@@ -60,6 +61,7 @@
     QObject::tr("Unknown import/export error")
 #define S_ERR_REC_NUM \
     QObject::tr("\nat record %1 from %2")
+#define S_DUP_NOT_FOUND QObject::tr("duplicates not found")
 // Status messages
 #define SS_MODE QObject::tr("Mode: ")
 #define SS_SORT_ON QObject::tr("sorted")

@@ -36,6 +36,7 @@ SOURCES += \
     logwindow.cpp \
     main.cpp \
     mainwindow.cpp \
+    reports.cpp \
     settingsdialog.cpp \
     formatsgui/exportdialog.cpp \
     formatsgui/postimportdialog.cpp \
@@ -51,6 +52,7 @@ HEADERS  += \
     languageselectdialog.h \
     logwindow.h \
     mainwindow.h \
+    reports.h \
     settingsdialog.h \
     formatsgui/exportdialog.h \
     formatsgui/postimportdialog.h \

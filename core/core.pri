@@ -40,6 +40,7 @@ HEADERS	+= \
     $$PWD/hwdatabase.h \
     $$PWD/languagemanager.h \
     $$PWD/pathmanager.h \
+    $$PWD/reportsdata.h
 
 SOURCES	+= \
     $$PWD/corehelpers.cpp \
@@ -59,6 +60,7 @@ SOURCES	+= \
     $$PWD/hwdatabase.cpp \
     $$PWD/languagemanager.cpp \
     $$PWD/pathmanager.cpp \
+    $$PWD/reportsdata.cpp
 
 DISTFILES += \
     $$PWD/dbinit/dbinit.sql \
