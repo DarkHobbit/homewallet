@@ -71,6 +71,11 @@ void Reports::addCellHtml(QTextTable *t, int row, int col, const QString &text,
     hc.insertHtml(text);
 }
 
+QString Reports::fromLowUnit(int lowUnitSum)
+{
+    return QString::number((float)lowUnitSum/100, 'f', 2);
+}
+
 QString Reports::makeDocumentFormatFilters()
 {
     QStringList res, exts;
@@ -85,7 +90,7 @@ QString Reports::makeDocumentFormatFilters()
             exts += sf;
         }
     }
-    res << S_ALL_SUPPORTED.arg("*." + exts.join(" *."));
+    res.insert(0, S_ALL_SUPPORTED.arg("*." + exts.join(" *.")));
     res << S_ALL_FILES;
     return res.join(";;");
 }
@@ -140,7 +145,7 @@ void Reports::findOneDupKind(QTextCursor &c, const QString &header, const Report
             }
             for (const ReportsData::DupInfo& dup : set.dups)
             {
-                addCellText(t, row, 1, QString::number((float)dup.sum/100), frmCell);
+                addCellText(t, row, 1, fromLowUnit(dup.sum), frmCell);
                 addCellText(t, row, colDesc, dup.descr, frmCell);
                 if (dupVec.showSrc)
                     addCellText(t, row, colDesc+1, dup.src, frmCell);

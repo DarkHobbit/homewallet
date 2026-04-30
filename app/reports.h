@@ -42,6 +42,7 @@ protected:
         const QTextCharFormat &charFormat = QTextCharFormat(), const QTextBlockFormat &blockFormat = QTextBlockFormat());
     void addCellHtml(QTextTable* t, int row, int col, const QString& text,
         const QTextBlockFormat &blockFormat = QTextBlockFormat());
+    QString fromLowUnit(int lowUnitSum);
 
     void findOneDupKind(QTextCursor& c, const QString& header, const ReportsData::DupVector& dupVec);
 signals:
