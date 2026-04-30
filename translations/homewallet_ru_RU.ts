@@ -686,63 +686,63 @@ Verified from %1</source>
         <translation>Поиск &amp;дубликатов</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="145"/>
+        <location filename="../app/mainwindow.cpp" line="146"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="149"/>
+        <location filename="../app/mainwindow.cpp" line="150"/>
         <source>Database not empty for testing</source>
         <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="204"/>
+        <location filename="../app/mainwindow.cpp" line="205"/>
         <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="263"/>
+        <location filename="../app/mainwindow.cpp" line="264"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="263"/>
+        <location filename="../app/mainwindow.cpp" line="264"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="274"/>
+        <location filename="../app/mainwindow.cpp" line="275"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="291"/>
+        <location filename="../app/mainwindow.cpp" line="292"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="341"/>
+        <location filename="../app/mainwindow.cpp" line="342"/>
         <source>Format require dialog, but dialog not provided. Contact author</source>
         <translation>Формат требует диалоговое окно, но программа его не обеспечивает.
 Свяжитесь с автором</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="738"/>
+        <location filename="../app/mainwindow.cpp" line="739"/>
         <source>Repayment history for: </source>
         <translation>История платежей для: </translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="759"/>
+        <location filename="../app/mainwindow.cpp" line="760"/>
         <source>Duplicates search</source>
         <translation>Поиск дубликатов</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="763"/>
+        <location filename="../app/mainwindow.cpp" line="764"/>
         <source>Amount delta</source>
         <translation>Допуск суммы</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="769"/>
+        <location filename="../app/mainwindow.cpp" line="770"/>
         <source>Show source</source>
         <translation>Показывать источник</translation>
     </message>
@@ -761,7 +761,7 @@ at record %1 from %2</source>
 в записи %1 из %2</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="395"/>
+        <location filename="../app/mainwindow.cpp" line="396"/>
         <source>Restart program to apply language change</source>
         <translation>Язык сменится после перезапуска программы</translation>
     </message>
@@ -864,6 +864,19 @@ State: %4</source>
         <location filename="../app/formatsgui/postimportdialog.cpp" line="314"/>
         <source>Select category</source>
         <translation>Выберите категорию</translation>
+    </message>
+</context>
+<context>
+    <name>ProgressWindow</name>
+    <message>
+        <location filename="../app/progresswindow.ui" line="14"/>
+        <source>Progress</source>
+        <translation>Прогресс операции</translation>
+    </message>
+    <message>
+        <location filename="../app/progresswindow.ui" line="20"/>
+        <source>[]</source>
+        <translation>[]</translation>
     </message>
 </context>
 <context>
@@ -1978,6 +1991,14 @@ At line %3</source>
     </message>
 </context>
 <context>
+    <name>ReportsData</name>
+    <message>
+        <location filename="../core/reportsdata.cpp" line="101"/>
+        <source>Search...</source>
+        <translation>Поиск...</translation>
+    </message>
+</context>
+<context>
     <name>SettingsDialog</name>
     <message>
         <location filename="../app/settingsdialog.ui" line="14"/>
@@ -2169,7 +2190,7 @@ At line %3</source>
     <message>
         <location filename="../app/simplereportdialog.cpp" line="78"/>
         <source>Select report file</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите файл отчёта</translation>
     </message>
 </context>
 <context>

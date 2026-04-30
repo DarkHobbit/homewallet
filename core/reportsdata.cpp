@@ -34,7 +34,7 @@ bool ReportsData::findDuplicates(HwDatabase &db, const QDate &dFrom, const QDate
     // Expenses
     DB_CHK(db.collectParentRevDict(collCat, "hw_ex_cat", "hw_ex_subcat", "id_ecat"))
     DB_CHK(db.collectRevDict(collSubCat, "hw_ex_subcat"))
-    if (!findOneDuplicatesKind(db, dFrom, dTo, amountDelta,
+    if (!findOneDuplicatesKind(db, dFrom, dTo, amountDelta, S_DK_EXPENSES,
         "select id, op_date, amount, id_esubcat from hw_ex_op where op_date>=:dmin and op_date<=:dmax order by op_date",
         "select id, amount, descr, id_imp, uid_imp from hw_ex_op where op_date>=:dc and op_date<:dn" \
         " and id_esubcat=:id_subcat and amount>=:am_min and amount<=:am_max",
@@ -46,7 +46,7 @@ bool ReportsData::findDuplicates(HwDatabase &db, const QDate &dFrom, const QDate
     collSubCat.clear();
     DB_CHK(db.collectParentRevDict(collCat, "hw_in_cat", "hw_in_subcat", "id_icat"))
     DB_CHK(db.collectRevDict(collSubCat, "hw_in_subcat"))
-    if (!findOneDuplicatesKind(db, dFrom, dTo, amountDelta,
+    if (!findOneDuplicatesKind(db, dFrom, dTo, amountDelta, S_DK_INCOMES,
         "select id, op_date, amount, id_isubcat from hw_in_op where op_date>=:dmin and op_date<=:dmax order by op_date",
         "select id, amount, descr, id_imp, uid_imp from hw_in_op where op_date>=:dc and op_date<:dn" \
         " and id_isubcat=:id_subcat and amount>=:am_min and amount<=:am_max",
@@ -57,7 +57,7 @@ bool ReportsData::findDuplicates(HwDatabase &db, const QDate &dFrom, const QDate
     collCat.clear();
     collSubCat.clear();
     DB_CHK(db.collectRevDict(collCat, "hw_transfer_type"))
-    if (!findOneDuplicatesKind(db, dFrom, dTo, amountDelta,
+    if (!findOneDuplicatesKind(db, dFrom, dTo, amountDelta, S_DK_TRANSFER,
         "select id, op_date, amount, id_tt from hw_transfer where op_date>=:dmin and op_date<=:dmax order by op_date",
         "select id, amount, descr, id_imp, uid_imp from hw_transfer where op_date>=:dc and op_date<:dn" \
         " and id_tt=:id_subcat and amount>=:am_min and amount<=:am_max",
@@ -68,7 +68,8 @@ bool ReportsData::findDuplicates(HwDatabase &db, const QDate &dFrom, const QDate
     return true;
 }
 
-bool ReportsData::findOneDuplicatesKind(HwDatabase &db, const QDate &dFrom, const QDate &dTo, int amountDelta,
+bool ReportsData::findOneDuplicatesKind(HwDatabase &db, const QDate &dFrom, const QDate &dTo,
+        int amountDelta, const QString& infoKind,
     const QString &sqlOrig, const QString &sqlDups,
     const HwDatabase::RevDictColl& collCat, const HwDatabase::RevDictColl& collSubCat,
     const HwDatabase::RevDictColl& collImp, DupVector &dupVec)
@@ -82,7 +83,8 @@ bool ReportsData::findOneDuplicatesKind(HwDatabase &db, const QDate &dFrom, cons
     qOrig.bindValue(":dmin", dFrom);
     qOrig.bindValue(":dmax", dTo);
     DB_CHK(db.execQuery(qOrig))
-    if (db.queryRecCount(qOrig)==0)
+    int origCount = db.queryRecCount(qOrig);
+    if (origCount==0)
         return true;
     int cnt = 0;
     qOrig.first();
@@ -95,8 +97,10 @@ bool ReportsData::findOneDuplicatesKind(HwDatabase &db, const QDate &dFrom, cons
             int sumMin = sum-amountDelta;
             int sumMax = sum+amountDelta;
             QDate d = qOrig.value(1).toDate();
-            if (cnt%500==0)
+            if (cnt%200==0) {
                 std::cerr << d.toString().toUtf8().data() << std::endl;
+                emit progressUpdate(cnt*100/origCount, infoKind);
+            }
             // Table-specific
             int idSubCat = qOrig.value(3).toInt();
             QSqlQuery qCandDup(db.sqlDbRef());

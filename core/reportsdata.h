@@ -15,6 +15,7 @@
 #define REPORTSDATA_H
 
 #include <QDate>
+#include <QObject>
 #include <QString>
 #include <QVector>
 
@@ -29,8 +30,9 @@
     } \
 }
 
-class ReportsData
+class ReportsData : public QObject
 {
+    Q_OBJECT
 public:
     struct DupInfo {
         int sum;
@@ -56,10 +58,13 @@ public:
     QString fatalError();
 protected:
     QString _fatalError;
-    bool findOneDuplicatesKind(HwDatabase& db, const QDate& dFrom, const QDate& dTo, int amountDelta,
+    bool findOneDuplicatesKind(HwDatabase& db, const QDate& dFrom, const QDate& dTo,
+        int amountDelta, const QString& infoKind,
         const QString& sqlOrig, const QString& sqlDups,
         const HwDatabase::RevDictColl& collCat, const HwDatabase::RevDictColl& collSubCat,
         const HwDatabase::RevDictColl& collImp, DupVector& dupVec);
+signals:
+    void progressUpdate(int,QString);
 };
 
 inline QString ReportsData::fatalError()

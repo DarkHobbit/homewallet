@@ -28,6 +28,7 @@
 #include "globals.h"
 #include "logwindow.h"
 #include "mainwindow.h"
+#include "progresswindow.h"
 #include "reportsdata.h"
 #include "reports.h"
 #include "settingsdialog.h"
@@ -776,6 +777,10 @@ void MainWindow::on_actionDuplicates_Search_triggered()
         QString path;
         QDate dMin, dMax;
         d->getData(path, dMin, dMax);
+        ProgressWindow* pw = new ProgressWindow(0);
+        connect(&rd, SIGNAL(progressUpdate(int,QString)), pw, SLOT(onProgressUpdate(int,QString)));
+        pw->show();
+        qApp->processEvents();
         if (!rd.findDuplicates(db, dMin, dMax,
           sbDelta->value(), cbShowSrc->isChecked(), duplicates))
             QMessageBox::critical(0, S_ERROR, rd.fatalError());
@@ -784,6 +789,7 @@ void MainWindow::on_actionDuplicates_Search_triggered()
             rep.findDuplicates(path, dMin, dMax, sbDelta->value(), duplicates);
             rep.show(path);
         }
+        delete pw;
     }
     delete d;
 }
