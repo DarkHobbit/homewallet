@@ -37,6 +37,8 @@ protected:
     QTextCharFormat frmHeader, frmSubHeader, frmCellHdr, frmCell;
     QTextBlockFormat fmtHeader;
     QMap<QString, QString> formatExtensions;
+    bool usePercentColumnsWith;
+    void adjustToFormat(const QString& path);
     void setTableColSizes(QTextTable* t, const IVec& sizes);
     void addCellText(QTextTable* t, int row, int col, const QString& text,
         const QTextCharFormat &charFormat = QTextCharFormat(), const QTextBlockFormat &blockFormat = QTextBlockFormat());

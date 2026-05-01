@@ -12,6 +12,7 @@
  */
 
 #include <QDesktopServices>
+#include <QFileInfo>
 #include <QMessageBox>
 #include <QTextCursor>
 #include <QTextDocument>
@@ -22,7 +23,7 @@
 #include "reports.h"
 
 Reports::Reports(QObject *parent)
-    : QObject{parent}
+    : QObject{parent}, usePercentColumnsWith(false)
 {
     frmHeader.setFontWeight(QFont::Bold);
     frmHeader.setFontFamily("Times");
@@ -49,10 +50,25 @@ void Reports::setTableColSizes(QTextTable* t, const IVec& sizes)
     QTextTableFormat tf;
     QVector<QTextLength> constraints;
     // QTextLength::PercentageLength don't work for ODF format
-    for (int sz: sizes)
-        constraints << QTextLength(QTextLength::FixedLength, sz);
+    if (usePercentColumnsWith) {
+        int totalWidth = 0;
+        for (int sz: sizes)
+            totalWidth += sz;
+        for (int sz: sizes)
+            constraints << QTextLength(QTextLength::PercentageLength, sz*100/totalWidth);
+    }
+    else {
+        for (int sz: sizes)
+            constraints << QTextLength(QTextLength::FixedLength, sz);
+    }
     tf.setColumnWidthConstraints(constraints);
     t->setFormat(tf);
+    if (usePercentColumnsWith) {
+        QTextFrameFormat ff = t->frameFormat();
+        // TODO create new format and setBorderStyle()
+        ff.setWidth(QTextLength(QTextLength::PercentageLength, 100));
+        t->setFrameFormat(ff);
+    }
 }
 
 void Reports::addCellText(QTextTable* t, int row, int col, const QString& text,
@@ -166,6 +182,7 @@ bool Reports::findDuplicates(const QString &path,
     QTextDocument doc;
     QTextCursor c(&doc);
     c.setBlockFormat(fmtHeader);
+    adjustToFormat(path);
 
     c.insertText(tr("Report on duplicates"), frmHeader);
     c.insertBlock();
@@ -195,4 +212,10 @@ bool Reports::findDuplicates(const QString &path,
 void Reports::show(const QString &path)
 {
     QDesktopServices::openUrl(QUrl(QString("file://")+path)); // TODO for Windows file:///
+}
+
+void Reports::adjustToFormat(const QString &path)
+{
+    QString ext = QFileInfo(path).suffix();
+    usePercentColumnsWith = ext.toLower()=="html";
 }
