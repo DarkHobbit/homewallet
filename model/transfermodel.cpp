@@ -22,13 +22,14 @@ TransferModel::TransferModel(QObject *parent)
         << "t.op_date"
           << lowUnitFunction("t.amount", "cur.abbr")
           << "cur.abbr" << "ao.name" << "ai.name"
-          << "c.name" << "t.descr";
+          << "c.name" << "t.descr"
+        << "if.filename as source";
     visibleFieldTypes
-              << 'D' << 'M' << 'G' << 'G' << 'G' << 'G' << 'G';
+              << 'D' << 'M' << 'G' << 'G' << 'G' << 'G' << 'G' << 'G';
     columnHeaders
         << S_COL_DATE << S_COL_SUM << S_COL_CURRENCY
         << S_COL_FROM << S_COL_TO
-        << S_COL_CATEGORY << S_COL_DESCRIPTION;
+        << S_COL_CATEGORY << S_COL_DESCRIPTION << S_COL_SOURCE;
     deleteQuery = "delete from hw_transfer where id=:id";
 }
 
@@ -43,7 +44,8 @@ void TransferModel::update()
     QString sql = \
         "select t.id, %1" \
         " from " \
-        "   hw_transfer t, " \
+        "   hw_transfer t " \
+        "   left join hw_imp_file if on t.id_imp=if.id," \
         "   hw_account ai, hw_account ao, hw_currency cur, hw_transfer_type c" \
         "   where t.id_ac_in=ai.id" \
         "   and t.id_ac_out=ao.id" \

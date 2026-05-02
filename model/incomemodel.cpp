@@ -24,16 +24,17 @@ IncomeModel::IncomeModel(QObject *parent)
         << lowUnitFunction("i.amount", "cur.abbr")
         << "cur.abbr" << "a.name"
         << "case i.attention when 1 then '*' else '' end"
-        << "i.descr";
+        << "i.descr"
+        << "if.filename as source";
     visibleFieldTypes
         << 'D' << 'G' << 'G' << 'G' << 'G'
-        << 'M' << 'G' << 'G' << 'G' << 'G';
+        << 'M' << 'G' << 'G' << 'G' << 'G' << 'G';
     columnHeaders
         << S_COL_DATE
         << S_COL_CATEGORY << S_COL_SUBCATEGORY << S_COL_QUANTITY <<S_COL_UNIT
         << S_COL_SUM
         << S_COL_CURRENCY << S_COL_ACCOUNT
-        << S_COL_ATTENTION << S_COL_DESCRIPTION;
+        << S_COL_ATTENTION << S_COL_DESCRIPTION << S_COL_SOURCE;
     deleteQuery = "delete from hw_in_op where id=:id";
 }
 
@@ -49,7 +50,8 @@ void IncomeModel::update()
         "select i.id, %1" \
         " from " \
         "   hw_in_op i " \
-        "   left join hw_unit u on i.id_un=u.id," \
+        "   left join hw_unit u on i.id_un=u.id" \
+        "   left join hw_imp_file if on i.id_imp=if.id," \
         "   hw_in_cat c, hw_in_subcat sc, hw_account a, hw_currency cur" \
         " where i.id_isubcat=sc.id" \
         " and sc.id_icat=c.id" \
