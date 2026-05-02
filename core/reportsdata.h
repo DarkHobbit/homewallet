@@ -45,11 +45,11 @@ public:
     };
     struct DupVector: public QVector<DupSet> {
         bool hasSubCat, showSrc;
-        int totalCount();
+        int totalCount() const;
     };
     struct Duplicates {
         DupVector expenses, incomes, transfer;
-        QString stat();
+        QString stat() const;
     };
 
     ReportsData();

@@ -141,7 +141,7 @@ bool ReportsData::findOneDuplicatesKind(HwDatabase &db, const QDate &dFrom, cons
     return true;
 }
 
-int ReportsData::DupVector::totalCount()
+int ReportsData::DupVector::totalCount() const
 {
     int res = 0;
     for (const DupSet& ds: *this)
@@ -149,7 +149,7 @@ int ReportsData::DupVector::totalCount()
     return res;
 }
 
-QString ReportsData::Duplicates::stat()
+QString ReportsData::Duplicates::stat() const
 {
     QString s = S_DK_EXPENSES + " %1/%2 "
               + S_DK_INCOMES  + " %3/%4 "
