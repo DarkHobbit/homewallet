@@ -164,8 +164,12 @@ QVariant ImportCandidatesModel::data(const QModelIndex &index, int role) const
             return QBrush(Qt::red);
         }
     }
-//    else if (role==SortStringRole) {
-//    }
+    else if (role==SortStringRole) {
+        if (index.column()==0)
+            return c->opDT.toString(Qt::ISODate);
+        else
+            return data(index, Qt::DisplayRole);
+    }
     return QVariant();
 }
 

@@ -11,6 +11,7 @@
  *
  */
 
+#include "globals.h"
 #include "importmodelset.h"
 
 ImportModelSet::ImportModelSet(ImpCandidates *cands, QObject *parent)
@@ -88,6 +89,7 @@ QSortFilterProxyModel *ImportModelSet::makeProxy(ImportCandidatesModel *source)
     proxy->setSourceModel(source);
     proxy->setFilterKeyColumn(-1);
     proxy->setFilterCaseSensitivity(Qt::CaseInsensitive); // Driver == driver
+    proxy->setSortRole(SortStringRole);
     return proxy;
 }
 
