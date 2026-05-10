@@ -36,12 +36,8 @@ AddDefaultUnitDialog::~AddDefaultUnitDialog()
 #include <iostream>
 void AddDefaultUnitDialog::addDefaultUnit(int idSubCat, const QString& subCatName, bool isExpense)
 {
-    if (!isExpense) {
-        QMessageBox::critical(0, S_ERROR, "For income categories, default units are not implemented. Contact author");
-        return;
-    }
     QSqlQuery q(db->sqlDbRef());
-    GUI_DB_CHK(q.prepare(SQL_GET_DEF_EXP_UNIT), q)
+    GUI_DB_CHK(q.prepare(isExpense ? SQL_GET_DEF_EXP_UNIT : SQL_GET_DEF_INC_UNIT), q)
     q.bindValue(":id", idSubCat);
     GUI_DB_CHK(q.exec(), q)
     // If already exists...
@@ -56,7 +52,7 @@ void AddDefaultUnitDialog::addDefaultUnit(int idSubCat, const QString& subCatNam
     setWindowTitle(windowTitle()+subCatName);
     // Recent used units
     QSqlQuery qRecent;
-    GUI_DB_CHK(qRecent.prepare(SQL_UNIT_COUNTS), qRecent)
+    GUI_DB_CHK(qRecent.prepare(isExpense ? SQL_EXP_UNIT_COUNTS : SQL_INC_UNIT_COUNTS), qRecent)
     qRecent.bindValue(":id_sc", idSubCat);
     GUI_DB_CHK(qRecent.exec(), qRecent)
     if (qRecent.first()) {
@@ -102,7 +98,8 @@ void AddDefaultUnitDialog::addDefaultUnit(int idSubCat, const QString& subCatNam
             if (unit==qAllUnits.value(0).toString()) {
                 int idUn = qAllUnits.value(1).toInt();
                 QSqlQuery qSetUnit;
-                GUI_DB_CHK(qSetUnit.prepare(SQL_SET_DEF_EXP_UNIT), qSetUnit)
+                GUI_DB_CHK(qSetUnit.prepare(isExpense ?
+                    SQL_SET_DEF_EXP_UNIT : SQL_SET_DEF_INC_UNIT), qSetUnit)
                 qSetUnit.bindValue(":id_sc", idSubCat);
                 qSetUnit.bindValue(":id_un", idUn);
                 GUI_DB_CHK(qSetUnit.exec(), qSetUnit)

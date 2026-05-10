@@ -184,7 +184,7 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
             if (c.unitName.isEmpty()) {
                 // Try to use default unit
                 QSqlQuery qDefUnit;
-                DB_CHK(db.prepQuery(qDefUnit, SQL_GET_DEF_EXP_UNIT));
+                DB_CHK(db.prepQuery(qDefUnit, isIncome ? SQL_GET_DEF_INC_UNIT : SQL_GET_DEF_EXP_UNIT));
                 qDefUnit.bindValue(":id", c.idSubcat);
                 DB_CHK(db.execQuery(qDefUnit));
                 if (db.queryRecCount(qDefUnit)>0) {

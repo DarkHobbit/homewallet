@@ -47,9 +47,21 @@
     " from hw_ex_subcat sc, hw_unit un" \
     " where sc.id_un_default=un.id and sc.id=:id"
 
-#define SQL_UNIT_COUNTS \
+#define SQL_GET_DEF_INC_UNIT \
+    "select un.short_name, un.id" \
+    " from hw_in_subcat sc, hw_unit un" \
+    " where sc.id_un_default=un.id and sc.id=:id"
+
+#define SQL_EXP_UNIT_COUNTS \
     "select short_name as unname," \
     " (select count(id) from hw_ex_op where id_esubcat=:id_sc and id_un=hw_unit.id) as cnt " \
+    " from hw_unit" \
+    " where cnt>0" \
+    " order by cnt desc"
+
+#define SQL_INC_UNIT_COUNTS \
+    "select short_name as unname," \
+    " (select count(id) from hw_in_op where id_isubcat=:id_sc and id_un=hw_unit.id) as cnt " \
     " from hw_unit" \
     " where cnt>0" \
     " order by cnt desc"
@@ -59,6 +71,9 @@
 
 #define SQL_SET_DEF_EXP_UNIT \
     "update hw_ex_subcat set id_un_default=:id_un where id=:id_sc"
+
+#define SQL_SET_DEF_INC_UNIT \
+    "update hw_in_subcat set id_un_default=:id_un where id=:id_sc"
 
 // At least for Home Bookkeeping XML file
 QString prepareDoubleImport(const QString& s);
