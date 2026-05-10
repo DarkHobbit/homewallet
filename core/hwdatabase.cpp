@@ -192,6 +192,22 @@ int HwDatabase::aliasId(const QString &pattern, AliasType alType)
     return dictId(sqlSel);
 }
 
+bool HwDatabase::collectAliasDescr(StrColl &coll, const QString &valuableFieldName)
+{
+    QSqlQuery sqlColl(sqlDb);
+    if (!prepQuery(sqlColl, QString("select pattern, to_descr from hw_alias where %1 is not null order by pattern;")
+          .arg(valuableFieldName)))
+        return false;
+    if (!execQuery(sqlColl))
+        return false;
+    sqlColl.first();
+    while (sqlColl.isValid()) {
+        coll[sqlColl.value(0).toString()] = sqlColl.value(1).toString();
+        sqlColl.next();
+    }
+    return true;
+}
+
 int HwDatabase::addAccount(const QString &name, const QString &descr,
     const QDateTime& foundation, const MultiCurrById& startBalance)
 {

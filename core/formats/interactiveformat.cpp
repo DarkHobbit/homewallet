@@ -69,8 +69,8 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
     db.collectDict(candidates.collInAllSubCat, "hw_alias", "pattern", "id_isubcat", "where id_isubcat is not null");
     candidates.collInCatBySubcat.clear();
     db.collectDict(candidates.collInCatBySubcat, "hw_in_subcat", "name", "id_icat");
-    candidates.collInSubcatToDescr.clear();
-    db.collectRevDict(candidates.collInSubcatToDescr, "hw_alias", "to_descr", "id_isubcat", "where id_isubcat is not null");
+    candidates.collInAliasToDescr.clear();
+    db.collectAliasDescr(candidates.collInAliasToDescr, "id_isubcat");
     // - expenses
     candidates.collExCat.clear();
     db.collectDict(candidates.collExCat, "hw_alias", "pattern", "id_ecat", "where id_ecat is not null");
@@ -78,8 +78,8 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
     db.collectDict(candidates.collExAllSubCat, "hw_alias", "pattern", "id_esubcat", "where id_esubcat is not null");
     candidates.collExCatBySubcat.clear();
     db.collectDict(candidates.collExCatBySubcat, "hw_ex_subcat", "name", "id_ecat");
-    candidates.collExSubcatToDescr.clear();
-    db.collectRevDict(candidates.collExSubcatToDescr, "hw_alias", "to_descr", "id_esubcat", "where id_esubcat is not null");
+    candidates.collExAliasToDescr.clear();
+    db.collectAliasDescr(candidates.collExAliasToDescr, "id_esubcat");
     // -- transfer types
     int idTransferTypeOther = db.transferTypeId(S_CAT_OTHER);
     if (idTransferTypeOther==-1)
@@ -97,7 +97,7 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
             const GenericDatabase::DictColl& collCat = isIncome ? candidates.collInCat : candidates.collExCat;
             const GenericDatabase::DictColl& collAllSubCat = isIncome ? candidates.collInAllSubCat : candidates.collExAllSubCat;
             const GenericDatabase::DictColl& collCatBySubcat = isIncome ? candidates.collInCatBySubcat : candidates.collExCatBySubcat;
-            const GenericDatabase::RevDictColl& collSubcatToDescr = isIncome ? candidates.collInSubcatToDescr : candidates.collExSubcatToDescr;
+            const GenericDatabase::StrColl& collAliasToDescr = isIncome ? candidates.collInAliasToDescr : candidates.collExAliasToDescr;
 
             if (!findAccount(db, c, c.accName, c.idAcc))
                 continue;
@@ -121,7 +121,7 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                     // Alias for subcategory
                     if (collAllSubCat.keys().contains(c.subcatName)) {
                         c.idSubcat = collAllSubCat[c.subcatName];
-                        completeDescr(c, collSubcatToDescr, c.idSubcat);
+                        completeDescr(c, collAliasToDescr, c.alias);
                     }
                     else {
                         c.state = ImpRecCandidate::UnknownSubCategory;
@@ -168,7 +168,7 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                     if (collAllSubCat.keys().contains(c.alias)) {
                         c.idSubcat = collAllSubCat[c.alias];
                         c.subcatName = isIncome ? db.incomeSubCategoryById(c.idSubcat) : db.expenseSubCategoryById(c.idSubcat);
-                        completeDescr(c, collSubcatToDescr, c.idSubcat);
+                        completeDescr(c, collAliasToDescr, c.alias);
                         c.idCat = collCatBySubcat[c.subcatName];
                         c.catName = isIncome ? db.incomeCategoryById(c.idCat) : db.expenseCategoryById(c.idCat);
                         c.state = ImpRecCandidate::ReadyToImport;
@@ -219,7 +219,7 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                 // Alias for transfer type
                 if (0) { // TODO
                     //c.idCat = collTransType[c.catName];
-                    //completeDescr(c, collTransTypeToToDescr, c.idSubcat);
+                    //completeDescr(c, collTransTypeAliasToToDescr, c.idAlias);
                 }
                 else
                     c.state = ImpRecCandidate::UnknownTransType;
@@ -339,10 +339,10 @@ bool InteractiveFormat::findUnit(HwDatabase &db, ImpRecCandidate &c, QString &na
     return true;
 }
 
-void InteractiveFormat::completeDescr(ImpRecCandidate &c, const GenericDatabase::RevDictColl &collDescr, int idSubcat)
+void InteractiveFormat::completeDescr(ImpRecCandidate &c, const GenericDatabase::StrColl &collDescr, const QString& alias)
 {
-    if (collDescr.keys().contains(idSubcat)) {
-        QString toDescr = collDescr[idSubcat];
+    if (collDescr.keys().contains(alias)) {
+        QString toDescr = collDescr[alias];
         if (!toDescr.isEmpty()) {
             if (!c.descr.isEmpty())
                 c.descr += " ";

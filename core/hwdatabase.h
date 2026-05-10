@@ -61,6 +61,7 @@ public:
     bool addAlias(const QString& pattern, const QString& toDescr,
         AliasType aType, int idSrc);
     int aliasId(const QString& pattern, AliasType alType);
+    bool collectAliasDescr(StrColl& coll, const QString& valuableFieldName);
     // Subject area
     virtual QString fileName();
     void getCounts(int& totalInCount, int& totalExpCount);

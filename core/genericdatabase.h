@@ -34,6 +34,7 @@ public:
     typedef QMap<QString, DictColl> SubDictColl;
     typedef QMap<QString, DictColl> TableRefColl;
     typedef QMap<int, QString> RevDictColl; // key - id, value - dictionary item name
+    typedef QMap<QString, QString> StrColl;
     GenericDatabase();
     ~GenericDatabase();
     virtual QString fileName()=0;
