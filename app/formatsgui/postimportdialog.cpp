@@ -97,11 +97,10 @@ void PostImportDialog::showEvent(QShowEvent*)
     updateTableConfig(ui->tableExpenses);
     updateTableConfig(ui->tableIncomes);
     updateTableConfig(ui->tableUnknown);
-    updateOneView(ui->tableExpenses, false);
-    updateOneView(ui->tableIncomes, false);
-    updateOneView(ui->tableUnknown, false);
+    updateView();
     ui->tableExpenses->resizeColumnsToContents();
     ui->tableIncomes->resizeColumnsToContents();
+    ui->tableTransfer->resizeColumnsToContents();
     ui->tableUnknown->resizeColumnsToContents();
     // Try to reduce source string
     ui->tableExpenses->setColumnWidth(1, ui->tableExpenses->columnWidth(5));
@@ -112,6 +111,10 @@ void PostImportDialog::updateView()
 {
     intFile->analyzeCandidates(*db);
     mSet->updateModels();
+    updateOneView(ui->tableExpenses, false);
+    updateOneView(ui->tableIncomes, false);
+    updateOneView(ui->tableTransfer, false);
+    updateOneView(ui->tableUnknown, false);
     updateStat();
 }
 
