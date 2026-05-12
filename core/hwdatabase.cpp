@@ -410,15 +410,16 @@ QString HwDatabase::incomeCategoryById(int idCat)
     return dictName(sqlSel);
 }
 
-int HwDatabase::addIncomeSubCategory(int idParentCat, const QString &name, const QString &descr)
+int HwDatabase::addIncomeSubCategory(int idParentCat, const QString &name, const QString &descr, int idDefUnit)
 {
     QSqlQuery sqlIns(sqlDb);
     if (!prepQuery(sqlIns,
-      "insert into hw_in_subcat (id_icat, name, descr) values (:id_icat, :name, :descr)"))
+      "insert into hw_in_subcat (id_icat, name, descr, id_un_default) values (:id_icat, :name, :descr, :id_un_default)"))
         return -1;
     sqlIns.bindValue(":name", name);
     sqlIns.bindValue(":descr", descr);
     sqlIns.bindValue(":id_icat", idParentCat);
+    sqlIns.bindValue(":id_un_default", idOrNull(idDefUnit));
     if (!execQuery(sqlIns))
         return -1;
     else
@@ -499,15 +500,16 @@ QString HwDatabase::expenseCategoryById(int idCat)
     return dictName(sqlSel);
 }
 
-int HwDatabase::addExpenseSubCategory(int idParentCat, const QString &name, const QString &descr)
+int HwDatabase::addExpenseSubCategory(int idParentCat, const QString &name, const QString &descr, int idDefUnit)
 {
     QSqlQuery sqlIns(sqlDb);
     if (!prepQuery(sqlIns,
-      "insert into hw_ex_subcat (id_ecat, name, descr) values (:id_ecat, :name, :descr)"))
+      "insert into hw_ex_subcat (id_ecat, name, descr, id_un_default) values (:id_ecat, :name, :descr, :id_un_default)"))
         return -1;
     sqlIns.bindValue(":name", name);
     sqlIns.bindValue(":descr", descr);
     sqlIns.bindValue(":id_ecat", idParentCat);
+    sqlIns.bindValue(":id_un_default", idOrNull(idDefUnit));
     if (!execQuery(sqlIns))
         return -1;
     else

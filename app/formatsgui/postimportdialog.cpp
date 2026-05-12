@@ -23,6 +23,7 @@
 #include "globals.h"
 #include "helpers.h"
 #include "postimportdialog.h"
+#include "subcategorydialog.h"
 #include "ui_postimportdialog.h"
 
 PostImportDialog::PostImportDialog(QWidget *parent) :
@@ -33,11 +34,13 @@ PostImportDialog::PostImportDialog(QWidget *parent) :
     ui->setupUi(this);
     ui->tableExpenses->insertAction(0, ui->actExpCandState);
     ui->tableExpenses->insertAction(0, ui->actAddAlias);
-    ui->tableExpenses->insertAction(0, ui->actAddDefaultUnit);    
+    ui->tableExpenses->insertAction(0, ui->actAddSubCategory);
+    ui->tableExpenses->insertAction(0, ui->actAddDefaultUnit);
     ui->tableExpenses->insertAction(0, ui->actResolveAmbiguity);
 
     ui->tableIncomes->insertAction(0, ui->actExpCandState);
     ui->tableIncomes->insertAction(0, ui->actAddAlias);
+    ui->tableIncomes->insertAction(0, ui->actAddSubCategory);
     ui->tableIncomes->insertAction(0, ui->actAddDefaultUnit);
     ui->tableIncomes->insertAction(0, ui->actResolveAmbiguity);
 
@@ -257,6 +260,20 @@ void PostImportDialog::on_actAddAlias_triggered()
     on_btnAddAlias_clicked();
 }
 
+void PostImportDialog::on_actAddSubCategory_triggered()
+{
+    activeTab();
+    int r = mappedCurrentRow();
+    ImpRecCandidate* c = activeModel->cand(r);
+    bool isExpense = c->type==ImpRecCandidate::Expense;
+    SubCategoryDialog* d = new SubCategoryDialog(isExpense, false, db, 0);
+    QString scName = (!c->subcatName.isEmpty()) ? c->subcatName : c->alias;
+    d->addSubCategory(scName);
+    delete d;
+    // Update candidates and its view
+    updateView();
+}
+
 void PostImportDialog::on_actAddDefaultUnit_triggered()
 {
     activeTab();
@@ -276,6 +293,7 @@ void PostImportDialog::on_actAddDefaultUnit_triggered()
     }
     auto d = new AddDefaultUnitDialog(0, db);
     d->addDefaultUnit(c->idSubcat, c->subcatName, c->type==ImpRecCandidate::Expense);
+    delete d;
     // Update candidates and its view
     updateView();
 }

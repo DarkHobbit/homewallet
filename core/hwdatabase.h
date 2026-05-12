@@ -82,13 +82,13 @@ public:
     int addIncomeCategory(const QString& name, const QString& descr);
     int incomeCategoryId(const QString& name);
     QString incomeCategoryById(int idCat);
-    int addIncomeSubCategory(int idParentCat, const QString& name, const QString& descr);
+    int addIncomeSubCategory(int idParentCat, const QString& name, const QString& descr, int idDefUnit=-1);
     int incomeSubCategoryId(int idParentCat, const QString& name);
     QString incomeSubCategoryById(int idSubCat);
     int addExpenseCategory(const QString& name, const QString& descr);
     int expenseCategoryId(const QString& name);
     QString expenseCategoryById(int idCat);
-    int addExpenseSubCategory(int idParentCat, const QString& name, const QString& descr);
+    int addExpenseSubCategory(int idParentCat, const QString& name, const QString& descr, int idDefUnit=-1);
     int expenseSubCategoryId(int idParentCat, const QString& name);
     QString expenseSubCategoryById(int idSubCat);
     int addTransferType(const QString& name, const QString& descr);

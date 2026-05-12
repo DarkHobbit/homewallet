@@ -44,6 +44,7 @@
 #define S_REC_NOT_REMOVABLE QObject::tr("Can't remove records from this table")
 #define S_PREP_ERR QObject::tr("Prepare error: %1")
 #define S_EXEC_ERR QObject::tr("Execute error: %1")
+#define S_EMPTY_NAME QObject::tr("Name cannot be empty")
 #define S_INTERNAL_ERR QObject::tr("Internal error")
 #define S_ERR_MAIN_CURR_MISSING QObject::tr("Main currency not found")
 #define S_REMOVE_CONFIRM QObject::tr("Do you really want to delete the selected items?")
@@ -73,6 +74,9 @@
 #define S_DK_CURR_CONV QObject::tr("Currency conversion")
 #define S_DK_LEND QObject::tr("Lend")
 #define S_DK_BORROW QObject::tr("Borrow")
+// Actions
+#define S_ACT_ADD QObject::tr("Add")
+#define S_ACT_EDIT QObject::tr("Edit")
 // Model item roles
 #define SortStringRole Qt::UserRole
 // Model common column names

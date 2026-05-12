@@ -67,6 +67,7 @@ private slots:
     void on_actExpCandState_triggered();
     void on_btnAddAlias_clicked();
     void on_actAddAlias_triggered();
+    void on_actAddSubCategory_triggered();
     void on_actAddDefaultUnit_triggered();
     void on_btnQuickFilter_clicked();
     void on_actFilter_triggered();
