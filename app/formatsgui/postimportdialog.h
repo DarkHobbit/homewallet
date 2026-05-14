@@ -46,18 +46,8 @@ private:
     QTableView* activeView;
     // End of potentially unsafe pointers
 
-    enum ActiveTab {
-        atIncomes,
-        atExpenses,
-        atReceipt,
-        atTransfer,
-        atDebtor,
-        atCreditor,
-        atUnknown
-    };
-
     virtual void showEvent(QShowEvent*);
-    ActiveTab activeTab();
+    void checkActiveTab();
     int mappedCurrentRow();
     void updateView();
     void updateStat();

@@ -128,34 +128,29 @@ void PostImportDialog::updateStat()
     //setAddAliasAccessibility();
 }
 
-PostImportDialog::ActiveTab PostImportDialog::activeTab()
+void PostImportDialog::checkActiveTab()
 {
     QWidget* curW = ui->tabWidget->currentWidget();
     if (curW==ui->tabExpenses) {
         activeModel = mSet->mdlExpense;
         activeView = ui->tableExpenses;
-        return atExpenses;
     }
     else if (curW==ui->tabIncomes) {
         activeModel = mSet->mdlIncome;
         activeView = ui->tableIncomes;
-        return atIncomes;
     }
     else if (curW==ui->tabTransfer) {
         activeModel = mSet->mdlTransfer;
         activeView = ui->tableTransfer;
-        return atTransfer;
     }
     else if (curW==ui->tabUnknown) {
         activeModel = mSet->mdlUnknown;
         activeView = ui->tableUnknown;
-        return atUnknown;
     }
     // TODO other tabs
     else {
         activeModel = mSet->mdlTransfer;
         activeView = 0; //===>
-        return atTransfer;
     }
 }
 
@@ -178,7 +173,7 @@ void PostImportDialog::setOkAccessibility()
 
 void PostImportDialog::setAddAliasAccessibility()
 {
-    activeTab();
+    checkActiveTab();
     if (!activeModel || !activeView)
         return;
 
@@ -188,7 +183,7 @@ void PostImportDialog::setAddAliasAccessibility()
 
 void PostImportDialog::on_actExpCandState_triggered()
 {
-    activeTab();
+    checkActiveTab();
     int r = mappedCurrentRow();
     ImpRecCandidate* c = activeModel->cand(r);
     QString s = tr("Row %1: source line %2\%3\nState: %4")
@@ -204,7 +199,7 @@ void PostImportDialog::on_btnAddAlias_clicked()
     // Select alias type
     HwDatabase::AliasType alType;
     QString alS, alHint = "";
-    activeTab();
+    checkActiveTab();
     int r = mappedCurrentRow();
     ImpRecCandidate* c = activeModel->cand(r);
     bool isIncome = c->type==ImpRecCandidate::Income;
@@ -262,7 +257,7 @@ void PostImportDialog::on_actAddAlias_triggered()
 
 void PostImportDialog::on_actAddSubCategory_triggered()
 {
-    activeTab();
+    checkActiveTab();
     int r = mappedCurrentRow();
     ImpRecCandidate* c = activeModel->cand(r);
     bool isExpense = c->type==ImpRecCandidate::Expense;
@@ -276,7 +271,7 @@ void PostImportDialog::on_actAddSubCategory_triggered()
 
 void PostImportDialog::on_actAddDefaultUnit_triggered()
 {
-    activeTab();
+    checkActiveTab();
     int r = mappedCurrentRow();
     ImpRecCandidate* c = activeModel->cand(r);
     if (c->subcatName.isEmpty()) {
@@ -300,7 +295,7 @@ void PostImportDialog::on_actAddDefaultUnit_triggered()
 
 void PostImportDialog::on_btnQuickFilter_clicked()
 {
-    activeTab();
+    checkActiveTab();
     QSortFilterProxyModel* proxy = dynamic_cast<QSortFilterProxyModel*>(activeView->model());
     if (!proxy)
         return;
@@ -320,7 +315,7 @@ void PostImportDialog::on_actFilter_triggered()
 
 void PostImportDialog::on_actResolveAmbiguity_triggered()
 {
-    activeTab();
+    checkActiveTab();
     int r = mappedCurrentRow();
     ImpRecCandidate* c = activeModel->cand(r);
     if (c->type!=ImpRecCandidate::Income && c->type!=ImpRecCandidate::Expense) {
