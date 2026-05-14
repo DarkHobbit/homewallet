@@ -153,7 +153,7 @@ bool SubCategoryDialog::validateInput()
     
     return true;
 }
-#include <iostream>
+
 int SubCategoryDialog::addSubCategory(const QString &defaultName)
 {
     // Set default name if provided and no existing data is being edited
@@ -164,17 +164,14 @@ int SubCategoryDialog::addSubCategory(const QString &defaultName)
     // Execute dialog and check result
     if (exec() != QDialog::Accepted)
         return -1;  // User canceled
-    std::cout << "asc1" << std::endl;
     // Validate input
     if (!validateInput())
         return -1;
 
-    std::cout << "asc2" << std::endl;
     // Add new subcategory
     int newId = -1;
     
     if (m_isExpense) {
-        std::cout << "asc3" << std::endl;
         newId = m_db->addExpenseSubCategory(getCategoryId(), getName(),
             getDescription(), getDefaultUnitId());
     } else {
@@ -182,7 +179,6 @@ int SubCategoryDialog::addSubCategory(const QString &defaultName)
             getDescription(), getDefaultUnitId());
     }
     
-    std::cout << "asc4" << std::endl;
     if (newId == -1) {
         QString errorMsg = m_db->lastError();
         if (!errorMsg.isEmpty()) {

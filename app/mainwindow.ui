@@ -336,6 +336,7 @@
      <string>&amp;View</string>
     </property>
     <addaction name="action_Categories"/>
+    <addaction name="actionCategory_Organizer"/>
     <addaction name="actionCurrencies"/>
     <addaction name="separator"/>
     <addaction name="actionFilter"/>
@@ -463,6 +464,11 @@
   <action name="actionDuplicates_Search">
    <property name="text">
     <string>&amp;Duplicates Search</string>
+   </property>
+  </action>
+  <action name="actionCategory_Organizer">
+   <property name="text">
+    <string>Category &amp;Organizer</string>
    </property>
   </action>
  </widget>

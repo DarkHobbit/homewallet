@@ -23,6 +23,7 @@
 #include <QTime>
 
 #include "aboutdialog.h"
+#include "categoryorganizerwindow.h"
 #include "configmanager.h"
 #include "currencywindow.h"
 #include "globals.h"
@@ -792,5 +793,12 @@ void MainWindow::on_actionDuplicates_Search_triggered()
         delete pw;
     }
     delete d;
+}
+
+
+void MainWindow::on_actionCategory_Organizer_triggered()
+{
+    CategoryOrganizerWindow* w = new CategoryOrganizerWindow(&db, 0);
+    w->show();
 }
 

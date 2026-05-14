@@ -53,6 +53,7 @@ protected:
     // End of potentially unsafe pointers
     QModelIndexList selection;
     void prepareModel(FilteredQueryModel* source, QSortFilterProxyModel *proxy, QTableView* view, const QString& nameForDebug, bool customSorting);
+    void prepareBaseModel(QAbstractItemModel* source, QSortFilterProxyModel *proxy, QAbstractItemView* view, const QString& nameForDebug, bool customSorting);
     bool checkSelection(bool errorIfNoSelected = true, bool onlyOneRowAllowed = false);
 };
 

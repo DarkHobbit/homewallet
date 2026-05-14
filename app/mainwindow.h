@@ -82,6 +82,8 @@ private slots:
 
     void on_actionDuplicates_Search_triggered();
 
+    void on_actionCategory_Organizer_triggered();
+
 private:
     Ui::MainWindow *ui;
     ExpenseModel* mdlExpenses;

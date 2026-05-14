@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CategoryOrganizerWindow</class>
+ <widget class="QWidget" name="CategoryOrganizerWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1011</width>
+    <height>524</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Category organizer</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tabExpenseCats">
+      <attribute name="title">
+       <string>Expenses</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QTreeView" name="tvExpCatLeft"/>
+       </item>
+       <item>
+        <widget class="QTreeView" name="tvExpCatRight"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabIncomeCats">
+      <attribute name="title">
+       <string>Incomes</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QTreeView" name="tvIncCatLeft"/>
+       </item>
+       <item>
+        <widget class="QTreeView" name="tvIncCatRight"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="layControls">
+     <item>
+      <widget class="QLabel" name="lbQuickFilter">
+       <property name="text">
+        <string>Text</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="leQuickFilter"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_Quick_Filter_Apply">
+       <property name="text">
+        <string>Apply</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_Add">
+       <property name="maximumSize">
+        <size>
+         <width>160</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Add...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="homewallet.qrc">
+         <normaloff>:/img/32x32/add_32x32.png</normaloff>:/img/32x32/add_32x32.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_Edit">
+       <property name="maximumSize">
+        <size>
+         <width>160</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Edit...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="homewallet.qrc">
+         <normaloff>:/img/32x32/edit_32x32.png</normaloff>:/img/32x32/edit_32x32.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_Delete">
+       <property name="maximumSize">
+        <size>
+         <width>160</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Delete...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="homewallet.qrc">
+         <normaloff>:/img/32x32/remove_32x32.png</normaloff>:/img/32x32/remove_32x32.png</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+  <action name="actFilter">
+   <property name="text">
+    <string>Filter</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+ </widget>
+ <tabstops>
+  <tabstop>tvExpCatLeft</tabstop>
+  <tabstop>tvExpCatRight</tabstop>
+  <tabstop>leQuickFilter</tabstop>
+  <tabstop>btn_Quick_Filter_Apply</tabstop>
+  <tabstop>btn_Add</tabstop>
+  <tabstop>btn_Edit</tabstop>
+  <tabstop>btn_Delete</tabstop>
+  <tabstop>tabWidget</tabstop>
+ </tabstops>
+ <resources>
+  <include location="homewallet.qrc"/>
+ </resources>
+ <connections/>
+</ui>

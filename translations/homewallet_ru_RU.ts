@@ -147,6 +147,49 @@
     </message>
 </context>
 <context>
+    <name>CategoryOrganizerWindow</name>
+    <message>
+        <location filename="../app/categoryorganizerwindow.ui" line="14"/>
+        <source>Category organizer</source>
+        <translation>Организатор категорий</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.ui" line="21"/>
+        <source>Expenses</source>
+        <translation>Расходы</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.ui" line="34"/>
+        <source>Incomes</source>
+        <translation>Доходы</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.ui" line="44"/>
+        <source>Text</source>
+        <translation>Текст</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.ui" line="51"/>
+        <source>Apply</source>
+        <translation>Применить</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.ui" line="80"/>
+        <source>Add...</source>
+        <translation>Добавить...</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.ui" line="97"/>
+        <source>Edit...</source>
+        <translation>Редактировать...</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.ui" line="114"/>
+        <source>Delete...</source>
+        <translation>Удалить...</translation>
+    </message>
+</context>
+<context>
     <name>CreditModel</name>
     <message>
         <source>Lend</source>
@@ -581,168 +624,173 @@ Verified from %1</source>
         <translation>&amp;Вид</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="352"/>
+        <location filename="../app/mainwindow.ui" line="353"/>
         <source>&amp;Help</source>
         <translation>&amp;Справка</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="346"/>
+        <location filename="../app/mainwindow.ui" line="471"/>
+        <source>Category &amp;Organizer</source>
+        <translation>&amp;Организатор категорий</translation>
+    </message>
+    <message>
+        <location filename="../app/mainwindow.ui" line="347"/>
         <source>&amp;Reports</source>
         <translation>&amp;Отчёты</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="374"/>
+        <location filename="../app/mainwindow.ui" line="375"/>
         <source>&amp;Import</source>
         <translation>&amp;Импорт</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="377"/>
+        <location filename="../app/mainwindow.ui" line="378"/>
         <source>Alt+I</source>
         <translation>Alt+I</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="382"/>
+        <location filename="../app/mainwindow.ui" line="383"/>
         <source>&amp;Export</source>
         <translation>&amp;Экспорт</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="385"/>
+        <location filename="../app/mainwindow.ui" line="386"/>
         <source>Alt+E</source>
         <translation>Alt+E</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="390"/>
+        <location filename="../app/mainwindow.ui" line="391"/>
         <source>E&amp;xit</source>
         <translation>В&amp;ыход</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="395"/>
+        <location filename="../app/mainwindow.ui" line="396"/>
         <source>&amp;Categories</source>
         <translation>&amp;Категории</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="400"/>
+        <location filename="../app/mainwindow.ui" line="401"/>
         <source>&amp;Settings...</source>
         <translation>&amp;Настройки…</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="403"/>
+        <location filename="../app/mainwindow.ui" line="404"/>
         <source>Ctrl+P</source>
         <translation>Ctrl+P</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="408"/>
+        <location filename="../app/mainwindow.ui" line="409"/>
         <source>&amp;About</source>
         <translation>&amp;О программе</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="413"/>
+        <location filename="../app/mainwindow.ui" line="414"/>
         <source>About &amp;Qt</source>
         <translation>О Qt</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="418"/>
+        <location filename="../app/mainwindow.ui" line="419"/>
         <source>&amp;DB debug</source>
         <translation>Отладка БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="423"/>
+        <location filename="../app/mainwindow.ui" line="424"/>
         <source>&amp;Filter</source>
         <translation>Фильтр</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="426"/>
+        <location filename="../app/mainwindow.ui" line="427"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="431"/>
+        <location filename="../app/mainwindow.ui" line="432"/>
         <source>Technical information</source>
         <translation>Техническая информация</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="439"/>
+        <location filename="../app/mainwindow.ui" line="440"/>
         <source>Edit</source>
         <translation>Редактировать</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="447"/>
+        <location filename="../app/mainwindow.ui" line="448"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="455"/>
+        <location filename="../app/mainwindow.ui" line="456"/>
         <source>Show repayment history</source>
         <translation>Показать историю платежей</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="460"/>
+        <location filename="../app/mainwindow.ui" line="461"/>
         <source>Currencies</source>
         <translation>Валюты</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.ui" line="465"/>
+        <location filename="../app/mainwindow.ui" line="466"/>
         <source>&amp;Duplicates Search</source>
         <translation>Поиск &amp;дубликатов</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="146"/>
+        <location filename="../app/mainwindow.cpp" line="147"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="150"/>
+        <location filename="../app/mainwindow.cpp" line="151"/>
         <source>Database not empty for testing</source>
         <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="205"/>
+        <location filename="../app/mainwindow.cpp" line="206"/>
         <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="264"/>
+        <location filename="../app/mainwindow.cpp" line="265"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="264"/>
+        <location filename="../app/mainwindow.cpp" line="265"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="275"/>
+        <location filename="../app/mainwindow.cpp" line="276"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="292"/>
+        <location filename="../app/mainwindow.cpp" line="293"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="342"/>
+        <location filename="../app/mainwindow.cpp" line="343"/>
         <source>Format require dialog, but dialog not provided. Contact author</source>
         <translation>Формат требует диалоговое окно, но программа его не обеспечивает.
 Свяжитесь с автором</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="739"/>
+        <location filename="../app/mainwindow.cpp" line="740"/>
         <source>Repayment history for: </source>
         <translation>История платежей для: </translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="760"/>
+        <location filename="../app/mainwindow.cpp" line="761"/>
         <source>Duplicates search</source>
         <translation>Поиск дубликатов</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="764"/>
+        <location filename="../app/mainwindow.cpp" line="765"/>
         <source>Amount delta</source>
         <translation>Допуск суммы</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="770"/>
+        <location filename="../app/mainwindow.cpp" line="771"/>
         <source>Show source</source>
         <translation>Показывать источник</translation>
     </message>
@@ -761,7 +809,7 @@ at record %1 from %2</source>
 в записи %1 из %2</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="396"/>
+        <location filename="../app/mainwindow.cpp" line="397"/>
         <source>Restart program to apply language change</source>
         <translation>Язык сменится после перезапуска программы</translation>
     </message>
@@ -2240,17 +2288,17 @@ At line %3</source>
         <translation>Ед.изм. по умолчанию</translation>
     </message>
     <message>
-        <location filename="../app/subcategorydialog.cpp" line="22"/>
+        <location filename="../app/subcategorydialog.cpp" line="36"/>
         <source>Expense Subcategory</source>
         <translation>подкатегорию расхода</translation>
     </message>
     <message>
-        <location filename="../app/subcategorydialog.cpp" line="22"/>
+        <location filename="../app/subcategorydialog.cpp" line="36"/>
         <source>Income Subcategory</source>
         <translation>подкатегорию дохода</translation>
     </message>
     <message>
-        <location filename="../app/subcategorydialog.cpp" line="136"/>
+        <location filename="../app/subcategorydialog.cpp" line="150"/>
         <source>Subcategory with this name already exists in the selected category.</source>
         <translation>Такая подкатегория в выбранной категории уже есть</translation>
     </message>

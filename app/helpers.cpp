@@ -114,6 +114,12 @@ bool SelecTables::checkSelection(bool errorIfNoSelected, bool onlyOneRowAllowed)
 void SelecTables::prepareModel(FilteredQueryModel *source, QSortFilterProxyModel *proxy, QTableView *view, const QString &nameForDebug, bool customSorting)
 {
     source->setDefaultVisibleColumns();
+    prepareBaseModel(source, proxy, view, nameForDebug, customSorting);
+    view->horizontalHeader()->setStretchLastSection(true);
+}
+
+void SelecTables::prepareBaseModel(QAbstractItemModel *source, QSortFilterProxyModel *proxy, QAbstractItemView *view, const QString &nameForDebug, bool customSorting)
+{
     source->setObjectName(QString("mdl")+nameForDebug);
     proxy->setSourceModel(source);
     proxy->setFilterKeyColumn(-1);
@@ -122,7 +128,6 @@ void SelecTables::prepareModel(FilteredQueryModel *source, QSortFilterProxyModel
         proxy->setSortRole(SortStringRole);
     proxy->setObjectName(QString("proxy")+nameForDebug);
     view->setModel(proxy);
-//    view->horizontalHeader()->setResizeContentsPrecision(64);
-    view->horizontalHeader()->setStretchLastSection(true);
+    //    view->horizontalHeader()->setResizeContentsPrecision(64);
     view->setObjectName(QString("tv")+nameForDebug);
 }
