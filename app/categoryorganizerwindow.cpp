@@ -137,3 +137,12 @@ void CategoryOrganizerWindow::treeEntered(const QModelIndex &)
         activeView = s;
 }
 
+
+void CategoryOrganizerWindow::on_cbShowOperations_toggled(bool checked)
+{
+    mdlExpCatLeft->setOperationShow(checked);
+    mdlExpCatRight->setOperationShow(checked);
+    mdlIncCatLeft->setOperationShow(checked);
+    mdlIncCatRight->setOperationShow(checked);
+}
+

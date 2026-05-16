@@ -147,6 +147,14 @@
     </message>
 </context>
 <context>
+    <name>CategoryHierModel</name>
+    <message>
+        <location filename="../model/categoryhiermodel.cpp" line="101"/>
+        <source>Operation #%1</source>
+        <translation>Операция №%1</translation>
+    </message>
+</context>
+<context>
     <name>CategoryOrganizerWindow</name>
     <message>
         <location filename="../app/categoryorganizerwindow.ui" line="14"/>
@@ -154,39 +162,54 @@
         <translation>Организатор категорий</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="21"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="24"/>
         <source>Expenses</source>
         <translation>Расходы</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="34"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="37"/>
         <source>Incomes</source>
         <translation>Доходы</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="44"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="53"/>
+        <source>Show operations on each (sub)category</source>
+        <translation>Показывать операции по каждой (под)категории</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.ui" line="62"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="51"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="72"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="80"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="98"/>
         <source>Add...</source>
         <translation>Добавить...</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="97"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="115"/>
         <source>Edit...</source>
         <translation>Редактировать...</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="114"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="132"/>
         <source>Delete...</source>
         <translation>Удалить...</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.ui" line="145"/>
+        <source>Filter</source>
+        <translation>Фильтр</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.ui" line="148"/>
+        <source>Ctrl+F</source>
+        <translation>Ctrl+F</translation>
     </message>
 </context>
 <context>
@@ -892,29 +915,29 @@ at record %1 from %2</source>
         <translation type="obsolete">Строка %1: строка исходного файла %2, состояние: %3</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="194"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="189"/>
         <source>Row %1: source line %2%3
 State: %4</source>
         <translation>Запись %1: исходная строка %2%3
 Состояние: %4</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="198"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="193"/>
         <source>Category candidates:</source>
         <translation>Кандидаты на категорию:</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="247"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="242"/>
         <source>No unknown aliases in this row</source>
         <translation>В этой строке нет неизвестных псевдонимов</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="331"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="326"/>
         <source>No ambiguous subcategory at this record</source>
         <translation>У этой записи нет неоднозначной подкатегории</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="335"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="330"/>
         <source>Select category</source>
         <translation>Выберите категорию</translation>
     </message>

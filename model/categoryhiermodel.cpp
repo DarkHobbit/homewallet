@@ -18,11 +18,13 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
+#include <QLocale>
 
 CategoryHierModel::CategoryHierModel(bool isExpense, HwDatabase* db, QObject *parent) :
     QAbstractItemModel(parent),
     m_isExpense(isExpense),
-    m_db(db)
+    m_db(db),
+    m_showOperations(false)
 {
     Q_ASSERT(m_db != nullptr);
     loadData();
@@ -32,52 +34,94 @@ CategoryHierModel::~CategoryHierModel()
 {
 }
 
+void CategoryHierModel::clearData()
+{
+    m_items.clear();
+    m_rootItems.clear();
+}
+
 void CategoryHierModel::loadData()
 {
     beginResetModel();
+    clearData();
     
-    // Clear existing data
-    m_items.clear();
-    m_rootItems.clear();
+    loadCategories();
+    loadSubcategories();
     
-    // Load categories
-    QString catTable = m_isExpense ? "hw_ex_cat" : "hw_in_cat";
-    QSqlQuery catQuery(QString("SELECT id, name, descr FROM %1 ORDER BY name").arg(catTable));
-    
-    while (catQuery.next()) {
-        CategoryItem item;
-        item.id = catQuery.value(0).toInt();
-        item.parentId = -1;
-        item.name = catQuery.value(1).toString();
-        item.description = catQuery.value(2).toString();
-        item.defaultUnitId = -1;
-        item.isCategory = true;
-        
-        m_items.append(item);
+    if (m_showOperations) {
+        loadOperations();
     }
     
-    // Load subcategories
-    QString subcatTable = m_isExpense ? "hw_ex_subcat" : "hw_in_subcat";
-    QString idCategoryField = m_isExpense ? "id_ecat" : "id_icat";
-    QSqlQuery subcatQuery(QString("SELECT id, %1, name, descr, id_un_default FROM %2 ORDER BY name")
-                          .arg(idCategoryField, subcatTable));
-    
-    while (subcatQuery.next()) {
-        CategoryItem item;
-        item.id = subcatQuery.value(0).toInt();
-        item.parentId = subcatQuery.value(1).toInt();
-        item.name = subcatQuery.value(2).toString();
-        item.description = subcatQuery.value(3).toString();
-        item.defaultUnitId = subcatQuery.value(4).toInt();
-        item.isCategory = false;
-        
-        m_items.append(item);
-    }
-    
-    // Build parent-child relationships
     buildHierarchy();
     
     endResetModel();
+}
+
+void CategoryHierModel::loadCategories()
+{
+    QString catTable = m_isExpense ? "hw_ex_cat" : "hw_in_cat";
+    QSqlQuery query(QString("SELECT id, name, descr FROM %1 ORDER BY name").arg(catTable));
+    
+    while (query.next()) {
+        CategoryItem item;
+        item.id = query.value(0).toInt();
+        item.parentId = -1;
+        item.name = query.value(1).toString();
+        item.description = query.value(2).toString();
+        item.defaultUnitId = -1;
+        item.isCategory = true;
+        item.isOperation = false;
+        
+        m_items.append(item);
+    }
+}
+
+void CategoryHierModel::loadSubcategories()
+{
+    QString subcatTable = m_isExpense ? "hw_ex_subcat" : "hw_in_subcat";
+    QString idCategoryField = m_isExpense ? "id_ecat" : "id_icat";
+    QSqlQuery query(QString("SELECT id, %1, name, descr, id_un_default FROM %2 ORDER BY name")
+                    .arg(idCategoryField, subcatTable));
+    
+    while (query.next()) {
+        CategoryItem item;
+        item.id = query.value(0).toInt();
+        item.parentId = query.value(1).toInt();
+        item.name = query.value(2).toString();
+        item.description = query.value(3).toString();
+        item.defaultUnitId = query.value(4).toInt();
+        item.isCategory = false;
+        item.isOperation = false;
+        
+        m_items.append(item);
+    }
+}
+
+void CategoryHierModel::loadOperations()
+{
+    QString opTable = m_isExpense ? "hw_ex_op" : "hw_in_op";
+    QString idSubcatField = m_isExpense ? "id_esubcat" : "id_isubcat";
+    
+    QSqlQuery query(QString("SELECT id, %1, op_date, quantity, amount, descr "
+                           "FROM %2 ORDER BY op_date DESC")
+                    .arg(idSubcatField, opTable));
+    
+    while (query.next()) {
+        CategoryItem item;
+        item.id = query.value(0).toInt();
+        item.parentId = query.value(1).toInt();  // Subcategory ID
+        item.name = query.value(5).toString();   // Operation description
+        if (item.name.isEmpty()) {
+            item.name = tr("Operation #%1").arg(item.id);
+        }
+        item.operationDate = query.value(2).toDate();
+        item.quantity = query.value(3).toDouble();
+        item.amount = query.value(4).toInt();
+        item.isCategory = false;
+        item.isOperation = true;
+        
+        m_items.append(item);
+    }
 }
 
 void CategoryHierModel::buildHierarchy()
@@ -93,8 +137,17 @@ void CategoryHierModel::buildHierarchy()
             // Root item (category)
             m_rootItems.append(i);
         } else {
-            // Find parent category index
-            int parentIndex = findItemIndex(m_items[i].parentId, true);
+            // Find parent item index
+            int parentIndex = -1;
+            
+            if (m_items[i].isOperation) {
+                // Operation's parent is subcategory
+                parentIndex = findItemIndex(m_items[i].parentId, false, true);
+            } else {
+                // Subcategory's parent is category
+                parentIndex = findItemIndex(m_items[i].parentId, true, false);
+            }
+            
             if (parentIndex != -1) {
                 m_items[parentIndex].children.append(i);
             }
@@ -102,11 +155,19 @@ void CategoryHierModel::buildHierarchy()
     }
 }
 
-int CategoryHierModel::findItemIndex(int id, bool isCategory) const
+int CategoryHierModel::findItemIndex(int id, bool isCategory, bool isSubcategory) const
 {
     for (int i = 0; i < m_items.size(); ++i) {
-        if (m_items[i].id == id && m_items[i].isCategory == isCategory) {
-            return i;
+        if (m_items[i].id == id) {
+            if (isCategory && m_items[i].isCategory && !m_items[i].isOperation) {
+                return i;
+            }
+            if (isSubcategory && !m_items[i].isCategory && !m_items[i].isOperation) {
+                return i;
+            }
+            if (!isCategory && !isSubcategory && m_items[i].isOperation) {
+                return i;
+            }
         }
     }
     return -1;
@@ -115,6 +176,24 @@ int CategoryHierModel::findItemIndex(int id, bool isCategory) const
 void CategoryHierModel::refresh()
 {
     loadData();
+}
+
+void CategoryHierModel::setOperationShow(bool show)
+{
+    if (m_showOperations == show)
+        return;
+    
+    m_showOperations = show;
+    refresh();
+}
+
+QString CategoryHierModel::formatAmount(int amountInLowUnits) const
+{
+    // Convert from low units (cents/kopeks) to main units
+    double amountInMainUnits = amountInLowUnits / 100.0;
+    
+    // Format with exactly 2 decimal places
+    return QLocale().toString(amountInMainUnits, 'f', 2);
 }
 
 QModelIndex CategoryHierModel::index(int row, int column, const QModelIndex &parent) const
@@ -129,7 +208,7 @@ QModelIndex CategoryHierModel::index(int row, int column, const QModelIndex &par
         return indexFromItem(m_rootItems[row], column);
     }
     
-    // Child item (subcategory)
+    // Child item (subcategory or operation)
     int parentIndex = parent.internalId();
     if (parentIndex < 0 || parentIndex >= m_items.size())
         return QModelIndex();
@@ -152,21 +231,28 @@ QModelIndex CategoryHierModel::parent(const QModelIndex &child) const
     
     int parentId = m_items[childIndex].parentId;
     if (parentId == -1)
-        return QModelIndex();  // Top-level item has no parent
+        return QModelIndex();
     
     // Find parent item index
-    int parentIndex = findItemIndex(parentId, true);
+    int parentIndex = -1;
+    
+    if (m_items[childIndex].isOperation) {
+        // Parent of operation is subcategory
+        parentIndex = findItemIndex(parentId, false, true);
+    } else {
+        // Parent of subcategory is category
+        parentIndex = findItemIndex(parentId, true, false);
+    }
+    
     if (parentIndex == -1)
         return QModelIndex();
     
-    // Find parent's row among root items or its parent's children
+    // Find parent's row
     int row = -1;
     if (m_items[parentIndex].parentId == -1) {
-        // Parent is a root category
         row = m_rootItems.indexOf(parentIndex);
     } else {
-        // Parent is a subcategory (should not happen, but handle gracefully)
-        int grandParentIndex = findItemIndex(m_items[parentIndex].parentId, true);
+        int grandParentIndex = findItemIndex(m_items[parentIndex].parentId, true, false);
         if (grandParentIndex != -1) {
             row = m_items[grandParentIndex].children.indexOf(parentIndex);
         }
@@ -181,7 +267,6 @@ QModelIndex CategoryHierModel::parent(const QModelIndex &child) const
 int CategoryHierModel::rowCount(const QModelIndex &parent) const
 {
     if (!parent.isValid()) {
-        // Top level - count root items
         return m_rootItems.size();
     }
     
@@ -189,7 +274,6 @@ int CategoryHierModel::rowCount(const QModelIndex &parent) const
     if (parentIndex < 0 || parentIndex >= m_items.size())
         return 0;
     
-    // Return number of children for this item
     return m_items[parentIndex].children.size();
 }
 
@@ -213,12 +297,36 @@ QVariant CategoryHierModel::data(const QModelIndex &index, int role) const
     switch (role) {
         case Qt::DisplayRole:
         case Qt::EditRole:
+            if (item.isOperation) {
+                // For operations: show date, description, and formatted amount
+                return QString("%1 - %2: %3")
+                    .arg(item.operationDate.toString("dd.MM.yyyy"))
+                    .arg(item.name)
+                    .arg(formatAmount(item.amount));
+            }
             return item.name;
             
         case Qt::ToolTipRole:
+            if (item.isOperation) {
+                return QString("%1\nAmount: %2\nQuantity: %3")
+                    .arg(item.name)
+                    .arg(formatAmount(item.amount))
+                    .arg(item.quantity);
+            }
             if (!item.description.isEmpty())
                 return item.description;
             return item.name;
+            
+        case Qt::UserRole + 1: // ID
+            return item.id;
+            
+        case Qt::UserRole + 2: // Type (0=category,1=subcategory,2=operation)
+            if (item.isCategory)
+                return 0;
+            else if (item.isOperation)
+                return 2;
+            else
+                return 1;
             
         default:
             return QVariant();
@@ -250,11 +358,17 @@ QModelIndex CategoryHierModel::indexFromItem(int itemIndex, int column) const
     const CategoryItem &item = m_items[itemIndex];
     
     if (item.parentId == -1) {
-        // This is a root category
+        // Root category
         row = m_rootItems.indexOf(itemIndex);
     } else {
-        // This is a subcategory - find its row within parent's children
-        int parentIndex = findItemIndex(item.parentId, true);
+        // Find parent index
+        int parentIndex = -1;
+        if (item.isOperation) {
+            parentIndex = findItemIndex(item.parentId, false, true);
+        } else {
+            parentIndex = findItemIndex(item.parentId, true, false);
+        }
+        
         if (parentIndex != -1) {
             row = m_items[parentIndex].children.indexOf(itemIndex);
         }
@@ -290,6 +404,30 @@ bool CategoryHierModel::isCategory(const QModelIndex &index) const
     return m_items[itemIndex].isCategory;
 }
 
+bool CategoryHierModel::isSubcategory(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return false;
+    
+    int itemIndex = index.internalId();
+    if (itemIndex < 0 || itemIndex >= m_items.size())
+        return false;
+    
+    return !m_items[itemIndex].isCategory && !m_items[itemIndex].isOperation;
+}
+
+bool CategoryHierModel::isOperation(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return false;
+    
+    int itemIndex = index.internalId();
+    if (itemIndex < 0 || itemIndex >= m_items.size())
+        return false;
+    
+    return m_items[itemIndex].isOperation;
+}
+
 int CategoryHierModel::getParentCategoryId(const QModelIndex &index) const
 {
     if (!index.isValid())
@@ -299,5 +437,73 @@ int CategoryHierModel::getParentCategoryId(const QModelIndex &index) const
     if (itemIndex < 0 || itemIndex >= m_items.size())
         return -1;
     
-    return m_items[itemIndex].parentId;
+    const CategoryItem &item = m_items[itemIndex];
+    
+    if (item.isCategory)
+        return -1;
+    
+    if (item.isOperation) {
+        // Find parent subcategory, then its parent category
+        int subcatIndex = findItemIndex(item.parentId, false, true);
+        if (subcatIndex != -1) {
+            return m_items[subcatIndex].parentId;
+        }
+        return -1;
+    }
+    
+    // Subcategory
+    return item.parentId;
+}
+
+int CategoryHierModel::getParentSubcategoryId(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return -1;
+    
+    int itemIndex = index.internalId();
+    if (itemIndex < 0 || itemIndex >= m_items.size())
+        return -1;
+    
+    const CategoryItem &item = m_items[itemIndex];
+    
+    if (!item.isOperation)
+        return -1;
+    
+    return item.parentId;
+}
+
+double CategoryHierModel::getQuantity(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return 0.0;
+    
+    int itemIndex = index.internalId();
+    if (itemIndex < 0 || itemIndex >= m_items.size())
+        return 0.0;
+    
+    return m_items[itemIndex].quantity;
+}
+
+int CategoryHierModel::getAmount(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return 0;
+    
+    int itemIndex = index.internalId();
+    if (itemIndex < 0 || itemIndex >= m_items.size())
+        return 0;
+    
+    return m_items[itemIndex].amount;
+}
+
+QDate CategoryHierModel::getOperationDate(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return QDate();
+    
+    int itemIndex = index.internalId();
+    if (itemIndex < 0 || itemIndex >= m_items.size())
+        return QDate();
+    
+    return m_items[itemIndex].operationDate;
 }

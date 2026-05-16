@@ -45,6 +45,8 @@ private slots:
     void on_actFilter_triggered();
     void treeEntered(const QModelIndex &);
 
+    void on_cbShowOperations_toggled(bool checked);
+
 private:
     Ui::CategoryOrganizerWindow *ui;
     CategoryHierModel *mdlExpCatLeft, *mdlExpCatRight,  *mdlIncCatLeft, *mdlIncCatRight;

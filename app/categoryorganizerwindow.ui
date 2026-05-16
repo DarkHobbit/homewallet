@@ -48,6 +48,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="cbShowOperations">
+     <property name="text">
+      <string>Show operations on each (sub)category</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="layControls">
      <item>
       <widget class="QLabel" name="lbQuickFilter">
