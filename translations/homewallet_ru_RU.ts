@@ -149,9 +149,24 @@
 <context>
     <name>CategoryHierModel</name>
     <message>
-        <location filename="../model/categoryhiermodel.cpp" line="101"/>
+        <location filename="../model/categoryhiermodel.cpp" line="115"/>
         <source>Operation #%1</source>
         <translation>Операция №%1</translation>
+    </message>
+    <message>
+        <location filename="../model/categoryhiermodel.cpp" line="348"/>
+        <source>Subcategories: %1</source>
+        <translation>Подкатегорий: %1</translation>
+    </message>
+    <message>
+        <location filename="../model/categoryhiermodel.cpp" line="350"/>
+        <source>Operations: %1</source>
+        <translation>Операций: %1</translation>
+    </message>
+    <message>
+        <location filename="../model/categoryhiermodel.cpp" line="399"/>
+        <source>Records</source>
+        <translation>Записей</translation>
     </message>
 </context>
 <context>

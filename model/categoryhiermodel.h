@@ -104,6 +104,9 @@ private:
     
     // Format amount from low units (cents/kopeks) to main units with 2 decimal places
     QString formatAmount(int amountInLowUnits) const;
+    
+    // Get child count for display (categories: subcategories count, subcategories: operations count)
+    int getChildCountForDisplay(const CategoryItem &item) const;
 };
 
 #endif // CATEGORYHIERMODEL_H

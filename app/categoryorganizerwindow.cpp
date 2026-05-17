@@ -103,6 +103,16 @@ bool CategoryOrganizerWindow::eventFilter(QObject *obj, QEvent *event)
         return QObject::eventFilter(obj, event);
 }
 
+void CategoryOrganizerWindow::showEvent(QShowEvent *e)
+{
+    QWidget::showEvent(e);
+    int w = ui->tvExpCatLeft->width()*3/4; // Important for tvInc* - are hidden while showEvent() is calling
+    ui->tvExpCatLeft->setColumnWidth(0, w);
+    ui->tvExpCatRight->setColumnWidth(0, w);
+    ui->tvIncCatLeft->setColumnWidth(0, w);
+    ui->tvIncCatRight->setColumnWidth(0, w);
+}
+
 void CategoryOrganizerWindow::on_btn_Quick_Filter_Apply_clicked()
 {
     checkActiveTree();

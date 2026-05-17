@@ -196,6 +196,20 @@ QString CategoryHierModel::formatAmount(int amountInLowUnits) const
     return QLocale().toString(amountInMainUnits, 'f', 2);
 }
 
+int CategoryHierModel::getChildCountForDisplay(const CategoryItem &item) const
+{
+
+    if (item.isCategory) {
+        return item.children.size();  // Subcategories count
+    }
+
+    if (!item.isOperation && m_showOperations) {
+        return item.children.size();  // Operations count
+    }
+
+    return 0;
+}
+
 QModelIndex CategoryHierModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent))
@@ -280,7 +294,7 @@ int CategoryHierModel::rowCount(const QModelIndex &parent) const
 int CategoryHierModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return 1;  // Only one column for name
+    return 2;  // Two columns: Name and Count
 }
 
 QVariant CategoryHierModel::data(const QModelIndex &index, int role) const
@@ -293,44 +307,79 @@ QVariant CategoryHierModel::data(const QModelIndex &index, int role) const
         return QVariant();
     
     const CategoryItem &item = m_items[itemIndex];
+    int column = index.column();
     
     switch (role) {
         case Qt::DisplayRole:
         case Qt::EditRole:
-            if (item.isOperation) {
-                // For operations: show date, description, and formatted amount
-                return QString("%1 - %2: %3")
-                    .arg(item.operationDate.toString("dd.MM.yyyy"))
-                    .arg(item.name)
-                    .arg(formatAmount(item.amount));
+            if (column == 0) {
+                // First column: name
+                if (item.isOperation) {
+                    return QString("%1 - %2: %3")
+                        .arg(item.operationDate.toString("dd.MM.yyyy"))
+                        .arg(item.name)
+                        .arg(formatAmount(item.amount));
+                }
+                return item.name;
+            } else if (column == 1) {
+                // Second column: child count
+                int count = getChildCountForDisplay(item);
+                if (count > 0) {
+                    return QString::number(count);
+                }
+                return QVariant();  // Empty for items without children
             }
-            return item.name;
+            break;
             
         case Qt::ToolTipRole:
-            if (item.isOperation) {
-                return QString("%1\nAmount: %2\nQuantity: %3")
-                    .arg(item.name)
-                    .arg(formatAmount(item.amount))
-                    .arg(item.quantity);
+            if (column == 0) {
+                if (item.isOperation) {
+                    return QString("%1\nAmount: %2\nQuantity: %3")
+                        .arg(item.name)
+                        .arg(formatAmount(item.amount))
+                        .arg(item.quantity);
+                }
+                if (!item.description.isEmpty())
+                    return item.description;
+                return item.name;
+            } else if (column == 1) {
+                int count = getChildCountForDisplay(item);
+                if (item.isCategory && count > 0) {
+                    return tr("Subcategories: %1").arg(count);
+                } else if (!item.isOperation && !item.isCategory && count > 0) {
+                    return tr("Operations: %1").arg(count);
+                }
             }
-            if (!item.description.isEmpty())
-                return item.description;
-            return item.name;
+            break;
+            
+        case Qt::TextAlignmentRole:
+            if (column == 1) {
+                return Qt::AlignCenter;
+            }
+            break;
             
         case Qt::UserRole + 1: // ID
-            return item.id;
+            if (column == 0) {
+                return item.id;
+            }
+            break;
             
         case Qt::UserRole + 2: // Type (0=category,1=subcategory,2=operation)
-            if (item.isCategory)
-                return 0;
-            else if (item.isOperation)
-                return 2;
-            else
-                return 1;
+            if (column == 0) {
+                if (item.isCategory)
+                    return 0;
+                else if (item.isOperation)
+                    return 2;
+                else
+                    return 1;
+            }
+            break;
             
         default:
             return QVariant();
     }
+    
+    return QVariant();
 }
 
 Qt::ItemFlags CategoryHierModel::flags(const QModelIndex &index) const
@@ -343,8 +392,12 @@ Qt::ItemFlags CategoryHierModel::flags(const QModelIndex &index) const
 
 QVariant CategoryHierModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole && section == 0) {
-        return QString(S_COL_CATEGORY);
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+        if (section == 0) {
+            return QString(S_COL_CATEGORY);
+        } else if (section == 1) {
+            return tr("Records");
+        }
     }
     return QVariant();
 }
@@ -385,7 +438,9 @@ int CategoryHierModel::getId(const QModelIndex &index) const
     if (!index.isValid())
         return -1;
     
-    int itemIndex = index.internalId();
+    // ID is stored in UserRole+1, but only for column 0
+    QModelIndex nameIndex = index.sibling(index.row(), 0);
+    int itemIndex = nameIndex.internalId();
     if (itemIndex < 0 || itemIndex >= m_items.size())
         return -1;
     

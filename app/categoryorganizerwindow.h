@@ -38,6 +38,7 @@ protected:
     void checkActiveTree();
     void changeEvent(QEvent *e);
     bool eventFilter(QObject *obj, QEvent *event);
+    void showEvent(QShowEvent* e);
 
 private slots:
     void on_btn_Quick_Filter_Apply_clicked();
