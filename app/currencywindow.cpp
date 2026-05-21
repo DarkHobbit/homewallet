@@ -17,7 +17,7 @@
 #include "ui_currencywindow.h"
 
 CurrencyWindow::CurrencyWindow(QWidget *parent, HwDatabase& db)
-    : QWidget(parent)
+    : QWidget(parent), SelecTables()
     , ui(new Ui::CurrencyWindow)
 {
     ui->setupUi(this);

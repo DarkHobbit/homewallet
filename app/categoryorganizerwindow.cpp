@@ -18,9 +18,8 @@
 #include "ui_categoryorganizerwindow.h"
 
 CategoryOrganizerWindow::CategoryOrganizerWindow(HwDatabase* db,  QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent), SelecTablesPair()
     , ui(new Ui::CategoryOrganizerWindow)
-    , activeView(0)
 {
     ui->setupUi(this);
     // Models
@@ -45,6 +44,13 @@ CategoryOrganizerWindow::CategoryOrganizerWindow(HwDatabase* db,  QWidget *paren
     // Filter
     ui->leQuickFilter->installEventFilter(this);
     addAction(ui->actFilter);
+    // Button access control
+    connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(selectionChanged()));
+    SetTreeSelectionHandler(ui->tvExpCatLeft);
+    SetTreeSelectionHandler(ui->tvExpCatRight);
+    SetTreeSelectionHandler(ui->tvIncCatLeft);
+    SetTreeSelectionHandler(ui->tvIncCatRight);
+    selectionChanged();
 }
 
 CategoryOrganizerWindow::~CategoryOrganizerWindow()
@@ -60,18 +66,33 @@ void CategoryOrganizerWindow::checkActiveTree()
         activeModel = mdlExpCatRight;
         if (activeView!=ui->tvExpCatRight) {
             activeView = ui->tvExpCatLeft;
+            oppositeView = ui->tvExpCatRight;
             activeModel = mdlExpCatLeft;
+            oppositeModel = mdlExpCatRight;
+        }
+        else {
+            oppositeView = ui->tvExpCatLeft;
+            activeModel = mdlExpCatRight;
+            oppositeModel = mdlExpCatLeft;
         }
     }
     else if (curW==ui->tabIncomeCats) {
         activeModel = mdlIncCatRight;
         if (activeView!=ui->tvIncCatRight) {
             activeView = ui->tvIncCatLeft;
+            oppositeView = ui->tvIncCatRight;
             activeModel = mdlIncCatLeft;
+            oppositeModel = mdlIncCatRight;
+        }
+        else {
+            oppositeView = ui->tvIncCatLeft;
+            activeModel = mdlIncCatRight;
+            oppositeModel = mdlIncCatLeft;
         }
     }
     else {
         activeView = 0;
+        oppositeView = 0;
         activeModel = 0;
     }
 }
@@ -124,6 +145,12 @@ void CategoryOrganizerWindow::on_btn_Quick_Filter_Apply_clicked()
     proxy->setFilterWildcard(ui->leQuickFilter->text());
 }
 
+void CategoryOrganizerWindow::on_btn_Edit_clicked()
+{
+    checkActiveTree();
+    if (!checkSelection()) return;
+
+}
 
 void CategoryOrganizerWindow::on_btn_Delete_clicked()
 {
@@ -147,6 +174,58 @@ void CategoryOrganizerWindow::treeEntered(const QModelIndex &)
         activeView = s;
 }
 
+void CategoryOrganizerWindow::selectionChanged()
+{
+    checkActiveTree();
+    ui->btn_Move->setEnabled(false);
+    ui->btn_Merge->setEnabled(false);
+    ui->btn_Add->setEnabled(false);
+    ui->btn_Edit->setEnabled(false);
+    ui->btn_Delete->setEnabled(false);
+    if (activeView) {
+        ui->btn_Add->setEnabled(true);
+        // Current and opposite selection
+        checkSelection(false, false);
+        // Access
+        if (!selection.isEmpty()) {
+            CategoryHierModel* mdlHier = dynamic_cast<CategoryHierModel*>(activeModel);
+            if (mdlHier) {
+                bool isCatOrSubcat = mdlHier->isCategory(selection.first())
+                                  || mdlHier->isSubcategory(selection.first());
+                ui->btn_Edit->setEnabled(isCatOrSubcat && selection.count()==1);
+                ui->btn_Delete->setEnabled(isCatOrSubcat && selection.count()>0);
+                bool hasCat=false, hasSubcat=false, hasOp=false;
+                foreach (const QModelIndex& item, selection) {
+                    if (mdlHier->isCategory(item))
+                        hasCat = true;
+                    if (mdlHier->isSubcategory(item))
+                        hasSubcat = true;
+                    if (mdlHier->isOperation(item))
+                        hasOp = true;
+                }
+                if (oppositeSelection.count()==1) {
+                    const QModelIndex& oppItem = oppositeSelection.first();
+                    // Move and merge access
+                    ui->btn_Move->setEnabled(
+                        // 1. Move subcategories to other category
+                        (mdlHier->isCategory(oppItem) && !hasCat && hasSubcat && !hasOp)
+                        // 2. Move operations to other subcategory
+                        || (mdlHier->isSubcategory(oppItem) && !hasCat && !hasSubcat && hasOp)
+                    );
+                    ui->btn_Merge->setEnabled(
+                        // 1. Merge categories
+                        (mdlHier->isCategory(oppItem) && hasCat && !hasSubcat && !hasOp)
+                        // 2. Merge subcategories
+                        || (mdlHier->isSubcategory(oppItem) && !hasCat && hasSubcat && !hasOp)
+                    );
+                }
+            }
+            else {
+                // TODO transfers, etc.
+            }
+        }
+    }
+}
 
 void CategoryOrganizerWindow::on_cbShowOperations_toggled(bool checked)
 {
@@ -156,3 +235,7 @@ void CategoryOrganizerWindow::on_cbShowOperations_toggled(bool checked)
     mdlIncCatRight->setOperationShow(checked);
 }
 
+void CategoryOrganizerWindow::SetTreeSelectionHandler(QTreeView* tree)
+{
+    connect(tree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(selectionChanged()));
+}

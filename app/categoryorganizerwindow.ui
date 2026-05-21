@@ -25,10 +25,18 @@
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QTreeView" name="tvExpCatLeft"/>
+        <widget class="QTreeView" name="tvExpCatLeft">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::ExtendedSelection</enum>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QTreeView" name="tvExpCatRight"/>
+        <widget class="QTreeView" name="tvExpCatRight">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::ExtendedSelection</enum>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -38,10 +46,18 @@
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QTreeView" name="tvIncCatLeft"/>
+        <widget class="QTreeView" name="tvIncCatLeft">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::ExtendedSelection</enum>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QTreeView" name="tvIncCatRight"/>
+        <widget class="QTreeView" name="tvIncCatRight">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::ExtendedSelection</enum>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -85,6 +101,20 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_Move">
+       <property name="text">
+        <string>Move...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_Merge">
+       <property name="text">
+        <string>Merge...</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btn_Add">

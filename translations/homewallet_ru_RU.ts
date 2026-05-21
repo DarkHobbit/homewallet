@@ -182,47 +182,57 @@
         <translation>Расходы</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="37"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="45"/>
         <source>Incomes</source>
         <translation>Доходы</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="53"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="69"/>
         <source>Show operations on each (sub)category</source>
         <translation>Показывать операции по каждой (под)категории</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="62"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="78"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="72"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="88"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="98"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="108"/>
+        <source>Move...</source>
+        <translation>Перенести...</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.ui" line="115"/>
+        <source>Merge...</source>
+        <translation>Слить...</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.ui" line="128"/>
         <source>Add...</source>
         <translation>Добавить...</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="115"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="145"/>
         <source>Edit...</source>
         <translation>Редактировать...</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="132"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="162"/>
         <source>Delete...</source>
         <translation>Удалить...</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="145"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="175"/>
         <source>Filter</source>
         <translation>Фильтр</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="148"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="178"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>

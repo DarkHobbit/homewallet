@@ -26,7 +26,7 @@ namespace Ui {
 class CategoryOrganizerWindow;
 }
 
-class CategoryOrganizerWindow : public QWidget, public SelecTables
+class CategoryOrganizerWindow : public QWidget, public SelecTablesPair
 {
     Q_OBJECT
 
@@ -42,10 +42,11 @@ protected:
 
 private slots:
     void on_btn_Quick_Filter_Apply_clicked();
+    void on_btn_Edit_clicked();
     void on_btn_Delete_clicked();
     void on_actFilter_triggered();
     void treeEntered(const QModelIndex &);
-
+    void selectionChanged();
     void on_cbShowOperations_toggled(bool checked);
 
 private:
@@ -53,10 +54,9 @@ private:
     CategoryHierModel *mdlExpCatLeft, *mdlExpCatRight,  *mdlIncCatLeft, *mdlIncCatRight;
     HierFilterProxyModel *proxyExpCatLeft, *proxyExpCatRight,  *proxyIncCatLeft, *proxyIncCatRight;
     // Potentially unsafe pointers (covered by checkActiveTree() in all changed)
-    QAbstractItemModel* activeModel;
-    QTreeView* activeView;
+    QAbstractItemModel *activeModel, *oppositeModel;
     // End of potentially unsafe pointers
-
+    void SetTreeSelectionHandler(QTreeView* tree);
 };
 
 #endif // CATEGORYORGANIZERWINDOW_H

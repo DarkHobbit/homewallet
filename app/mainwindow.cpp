@@ -42,7 +42,7 @@
 #include "formatsgui/postimportdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
+    QMainWindow(parent), SelecTables(),
     ui(new Ui::MainWindow), activeModel(0)
 {
     ui->setupUi(this);

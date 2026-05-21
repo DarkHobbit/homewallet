@@ -47,14 +47,27 @@ void updateOneView(QTableView* view, bool isDatabaseView);
 // Second base class for widgets with QTableView-s and proxy models
 // Can be used with QMainWindow, QWidget, etc.
 class SelecTables {
+public:
+    SelecTables();
 protected:
     // Potentially unsafe pointers (covered by activeTab() in all changed)
-    QTableView* activeView;
+    QAbstractItemView *activeView;
     // End of potentially unsafe pointers
     QModelIndexList selection;
     void prepareModel(FilteredQueryModel* source, QSortFilterProxyModel *proxy, QTableView* view, const QString& nameForDebug, bool customSorting);
     void prepareBaseModel(QAbstractItemModel* source, QSortFilterProxyModel *proxy, QAbstractItemView* view, const QString& nameForDebug, bool customSorting);
-    bool checkSelection(bool errorIfNoSelected = true, bool onlyOneRowAllowed = false);
+    virtual bool checkSelection(bool errorIfNoSelected = true, bool onlyOneRowAllowed = false);
+};
+
+class SelecTablesPair : public SelecTables {
+public:
+    SelecTablesPair();
+protected:
+    // Potentially unsafe pointers (covered by activeTab() in all changed)
+    QAbstractItemView *oppositeView;
+    // End of potentially unsafe pointers
+    QModelIndexList oppositeSelection;
+    virtual bool checkSelection(bool errorIfNoSelected = true, bool onlyOneRowAllowed = false) override;
 };
 
 #endif // HELPERS_H

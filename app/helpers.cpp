@@ -89,6 +89,7 @@ void setSimilarComboText(QComboBox *combo, const QString &pattern)
 
 bool SelecTables::checkSelection(bool errorIfNoSelected, bool onlyOneRowAllowed)
 {
+    selection.clear();
     QModelIndexList proxySelection = activeView->selectionModel()->selectedRows();
     if (proxySelection.count()==0) {
         if (errorIfNoSelected)
@@ -105,11 +106,14 @@ bool SelecTables::checkSelection(bool errorIfNoSelected, bool onlyOneRowAllowed)
         QMessageBox::critical(0, S_ERROR, S_INTERNAL_ERR);
         return false;
     }
-    selection.clear();
     foreach(QModelIndex index, proxySelection)
         selection << selectedProxy->mapToSource(index);
     return true;
 }
+
+SelecTables::SelecTables()
+    : activeView(0)
+{}
 
 void SelecTables::prepareModel(FilteredQueryModel *source, QSortFilterProxyModel *proxy, QTableView *view, const QString &nameForDebug, bool customSorting)
 {
@@ -130,4 +134,20 @@ void SelecTables::prepareBaseModel(QAbstractItemModel *source, QSortFilterProxyM
     view->setModel(proxy);
     //    view->horizontalHeader()->setResizeContentsPrecision(64);
     view->setObjectName(QString("tv")+nameForDebug);
+}
+
+SelecTablesPair::SelecTablesPair()
+    : oppositeView(0)
+{}
+
+bool SelecTablesPair::checkSelection(bool errorIfNoSelected, bool onlyOneRowAllowed)
+{
+    oppositeSelection.clear();
+    if (!SelecTables::checkSelection(errorIfNoSelected, onlyOneRowAllowed))
+        return false;
+    QModelIndexList oppoProxySelection = oppositeView->selectionModel()->selectedRows();
+    QSortFilterProxyModel* oppositeProxy = dynamic_cast<QSortFilterProxyModel*>(oppositeView->model());
+    foreach(QModelIndex index, oppoProxySelection)
+        oppositeSelection << oppositeProxy->mapToSource(index);
+    return true;
 }
