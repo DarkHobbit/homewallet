@@ -47,6 +47,8 @@
 #define S_EMPTY_NAME QObject::tr("Name cannot be empty")
 #define S_INTERNAL_ERR QObject::tr("Internal error")
 #define S_ERR_MAIN_CURR_MISSING QObject::tr("Main currency not found")
+#define S_ERR_REMOVE_NOT_EMPTY \
+ QObject::tr("Category or subcategory contains child records.\nAt first, move it to another place")
 #define S_REMOVE_CONFIRM QObject::tr("Do you really want to delete the selected items?")
 // Common import/export messages
 #define S_READ_ONLY_FORMAT QObject::tr("This format is read only")

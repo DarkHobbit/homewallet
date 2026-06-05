@@ -42,15 +42,20 @@ protected:
 
 private slots:
     void on_btn_Quick_Filter_Apply_clicked();
+    void addCategory();
+    void addSubcategory();
     void on_btn_Edit_clicked();
     void on_btn_Delete_clicked();
+    void on_btn_Refresh_clicked();
     void on_actFilter_triggered();
     void treeEntered(const QModelIndex &);
     void selectionChanged();
     void on_cbShowOperations_toggled(bool checked);
 
+
 private:
     Ui::CategoryOrganizerWindow *ui;
+    HwDatabase* _db;
     CategoryHierModel *mdlExpCatLeft, *mdlExpCatRight,  *mdlIncCatLeft, *mdlIncCatRight;
     HierFilterProxyModel *proxyExpCatLeft, *proxyExpCatRight,  *proxyIncCatLeft, *proxyIncCatRight;
     // Potentially unsafe pointers (covered by checkActiveTree() in all changed)

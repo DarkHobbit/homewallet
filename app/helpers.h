@@ -37,6 +37,7 @@
 
 QStringList getListItems(QListWidget* list);
 void fillComboByDict(QComboBox* combo, GenericDatabase::DictColl coll, bool addAllItem);
+QVariant currentComboData(QComboBox* combo, int role = Qt::UserRole);
 int getComboCurrentId(QComboBox* combo);
 // setSimilarComboText() assumes that combo box items sorted alphabetically
 void setSimilarComboText(QComboBox* combo, const QString& pattern);

@@ -15,7 +15,9 @@
 #include "subcategorydialog.h"
 #include "ui_subcategorydialog.h"
 #include "hwdatabase.h"
+#include "helpers.h"
 #include "globals.h"
+
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QMessageBox>
@@ -91,7 +93,7 @@ void SubCategoryDialog::setEditData(int id, int categoryId, const QString &name,
 
 int SubCategoryDialog::getCategoryId() const
 {
-    return ui->comboCategory->currentData().toInt();
+    return currentComboData(ui->comboCategory).toInt();
 }
 
 QString SubCategoryDialog::getName() const
@@ -106,7 +108,7 @@ QString SubCategoryDialog::getDescription() const
 
 int SubCategoryDialog::getDefaultUnitId() const
 {
-    QVariant data = ui->comboDefaultUnit->currentData();
+    QVariant data = currentComboData(ui->comboDefaultUnit);
     return data.isValid() ? data.toInt() : -1;  // -1 means NULL
 }
 
@@ -141,12 +143,12 @@ bool SubCategoryDialog::isDuplicate() const
 bool SubCategoryDialog::validateInput()
 {
     if (getName().isEmpty()) {
-        QMessageBox::critical(nullptr, S_ERROR, S_EMPTY_NAME);
+        QMessageBox::critical(0, S_ERROR, S_EMPTY_NAME);
         return false;
     }
     // Check for duplicate
     if (isDuplicate()) {
-        QMessageBox::critical(nullptr, S_ERROR,
+        QMessageBox::critical(0, S_ERROR,
             tr("Subcategory with this name already exists in the selected category."));
         return false;
     }
@@ -154,8 +156,16 @@ bool SubCategoryDialog::validateInput()
     return true;
 }
 
-int SubCategoryDialog::addSubCategory(const QString &defaultName)
+int SubCategoryDialog::addSubCategory(const QString &defaultName, int parentId)
 {
+    // Pre-select category if parentId is provided and positive
+    if (parentId > 0 && m_currentId == -1) {
+        int index = ui->comboCategory->findData(parentId);
+        if (index >= 0) {
+            ui->comboCategory->setCurrentIndex(index);
+        }
+    }
+    
     // Set default name if provided and no existing data is being edited
     if (!defaultName.isEmpty() && m_currentId == -1 && ui->lineEditName->text().isEmpty()) {
         ui->lineEditName->setText(defaultName);
@@ -164,6 +174,7 @@ int SubCategoryDialog::addSubCategory(const QString &defaultName)
     // Execute dialog and check result
     if (exec() != QDialog::Accepted)
         return -1;  // User canceled
+    
     // Validate input
     if (!validateInput())
         return -1;
@@ -182,7 +193,7 @@ int SubCategoryDialog::addSubCategory(const QString &defaultName)
     if (newId == -1) {
         QString errorMsg = m_db->lastError();
         if (!errorMsg.isEmpty()) {
-            QMessageBox::critical(nullptr, S_ERROR, errorMsg);
+            QMessageBox::critical(0, S_ERROR, errorMsg);
         }
         return -1;
     }

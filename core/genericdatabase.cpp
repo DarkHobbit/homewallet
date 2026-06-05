@@ -300,6 +300,34 @@ bool GenericDatabase::execQuery(QSqlQuery &q)
     return res;
 }
 
+bool GenericDatabase::execSimpleQuery(const QString &sql)
+{
+    QSqlQuery q(sqlDbRef());
+    if (!prepQuery(q, sql))
+        return false;
+    return execQuery(q);
+}
+
+bool GenericDatabase::deleteRecIfEmpty(int id, const QString &countSql, const QString &deleteSql)
+{
+    QSqlQuery qC(sqlDbRef());
+    if (!prepQuery(qC, countSql))
+        return false;
+    qC.bindValue(":id", id);
+    if (!execQuery(qC))
+        return false;
+    qC.first();
+    if (qC.value(0).toInt()>0) {
+        _lastError = S_ERR_REMOVE_NOT_EMPTY;
+        return false;
+    }
+    QSqlQuery qD(sqlDbRef());
+    if (!prepQuery(qD, deleteSql))
+        return false;
+    qD.bindValue(":id", id);
+    return execQuery(qD);
+}
+
 int GenericDatabase::dictId(QSqlQuery &q)
 {
     if (!q.exec()) {
@@ -383,7 +411,7 @@ bool GenericDatabase::checkForICU()
             }
         }
 #else
-        return false;
+        return true;
 #endif
     }    
     isICUSupported = true;

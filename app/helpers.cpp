@@ -27,6 +27,15 @@ void fillComboByDict(QComboBox *combo, GenericDatabase::DictColl coll, bool addA
         combo->addItem(key, coll[key]);
 }
 
+QVariant currentComboData(QComboBox *combo, int role)
+{
+    int idx = combo->currentIndex();
+    if (idx==-1)
+        return QVariant();
+    else
+        return combo->itemData(idx, role);
+}
+
 int getComboCurrentId(QComboBox *combo)
 {
     return combo->itemData(combo->currentIndex()).toInt();

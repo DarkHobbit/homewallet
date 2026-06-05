@@ -50,8 +50,9 @@ public:
     // Add subcategory to database (similar to AliasDialog::addAlias())
     // Shows dialog, validates input, and performs insertion
     // If defaultName is provided, it will be pre-filled in the name field
+    // If parentId > 0, the corresponding category will be pre-selected in the combo box
     // Returns ID of added record or -1 on error or cancellation
-    int addSubCategory(const QString &defaultName = QString());
+    int addSubCategory(const QString &defaultName = QString(), int parentId = -1);
 
 private:
     Ui::SubCategoryDialog *ui;

@@ -27,14 +27,14 @@
        <item>
         <widget class="QTreeView" name="tvExpCatLeft">
          <property name="selectionMode">
-          <enum>QAbstractItemView::ExtendedSelection</enum>
+          <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QTreeView" name="tvExpCatRight">
          <property name="selectionMode">
-          <enum>QAbstractItemView::ExtendedSelection</enum>
+          <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
          </property>
         </widget>
        </item>
@@ -48,14 +48,14 @@
        <item>
         <widget class="QTreeView" name="tvIncCatLeft">
          <property name="selectionMode">
-          <enum>QAbstractItemView::ExtendedSelection</enum>
+          <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QTreeView" name="tvIncCatRight">
          <property name="selectionMode">
-          <enum>QAbstractItemView::ExtendedSelection</enum>
+          <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
          </property>
         </widget>
        </item>
@@ -167,6 +167,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="btn_Refresh">
+       <property name="text">
+        <string>Refresh</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
@@ -176,6 +183,22 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actAddCat">
+   <property name="text">
+    <string>...category</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+C</string>
+   </property>
+  </action>
+  <action name="actAddSubcat">
+   <property name="text">
+    <string>...subcategory</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+S</string>
    </property>
   </action>
  </widget>

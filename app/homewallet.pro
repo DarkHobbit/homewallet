@@ -42,6 +42,7 @@ SOURCES += \
     settingsdialog.cpp \
     formatsgui/exportdialog.cpp \
     formatsgui/postimportdialog.cpp \
+    simpledictdialog.cpp \
     simplereportdialog.cpp \
     subcategorydialog.cpp \
 
@@ -61,6 +62,7 @@ HEADERS  += \
     settingsdialog.h \
     formatsgui/exportdialog.h \
     formatsgui/postimportdialog.h \
+    simpledictdialog.h \
     simplereportdialog.h \
     subcategorydialog.h \
 
@@ -77,6 +79,7 @@ FORMS    += \
     settingsdialog.ui \
     formatsgui/exportdialog.ui \
     formatsgui/postimportdialog.ui \
+    simpledictdialog.ui \
     simplereportdialog.ui \
     subcategorydialog.ui \
 

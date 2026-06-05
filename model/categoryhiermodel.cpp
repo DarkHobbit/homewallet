@@ -24,9 +24,10 @@ CategoryHierModel::CategoryHierModel(bool isExpense, HwDatabase* db, QObject *pa
     QAbstractItemModel(parent),
     m_isExpense(isExpense),
     m_db(db),
-    m_showOperations(false)
+    m_showOperations(false),
+    m_lastError()
 {
-    Q_ASSERT(m_db != nullptr);
+    Q_ASSERT(m_db != 0);
     loadData();
 }
 
@@ -38,6 +39,50 @@ void CategoryHierModel::clearData()
 {
     m_items.clear();
     m_rootItems.clear();
+}
+
+bool CategoryHierModel::removeByIndex(const QModelIndex& index)
+{
+    // This methods must be called BEFORE beginRemoveRows()
+    int id = getId(index);
+    bool isC = isCategory(index);
+    bool isS = isSubcategory(index);
+    bool res = false;
+    int removingRow = index.row();
+
+    if (m_isExpense) {
+        if (isC)
+            res = m_db->deleteExpenseCategory(id);
+        else if (isS)
+            res = m_db->deleteExpenseSubcategory(id);
+    }
+    else {
+        if (isC)
+            res = m_db->deleteIncomeCategory(id);
+        else if (isS)
+            res = m_db->deleteIncomeSubcategory(id);
+    }
+    if (!res)
+        return false;
+
+    /*
+    beginRemoveRows(index.parent(), removingRow, removingRow);
+    // Internal buffer correction
+    if (index.parent().isValid()) // Subcategory, not category
+        m_items[index.parent().internalId()].children.remove(removingRow);
+    m_items.remove(index.internalId());
+    for (int i = 0; i < m_items.size(); ++i) {
+        for (int j = 0; j < m_items[i].children.size(); ++j) {
+            if (m_items[i].children[j] > removingRow) {
+                m_items[i].children[j]--;
+            }
+        }
+    }
+    endRemoveRows();
+*/
+    refresh();
+
+    return true;
 }
 
 void CategoryHierModel::loadData()
@@ -483,6 +528,11 @@ bool CategoryHierModel::isOperation(const QModelIndex &index) const
     return m_items[itemIndex].isOperation;
 }
 
+bool CategoryHierModel::isExpense() const
+{
+    return m_isExpense;
+}
+
 int CategoryHierModel::getParentCategoryId(const QModelIndex &index) const
 {
     if (!index.isValid())
@@ -561,4 +611,31 @@ QDate CategoryHierModel::getOperationDate(const QModelIndex &index) const
         return QDate();
     
     return m_items[itemIndex].operationDate;
+}
+
+QString CategoryHierModel::lastError()
+{
+    return m_lastError;
+}
+
+bool CategoryHierModel::removeAnyRows(QModelIndexList &indices)
+{
+    // Reverse sort
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+    std::sort(indices.rbegin(), indices.rend());
+#else
+#warning Multiple remove don''t work in Qt before 5.6!
+    if (indices.count()>1) {
+        m_lastError = "Multiple remove don't work in Qt before 5.6, select strictly one record";
+        return false;
+    }
+#endif
+    for (QModelIndex& index: indices) {
+        if (!removeByIndex(index)) {
+            m_lastError = m_db->lastError();
+            return false;
+        }
+    }
+    return true;
+
 }

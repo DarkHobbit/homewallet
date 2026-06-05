@@ -48,7 +48,7 @@ class CategoryHierModel : public QAbstractItemModel
 public:
     // isExpense = true  -> work with expenses (hw_ex_cat, hw_ex_subcat, hw_ex_op)
     // isExpense = false -> work with incomes (hw_in_cat, hw_in_subcat, hw_in_op)
-    explicit CategoryHierModel(bool isExpense, HwDatabase* db, QObject *parent = nullptr);
+    explicit CategoryHierModel(bool isExpense, HwDatabase* db, QObject *parent = 0);
     ~CategoryHierModel();
 
     // QAbstractItemModel interface implementation
@@ -74,7 +74,8 @@ public:
     bool isCategory(const QModelIndex &index) const;
     bool isSubcategory(const QModelIndex &index) const;
     bool isOperation(const QModelIndex &index) const;
-    
+    bool isExpense() const;
+
     // Get parent category ID for a subcategory or operation
     int getParentCategoryId(const QModelIndex &index) const;
     
@@ -86,12 +87,16 @@ public:
     int getAmount(const QModelIndex &index) const;
     QDate getOperationDate(const QModelIndex &index) const;
 
+    QString lastError();
+    bool removeAnyRows(QModelIndexList &indices);
+
 private:
     bool m_isExpense;           // true - expenses, false - incomes
     HwDatabase* m_db;           // pointer to database object (not owner)
     QVector<CategoryItem> m_items;  // flat list of all items
     QVector<int> m_rootItems;   // indices of root (top-level) items
     bool m_showOperations;      // show third level (operations)
+    QString m_lastError;
     
     void loadData();            // load data from database
     void loadCategories();      // load categories (level 0)
@@ -101,7 +106,8 @@ private:
     QModelIndex indexFromItem(int itemIndex, int column) const;
     int findItemIndex(int id, bool isCategory, bool isSubcategory = false) const;
     void clearData();
-    
+    bool removeByIndex(const QModelIndex& index);
+
     // Format amount from low units (cents/kopeks) to main units with 2 decimal places
     QString formatAmount(int amountInLowUnits) const;
     

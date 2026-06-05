@@ -12,14 +12,19 @@
  */
 
 #include <QKeyEvent>
+#include <QMenu>
+#include <QMessageBox>
 
 #include "categoryorganizerwindow.h"
+#include "globals.h"
 #include "hierfilterproxymodel.h"
+#include "simpledictdialog.h"
+#include "subcategorydialog.h"
 #include "ui_categoryorganizerwindow.h"
 
 CategoryOrganizerWindow::CategoryOrganizerWindow(HwDatabase* db,  QWidget *parent)
     : QWidget(parent), SelecTablesPair()
-    , ui(new Ui::CategoryOrganizerWindow)
+    , ui(new Ui::CategoryOrganizerWindow), _db(db)
 {
     ui->setupUi(this);
     // Models
@@ -51,6 +56,13 @@ CategoryOrganizerWindow::CategoryOrganizerWindow(HwDatabase* db,  QWidget *paren
     SetTreeSelectionHandler(ui->tvIncCatLeft);
     SetTreeSelectionHandler(ui->tvIncCatRight);
     selectionChanged();
+    // Add menu
+    QMenu* menuAdd = new QMenu(this);
+    menuAdd->addAction(ui->actAddCat);
+    connect(ui->actAddCat, SIGNAL(triggered()), this, SLOT(addCategory()));
+    menuAdd->addAction(ui->actAddSubcat);
+    connect(ui->actAddSubcat, SIGNAL(triggered()), this, SLOT(addSubcategory()));
+    ui->btn_Add->setMenu(menuAdd);
 }
 
 CategoryOrganizerWindow::~CategoryOrganizerWindow()
@@ -145,6 +157,39 @@ void CategoryOrganizerWindow::on_btn_Quick_Filter_Apply_clicked()
     proxy->setFilterWildcard(ui->leQuickFilter->text());
 }
 
+void CategoryOrganizerWindow::addCategory()
+{
+    CategoryHierModel* md = dynamic_cast<CategoryHierModel*>(activeModel);
+    if (md) {
+        bool isExpense = md->isExpense();
+        SimpleDictDialog* d = new SimpleDictDialog(isExpense ? "hw_ex_cat" : "hw_in_cat", false, _db, 0);
+        d->addRecord("");
+        if (d->result()==QDialog::Accepted)
+            md->refresh();
+        delete d;
+    }
+}
+
+void CategoryOrganizerWindow::addSubcategory()
+{
+    checkActiveTree();
+    if (selection.count()!=1)
+        return;
+    const QModelIndex& parentItem = selection.first();
+    CategoryHierModel* md = dynamic_cast<CategoryHierModel*>(activeModel);
+    if (md) {
+        if (!md->isCategory(parentItem))
+            return;
+        bool isExpense = md->isExpense();
+        SubCategoryDialog* d = new SubCategoryDialog(isExpense, false, _db, 0);
+        d->addSubCategory("", md->getId(parentItem));
+        if (d->result()==QDialog::Accepted)
+            md->refresh();
+        // TODO find parent in refreshed tree and expand
+        delete d;        
+    }
+}
+
 void CategoryOrganizerWindow::on_btn_Edit_clicked()
 {
     checkActiveTree();
@@ -156,11 +201,25 @@ void CategoryOrganizerWindow::on_btn_Delete_clicked()
 {
     checkActiveTree();
     if (!checkSelection()) return;
-    // TODO implement removeAnyRows(selection) in CategoryHierModel?
-    //mdlExpCatLeft->getId(ind1)
-    //mdlExpCatLeft->getParentCategoryId(ind)
+    if (QMessageBox::question(0, S_CONFIRM, S_REMOVE_CONFIRM,
+                              QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
+    {
+        CategoryHierModel* md = dynamic_cast<CategoryHierModel*>(activeModel);
+        if (md) {
+            if (!md->removeAnyRows(selection))
+                QMessageBox::critical(0, S_ERROR, md->lastError());
+            activeView->update();
+        }
+    }
 }
 
+void CategoryOrganizerWindow::on_btn_Refresh_clicked()
+{
+    checkActiveTree();
+    CategoryHierModel* md = dynamic_cast<CategoryHierModel*>(activeModel);
+    if (md)
+        md->refresh();
+}
 
 void CategoryOrganizerWindow::on_actFilter_triggered()
 {
@@ -239,3 +298,4 @@ void CategoryOrganizerWindow::SetTreeSelectionHandler(QTreeView* tree)
 {
     connect(tree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(selectionChanged()));
 }
+

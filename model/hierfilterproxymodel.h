@@ -25,7 +25,7 @@ class HierFilterProxyModel : public QSortFilterProxyModel
     Q_OBJECT
 
 public:
-    explicit HierFilterProxyModel(QObject *parent = nullptr);
+    explicit HierFilterProxyModel(QObject *parent = 0);
     
     void setFilterWildcard(const QString &pattern);
     QString filterPattern() const { return m_filterPattern; }

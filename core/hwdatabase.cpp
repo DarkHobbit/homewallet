@@ -410,6 +410,13 @@ QString HwDatabase::incomeCategoryById(int idCat)
     return dictName(sqlSel);
 }
 
+bool HwDatabase::deleteIncomeCategory(int idCat)
+{
+    return deleteRecIfEmpty(idCat,
+        "select count(id) from hw_in_subcat where id_icat=:id",
+        "delete from hw_in_cat where id=:id");
+}
+
 int HwDatabase::addIncomeSubCategory(int idParentCat, const QString &name, const QString &descr, int idDefUnit)
 {
     QSqlQuery sqlIns(sqlDb);
@@ -452,6 +459,13 @@ QString HwDatabase::incomeSubCategoryById(int idSubCat)
         return "";
     sqlSel.bindValue(":id", idSubCat);
     return dictName(sqlSel);
+}
+
+bool HwDatabase::deleteIncomeSubcategory(int idSubCat)
+{
+    return deleteRecIfEmpty(idSubCat,
+        "select count(id) from hw_in_op where id_isubcat=:id",
+        "delete from hw_in_subcat where id=:id");
 }
 
 int HwDatabase::addExpenseCategory(const QString &name, const QString &descr)
@@ -500,6 +514,13 @@ QString HwDatabase::expenseCategoryById(int idCat)
     return dictName(sqlSel);
 }
 
+bool HwDatabase::deleteExpenseCategory(int idCat)
+{
+    return deleteRecIfEmpty(idCat,
+        "select count(id) from hw_ex_subcat where id_ecat=:id",
+        "delete from hw_ex_cat where id=:id");
+}
+
 int HwDatabase::addExpenseSubCategory(int idParentCat, const QString &name, const QString &descr, int idDefUnit)
 {
     QSqlQuery sqlIns(sqlDb);
@@ -542,6 +563,13 @@ QString HwDatabase::expenseSubCategoryById(int idSubCat)
         return "";
     sqlSel.bindValue(":id", idSubCat);
     return dictName(sqlSel);
+}
+
+bool HwDatabase::deleteExpenseSubcategory(int idSubCat)
+{
+    return deleteRecIfEmpty(idSubCat,
+        "select count(id) from hw_ex_op where id_esubcat=:id",
+        "delete from hw_ex_subcat where id=:id");
 }
 
 int HwDatabase::addTransferType(const QString &name, const QString &descr)
