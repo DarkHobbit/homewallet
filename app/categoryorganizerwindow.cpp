@@ -186,7 +186,7 @@ void CategoryOrganizerWindow::addSubcategory()
         if (d->result()==QDialog::Accepted)
             md->refresh();
         // TODO find parent in refreshed tree and expand
-        delete d;        
+        delete d;
     }
 }
 

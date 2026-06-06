@@ -41,46 +41,54 @@ void CategoryHierModel::clearData()
     m_rootItems.clear();
 }
 
-bool CategoryHierModel::removeByIndex(const QModelIndex& index)
+bool CategoryHierModel::removeByIndex(const QModelIndex& indexToRemove)
 {
     // This methods must be called BEFORE beginRemoveRows()
-    int id = getId(index);
-    bool isC = isCategory(index);
-    bool isS = isSubcategory(index);
+    int idToRemove = getId(indexToRemove);
+    bool isC = isCategory(indexToRemove);
+    bool isS = isSubcategory(indexToRemove);
     bool res = false;
-    int removingRow = index.row();
+    int removingRow = indexToRemove.row();
+    QModelIndex parentIndex = indexToRemove.parent();
 
+    // Physical remove from database
     if (m_isExpense) {
         if (isC)
-            res = m_db->deleteExpenseCategory(id);
+            res = m_db->deleteExpenseCategory(idToRemove);
         else if (isS)
-            res = m_db->deleteExpenseSubcategory(id);
+            res = m_db->deleteExpenseSubcategory(idToRemove);
     }
     else {
         if (isC)
-            res = m_db->deleteIncomeCategory(id);
+            res = m_db->deleteIncomeCategory(idToRemove);
         else if (isS)
-            res = m_db->deleteIncomeSubcategory(id);
+            res = m_db->deleteIncomeSubcategory(idToRemove);
     }
     if (!res)
         return false;
 
-    /*
-    beginRemoveRows(index.parent(), removingRow, removingRow);
-    // Internal buffer correction
-    if (index.parent().isValid()) // Subcategory, not category
-        m_items[index.parent().internalId()].children.remove(removingRow);
-    m_items.remove(index.internalId());
+    // Remove from model and transfer to view
+    beginRemoveRows(parentIndex, removingRow, removingRow);
+    if (parentIndex.isValid()) // Subcategory, not category
+        m_items[parentIndex.internalId()].children.remove(removingRow);
+    int removeIndex = -1;
+    for (int i = 0; i < m_items.size(); ++i) {
+        if (m_items[i].id == idToRemove) {
+            removeIndex = i;
+            break;
+        }
+    }
+    if (removeIndex != -1)
+        m_items.removeAt(removeIndex);
+    // Indices correction
     for (int i = 0; i < m_items.size(); ++i) {
         for (int j = 0; j < m_items[i].children.size(); ++j) {
-            if (m_items[i].children[j] > removingRow) {
+            if (m_items[i].children[j] > removeIndex) {
                 m_items[i].children[j]--;
             }
         }
     }
     endRemoveRows();
-*/
-    refresh();
 
     return true;
 }

@@ -106,7 +106,7 @@ private:
     QModelIndex indexFromItem(int itemIndex, int column) const;
     int findItemIndex(int id, bool isCategory, bool isSubcategory = false) const;
     void clearData();
-    bool removeByIndex(const QModelIndex& index);
+    bool removeByIndex(const QModelIndex& indexToRemove);
 
     // Format amount from low units (cents/kopeks) to main units with 2 decimal places
     QString formatAmount(int amountInLowUnits) const;
