@@ -571,44 +571,44 @@ bool XmlHwFile::exportAccounts(HwDatabase &db, QDomElement &elRoot)
 }
 
 #define Q_SEL_ALIAS_ACC \
-    "select al.pattern, al.to_descr, reft.name as ref" \
+    "select al.id, al.pattern, al.to_descr, reft.name as ref" \
     " from hw_alias al, hw_account reft" \
     " where al.id_ac=reft.id" \
     " order by ref;"
 
 #define Q_SEL_ALIAS_CUR \
-    "select al.pattern, al.to_descr, reft.short_name as ref" \
+    "select al.id, al.pattern, al.to_descr, reft.short_name as ref" \
     " from hw_alias al, hw_currency reft" \
     " where al.id_cur=reft.id" \
     " order by ref" \
 
 #define Q_SEL_ALIAS_UN \
-"select al.pattern, al.to_descr, reft.name as ref" \
+    "select al.id, al.pattern, al.to_descr, reft.name as ref" \
     " from hw_alias al, hw_unit reft" \
     " where al.id_un=reft.id" \
     " order by ref" \
 
 #define Q_SEL_ALIAS_ICAT \
-    "select al.pattern, al.to_descr, c.name as ref" \
+    "select al.id, al.pattern, al.to_descr, c.name as ref" \
         " from hw_alias al, hw_in_cat c" \
         " where al.id_icat=c.id" \
         " order by ref" \
 
 #define Q_SEL_ALIAS_ISUBCAT \
-    "select al.pattern, al.to_descr," \
+    "select al.id, al.pattern, al.to_descr," \
         "  c.name||'::'||sc.name as ref" \
         " from hw_alias al, hw_in_cat c, hw_in_subcat sc" \
         " where al.id_isubcat=sc.id and sc.id_icat=c.id" \
         " order by ref" \
 
 #define Q_SEL_ALIAS_ECAT \
-    "select al.pattern, al.to_descr, c.name as ref" \
+    "select al.id, al.pattern, al.to_descr, c.name as ref" \
         " from hw_alias al, hw_ex_cat c" \
         " where al.id_ecat=c.id" \
         " order by ref" \
 
 #define Q_SEL_ALIAS_ESUBCAT \
-    "select al.pattern, al.to_descr," \
+    "select al.id, al.pattern, al.to_descr," \
         "  c.name||'::'||sc.name as ref" \
         " from hw_alias al, hw_ex_cat c, hw_ex_subcat sc" \
         " where al.id_esubcat=sc.id and sc.id_ecat=c.id" \
