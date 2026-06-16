@@ -42,6 +42,7 @@ protected:
 
 private slots:
     void on_btn_Quick_Filter_Apply_clicked();
+    void on_btn_Merge_clicked();
     void addCategory();
     void addSubcategory();
     void on_btn_Edit_clicked();
@@ -51,7 +52,7 @@ private slots:
     void treeEntered(const QModelIndex &);
     void selectionChanged();
     void on_cbShowOperations_toggled(bool checked);
-
+    void showUserInfo(const QString& message);
 
 private:
     Ui::CategoryOrganizerWindow *ui;
@@ -59,9 +60,10 @@ private:
     CategoryHierModel *mdlExpCatLeft, *mdlExpCatRight,  *mdlIncCatLeft, *mdlIncCatRight;
     HierFilterProxyModel *proxyExpCatLeft, *proxyExpCatRight,  *proxyIncCatLeft, *proxyIncCatRight;
     // Potentially unsafe pointers (covered by checkActiveTree() in all changed)
-    QAbstractItemModel *activeModel, *oppositeModel;
+    QWidget* curW;
+    CategoryHierModel *activeModel, *oppositeModel;
     // End of potentially unsafe pointers
-    void SetTreeSelectionHandler(QTreeView* tree);
+    void prepareModel(CategoryHierModel *source, QSortFilterProxyModel *proxy, QTreeView *tree, const QString &nameForDebug);
 };
 
 #endif // CATEGORYORGANIZERWINDOW_H

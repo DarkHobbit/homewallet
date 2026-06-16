@@ -149,22 +149,27 @@
 <context>
     <name>CategoryHierModel</name>
     <message>
-        <location filename="../model/categoryhiermodel.cpp" line="156"/>
+        <location filename="../model/categoryhiermodel.cpp" line="154"/>
+        <source>Subcategories merged: %1</source>
+        <translation>Объединены подкатегории: %1</translation>
+    </message>
+    <message>
+        <location filename="../model/categoryhiermodel.cpp" line="231"/>
         <source>Operation #%1</source>
         <translation>Операция №%1</translation>
     </message>
     <message>
-        <location filename="../model/categoryhiermodel.cpp" line="389"/>
+        <location filename="../model/categoryhiermodel.cpp" line="464"/>
         <source>Subcategories: %1</source>
         <translation>Подкатегорий: %1</translation>
     </message>
     <message>
-        <location filename="../model/categoryhiermodel.cpp" line="391"/>
+        <location filename="../model/categoryhiermodel.cpp" line="466"/>
         <source>Operations: %1</source>
         <translation>Операций: %1</translation>
     </message>
     <message>
-        <location filename="../model/categoryhiermodel.cpp" line="440"/>
+        <location filename="../model/categoryhiermodel.cpp" line="515"/>
         <source>Records</source>
         <translation>Записей</translation>
     </message>
@@ -227,32 +232,37 @@
         <translation>Удалить...</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="175"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="173"/>
+        <source>Refresh</source>
+        <translation>Обновить</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.ui" line="182"/>
         <source>Filter</source>
         <translation>Фильтр</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="178"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="185"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="183"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="190"/>
         <source>...category</source>
         <translation>...категорию</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="186"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="193"/>
         <source>Alt+C</source>
         <translation>Alt+C</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="191"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="198"/>
         <source>...subcategory</source>
         <translation>...подкатегорию</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="194"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="201"/>
         <source>Alt+S</source>
         <translation>Alt+S</translation>
     </message>
@@ -1546,18 +1556,25 @@ At first, move it to another place</source>
     </message>
     <message>
         <location filename="../core/globals.h" line="54"/>
+        <source>Do you really want to merge &apos;%1&apos; and &apos;%2&apos;?
+United record will be &apos;%3&apos;</source>
+        <translation>Вы действительно хотите объединить &apos;%1&apos; и &apos;%2&apos;?
+Объединённая запись будет называться &apos;%3&apos;</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="56"/>
         <source>This format is read only</source>
         <translation>Это формат только для чтения</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="56"/>
+        <location filename="../core/globals.h" line="58"/>
         <source>Warning: record %1 has %2, not supported in this format.
 Data will be lost</source>
         <translation>Предупреждение: у записи %1 есть %2, не поддерживается в этом формате.
 Данные будут потеряны</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="58"/>
+        <location filename="../core/globals.h" line="60"/>
         <source>%1 %2 will be lost at record %3</source>
         <translation>%1 %2 будет утерян у записи %3</translation>
     </message>
@@ -1566,229 +1583,229 @@ Data will be lost</source>
         <translation type="obsolete">Прочитано записей: %1</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="60"/>
+        <location filename="../core/globals.h" line="62"/>
         <source>%1 records has been processed</source>
         <translation>Обработано записей: %1</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="62"/>
+        <location filename="../core/globals.h" line="64"/>
         <source>Select at least one export information type</source>
         <translation>Выберите хотя бы один тип информации</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="64"/>
+        <location filename="../core/globals.h" line="66"/>
         <source>Unknown import/export error</source>
         <translation>Неизвестная ошибка импорта/экспорта</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="66"/>
+        <location filename="../core/globals.h" line="68"/>
         <source>
 at record %1 from %2</source>
         <translation>
 в записи %1 из %2</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="67"/>
+        <location filename="../core/globals.h" line="69"/>
         <source>duplicates not found</source>
         <translation>дубликатов не обнаружено</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="69"/>
+        <location filename="../core/globals.h" line="71"/>
         <source>Mode: </source>
         <translation>Режим: </translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="70"/>
+        <location filename="../core/globals.h" line="72"/>
         <source>sorted</source>
         <translation>сорт.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="71"/>
+        <location filename="../core/globals.h" line="73"/>
         <source>not sorted</source>
         <translation>не сорт.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="73"/>
+        <location filename="../core/globals.h" line="75"/>
         <source>Expenses</source>
         <translation>Расходы</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="74"/>
+        <location filename="../core/globals.h" line="76"/>
         <source>Incomes</source>
         <translation>Доходы</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="75"/>
+        <location filename="../core/globals.h" line="77"/>
         <source>Transfer</source>
         <translation>Переносы</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="76"/>
+        <location filename="../core/globals.h" line="78"/>
         <source>Currency conversion</source>
         <translation>Обмен валют</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="77"/>
+        <location filename="../core/globals.h" line="79"/>
         <source>Lend</source>
         <translation>Долги</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="78"/>
+        <location filename="../core/globals.h" line="80"/>
         <source>Borrow</source>
         <translation>Кредиты</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="80"/>
+        <location filename="../core/globals.h" line="82"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="81"/>
+        <location filename="../core/globals.h" line="83"/>
         <source>Edit</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="85"/>
+        <location filename="../core/globals.h" line="87"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="86"/>
+        <location filename="../core/globals.h" line="88"/>
         <source>#</source>
         <translation>№</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="87"/>
+        <location filename="../core/globals.h" line="89"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="88"/>
+        <location filename="../core/globals.h" line="90"/>
         <source>Sh.name</source>
         <translation>Кр.имя</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="89"/>
+        <location filename="../core/globals.h" line="91"/>
         <source>Category</source>
         <translation>Категория</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="90"/>
+        <location filename="../core/globals.h" line="92"/>
         <source>Subcategory</source>
         <translation>Подкатегория</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="91"/>
+        <location filename="../core/globals.h" line="93"/>
         <source>Qty.</source>
         <translation>Кол-во</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="92"/>
+        <location filename="../core/globals.h" line="94"/>
         <source>Unit</source>
         <translation>Ед.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="93"/>
+        <location filename="../core/globals.h" line="95"/>
         <source>Sum</source>
         <translation>Сумма</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="94"/>
+        <location filename="../core/globals.h" line="96"/>
         <source>Cur.</source>
         <translation>В.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="95"/>
+        <location filename="../core/globals.h" line="97"/>
         <source>Account</source>
         <translation>Счёт</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="96"/>
+        <location filename="../core/globals.h" line="98"/>
         <source>At.</source>
         <translation>★</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="97"/>
+        <location filename="../core/globals.h" line="99"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="99"/>
+        <location filename="../core/globals.h" line="101"/>
         <source>From</source>
         <translation>Откуда</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="100"/>
+        <location filename="../core/globals.h" line="102"/>
         <source>To</source>
         <translation>Куда</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="102"/>
+        <location filename="../core/globals.h" line="104"/>
         <source>Close date</source>
         <translation>Дата пог.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="103"/>
+        <location filename="../core/globals.h" line="105"/>
         <source>Remind date</source>
         <translation>Дата нап.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="104"/>
+        <location filename="../core/globals.h" line="106"/>
         <source>Debtor</source>
         <translation>Должник</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="105"/>
+        <location filename="../core/globals.h" line="107"/>
         <source>Creditor</source>
         <translation>Кредитор</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="106"/>
+        <location filename="../core/globals.h" line="108"/>
         <source>Down pay</source>
         <translation>Нач.пл.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="107"/>
+        <location filename="../core/globals.h" line="109"/>
         <source>Moneyback</source>
         <translation>Возвращено</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="108"/>
+        <location filename="../core/globals.h" line="110"/>
         <source>Remaining</source>
         <translation>Осталось</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="109"/>
+        <location filename="../core/globals.h" line="111"/>
         <source>Rate</source>
         <translation>Ставка</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="110"/>
+        <location filename="../core/globals.h" line="112"/>
         <source>Period</source>
         <translation>Период</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="111"/>
+        <location filename="../core/globals.h" line="113"/>
         <source>Closed</source>
         <translation>Закр.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="113"/>
+        <location filename="../core/globals.h" line="115"/>
         <source>Source</source>
         <translation>Источник</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="114"/>
+        <location filename="../core/globals.h" line="116"/>
         <source>Alias</source>
         <translation>Псевдоним</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="116"/>
+        <location filename="../core/globals.h" line="118"/>
         <source>&lt;All&gt;</source>
         <translation>&lt;Все&gt;</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="117"/>
+        <location filename="../core/globals.h" line="119"/>
         <source>Other</source>
         <translation>Прочее</translation>
     </message>

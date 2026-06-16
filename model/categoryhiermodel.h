@@ -60,16 +60,18 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-    // Refresh model data from database
-    void refresh();
-    
     // Enable/disable operation display (third level)
     void setOperationShow(bool show);
     bool isOperationShow() const { return m_showOperations; }
+    QString lastError();
 
-    // Get category/subcategory/operation ID by model index
+    // Refresh model data from database
+    void refresh();
+
+    // Get category/subcategory/operation data by model index
     int getId(const QModelIndex &index) const;
-    
+    QString getName(const QModelIndex &index) const;
+
     // Check type of item
     bool isCategory(const QModelIndex &index) const;
     bool isSubcategory(const QModelIndex &index) const;
@@ -87,8 +89,10 @@ public:
     int getAmount(const QModelIndex &index) const;
     QDate getOperationDate(const QModelIndex &index) const;
 
-    QString lastError();
+    // Operations
     bool removeAnyRows(QModelIndexList &indices);
+    bool mergeSelectedNodes(CategoryHierModel* opposite,
+        QModelIndex& index, QModelIndex& oppositeIndex);
 
 private:
     bool m_isExpense;           // true - expenses, false - incomes
@@ -107,12 +111,17 @@ private:
     int findItemIndex(int id, bool isCategory, bool isSubcategory = false) const;
     void clearData();
     bool removeByIndex(const QModelIndex& indexToRemove);
+    bool mergeCategories(int idSrc, int idDest);
+    bool mergeSubcategories(int idSrc, int idDest);
+    bool preMergeChildren(int idSrc, int idDest);
 
     // Format amount from low units (cents/kopeks) to main units with 2 decimal places
-    QString formatAmount(int amountInLowUnits) const;
-    
+    QString formatAmount(int amountInLowUnits) const;    
     // Get child count for display (categories: subcategories count, subcategories: operations count)
     int getChildCountForDisplay(const CategoryItem &item) const;
+
+signals:
+    void infoForUser(const QString& message);
 };
 
 #endif // CATEGORYHIERMODEL_H

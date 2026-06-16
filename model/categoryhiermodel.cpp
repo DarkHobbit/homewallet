@@ -79,7 +79,7 @@ bool CategoryHierModel::removeByIndex(const QModelIndex& indexToRemove)
         }
     }
     if (removeIndex != -1)
-        m_items.removeAt(removeIndex);
+        m_items.remove(removeIndex);
     // Indices correction
     for (int i = 0; i < m_items.size(); ++i) {
         for (int j = 0; j < m_items[i].children.size(); ++j) {
@@ -90,6 +90,69 @@ bool CategoryHierModel::removeByIndex(const QModelIndex& indexToRemove)
     }
     endRemoveRows();
 
+    return true;
+}
+
+bool CategoryHierModel::mergeCategories(int idSrc, int idDest)
+{
+    QString sqlM = m_isExpense
+        ? "update hw_ex_subcat set id_ecat=%1 where id_ecat=%2"
+        : "update hw_in_subcat set id_icat=%1 where id_icat=%2";
+    QString sqlD = m_isExpense
+        ? "delete from hw_ex_cat where id=%1"
+        : "delete from hw_in_cat where id=%1";
+    // Subcategories name uniq
+    if (!preMergeChildren(idSrc, idDest))
+        return false;
+    // Merge children and delete old parent
+    if (m_db->execSimpleQuery(sqlM.arg(idDest).arg(idSrc)))
+        return m_db->execSimpleQuery(sqlD.arg(idSrc));
+    else
+        return false;
+}
+
+bool CategoryHierModel::mergeSubcategories(int idSrc, int idDest)
+{
+    QString sqlM = m_isExpense
+            ? "update hw_ex_op set id_esubcat=%1 where id_esubcat=%2"
+            : "update hw_in_op set id_isubcat=%1 where id_isubcat=%2";
+    QString sqlD = m_isExpense
+        ? "delete from hw_ex_subcat where id=%1"
+        : "delete from hw_in_subcat where id=%1";
+    // Merge children and delete old parent
+    if (m_db->execSimpleQuery(sqlM.arg(idDest).arg(idSrc)))
+        return m_db->execSimpleQuery(sqlD.arg(idSrc));
+    else
+        return false;
+}
+
+bool CategoryHierModel::preMergeChildren(int idSrc, int idDest)
+{
+    QString sqlCU = m_isExpense ?
+        "select sc1.id as id1, sc2.id as id2, sc1.name as nm" \
+        " from hw_ex_subcat sc1, hw_ex_subcat sc2" \
+        " where sc1.name=sc2.name" \
+        " and sc1.id_ecat=%1 and sc2.id_ecat=%2"
+        :
+        "select sc1.id as id1, sc2.id as id2, sc1.name as nm" \
+        " from hw_in_subcat sc1, hw_in_subcat sc2" \
+        " where sc1.name=sc2.name" \
+        " and sc1.id_icat=%1 and sc2.id_icat=%2";
+    QSqlQuery qCU(m_db->sqlDbRef());
+    if (!m_db->prepQuery(qCU, sqlCU.arg(idSrc).arg(idDest)))
+        return false;
+    if (!m_db->execQuery(qCU))
+        return false;
+    qCU.first();
+    QStringList mergedSubcategories;
+    while (qCU.isValid()) {
+        mergeSubcategories(qCU.value(0).toInt(), qCU.value(1).toInt());
+        mergedSubcategories << qCU.value(2).toString();
+        qCU.next();
+    }
+    if (!mergedSubcategories.isEmpty())
+        emit infoForUser(tr("Subcategories merged: %1")
+            .arg(mergedSubcategories.join(", ")));
     return true;
 }
 
@@ -500,6 +563,11 @@ int CategoryHierModel::getId(const QModelIndex &index) const
     return m_items[itemIndex].id;
 }
 
+QString CategoryHierModel::getName(const QModelIndex &index) const
+{
+    return data(index).toString();
+}
+
 bool CategoryHierModel::isCategory(const QModelIndex &index) const
 {
     if (!index.isValid())
@@ -646,4 +714,21 @@ bool CategoryHierModel::removeAnyRows(QModelIndexList &indices)
     }
     return true;
 
+}
+
+bool CategoryHierModel::mergeSelectedNodes(CategoryHierModel *opposite,
+    QModelIndex& index, QModelIndex& oppositeIndex)
+{
+    int idSrc = getId(index);
+    int idDest = opposite->getId(oppositeIndex);
+    bool res = false;
+
+    if (isCategory(index))
+        res = mergeCategories(idSrc, idDest);
+    else if (isSubcategory(index))
+        res = mergeSubcategories(idSrc, idDest);
+
+    if (!res)
+        m_lastError = m_db->lastError();
+    return res;
 }

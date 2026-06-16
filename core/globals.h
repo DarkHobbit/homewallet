@@ -50,6 +50,8 @@
 #define S_ERR_REMOVE_NOT_EMPTY \
  QObject::tr("Category or subcategory contains child records.\nAt first, move it to another place")
 #define S_REMOVE_CONFIRM QObject::tr("Do you really want to delete the selected items?")
+#define S_MERGE_CONFIRM \
+ QObject::tr("Do you really want to merge '%1' and '%2'?\nUnited record will be '%3'")
 // Common import/export messages
 #define S_READ_ONLY_FORMAT QObject::tr("This format is read only")
 #define S_ERR_UNSUPPORTED_TAG \
