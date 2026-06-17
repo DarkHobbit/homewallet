@@ -20,6 +20,7 @@
 #include "categoryhiermodel.h"
 #include "helpers.h"
 #include "hierfilterproxymodel.h"
+#include "hiermodelbase.h"
 #include "hwdatabase.h"
 
 namespace Ui {
@@ -61,9 +62,9 @@ private:
     HierFilterProxyModel *proxyExpCatLeft, *proxyExpCatRight,  *proxyIncCatLeft, *proxyIncCatRight;
     // Potentially unsafe pointers (covered by checkActiveTree() in all changed)
     QWidget* curW;
-    CategoryHierModel *activeModel, *oppositeModel;
+    HierModelBase *activeModel, *oppositeModel;
     // End of potentially unsafe pointers
-    void prepareModel(CategoryHierModel *source, QSortFilterProxyModel *proxy, QTreeView *tree, const QString &nameForDebug);
+    void prepareModel(HierModelBase *source, QSortFilterProxyModel *proxy, QTreeView *tree, const QString &nameForDebug);
 };
 
 #endif // CATEGORYORGANIZERWINDOW_H

@@ -308,7 +308,7 @@ void CategoryOrganizerWindow::showUserInfo(const QString &message)
     QMessageBox::information(0, S_INFORM, message);
 }
 
-void CategoryOrganizerWindow::prepareModel(CategoryHierModel *source,
+void CategoryOrganizerWindow::prepareModel(HierModelBase *source,
     QSortFilterProxyModel *proxy, QTreeView *tree, const QString &nameForDebug)
 {
     prepareBaseModel(source, proxy, tree, nameForDebug, false);

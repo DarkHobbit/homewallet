@@ -13,6 +13,7 @@ HEADERS	+= \
     $$PWD/expensemodel.h \
     $$PWD/filteredquerymodel.h \
     $$PWD/hierfilterproxymodel.h \
+    $$PWD/hiermodelbase.h \
     $$PWD/importcandidatesmodel.h \
     $$PWD/importmodelset.h \
     $$PWD/incomemodel.h \
@@ -29,6 +30,7 @@ SOURCES	+= \
     $$PWD/expensemodel.cpp \
     $$PWD/filteredquerymodel.cpp \
     $$PWD/hierfilterproxymodel.cpp \
+    $$PWD/hiermodelbase.cpp \
     $$PWD/importcandidatesmodel.cpp \
     $$PWD/importmodelset.cpp \
     $$PWD/incomemodel.cpp \

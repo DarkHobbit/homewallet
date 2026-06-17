@@ -20,6 +20,8 @@
 #include <QVector>
 #include <QDate>
 
+#include "hiermodelbase.h"
+
 class HwDatabase;
 
 // Structure for storing category/subcategory/operation data
@@ -41,7 +43,7 @@ struct CategoryItem {
                      quantity(0), amount(0) {}
 };
 
-class CategoryHierModel : public QAbstractItemModel
+class CategoryHierModel : public HierModelBase
 {
     Q_OBJECT
 
@@ -60,47 +62,37 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-    // Enable/disable operation display (third level)
-    void setOperationShow(bool show);
-    bool isOperationShow() const { return m_showOperations; }
-    QString lastError();
-
     // Refresh model data from database
     void refresh();
 
-    // Get category/subcategory/operation data by model index
-    int getId(const QModelIndex &index) const;
-    QString getName(const QModelIndex &index) const;
+    // Get data by model index
+    int getId(const QModelIndex &index) const override;
+    QString getName(const QModelIndex &index) const override;
 
     // Check type of item
-    bool isCategory(const QModelIndex &index) const;
-    bool isSubcategory(const QModelIndex &index) const;
-    bool isOperation(const QModelIndex &index) const;
-    bool isExpense() const;
+    bool isCategory(const QModelIndex &index) const override;
+    bool isSubcategory(const QModelIndex &index) const override;
+    bool isOperation(const QModelIndex &index) const override;
+    bool isExpense() const override;
 
-    // Get parent category ID for a subcategory or operation
-    int getParentCategoryId(const QModelIndex &index) const;
-    
-    // Get parent subcategory ID for an operation
-    int getParentSubcategoryId(const QModelIndex &index) const;
+    // Get parent IDs
+    int getParentCategoryId(const QModelIndex &index) const override;
+    int getParentSubcategoryId(const QModelIndex &index) const override;
     
     // Get operation data
-    double getQuantity(const QModelIndex &index) const;
-    int getAmount(const QModelIndex &index) const;
-    QDate getOperationDate(const QModelIndex &index) const;
+    double getQuantity(const QModelIndex &index) const override;
+    int getAmount(const QModelIndex &index) const override;
+    QDate getOperationDate(const QModelIndex &index) const override;
 
-    // Operations
-    bool removeAnyRows(QModelIndexList &indices);
-    bool mergeSelectedNodes(CategoryHierModel* opposite,
-        QModelIndex& index, QModelIndex& oppositeIndex);
+    // Node operations
+    bool removeAnyRows(QModelIndexList &indices) override;
+    bool mergeSelectedNodes(HierModelBase* opposite,
+        QModelIndex& index, QModelIndex& oppositeIndex) override;
 
 private:
     bool m_isExpense;           // true - expenses, false - incomes
-    HwDatabase* m_db;           // pointer to database object (not owner)
     QVector<CategoryItem> m_items;  // flat list of all items
     QVector<int> m_rootItems;   // indices of root (top-level) items
-    bool m_showOperations;      // show third level (operations)
-    QString m_lastError;
     
     void loadData();            // load data from database
     void loadCategories();      // load categories (level 0)

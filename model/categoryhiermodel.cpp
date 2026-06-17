@@ -21,13 +21,9 @@
 #include <QLocale>
 
 CategoryHierModel::CategoryHierModel(bool isExpense, HwDatabase* db, QObject *parent) :
-    QAbstractItemModel(parent),
-    m_isExpense(isExpense),
-    m_db(db),
-    m_showOperations(false),
-    m_lastError()
+    HierModelBase(db, parent),
+    m_isExpense(isExpense)
 {
-    Q_ASSERT(m_db != 0);
     loadData();
 }
 
@@ -292,15 +288,6 @@ int CategoryHierModel::findItemIndex(int id, bool isCategory, bool isSubcategory
 void CategoryHierModel::refresh()
 {
     loadData();
-}
-
-void CategoryHierModel::setOperationShow(bool show)
-{
-    if (m_showOperations == show)
-        return;
-    
-    m_showOperations = show;
-    refresh();
 }
 
 QString CategoryHierModel::formatAmount(int amountInLowUnits) const
@@ -689,11 +676,6 @@ QDate CategoryHierModel::getOperationDate(const QModelIndex &index) const
     return m_items[itemIndex].operationDate;
 }
 
-QString CategoryHierModel::lastError()
-{
-    return m_lastError;
-}
-
 bool CategoryHierModel::removeAnyRows(QModelIndexList &indices)
 {
     // Reverse sort
@@ -716,7 +698,7 @@ bool CategoryHierModel::removeAnyRows(QModelIndexList &indices)
 
 }
 
-bool CategoryHierModel::mergeSelectedNodes(CategoryHierModel *opposite,
+bool CategoryHierModel::mergeSelectedNodes(HierModelBase *opposite,
     QModelIndex& index, QModelIndex& oppositeIndex)
 {
     int idSrc = getId(index);
