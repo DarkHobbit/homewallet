@@ -63,7 +63,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
     // Refresh model data from database
-    void refresh();
+    void refresh() override;
 
     // Get data by model index
     int getId(const QModelIndex &index) const override;
@@ -86,6 +86,8 @@ public:
 
     // Node operations
     bool removeAnyRows(QModelIndexList &indices) override;
+    bool moveSelectedNodes(HierModelBase* opposite,
+        QModelIndexList& indices, QModelIndex& oppositeIndex) override;
     bool mergeSelectedNodes(HierModelBase* opposite,
         QModelIndex& index, QModelIndex& oppositeIndex) override;
 
@@ -103,6 +105,8 @@ private:
     int findItemIndex(int id, bool isCategory, bool isSubcategory = false) const;
     void clearData();
     bool removeByIndex(const QModelIndex& indexToRemove);
+    bool moveSubcategory(int idSrc, int idNewParent, QStringList& mergedSubcategories);
+    bool moveOperation(int idSrc, int idNewParent);
     bool mergeCategories(int idSrc, int idDest);
     bool mergeSubcategories(int idSrc, int idDest);
     bool preMergeChildren(int idSrc, int idDest);

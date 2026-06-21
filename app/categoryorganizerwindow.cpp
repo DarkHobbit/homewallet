@@ -150,6 +150,24 @@ void CategoryOrganizerWindow::on_btn_Quick_Filter_Apply_clicked()
     proxy->setFilterWildcard(ui->leQuickFilter->text());
 }
 
+void CategoryOrganizerWindow::on_btn_Move_clicked()
+{
+    checkActiveTree();
+    if (selection.isEmpty() || oppositeSelection.isEmpty())
+        return;
+    QModelIndex indDest = oppositeSelection.first();
+    QString destName = oppositeModel->getName(indDest);
+    if (QMessageBox::question(0, S_CONFIRM,
+        S_MOVE_CONFIRM.arg(destName),
+        QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
+    {
+        if (!activeModel->moveSelectedNodes(oppositeModel, selection, indDest))
+            QMessageBox::critical(0, S_ERROR, activeModel->lastError());
+        activeModel->refresh();
+        oppositeModel->refresh();
+    }
+}
+
 void CategoryOrganizerWindow::on_btn_Merge_clicked()
 {
     checkActiveTree();
@@ -163,10 +181,8 @@ void CategoryOrganizerWindow::on_btn_Merge_clicked()
         S_MERGE_CONFIRM.arg(srcName).arg(destName).arg(destName),
         QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
     {
-        if (curW==ui->tabExpenseCats || curW==ui->tabIncomeCats) {
-            if (!activeModel->mergeSelectedNodes(oppositeModel, indSrc, indDest))
-                QMessageBox::critical(0, S_ERROR, activeModel->lastError());
-        }
+        if (!activeModel->mergeSelectedNodes(oppositeModel, indSrc, indDest))
+            QMessageBox::critical(0, S_ERROR, activeModel->lastError());
         activeModel->refresh();
         oppositeModel->refresh();
     }
@@ -319,4 +335,3 @@ void CategoryOrganizerWindow::prepareModel(HierModelBase *source,
     // Model info
     connect(source, SIGNAL(infoForUser(QString)), this, SLOT(showUserInfo(QString)));
 }
-

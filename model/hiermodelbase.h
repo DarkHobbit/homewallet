@@ -53,6 +53,8 @@ public:
 
     // Node operations
     virtual bool removeAnyRows(QModelIndexList &indices) = 0;
+    virtual bool moveSelectedNodes(HierModelBase* opposite,
+        QModelIndexList& indices, QModelIndex& oppositeIndex) = 0;
     virtual bool mergeSelectedNodes(HierModelBase* opposite,
         QModelIndex& index, QModelIndex& oppositeIndex) = 0;
 

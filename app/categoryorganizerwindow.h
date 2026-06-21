@@ -43,6 +43,7 @@ protected:
 
 private slots:
     void on_btn_Quick_Filter_Apply_clicked();
+    void on_btn_Move_clicked();
     void on_btn_Merge_clicked();
     void addCategory();
     void addSubcategory();

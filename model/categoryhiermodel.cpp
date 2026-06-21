@@ -20,6 +20,8 @@
 #include <QDebug>
 #include <QLocale>
 
+#define S_SUBCAT_MERGED tr("Subcategories merged: %1")
+
 CategoryHierModel::CategoryHierModel(bool isExpense, HwDatabase* db, QObject *parent) :
     HierModelBase(db, parent),
     m_isExpense(isExpense)
@@ -89,6 +91,47 @@ bool CategoryHierModel::removeByIndex(const QModelIndex& indexToRemove)
     return true;
 }
 
+bool CategoryHierModel::moveSubcategory(int idSrc, int idNewParent, QStringList &mergedSubcategories)
+{
+    // Check for present same name!
+    QString sqlCN = m_isExpense ?
+        "select sc2.id, sc2.name" \
+        " from hw_ex_subcat sc1, hw_ex_subcat sc2" \
+        " where sc1.name=sc2.name and sc2.id_ecat=%1" \
+        " and sc1.id=%2"
+        :
+        "select sc2.id, sc2.name" \
+        " from hw_in_subcat sc1, hw_in_subcat sc2" \
+        " where sc1.name=sc2.name and sc2.id_icat=%1" \
+        " and sc1.id=%2";
+    QString sqlM = m_isExpense
+        ? "update hw_ex_subcat set id_ecat=%1 where id=%2"
+        : "update hw_in_subcat set id_icat=%1 where id=%2";
+
+    // If same name present in new parent - merge
+    QSqlQuery qCN(m_db->sqlDbRef());
+    if (!m_db->prepQuery(qCN, sqlCN.arg(idNewParent).arg(idSrc)))
+        return false;
+    if (!m_db->execQuery(qCN))
+        return false;
+    if (m_db->queryRecCount(qCN)>0) {
+        qCN.first();
+        int idDest = qCN.value(0).toInt();
+        mergedSubcategories << qCN.value(1).toString();
+        return mergeSubcategories(idSrc, idDest);
+    }
+    else // simply move
+        return m_db->execSimpleQuery(sqlM.arg(idNewParent).arg(idSrc));
+}
+
+bool CategoryHierModel::moveOperation(int idSrc, int idNewParent)
+{
+    QString sqlM = m_isExpense
+        ? "update hw_ex_op set id_esubcat=%1 where id=%2"
+        : "update hw_in_op set id_isubcat=%1 where id=%2";
+    return m_db->execSimpleQuery(sqlM.arg(idNewParent).arg(idSrc));
+}
+
 bool CategoryHierModel::mergeCategories(int idSrc, int idDest)
 {
     QString sqlM = m_isExpense
@@ -147,8 +190,7 @@ bool CategoryHierModel::preMergeChildren(int idSrc, int idDest)
         qCU.next();
     }
     if (!mergedSubcategories.isEmpty())
-        emit infoForUser(tr("Subcategories merged: %1")
-            .arg(mergedSubcategories.join(", ")));
+        emit infoForUser(S_SUBCAT_MERGED.arg(mergedSubcategories.join(", ")));
     return true;
 }
 
@@ -696,6 +738,28 @@ bool CategoryHierModel::removeAnyRows(QModelIndexList &indices)
     }
     return true;
 
+}
+
+bool CategoryHierModel::moveSelectedNodes(HierModelBase *opposite, QModelIndexList &indices, QModelIndex &oppositeIndex)
+{
+    int idNewParent = opposite->getId(oppositeIndex);
+
+    QStringList mergedSubcategories;
+    for (const QModelIndex &index: indices)
+    {
+        bool res;
+        int idSrc = getId(index);
+        if (isSubcategory(index))
+            res = moveSubcategory(idSrc, idNewParent, mergedSubcategories);
+        else if (isOperation(index))
+            res = moveOperation(idSrc, idNewParent);
+        if (!res)
+            return false;
+    }
+
+    if (!mergedSubcategories.isEmpty())
+        emit infoForUser(S_SUBCAT_MERGED.arg(mergedSubcategories.join(", ")));
+    return true;
 }
 
 bool CategoryHierModel::mergeSelectedNodes(HierModelBase *opposite,
