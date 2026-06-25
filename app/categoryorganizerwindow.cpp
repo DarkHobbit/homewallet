@@ -11,6 +11,8 @@
  *
  */
 
+#define S_ERR_SEL_PARENT QObject::tr("Select parent category")
+
 #include <QKeyEvent>
 #include <QMenu>
 #include <QMessageBox>
@@ -209,11 +211,15 @@ void CategoryOrganizerWindow::addCategory()
 void CategoryOrganizerWindow::addSubcategory()
 {
     checkActiveTree();
-    if (selection.count()!=1)
+    if (selection.count()!=1) {
+        QMessageBox::critical(0, S_ERROR, S_ERR_SEL_PARENT);
         return;
+    }
     const QModelIndex& parentItem = selection.first();
-    if (!activeModel->isCategory(parentItem))
+    if (!activeModel->isCategory(parentItem)) {
+        QMessageBox::critical(0, S_ERROR, S_ERR_SEL_PARENT);
         return;
+    }
     bool isExpense = curW==ui->tabExpenseCats;
     SubCategoryDialog* d = new SubCategoryDialog(isExpense, false, _db, 0);
     d->addSubCategory("", activeModel->getId(parentItem));

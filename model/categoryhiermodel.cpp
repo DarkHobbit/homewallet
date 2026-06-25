@@ -20,7 +20,7 @@
 #include <QDebug>
 #include <QLocale>
 
-#define S_SUBCAT_MERGED tr("Subcategories merged: %1")
+#define S_SUBCAT_MERGED QObject::tr("Subcategories merged: %1")
 
 CategoryHierModel::CategoryHierModel(bool isExpense, HwDatabase* db, QObject *parent) :
     HierModelBase(db, parent),

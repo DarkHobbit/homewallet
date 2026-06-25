@@ -2096,6 +2096,16 @@ At line %3</source>
         <source>Main currency not found</source>
         <translation>Главная валюта не найдена</translation>
     </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.cpp" line="14"/>
+        <source>Select parent category</source>
+        <translation>Выберите родительскую категорию</translation>
+    </message>
+    <message>
+        <location filename="../model/categoryhiermodel.cpp" line="23"/>
+        <source>Subcategories merged: %1</source>
+        <translation>Объединены подкатегории: %1</translation>
+    </message>
 </context>
 <context>
     <name>QuaGzipFile</name>
