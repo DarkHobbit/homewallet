@@ -54,6 +54,7 @@ public:
     ~CategoryHierModel();
 
     // QAbstractItemModel interface implementation
+
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
     QModelIndex parent(const QModelIndex &child) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -61,6 +62,8 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+
+    // HierModelBase interface implementation
 
     // Refresh model data from database
     void refresh() override;
@@ -73,7 +76,6 @@ public:
     bool isCategory(const QModelIndex &index) const override;
     bool isSubcategory(const QModelIndex &index) const override;
     bool isOperation(const QModelIndex &index) const override;
-    bool isExpense() const override;
 
     // Get parent IDs
     int getParentCategoryId(const QModelIndex &index) const override;
@@ -90,6 +92,9 @@ public:
         QModelIndexList& indices, QModelIndex& oppositeIndex) override;
     bool mergeSelectedNodes(HierModelBase* opposite,
         QModelIndex& index, QModelIndex& oppositeIndex) override;
+    // End of HierModelBase interface implementation
+
+    bool isExpense() const;
 
 private:
     bool m_isExpense;           // true - expenses, false - incomes

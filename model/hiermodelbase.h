@@ -40,7 +40,6 @@ public:
     virtual bool isCategory(const QModelIndex &index) const = 0;
     virtual bool isSubcategory(const QModelIndex &index) const = 0;
     virtual bool isOperation(const QModelIndex &index) const = 0;
-    virtual bool isExpense() const = 0;
 
     // Get parent IDs
     virtual int getParentCategoryId(const QModelIndex &index) const = 0;

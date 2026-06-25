@@ -192,7 +192,7 @@ void CategoryOrganizerWindow::addCategory()
 {
     QString tableName = "";
     if (curW==ui->tabExpenseCats || curW==ui->tabIncomeCats) {
-        bool isExpense = activeModel->isExpense();
+        bool isExpense = curW==ui->tabExpenseCats;
         tableName = isExpense ? "hw_ex_cat" : "hw_in_cat";
     }
     // TODO transfer types, etc.
@@ -214,7 +214,7 @@ void CategoryOrganizerWindow::addSubcategory()
     const QModelIndex& parentItem = selection.first();
     if (!activeModel->isCategory(parentItem))
         return;
-    bool isExpense = activeModel->isExpense();
+    bool isExpense = curW==ui->tabExpenseCats;
     SubCategoryDialog* d = new SubCategoryDialog(isExpense, false, _db, 0);
     d->addSubCategory("", activeModel->getId(parentItem));
     if (d->result()==QDialog::Accepted) {
