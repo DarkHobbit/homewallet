@@ -14,7 +14,6 @@
 #define S_ERR_SEL_PARENT QObject::tr("Select parent category")
 
 #include <QKeyEvent>
-#include <QMenu>
 #include <QMessageBox>
 
 #include "categoryorganizerwindow.h"
@@ -38,26 +37,33 @@ CategoryOrganizerWindow::CategoryOrganizerWindow(HwDatabase* db,  QWidget *paren
     proxyIncCatLeft = new HierFilterProxyModel(this);
     mdlIncCatRight = new CategoryHierModel(false, db, this);
     proxyIncCatRight = new HierFilterProxyModel(this);
+    mdlTransTypeLeft = new TransferTypeHierModel(db, this);
+    proxyTransTypeLeft = new HierFilterProxyModel(this);
+    mdlTransTypeRight = new TransferTypeHierModel(db, this);
+    proxyTransTypeRight = new HierFilterProxyModel(this);
 
     prepareModel(mdlExpCatLeft, proxyExpCatLeft, ui->tvExpCatLeft, "ExpCatLeft");
     prepareModel(mdlExpCatRight, proxyExpCatRight, ui->tvExpCatRight, "ExpCatRight");
     prepareModel(mdlIncCatLeft, proxyIncCatLeft, ui->tvIncCatLeft, "IncCatLeft");
     prepareModel(mdlIncCatRight, proxyIncCatRight, ui->tvIncCatRight, "IncCatRight");
+    prepareModel(mdlTransTypeLeft, proxyTransTypeLeft, ui->tvTransTypeLeft, "TransferTypesLeft");
+    prepareModel(mdlTransTypeRight, proxyTransTypeRight, ui->tvTransTypeRight, "TransferTypesRight");
 
     activeView = ui->tvExpCatLeft;
     // Filter
     ui->leQuickFilter->installEventFilter(this);
     addAction(ui->actFilter);
-    // Button access control
-    connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(selectionChanged()));
-    selectionChanged();
     // Add menu
-    QMenu* menuAdd = new QMenu(this);
+    menuAdd = new QMenu(this);
     menuAdd->addAction(ui->actAddCat);
     connect(ui->actAddCat, SIGNAL(triggered()), this, SLOT(addCategory()));
     menuAdd->addAction(ui->actAddSubcat);
     connect(ui->actAddSubcat, SIGNAL(triggered()), this, SLOT(addSubcategory()));
     ui->btn_Add->setMenu(menuAdd);
+    connect(ui->btn_Add, SIGNAL(clicked(bool)), this, SLOT(addCategory()));
+    // Button access control
+    connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(selectionChanged()));
+    selectionChanged();
 }
 
 CategoryOrganizerWindow::~CategoryOrganizerWindow()
@@ -95,6 +101,20 @@ void CategoryOrganizerWindow::checkActiveTree()
             oppositeView = ui->tvIncCatLeft;
             activeModel = mdlIncCatRight;
             oppositeModel = mdlIncCatLeft;
+        }
+    }
+    else if (curW==ui->tabTransType) {
+        activeModel = mdlTransTypeLeft;
+        if (activeView!=ui->tvTransTypeRight) {
+            activeView = ui->tvTransTypeLeft;
+            oppositeView = ui->tvTransTypeRight;
+            activeModel = mdlTransTypeLeft;
+            oppositeModel = mdlTransTypeRight;
+        }
+        else {
+            oppositeView = ui->tvTransTypeLeft;
+            activeModel = mdlTransTypeRight;
+            oppositeModel = mdlTransTypeLeft;
         }
     }
     else {
@@ -139,6 +159,8 @@ void CategoryOrganizerWindow::showEvent(QShowEvent *e)
     ui->tvExpCatRight->setColumnWidth(0, w);
     ui->tvIncCatLeft->setColumnWidth(0, w);
     ui->tvIncCatRight->setColumnWidth(0, w);
+    ui->tvTransTypeLeft->setColumnWidth(0, w);
+    ui->tvTransTypeRight->setColumnWidth(0, w);
 }
 
 void CategoryOrganizerWindow::on_btn_Quick_Filter_Apply_clicked()
@@ -192,13 +214,18 @@ void CategoryOrganizerWindow::on_btn_Merge_clicked()
 
 void CategoryOrganizerWindow::addCategory()
 {
-    QString tableName = "";
+    QString tableName = "", entityName = "";
     if (curW==ui->tabExpenseCats || curW==ui->tabIncomeCats) {
         bool isExpense = curW==ui->tabExpenseCats;
         tableName = isExpense ? "hw_ex_cat" : "hw_in_cat";
+        entityName = isExpense ? tr("expense category") : tr("income category");
+    }
+    else if (curW==ui->tabTransType) {
+        tableName = "hw_transfer_type";
+        entityName = tr("transfer type");
     }
     // TODO transfer types, etc.
-    SimpleDictDialog* d = new SimpleDictDialog(tableName, false, _db, 0);
+    SimpleDictDialog* d = new SimpleDictDialog(tableName, entityName, false, _db, 0);
     d->addRecord("");
     if (d->result()==QDialog::Accepted) {
         // TODO
@@ -247,7 +274,8 @@ void CategoryOrganizerWindow::on_btn_Delete_clicked()
     {
         if (!activeModel->removeAnyRows(selection))
             QMessageBox::critical(0, S_ERROR, activeModel->lastError());
-        activeView->update();
+        activeModel->refresh();
+        oppositeModel->refresh();
     }
 }
 
@@ -279,6 +307,10 @@ void CategoryOrganizerWindow::selectionChanged()
     ui->btn_Delete->setEnabled(false);
     if (activeView) {
         ui->btn_Add->setEnabled(true);
+        if (curW==ui->tabExpenseCats || curW==ui->tabIncomeCats)
+            ui->btn_Add->setMenu(menuAdd);
+        else
+            ui->btn_Add->setMenu(0);
         // Current and opposite selection
         checkSelection(false, false);
         // Access
@@ -323,6 +355,8 @@ void CategoryOrganizerWindow::on_cbShowOperations_toggled(bool checked)
     mdlExpCatRight->setOperationShow(checked);
     mdlIncCatLeft->setOperationShow(checked);
     mdlIncCatRight->setOperationShow(checked);
+    mdlTransTypeLeft->setOperationShow(checked);
+    mdlTransTypeRight->setOperationShow(checked);
 }
 
 void CategoryOrganizerWindow::showUserInfo(const QString &message)

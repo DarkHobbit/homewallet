@@ -19,7 +19,8 @@ HEADERS	+= \
     $$PWD/incomemodel.h \
     $$PWD/miscmodels.h \
     $$PWD/testmanager.h \
-    $$PWD/transfermodel.h
+    $$PWD/transfermodel.h \
+    $$PWD/transfertypehiermodel.h \
 
 SOURCES	+= \
     $$PWD/categoriesbasedquerymodel.cpp \
@@ -36,5 +37,6 @@ SOURCES	+= \
     $$PWD/incomemodel.cpp \
     $$PWD/miscmodels.cpp \
     $$PWD/testmanager.cpp \
-    $$PWD/transfermodel.cpp
+    $$PWD/transfermodel.cpp \
+    $$PWD/transfertypehiermodel.cpp \
 

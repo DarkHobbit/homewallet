@@ -539,9 +539,9 @@ QVariant CategoryHierModel::headerData(int section, Qt::Orientation orientation,
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         if (section == 0) {
-            return QString(S_COL_CATEGORY);
+            return S_COL_CATEGORY;
         } else if (section == 1) {
-            return tr("Records");
+            return S_COL_REC_NUM;
         }
     }
     return QVariant();

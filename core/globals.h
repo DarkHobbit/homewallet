@@ -99,6 +99,7 @@ QObject::tr("Do you really want to move selected records to '%1'?")
 #define S_COL_ACCOUNT QObject::tr("Account")
 #define S_COL_ATTENTION QObject::tr("At.")
 #define S_COL_DESCRIPTION QObject::tr("Description")
+#define S_COL_REC_NUM QObject::tr("Records")
 // Additional column names for transfer
 #define S_COL_FROM QObject::tr("From")
 #define S_COL_TO QObject::tr("To")

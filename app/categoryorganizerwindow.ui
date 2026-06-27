@@ -19,11 +19,12 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
+
      <widget class="QWidget" name="tabExpenseCats">
       <attribute name="title">
        <string>Expenses</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="layExpenseCats">
        <item>
         <widget class="QTreeView" name="tvExpCatLeft">
          <property name="selectionMode">
@@ -40,11 +41,12 @@
        </item>
       </layout>
      </widget>
+
      <widget class="QWidget" name="tabIncomeCats">
       <attribute name="title">
        <string>Incomes</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <layout class="QHBoxLayout" name="layIncomeCats">
        <item>
         <widget class="QTreeView" name="tvIncCatLeft">
          <property name="selectionMode">
@@ -61,6 +63,29 @@
        </item>
       </layout>
      </widget>
+
+     <widget class="QWidget" name="tabTransType">
+      <attribute name="title">
+       <string>Transfer Types</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="layTransType">
+       <item>
+        <widget class="QTreeView" name="tvTransTypeLeft">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTreeView" name="tvTransTypeRight">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+
     </widget>
    </item>
    <item>

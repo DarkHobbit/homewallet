@@ -32,7 +32,7 @@ public:
     // tableName - name of dictionary table with columns: id, name, descr
     // isEdit = true -> edit existing record, false -> add new record
     // db - pointer to HwDatabase object (cannot be nullptr)
-    explicit SimpleDictDialog(const QString &tableName, bool isEdit, HwDatabase* db, QWidget *parent = nullptr);
+    explicit SimpleDictDialog(const QString &tableName, const QString &entityName, bool isEdit, HwDatabase* db, QWidget *parent = nullptr);
     ~SimpleDictDialog();
 
     // Set data for editing existing record

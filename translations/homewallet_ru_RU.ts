@@ -168,9 +168,8 @@
         <translation>Операций: %1</translation>
     </message>
     <message>
-        <location filename="../model/categoryhiermodel.cpp" line="544"/>
         <source>Records</source>
-        <translation>Записей</translation>
+        <translation type="obsolete">Записей</translation>
     </message>
 </context>
 <context>
@@ -181,89 +180,109 @@
         <translation>Организатор категорий</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="24"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="25"/>
         <source>Expenses</source>
         <translation>Расходы</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="45"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="47"/>
         <source>Incomes</source>
         <translation>Доходы</translation>
     </message>
     <message>
         <location filename="../app/categoryorganizerwindow.ui" line="69"/>
+        <source>Transfer Types</source>
+        <translation>Типы переноса</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.ui" line="94"/>
         <source>Show operations on each (sub)category</source>
         <translation>Показывать операции по каждой (под)категории</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="78"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="103"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="88"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="113"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="108"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="133"/>
         <source>Move...</source>
         <translation>Перенести...</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="115"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="140"/>
         <source>Merge...</source>
         <translation>Слить...</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="128"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="153"/>
         <source>Add...</source>
         <translation>Добавить...</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="145"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="170"/>
         <source>Edit...</source>
         <translation>Редактировать...</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="162"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="187"/>
         <source>Delete...</source>
         <translation>Удалить...</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="173"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="198"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="182"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="207"/>
         <source>Filter</source>
         <translation>Фильтр</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="185"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="210"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="190"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="215"/>
         <source>...category</source>
         <translation>...категорию</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="193"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="218"/>
         <source>Alt+C</source>
         <translation>Alt+C</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="198"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="223"/>
         <source>...subcategory</source>
         <translation>...подкатегорию</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="201"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="226"/>
         <source>Alt+S</source>
         <translation>Alt+S</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.cpp" line="221"/>
+        <source>expense category</source>
+        <translation>категорию расходов</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.cpp" line="221"/>
+        <source>income category</source>
+        <translation>категорию доходов</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.cpp" line="225"/>
+        <source>transfer type</source>
+        <translation>тип переноса</translation>
     </message>
 </context>
 <context>
@@ -1734,82 +1753,87 @@ at record %1 from %2</source>
         <translation>Описание</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="103"/>
+        <location filename="../core/globals.h" line="102"/>
+        <source>Records</source>
+        <translation>Записей</translation>
+    </message>
+    <message>
+        <location filename="../core/globals.h" line="104"/>
         <source>From</source>
         <translation>Откуда</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="104"/>
+        <location filename="../core/globals.h" line="105"/>
         <source>To</source>
         <translation>Куда</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="106"/>
+        <location filename="../core/globals.h" line="107"/>
         <source>Close date</source>
         <translation>Дата пог.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="107"/>
+        <location filename="../core/globals.h" line="108"/>
         <source>Remind date</source>
         <translation>Дата нап.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="108"/>
+        <location filename="../core/globals.h" line="109"/>
         <source>Debtor</source>
         <translation>Должник</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="109"/>
+        <location filename="../core/globals.h" line="110"/>
         <source>Creditor</source>
         <translation>Кредитор</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="110"/>
+        <location filename="../core/globals.h" line="111"/>
         <source>Down pay</source>
         <translation>Нач.пл.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="111"/>
+        <location filename="../core/globals.h" line="112"/>
         <source>Moneyback</source>
         <translation>Возвращено</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="112"/>
+        <location filename="../core/globals.h" line="113"/>
         <source>Remaining</source>
         <translation>Осталось</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="113"/>
+        <location filename="../core/globals.h" line="114"/>
         <source>Rate</source>
         <translation>Ставка</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="114"/>
+        <location filename="../core/globals.h" line="115"/>
         <source>Period</source>
         <translation>Период</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="115"/>
+        <location filename="../core/globals.h" line="116"/>
         <source>Closed</source>
         <translation>Закр.</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="117"/>
+        <location filename="../core/globals.h" line="118"/>
         <source>Source</source>
         <translation>Источник</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="118"/>
+        <location filename="../core/globals.h" line="119"/>
         <source>Alias</source>
         <translation>Псевдоним</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="120"/>
+        <location filename="../core/globals.h" line="121"/>
         <source>&lt;All&gt;</source>
         <translation>&lt;Все&gt;</translation>
     </message>
     <message>
-        <location filename="../core/globals.h" line="121"/>
+        <location filename="../core/globals.h" line="122"/>
         <source>Other</source>
         <translation>Прочее</translation>
     </message>
@@ -2419,12 +2443,12 @@ At line %3</source>
     <message>
         <location filename="../app/subcategorydialog.cpp" line="38"/>
         <source>Expense Subcategory</source>
-        <translation>подкатегорию расхода</translation>
+        <translation>подкатегорию расходов</translation>
     </message>
     <message>
         <location filename="../app/subcategorydialog.cpp" line="38"/>
         <source>Income Subcategory</source>
-        <translation>подкатегорию дохода</translation>
+        <translation>подкатегорию доходов</translation>
     </message>
     <message>
         <location filename="../app/subcategorydialog.cpp" line="152"/>
@@ -2437,6 +2461,19 @@ At line %3</source>
     <message>
         <source>Transfer</source>
         <translation type="obsolete">Переносы</translation>
+    </message>
+</context>
+<context>
+    <name>TransferTypeHierModel</name>
+    <message>
+        <location filename="../model/transfertypehiermodel.cpp" line="82"/>
+        <source>Transfer #%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../model/transfertypehiermodel.cpp" line="256"/>
+        <source>Transfers: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

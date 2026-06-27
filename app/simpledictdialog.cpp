@@ -21,7 +21,7 @@
 #include <QMessageBox>
 #include <QDebug>
 
-SimpleDictDialog::SimpleDictDialog(const QString &tableName, bool isEdit, HwDatabase* db, QWidget *parent) :
+SimpleDictDialog::SimpleDictDialog(const QString &tableName, const QString &entityName, bool isEdit, HwDatabase* db, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SimpleDictDialog),
     m_db(db),
@@ -33,7 +33,7 @@ SimpleDictDialog::SimpleDictDialog(const QString &tableName, bool isEdit, HwData
     
     // Setup window title based on operation mode
     QString action = m_isEdit ? S_ACT_EDIT : S_ACT_ADD;
-    setWindowTitle(QString("%1 %2").arg(action, m_tableName));
+    setWindowTitle(QString("%1 %2").arg(action, entityName));
 }
 
 SimpleDictDialog::~SimpleDictDialog()

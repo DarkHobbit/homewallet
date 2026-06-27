@@ -13,6 +13,7 @@
 #ifndef CATEGORYORGANIZERWINDOW_H
 #define CATEGORYORGANIZERWINDOW_H
 
+#include <QMenu>
 #include <QSortFilterProxyModel>
 #include <QTreeView>
 #include <QWidget>
@@ -22,6 +23,7 @@
 #include "hierfilterproxymodel.h"
 #include "hiermodelbase.h"
 #include "hwdatabase.h"
+#include "transfertypehiermodel.h"
 
 namespace Ui {
 class CategoryOrganizerWindow;
@@ -59,12 +61,20 @@ private slots:
 private:
     Ui::CategoryOrganizerWindow *ui;
     HwDatabase* _db;
-    CategoryHierModel *mdlExpCatLeft, *mdlExpCatRight,  *mdlIncCatLeft, *mdlIncCatRight;
-    HierFilterProxyModel *proxyExpCatLeft, *proxyExpCatRight,  *proxyIncCatLeft, *proxyIncCatRight;
+    CategoryHierModel
+        *mdlExpCatLeft, *mdlExpCatRight,
+        *mdlIncCatLeft, *mdlIncCatRight;
+    TransferTypeHierModel
+        *mdlTransTypeLeft, *mdlTransTypeRight;
+    HierFilterProxyModel
+        *proxyExpCatLeft, *proxyExpCatRight,
+        *proxyIncCatLeft, *proxyIncCatRight,
+        *proxyTransTypeLeft, *proxyTransTypeRight;
     // Potentially unsafe pointers (covered by checkActiveTree() in all changed)
     QWidget* curW;
     HierModelBase *activeModel, *oppositeModel;
     // End of potentially unsafe pointers
+    QMenu* menuAdd;
     void prepareModel(HierModelBase *source, QSortFilterProxyModel *proxy, QTreeView *tree, const QString &nameForDebug);
 };
 
