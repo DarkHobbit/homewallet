@@ -298,7 +298,17 @@ void CategoryOrganizerWindow::treeEntered(const QModelIndex &)
 }
 
 void CategoryOrganizerWindow::selectionChanged()
-{
+{    
+    if (sender()) {
+        QTreeView* acTree = dynamic_cast<QTreeView*>(sender()->parent());
+        if (acTree)
+            activeView = acTree;
+        else {
+            acTree = dynamic_cast<QTreeView*>(sender());
+            if (acTree)
+                activeView = acTree;
+        }
+    }
     checkActiveTree();
     ui->btn_Move->setEnabled(false);
     ui->btn_Merge->setEnabled(false);
@@ -372,6 +382,7 @@ void CategoryOrganizerWindow::prepareModel(HierModelBase *source,
     connect(tree, SIGNAL(activated(QModelIndex)), this, SLOT(treeEntered(QModelIndex)));
     // Button access control
     connect(tree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(selectionChanged()));
+    connect(tree, SIGNAL(clicked(QModelIndex)), this, SLOT(selectionChanged()));
     // Model info
     connect(source, SIGNAL(infoForUser(QString)), this, SLOT(showUserInfo(QString)));
 }
