@@ -18,6 +18,7 @@
 #include <QTreeView>
 #include <QWidget>
 
+#include "accounthiermodel.h"
 #include "categoryhiermodel.h"
 #include "helpers.h"
 #include "hierfilterproxymodel.h"
@@ -61,12 +62,16 @@ private slots:
 private:
     Ui::CategoryOrganizerWindow *ui;
     HwDatabase* _db;
+    // Models
+    AccountHierModel
+        *mdlAccountsLeft, *mdlAccountsRight;
     CategoryHierModel
         *mdlExpCatLeft, *mdlExpCatRight,
         *mdlIncCatLeft, *mdlIncCatRight;
     TransferTypeHierModel
         *mdlTransTypeLeft, *mdlTransTypeRight;
     HierFilterProxyModel
+        *proxyAccountsLeft, *proxyAccountsRight,
         *proxyExpCatLeft, *proxyExpCatRight,
         *proxyIncCatLeft, *proxyIncCatRight,
         *proxyTransTypeLeft, *proxyTransTypeRight;

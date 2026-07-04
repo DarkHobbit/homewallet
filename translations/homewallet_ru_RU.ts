@@ -60,6 +60,64 @@
     </message>
 </context>
 <context>
+    <name>AccountHierModel</name>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="398"/>
+        <source>Operations: %1</source>
+        <translation>Операций: %1</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="658"/>
+        <source>Income</source>
+        <translation>Доход</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="659"/>
+        <source>Expense</source>
+        <translation>Расход</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="660"/>
+        <source>Receipt</source>
+        <translation>Чек</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="661"/>
+        <source>Transfer Out</source>
+        <translation>Перенос исх.</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="662"/>
+        <source>Transfer In</source>
+        <translation>Перенос вх.</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="663"/>
+        <source>Currency Exchange</source>
+        <translation>Обмен валюты</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="664"/>
+        <source>Credit Given</source>
+        <translation>Кредит выдан</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="665"/>
+        <source>Credit Taken</source>
+        <translation>Кредит взят</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="666"/>
+        <source>Repayment</source>
+        <translation>Возврат долга/кредита</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="667"/>
+        <source>Unknown</source>
+        <translation>Неизвестная операция</translation>
+    </message>
+</context>
+<context>
     <name>AddDefaultUnitDialog</name>
     <message>
         <location filename="../app/formatsgui/adddefaultunitdialog.ui" line="14"/>
@@ -181,106 +239,111 @@
     </message>
     <message>
         <location filename="../app/categoryorganizerwindow.ui" line="25"/>
+        <source>Accounts</source>
+        <translation>Счета</translation>
+    </message>
+    <message>
+        <location filename="../app/categoryorganizerwindow.ui" line="47"/>
         <source>Expenses</source>
         <translation>Расходы</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="47"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="69"/>
         <source>Incomes</source>
         <translation>Доходы</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="69"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="91"/>
         <source>Transfer Types</source>
         <translation>Типы переноса</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="94"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="116"/>
         <source>Show operations on each (sub)category</source>
         <translation>Показывать операции по каждой (под)категории</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="103"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="125"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="113"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="135"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="133"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="155"/>
         <source>Move...</source>
         <translation>Перенести...</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="140"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="162"/>
         <source>Merge...</source>
         <translation>Слить...</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="153"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="175"/>
         <source>Add...</source>
         <translation>Добавить...</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="170"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="192"/>
         <source>Edit...</source>
         <translation>Редактировать...</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="187"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="209"/>
         <source>Delete...</source>
         <translation>Удалить...</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="198"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="220"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="207"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="229"/>
         <source>Filter</source>
         <translation>Фильтр</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="210"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="232"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="215"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="237"/>
         <source>...category</source>
         <translation>...категорию</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="218"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="240"/>
         <source>Alt+C</source>
         <translation>Alt+C</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="223"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="245"/>
         <source>...subcategory</source>
         <translation>...подкатегорию</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.ui" line="226"/>
+        <location filename="../app/categoryorganizerwindow.ui" line="248"/>
         <source>Alt+S</source>
         <translation>Alt+S</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.cpp" line="221"/>
+        <location filename="../app/categoryorganizerwindow.cpp" line="243"/>
         <source>expense category</source>
         <translation>категорию расходов</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.cpp" line="221"/>
+        <location filename="../app/categoryorganizerwindow.cpp" line="243"/>
         <source>income category</source>
         <translation>категорию доходов</translation>
     </message>
     <message>
-        <location filename="../app/categoryorganizerwindow.cpp" line="225"/>
+        <location filename="../app/categoryorganizerwindow.cpp" line="247"/>
         <source>transfer type</source>
         <translation>тип переноса</translation>
     </message>
@@ -2467,12 +2530,12 @@ At line %3</source>
     <name>TransferTypeHierModel</name>
     <message>
         <location filename="../model/transfertypehiermodel.cpp" line="82"/>
-        <source>Transfer #%1</source>
-        <translation type="unfinished"></translation>
+        <source>Перенос №%1</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../model/transfertypehiermodel.cpp" line="256"/>
-        <source>Transfers: %1</source>
+        <source>Переносов: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

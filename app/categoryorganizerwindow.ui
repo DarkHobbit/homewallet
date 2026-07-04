@@ -20,6 +20,28 @@
       <number>0</number>
      </property>
 
+     <widget class="QWidget" name="tabAccounts">
+      <attribute name="title">
+       <string>Accounts</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="layAccounts">
+       <item>
+        <widget class="QTreeView" name="tvAccountsLeft">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTreeView" name="tvAccountsRight">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+
      <widget class="QWidget" name="tabExpenseCats">
       <attribute name="title">
        <string>Expenses</string>

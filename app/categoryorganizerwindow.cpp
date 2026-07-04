@@ -29,6 +29,10 @@ CategoryOrganizerWindow::CategoryOrganizerWindow(HwDatabase* db,  QWidget *paren
 {
     ui->setupUi(this);
     // Models
+    mdlAccountsLeft = new AccountHierModel(db, this);
+    proxyAccountsLeft = new HierFilterProxyModel(this);
+    mdlAccountsRight = new AccountHierModel(db, this);
+    proxyAccountsRight = new HierFilterProxyModel(this);
     mdlExpCatLeft = new CategoryHierModel(true, db, this);
     proxyExpCatLeft = new HierFilterProxyModel(this);
     mdlExpCatRight = new CategoryHierModel(true, db, this);
@@ -42,6 +46,8 @@ CategoryOrganizerWindow::CategoryOrganizerWindow(HwDatabase* db,  QWidget *paren
     mdlTransTypeRight = new TransferTypeHierModel(db, this);
     proxyTransTypeRight = new HierFilterProxyModel(this);
 
+    prepareModel(mdlAccountsLeft, proxyAccountsLeft, ui->tvAccountsLeft, "AccountsLeft");
+    prepareModel(mdlAccountsRight, proxyAccountsRight, ui->tvAccountsRight, "AccountsRight");
     prepareModel(mdlExpCatLeft, proxyExpCatLeft, ui->tvExpCatLeft, "ExpCatLeft");
     prepareModel(mdlExpCatRight, proxyExpCatRight, ui->tvExpCatRight, "ExpCatRight");
     prepareModel(mdlIncCatLeft, proxyIncCatLeft, ui->tvIncCatLeft, "IncCatLeft");
@@ -49,7 +55,7 @@ CategoryOrganizerWindow::CategoryOrganizerWindow(HwDatabase* db,  QWidget *paren
     prepareModel(mdlTransTypeLeft, proxyTransTypeLeft, ui->tvTransTypeLeft, "TransferTypesLeft");
     prepareModel(mdlTransTypeRight, proxyTransTypeRight, ui->tvTransTypeRight, "TransferTypesRight");
 
-    activeView = ui->tvExpCatLeft;
+    activeView = ui->tvAccountsLeft;
     // Filter
     ui->leQuickFilter->installEventFilter(this);
     addAction(ui->actFilter);
@@ -75,7 +81,21 @@ void CategoryOrganizerWindow::checkActiveTree()
 {
     curW = ui->tabWidget->currentWidget();
     // activeView also can be setted by widget activate
-    if (curW==ui->tabExpenseCats) {
+    if (curW==ui->tabAccounts) {
+        activeModel = mdlAccountsRight;
+        if (activeView!=ui->tvAccountsRight) {
+            activeView = ui->tvAccountsLeft;
+            oppositeView = ui->tvAccountsRight;
+            activeModel = mdlAccountsLeft;
+            oppositeModel = mdlAccountsRight;
+        }
+        else {
+            oppositeView = ui->tvAccountsLeft;
+            activeModel = mdlAccountsRight;
+            oppositeModel = mdlAccountsLeft;
+        }
+    }
+    else if (curW==ui->tabExpenseCats) {
         activeModel = mdlExpCatRight;
         if (activeView!=ui->tvExpCatRight) {
             activeView = ui->tvExpCatLeft;
@@ -154,7 +174,9 @@ bool CategoryOrganizerWindow::eventFilter(QObject *obj, QEvent *event)
 void CategoryOrganizerWindow::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
-    int w = ui->tvExpCatLeft->width()*3/4; // Important for tvInc* - are hidden while showEvent() is calling
+    int w = ui->tvAccountsLeft->width()*3/4; // Tree on first tab! Other are hidden while showEvent() is calling
+    ui->tvAccountsLeft->setColumnWidth(0, w);
+    ui->tvAccountsRight->setColumnWidth(0, w);
     ui->tvExpCatLeft->setColumnWidth(0, w);
     ui->tvExpCatRight->setColumnWidth(0, w);
     ui->tvIncCatLeft->setColumnWidth(0, w);
@@ -361,6 +383,8 @@ void CategoryOrganizerWindow::selectionChanged()
 
 void CategoryOrganizerWindow::on_cbShowOperations_toggled(bool checked)
 {
+    mdlAccountsLeft->setOperationShow(checked);
+    mdlAccountsRight->setOperationShow(checked);
     mdlExpCatLeft->setOperationShow(checked);
     mdlExpCatRight->setOperationShow(checked);
     mdlIncCatLeft->setOperationShow(checked);

@@ -179,6 +179,7 @@ create table hw_in_op (
 -- Expenses
 create table hw_receipt ( -- in shop, rus. чек
     id integer primary key autoincrement,
+    op_date date not null,
     note char(32),
     total_amount integer not null, -- in low units, on all ex_op in receipt
     id_ac integer not null,

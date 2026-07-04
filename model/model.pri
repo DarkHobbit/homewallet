@@ -5,6 +5,7 @@ QT += gui
 INCLUDEPATH += $$PWD
 
 HEADERS	+= \
+    $$PWD/accounthiermodel.h \
     $$PWD/categoriesbasedquerymodel.h \
     $$PWD/categoryhiermodel.h \
     $$PWD/configmanager.h \
@@ -23,6 +24,7 @@ HEADERS	+= \
     $$PWD/transfertypehiermodel.h \
 
 SOURCES	+= \
+    $$PWD/accounthiermodel.cpp \
     $$PWD/categoriesbasedquerymodel.cpp \
     $$PWD/categoryhiermodel.cpp \
     $$PWD/configmanager.cpp \
