@@ -194,6 +194,22 @@ void AccountHierModel::loadOperations()
                 9 AS operation_type,
                 0 AS is_credit
             FROM hw_repayment
+
+            UNION ALL
+
+            -- Currencies by account
+            SELECT
+                ai.id AS id,
+                null AS op_date,
+                id_ac AS account_id,
+                ai.init_sum AS amount,
+                1 AS quantity,
+                cur.full_name AS description,
+                10 AS operation_type,
+                0 AS is_credit
+            FROM hw_acc_init ai, hw_currency cur
+            WHERE ai.id_cur=cur.id
+
         ) AS all_operations
         ORDER BY op_date DESC
     )");
@@ -660,6 +676,7 @@ QString AccountHierModel::getOperationTypeName(int type) const
         case 7: return tr("Credit Given");
         case 8: return tr("Credit Taken");
         case 9: return tr("Repayment");
+        case 10:return tr("Start balance");
         default: return tr("Unknown");
     }
 }
