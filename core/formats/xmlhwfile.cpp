@@ -70,21 +70,21 @@ bool XmlHwFile::importRecords(const QString &path, HwDatabase &db)
     QDomElement elRoot = documentElement();
     if (elRoot.nodeName()!="homewallet")
         return false;
-    // Order matter! Accounts, categories (at first, units), inc/exp/trans, aliases
+    // Order matter! Categories (at first, units), accounts, inc/exp/trans, aliases
     _processedRecordsCount = 0;
-    // Accounts
-    QDomElement e = elRoot.firstChildElement("accounts");
-    if (!e.isNull()) {
-        if (!importAccounts(e, db))
-            return false;
-    }
     // Categories
     if (!importCategories(elRoot, db))
         return false;
     // Import refs
-    e = elRoot.firstChildElement("importfiles");
+    QDomElement e = elRoot.firstChildElement("importfiles");
     if (!e.isNull()) {
         if (!importImportReferences(e, db))
+            return false;
+    }
+    // Accounts
+    e = elRoot.firstChildElement("accounts");
+    if (!e.isNull()) {
+        if (!importAccounts(e, db))
             return false;
     }
     // Expenses
