@@ -12,14 +12,18 @@
 QT       += core gui
 
 contains(QMAKE_CXX, g++) {
-    # For older GCCs, such as gcc 4.7.2 (also work on modern gcc, don't work on Mac with clang 7.0.2 aka 700.1.81)
-    QMAKE_CXXFLAGS += -std=c++0x -fpermissive
+lessThan(QT_MAJOR_VERSION, 6) {
+    # For older GCCs, such as gcc 4.7.2, also work on modern gcc,
+    # but don't work on Mac with clang 7.0.2 aka 700.1.81 and Qt6 (requires C++17)
+    # QMAKE_CXXFLAGS += -std=c++0x -fpermissive
+}
 }
 
 include(../core/core.pri)
 include(../model/model.pri)
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 5): QT += core5compat
 
 TARGET = homewallet
 TEMPLATE = app

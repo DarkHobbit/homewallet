@@ -17,7 +17,7 @@ QString prepareDoubleImport(const QString &s)
 {
     QString res = s;
     res.replace(" ", "");
-    res.replace(0xa0, ""); // NBSP, really present in HB XML number fields!
+    res.replace(QChar(0xa0), ""); // NBSP, really present in HB XML number fields!
     res.replace(",", ".");
     return res;
 }
