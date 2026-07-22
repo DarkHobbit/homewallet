@@ -25,18 +25,18 @@ class HwDatabase;
 // Structure for storing account/operation data
 struct AccountItem {
     int id;                 // Record ID
-    int parentId;           // Parent ID (-1 for root accounts)
+    int parentId;           // Parent ID (-1 for root accounts, or ID of hw_acc_init for history)
     QString name;           // Display name
     QString description;    // Description (for accounts)
     bool isOperation;       // true - operation, false - account
+    bool isCurrency;        // true - currency entry (from hw_acc_init), false - regular operation
     double quantity;        // Quantity (for operations)
     int amount;             // Amount in low units (for operations)
     QDate operationDate;    // Operation date
     int operationType;      // Type of operation (for display)
-    QString operationDetails; // Additional details
     QVector<int> children;  // Child item indices in flat list
 
-    AccountItem() : id(-1), parentId(-1), isOperation(false),
+    AccountItem() : id(-1), parentId(-1), isOperation(false), isCurrency(false),
                     quantity(0), amount(0), operationType(0) {}
 };
 
@@ -65,11 +65,11 @@ public:
     QString getName(const QModelIndex &index) const override;
 
     bool isCategory(const QModelIndex &index) const override;     // Always false
-    bool isSubcategory(const QModelIndex &index) const override; // True for accounts
-    bool isOperation(const QModelIndex &index) const override;   // True for operations
+    bool isSubcategory(const QModelIndex &index) const override; // True for accounts and currencies
+    bool isOperation(const QModelIndex &index) const override;   // True for operations (including history)
 
     int getParentCategoryId(const QModelIndex &index) const override; // Not applicable, returns -1
-    int getParentSubcategoryId(const QModelIndex &index) const override; // Returns account ID for operations
+    int getParentSubcategoryId(const QModelIndex &index) const override; // Returns account ID for operations, or hw_acc_init ID for history
 
     double getQuantity(const QModelIndex &index) const override;
     int getAmount(const QModelIndex &index) const override;
@@ -89,15 +89,16 @@ private:
 
     void loadData();                 // load data from database
     void loadAccounts();             // load accounts (level 0)
-    void loadOperations();           // load all operations (level 1)
+    void loadOperations();           // load all operations, currencies, and history (levels 1-2)
     void buildHierarchy();           // build parent-child relationships
     QModelIndex indexFromItem(int itemIndex, int column) const;
-    int findItemIndex(int id) const;
+    int findItemIndex(int id) const; // find account index by ID
     void clearData();
 
     // Helper methods
     QString formatAmount(int amountInLowUnits) const;
     QString getOperationTypeName(int type) const;
+    QString getDefaultOperationName(int type, int id) const;
 };
 
 #endif // ACCOUNTHIERMODEL_H

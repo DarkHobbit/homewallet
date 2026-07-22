@@ -64,15 +64,14 @@ void AccountHierModel::loadAccounts()
         item.name = query.value(1).toString();
         item.description = query.value(2).toString();
         item.isOperation = false;
+        item.isCurrency = false;
 
         m_items.append(item);
     }
 }
-#include <iostream>
+
 void AccountHierModel::loadOperations()
 {
-    // Unified query with UNION for all operation types
-    // This single query replaces 7 separate methods
     QSqlQuery query;
     bool res = query.prepare(R"(
         SELECT
@@ -83,8 +82,37 @@ void AccountHierModel::loadOperations()
             quantity,
             description,
             operation_type,
-            is_credit
+            parent_id_for_history
         FROM (
+            -- Currencies by account (level 1)
+            SELECT
+                ai.id AS id,
+                NULL AS op_date,
+                ai.id_ac AS account_id,
+                ai.init_sum AS amount,
+                1 AS quantity,
+                cur.full_name AS description,
+                10 AS operation_type,  -- Start balance
+                -1 AS parent_id_for_history
+            FROM hw_acc_init ai
+            JOIN hw_currency cur ON ai.id_cur = cur.id
+
+            UNION ALL
+
+            -- History of currencies (level 2)
+            SELECT
+                ah.id AS id,
+                ah.ch_date AS op_date,
+                ah.id_ai AS account_id,  -- References hw_acc_init
+                ah.sum_calc AS amount,
+                0 AS quantity,
+                'History record' AS description,
+                11 AS operation_type,  -- History record
+                ah.id_ai AS parent_id_for_history
+            FROM hw_acc_hist ah
+
+            UNION ALL
+
             -- Incomes
             SELECT
                 id,
@@ -92,9 +120,9 @@ void AccountHierModel::loadOperations()
                 id_ac AS account_id,
                 amount,
                 quantity,
-                descr AS description,
+                COALESCE(descr, '') AS description,
                 1 AS operation_type,
-                0 AS is_credit
+                -1 AS parent_id_for_history
             FROM hw_in_op
 
             UNION ALL
@@ -106,9 +134,9 @@ void AccountHierModel::loadOperations()
                 id_ac AS account_id,
                 amount,
                 quantity,
-                descr AS description,
+                COALESCE(descr, '') AS description,
                 2 AS operation_type,
-                0 AS is_credit
+                -1 AS parent_id_for_history
             FROM hw_ex_op
 
             UNION ALL
@@ -120,9 +148,9 @@ void AccountHierModel::loadOperations()
                 id_ac AS account_id,
                 total_amount AS amount,
                 0 AS quantity,
-                note AS description,
+                COALESCE(note, '') AS description,
                 3 AS operation_type,
-                0 AS is_credit
+                -1 AS parent_id_for_history
             FROM hw_receipt
 
             UNION ALL
@@ -132,11 +160,11 @@ void AccountHierModel::loadOperations()
                 id,
                 op_date,
                 id_ac_out AS account_id,
-                -amount AS amount,  -- Negative for outgoing
+                -amount AS amount,
                 0 AS quantity,
-                descr AS description,
-                4 AS operation_type,  -- Transfer Out
-                0 AS is_credit
+                COALESCE(descr, '') AS description,
+                4 AS operation_type,
+                -1 AS parent_id_for_history
             FROM hw_transfer
 
             UNION ALL
@@ -148,9 +176,9 @@ void AccountHierModel::loadOperations()
                 id_ac_in AS account_id,
                 amount AS amount,
                 0 AS quantity,
-                descr AS description,
-                5 AS operation_type,  -- Transfer In
-                0 AS is_credit
+                COALESCE(descr, '') AS description,
+                5 AS operation_type,
+                -1 AS parent_id_for_history
             FROM hw_transfer
 
             UNION ALL
@@ -162,9 +190,9 @@ void AccountHierModel::loadOperations()
                 id_ac AS account_id,
                 amount_out AS amount,
                 0 AS quantity,
-                descr AS description,
+                COALESCE(descr, '') AS description,
                 6 AS operation_type,
-                0 AS is_credit
+                -1 AS parent_id_for_history
             FROM hw_curr_exch
 
             UNION ALL
@@ -176,9 +204,9 @@ void AccountHierModel::loadOperations()
                 id_ac AS account_id,
                 amount,
                 0 AS quantity,
-                descr AS description,
+                COALESCE(descr, '') AS description,
                 CASE WHEN is_lend = 1 THEN 7 ELSE 8 END AS operation_type,
-                is_lend AS is_credit
+                -1 AS parent_id_for_history
             FROM hw_credit
 
             UNION ALL
@@ -190,59 +218,55 @@ void AccountHierModel::loadOperations()
                 id_ac AS account_id,
                 amount,
                 0 AS quantity,
-                descr AS description,
+                COALESCE(descr, '') AS description,
                 9 AS operation_type,
-                0 AS is_credit
+                -1 AS parent_id_for_history
             FROM hw_repayment
-
-            UNION ALL
-
-            -- Currencies by account
-            SELECT
-                ai.id AS id,
-                null AS op_date,
-                id_ac AS account_id,
-                ai.init_sum AS amount,
-                1 AS quantity,
-                cur.full_name AS description,
-                10 AS operation_type,
-                0 AS is_credit
-            FROM hw_acc_init ai, hw_currency cur
-            WHERE ai.id_cur=cur.id
-
         ) AS all_operations
-        ORDER BY op_date DESC
+        ORDER BY 
+            CASE WHEN operation_type = 10 THEN 0 ELSE 1 END,  -- Currencies first
+            op_date DESC
     )");
     if (!res) {
-        std::cerr << "Failed to load operations 1:" << query.lastError().text().toUtf8().data() << std::endl;
+        qDebug() << "Failed to load operations:" << query.lastError().text();
         m_lastError = query.lastError().text();
         return;
     }
 
     if (!query.exec()) {
-        std::cerr << "Failed to load operations 2:" << query.lastError().text().toUtf8().data() << std::endl;
+        qDebug() << "Failed to load operations:" << query.lastError().text();
         m_lastError = query.lastError().text();
         return;
     }
 
-
     while (query.next()) {
         AccountItem item;
         item.id = query.value("id").toInt();
-        item.parentId = query.value("account_id").toInt();
         item.operationDate = query.value("op_date").toDate();
         item.amount = query.value("amount").toInt();
         item.quantity = query.value("quantity").toDouble();
         item.isOperation = true;
         item.operationType = query.value("operation_type").toInt();
 
-        // Build display name
-        QString descr = query.value("description").toString();
-        if (descr.isEmpty()) {
-            descr = getOperationTypeName(item.operationType)
-               + QString(" #%1").arg(item.id);
+        int accountId = query.value("account_id").toInt();
+        int parentForHistory = query.value("parent_id_for_history").toInt();
+
+        if (item.operationType == 11) {
+            // History record: parentId = id of hw_acc_init record
+            item.parentId = parentForHistory;
+            item.isCurrency = true;
+            item.name = tr("History: %1")
+                .arg(item.operationDate.toString("dd.MM.yyyy"));
+        } else {
+            // Currencies and regular operations: parentId = account ID
+            item.parentId = accountId;
+            item.isCurrency = (item.operationType == 10);
+            QString descr = query.value("description").toString();
+            if (descr.isEmpty()) {
+                descr = getDefaultOperationName(item.operationType, item.id);
+            }
+            item.name = descr;
         }
-        item.name = descr;
 
         m_items.append(item);
     }
@@ -254,17 +278,37 @@ void AccountHierModel::buildHierarchy()
     for (int i = 0; i < m_items.size(); ++i) {
         m_items[i].children.clear();
     }
+    m_rootItems.clear();
 
-    // Build children lists
+    // Build hierarchy
     for (int i = 0; i < m_items.size(); ++i) {
-        if (m_items[i].parentId == -1) {
-            // Root item (account)
+        AccountItem &item = m_items[i];
+
+        if (item.parentId == -1) {
+            // Root items (accounts)
             m_rootItems.append(i);
+        } else if (item.operationType == 11) {
+            // History records (level 2): parent is currency record (operationType == 10)
+            bool found = false;
+            for (int j = 0; j < m_items.size(); ++j) {
+                if (m_items[j].operationType == 10 && m_items[j].id == item.parentId) {
+                    m_items[j].children.append(i);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                qDebug() << "Warning: History record" << item.id
+                         << "has no parent currency record" << item.parentId;
+            }
         } else {
-            // Find parent account index
-            int parentIndex = findItemIndex(m_items[i].parentId);
+            // Currencies and regular operations (level 1): parent is account
+            int parentIndex = findItemIndex(item.parentId);
             if (parentIndex != -1) {
                 m_items[parentIndex].children.append(i);
+            } else {
+                qDebug() << "Warning: Operation" << item.id
+                         << "has no parent account" << item.parentId;
             }
         }
     }
@@ -299,7 +343,7 @@ QModelIndex AccountHierModel::index(int row, int column, const QModelIndex &pare
         return indexFromItem(m_rootItems[row], column);
     }
 
-    // Child item (operation)
+    // Child item
     int parentIndex = parent.internalId();
     if (parentIndex < 0 || parentIndex >= m_items.size())
         return QModelIndex();
@@ -324,13 +368,37 @@ QModelIndex AccountHierModel::parent(const QModelIndex &child) const
     if (parentId == -1)
         return QModelIndex();
 
-    // Find parent account index
-    int parentIndex = findItemIndex(parentId);
+    // Find parent item
+    int parentIndex = -1;
+
+    // For history records, parent is currency record (operationType == 10)
+    if (m_items[childIndex].operationType == 11) {
+        for (int i = 0; i < m_items.size(); ++i) {
+            if (m_items[i].operationType == 10 && m_items[i].id == parentId) {
+                parentIndex = i;
+                break;
+            }
+        }
+    } else {
+        // For regular operations and currencies, parent is account
+        parentIndex = findItemIndex(parentId);
+    }
+
     if (parentIndex == -1)
         return QModelIndex();
 
-    // Find parent's row among root items
-    int row = m_rootItems.indexOf(parentIndex);
+    // Find parent's row
+    int row = -1;
+    if (m_items[parentIndex].parentId == -1) {
+        row = m_rootItems.indexOf(parentIndex);
+    } else {
+        // Parent is not root (e.g., currency has parent account)
+        int grandParentIndex = findItemIndex(m_items[parentIndex].parentId);
+        if (grandParentIndex != -1) {
+            row = m_items[grandParentIndex].children.indexOf(parentIndex);
+        }
+    }
+
     if (row == -1)
         return QModelIndex();
 
@@ -372,25 +440,39 @@ QVariant AccountHierModel::data(const QModelIndex &index, int role) const
         case Qt::DisplayRole:
         case Qt::EditRole:
             if (column == 0) {
-                // First column: name
                 if (item.isOperation) {
-                    return QString("%1 - %2")
-                        .arg(item.operationDate.toString("dd.MM.yyyy"))
-                        .arg(item.name);
+                    if (item.operationType == 11) {
+                        // History record
+                        return QString("%1 - %2: %3")
+                            .arg(item.operationDate.toString("dd.MM.yyyy"))
+                            .arg(item.name)
+                            .arg(formatAmount(item.amount));
+                    } else if (item.operationType == 10) {
+                        // Currency
+                        return item.name;
+                    } else {
+                        // Regular operation
+                        return QString("%1 - %2")
+                            .arg(item.operationDate.toString("dd.MM.yyyy"))
+                            .arg(item.name);
+                    }
                 }
                 return item.name;
             } else if (column == 1) {
-                // Second column: child count for accounts, amount for operations
                 if (!item.isOperation) {
-                    // Account - show number of operations
+                    // Account: count of children
                     int count = item.children.size();
-                    if (count > 0) {
-                        return QString::number(count);
-                    }
-                    return QVariant();
+                    return count > 0 ? QString::number(count) : QVariant();
+                } else if (item.operationType == 10) {
+                    // Currency: count of history records
+                    int count = item.children.size();
+                    return count > 0 ? QString::number(count) : QVariant();
+                } else if (item.operationType == 11) {
+                    // History: amount change
+                    return formatAmount(item.amount);
                 } else {
-                    // Operation - empty
-                    return QVariant();
+                    // Regular operation: amount
+                    return formatAmount(item.amount);
                 }
             }
             break;
@@ -399,6 +481,11 @@ QVariant AccountHierModel::data(const QModelIndex &index, int role) const
             if (column == 0) {
                 if (item.isOperation) {
                     QString typeName = getOperationTypeName(item.operationType);
+                    if (item.operationType == 11) {
+                        return tr("History record for currency\nDate: %1\nAmount: %2")
+                            .arg(item.operationDate.toString("dd.MM.yyyy"))
+                            .arg(formatAmount(item.amount));
+                    }
                     return tr("%1\nType: %2\nAmount: %3")
                         .arg(item.name)
                         .arg(typeName)
@@ -413,14 +500,21 @@ QVariant AccountHierModel::data(const QModelIndex &index, int role) const
                     if (count > 0) {
                         return tr("Operations: %1").arg(count);
                     }
+                } else if (item.operationType == 10) {
+                    int count = item.children.size();
+                    if (count > 0) {
+                        return tr("History records: %1").arg(count);
+                    }
                 }
             }
             break;
 
         case Qt::TextAlignmentRole:
             if (column == 1) {
-                if (!item.isOperation) {
+                if (!item.isOperation || item.operationType == 10) {
                     return Qt::AlignCenter;
+                } else {
+                    return Qt::AlignRight;
                 }
             }
             break;
@@ -431,12 +525,14 @@ QVariant AccountHierModel::data(const QModelIndex &index, int role) const
             }
             break;
 
-        case Qt::UserRole + 2: // Type (0=category,1=subcategory,2=operation)
+        case Qt::UserRole + 2: // Type (0=category,1=subcategory,2=operation,3=currency/history)
             if (column == 0) {
                 if (!item.isOperation)
-                    return 1;  // Account (like subcategory)
+                    return 1;  // Account
+                else if (item.operationType == 10 || item.operationType == 11)
+                    return 3;  // Currency or history
                 else
-                    return 2;  // Operation
+                    return 2;  // Regular operation
             }
             break;
 
@@ -508,7 +604,10 @@ bool AccountHierModel::isSubcategory(const QModelIndex &index) const
     if (itemIndex < 0 || itemIndex >= m_items.size())
         return false;
 
-    return !m_items[itemIndex].isOperation;  // Accounts are like subcategories
+    const AccountItem &item = m_items[itemIndex];
+    
+    // Accounts and currencies are considered "subcategories"
+    return !item.isOperation || item.operationType == 10;
 }
 
 bool AccountHierModel::isOperation(const QModelIndex &index) const
@@ -543,7 +642,12 @@ int AccountHierModel::getParentSubcategoryId(const QModelIndex &index) const
     if (!item.isOperation)
         return -1;
 
-    return item.parentId;  // Returns account ID for operations
+    if (item.operationType == 11) {
+        // For history, return hw_acc_init ID
+        return item.parentId;
+    }
+
+    return item.parentId;  // For regular operations, return account ID
 }
 
 double AccountHierModel::getQuantity(const QModelIndex &index) const
@@ -620,6 +724,9 @@ bool AccountHierModel::moveSelectedNodes(HierModelBase* opposite,
                                          QModelIndex& oppositeIndex)
 {
     // TODO
+    Q_UNUSED(opposite);
+    Q_UNUSED(indices);
+    Q_UNUSED(oppositeIndex);
     return false;
 }
 
@@ -628,6 +735,9 @@ bool AccountHierModel::mergeSelectedNodes(HierModelBase* opposite,
                                           QModelIndex& oppositeIndex)
 {
     // TODO
+    Q_UNUSED(opposite);
+    Q_UNUSED(index);
+    Q_UNUSED(oppositeIndex);
     return false;
 }
 
@@ -645,8 +755,22 @@ QModelIndex AccountHierModel::indexFromItem(int itemIndex, int column) const
         // Root account
         row = m_rootItems.indexOf(itemIndex);
     } else {
-        // Operation - find parent
-        int parentIndex = findItemIndex(item.parentId);
+        // Child item - find parent
+        int parentIndex = -1;
+        
+        if (item.operationType == 11) {
+            // History record: parent is currency record
+            for (int i = 0; i < m_items.size(); ++i) {
+                if (m_items[i].operationType == 10 && m_items[i].id == item.parentId) {
+                    parentIndex = i;
+                    break;
+                }
+            }
+        } else {
+            // Regular operation or currency: parent is account
+            parentIndex = findItemIndex(item.parentId);
+        }
+        
         if (parentIndex != -1) {
             row = m_items[parentIndex].children.indexOf(itemIndex);
         }
@@ -676,7 +800,13 @@ QString AccountHierModel::getOperationTypeName(int type) const
         case 7: return tr("Credit Given");
         case 8: return tr("Credit Taken");
         case 9: return tr("Repayment");
-        case 10:return tr("Start balance");
+        case 10: return tr("Start balance");
+        case 11: return tr("History record");
         default: return tr("Unknown");
     }
+}
+
+QString AccountHierModel::getDefaultOperationName(int type, int id) const
+{
+    return getOperationTypeName(type) + tr(" #%1").arg(id);
 }
