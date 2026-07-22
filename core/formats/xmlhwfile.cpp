@@ -205,26 +205,38 @@ bool XmlHwFile::exportRecords(const QString &path, HwDatabase &db, SubTypeFlags 
 
 bool XmlHwFile::importAccounts(const QDomElement &e, HwDatabase &db)
 {
-    ChildRecMap accInits;
+    ChildRecMap elAccs;
     bool res = importDbRecordsGroup(db, e, "ac", "hw_account",
         QStringList() << "name" << "descr" << "foundation",
         "SSD", "MOO",
         QStringList() << "n" << "d" << "fd",
         HwDatabase::TableRefColl(),
-        QVariantList(), &accInits);
+        QVariantList(), &elAccs);
     if (!res)
         return false;
     HwDatabase::TableRefColl tRefs;
     DB_CHK(db.collectDict(tRefs["cur"], "hw_currency", "abbr"));
-    for (int idAcc: accInits.keys()) {
-        const QDomElement& eIn = accInits[idAcc];
+    for (int idAcc: elAccs.keys()) {
+        const QDomElement& eIn = elAccs[idAcc];
+        ChildRecMap elAccInits;
         res = importDbRecordsGroup(db, eIn, "init", "hw_acc_init",
             QStringList() << "init_sum" << "id_cur" << "id_ac",
             "IRI", "OOM",
             QStringList() << "init_sum" << "cur", tRefs,
-            QVariantList() << QVariant(idAcc));
+            QVariantList() << QVariant(idAcc), &elAccInits);
         if (!res)
             return false;
+        for (int idAccInit: elAccInits.keys()) {
+            const QDomElement& eHist = elAccInits[idAccInit];
+            res = importDbRecordsGroup(db, eHist, "cut", "hw_acc_hist",
+                QStringList() << "ch_date" << "sum_calc" << "sum_fact" << "id_ai",
+                "DIIR", "MOOM",
+                QStringList() << "dt" << "sc" << "sf",
+                HwDatabase::TableRefColl(),
+                QVariantList() << QVariant(idAccInit));
+            if (!res)
+                return false;
+        }
     }
     return true;
 }
@@ -563,9 +575,12 @@ bool XmlHwFile::exportAccounts(HwDatabase &db, QDomElement &elRoot)
     QDomElement elGroup = addElem(elRoot, "accounts");
     bool res = exportDbRecordsGroup(db, Q_SEL_ACCOUNT, elGroup, "ac", &elAccs);
     if (res) {
-        foreach (int idAcc, elAccs.keys())
-            if (!exportDbRecordsGroup(db, QString(Q_SEL_ACC_INIT).arg(idAcc), elAccs[idAcc], "init"))
+        foreach (int idAcc, elAccs.keys()) {
+            if (!exportDbRecordsGroup(db,
+                QString(Q_SEL_ACC_INIT).arg(idAcc), elAccs[idAcc], "init"))
                 return false;
+            // TODO hw_acc_hist
+        }
     }
     return res;
 }

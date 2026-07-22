@@ -117,7 +117,8 @@ create table hw_acc_hist ( -- account history
     id integer primary key autoincrement,
     ch_date date not null,
     id_ai integer not null,
-    sum integer null, -- in low units
+    sum_calc integer null, -- in low units
+    sum_fact integer null, -- in low units
     constraint uk_ah unique(ch_date, id_ai),
     constraint fk_ahai foreign key(id_ai) references hw_acc_init(id)
 );

@@ -62,59 +62,53 @@
 <context>
     <name>AccountHierModel</name>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="398"/>
         <source>Operations: %1</source>
-        <translation>Операций: %1</translation>
+        <translation type="obsolete">Операций: %1</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="658"/>
         <source>Income</source>
-        <translation>Доход</translation>
+        <translation type="obsolete">Доход</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="659"/>
         <source>Expense</source>
-        <translation>Расход</translation>
+        <translation type="obsolete">Расход</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="660"/>
         <source>Receipt</source>
-        <translation>Чек</translation>
+        <translation type="obsolete">Чек</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="661"/>
         <source>Transfer Out</source>
-        <translation>Перенос исх.</translation>
+        <translation type="obsolete">Перенос исх.</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="662"/>
         <source>Transfer In</source>
-        <translation>Перенос вх.</translation>
+        <translation type="obsolete">Перенос вх.</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="663"/>
         <source>Currency Exchange</source>
-        <translation>Обмен валюты</translation>
+        <translation type="obsolete">Обмен валюты</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="664"/>
         <source>Credit Given</source>
-        <translation>Кредит выдан</translation>
+        <translation type="obsolete">Кредит выдан</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="665"/>
         <source>Credit Taken</source>
-        <translation>Кредит взят</translation>
+        <translation type="obsolete">Кредит взят</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="666"/>
         <source>Repayment</source>
-        <translation>Возврат долга/кредита</translation>
+        <translation type="obsolete">Возврат долга/кредита</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="667"/>
         <source>Unknown</source>
-        <translation>Неизвестная операция</translation>
+        <translation type="obsolete">Неизвестная операция</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="258"/>
+        <source>History: %1</source>
+        <translation>История: %1</translation>
     </message>
 </context>
 <context>
@@ -2010,7 +2004,7 @@ Found: %1</source>
         <translation>HomeWallet XML (*.xml *.XML)</translation>
     </message>
     <message>
-        <location filename="../core/formats/xmlhwfile.cpp" line="319"/>
+        <location filename="../core/formats/xmlhwfile.cpp" line="331"/>
         <source>This version of HomeWallet not support third category level: %1::%2</source>
         <translation>Эта версия Домашнего кошелька не поддерживает третий уровень категорий: %1::%2</translation>
     </message>
@@ -2530,13 +2524,13 @@ At line %3</source>
     <name>TransferTypeHierModel</name>
     <message>
         <location filename="../model/transfertypehiermodel.cpp" line="82"/>
-        <source>Перенос №%1</source>
-        <translation></translation>
+        <source>Transfer #%1</source>
+        <translation>Перенос №%1</translation>
     </message>
     <message>
         <location filename="../model/transfertypehiermodel.cpp" line="256"/>
-        <source>Переносов: %1</source>
-        <translation type="unfinished"></translation>
+        <source>Transfers: %1</source>
+        <translation>Переносов: %1</translation>
     </message>
 </context>
 </TS>
