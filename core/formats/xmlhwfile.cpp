@@ -569,6 +569,11 @@ bool XmlHwFile::importAliases(const QDomElement &e, HwDatabase &db)
     " and ain.id_ac=%1" \
     " order by cur.seq_order;"
 
+#define Q_SEL_ACC_HIST \
+    "select id, ch_date as dt, sum_calc as sc, sum_fact as sf" \
+    " from hw_acc_hist where id_ai=%1" \
+    " order by dt;"
+
 bool XmlHwFile::exportAccounts(HwDatabase &db, QDomElement &elRoot)
 {
     ChildRecMap elAccs;
@@ -576,10 +581,15 @@ bool XmlHwFile::exportAccounts(HwDatabase &db, QDomElement &elRoot)
     bool res = exportDbRecordsGroup(db, Q_SEL_ACCOUNT, elGroup, "ac", &elAccs);
     if (res) {
         foreach (int idAcc, elAccs.keys()) {
+            ChildRecMap elAccInits;
             if (!exportDbRecordsGroup(db,
-                QString(Q_SEL_ACC_INIT).arg(idAcc), elAccs[idAcc], "init"))
+                QString(Q_SEL_ACC_INIT).arg(idAcc), elAccs[idAcc], "init", &elAccInits))
                 return false;
-            // TODO hw_acc_hist
+            for (int idAccInit: elAccInits.keys()) {
+                if (!exportDbRecordsGroup(db,
+                    QString(Q_SEL_ACC_HIST).arg(idAccInit), elAccInits[idAccInit], "cut"))
+                    return false;
+            }
         }
     }
     return res;
