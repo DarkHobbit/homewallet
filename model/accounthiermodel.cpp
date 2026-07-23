@@ -697,26 +697,23 @@ bool AccountHierModel::removeAnyRows(QModelIndexList &indices)
                   return a.row() > b.row();
               });
 
-    bool success = true;
     for (const QModelIndex &index : indices) {
         if (!index.isValid())
             continue;
 
         // For now, we only support removing operations
         // Account removal would need to handle cascading deletes
-        if (isOperation(index)) {
-            // Remove operation from database
-            // ... implementation depends on operation type
-            // This is a placeholder
-            success = false;
+        if (isSubcategory(index)) {
+            bool success = m_db->deleteAccount(getId(index));
+            if (!success) {
+                m_lastError = m_db->lastError();
+                return false;
+            }
         }
     }
 
-    if (success) {
-        refresh();
-    }
-
-    return success;
+    refresh();
+    return true;;
 }
 
 bool AccountHierModel::moveSelectedNodes(HierModelBase* opposite,

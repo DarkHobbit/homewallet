@@ -265,6 +265,38 @@ int HwDatabase::addUnit(const QString &name, const QString &shortName, const QSt
     return unitId(name);
 }
 
+bool HwDatabase::deleteAccount(int idAcc)
+{
+    if (!checkForMultiEmpty(idAcc, QStringList()
+        << "select count(id) from hw_in_op where id_ac=:id"
+        << "select count(id) from hw_ex_op where id_ac=:id"
+        << "select count(id) from hw_receipt where id_ac=:id"
+        << "select count(id) from hw_transfer where id_ac_out=:id or id_ac_in=:id"
+        << "select count(id) from hw_curr_exch where id_ac=:id"
+        << "select count(id) from hw_credit where id_ac=:id"
+        << "select count(id) from hw_repayment where id_ac=:id"
+                            ))
+        return false;
+    QSqlQuery qCh(sqlDb), qD(sqlDb);
+    // Remove inits and history cycle
+    if (!prepQuery(qCh, "select id from hw_acc_init where id_ac=:id_ac"))
+        return false;
+    qCh.bindValue(":id_ac", idAcc);
+    if (!execQuery(qCh))
+        return false;
+    qCh.first();
+    while (qCh.isValid()) {
+        int idAccInit = qCh.value(0).toInt();
+        if (!execSimpleQuery(QString("delete from hw_acc_hist where id_ai=%1").arg(idAccInit)))
+            return false;
+        qCh.next();
+    }
+    if (!execSimpleQuery(QString("delete from hw_acc_init where id_ac=%1").arg(idAcc)))
+        return false;
+    // Remove account
+    return execSimpleQuery(QString("delete from hw_account where id=%1").arg(idAcc));
+}
+
 int HwDatabase::unitId(const QString &name)
 {
     QSqlQuery sqlSel(sqlDb);

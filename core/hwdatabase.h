@@ -70,6 +70,7 @@ public:
                     const QDateTime& foundation=QDateTime(), const MultiCurrById& startBalance=MultiCurrById());
     int accountId(const QString& name, Qt::CaseSensitivity cs = Qt::CaseInsensitive);
     int addUnit(const QString& name, const QString& shortName, const QString& descr);
+    bool deleteAccount(int idAcc);
     int unitId(const QString& name);
     QString unitById(int idUnit);
     int currencyIdByAbbr(const QString& abbr);

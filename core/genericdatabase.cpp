@@ -70,10 +70,12 @@ bool GenericDatabase::open(const QString& path)
         }
     }
     sqlDb.setDatabaseName(path+QDir::separator()+fileName());
-    bool res = sqlDb.open();
-    if (res)
-        res = checkForICU();
-    return res;
+    if (!sqlDb.open())
+        return false;
+    if (!checkForICU())
+        return false;
+    //return execSimpleQuery("PRAGMA foreign_keys = ON;");
+    return true;
 }
 
 void GenericDatabase::close()
@@ -326,6 +328,25 @@ bool GenericDatabase::deleteRecIfEmpty(int id, const QString &countSql, const QS
         return false;
     qD.bindValue(":id", id);
     return execQuery(qD);
+}
+
+bool GenericDatabase::checkForMultiEmpty(int id, const QStringList &countSqls)
+{
+    QSqlQuery qC(sqlDbRef());
+    for (const QString& sql: countSqls) {
+        if (!prepQuery(qC, sql))
+            return false;
+        qC.bindValue(":id", id);
+        if (!execQuery(qC))
+            return false;
+        qC.first();
+        if (qC.value(0).toInt()>0) {
+            _lastError = S_ERR_REMOVE_NOT_EMPTY;
+            return false;
+        }
+        qC.clear();
+    }
+    return true;
 }
 
 int GenericDatabase::dictId(QSqlQuery &q)
