@@ -74,7 +74,7 @@ bool GenericDatabase::open(const QString& path)
         return false;
     if (!checkForICU())
         return false;
-    //return execSimpleQuery("PRAGMA foreign_keys = ON;");
+    //return execSimpleQuery("PRAGMA foreign_keys = ON;"); // TODO no main.hw_units
     return true;
 }
 

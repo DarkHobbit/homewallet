@@ -97,6 +97,7 @@ private:
 
     // Helper methods
     QString formatAmount(int amountInLowUnits) const;
+    int getOperationType(const QModelIndex &index) const;
     QString getOperationTypeName(int type) const;
     QString getDefaultOperationName(int type, int id) const;
 };

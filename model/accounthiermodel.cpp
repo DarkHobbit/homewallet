@@ -720,11 +720,44 @@ bool AccountHierModel::moveSelectedNodes(HierModelBase* opposite,
                                          QModelIndexList& indices,
                                          QModelIndex& oppositeIndex)
 {
-    // TODO
-    Q_UNUSED(opposite);
-    Q_UNUSED(indices);
-    Q_UNUSED(oppositeIndex);
-    return false;
+    QStringList sqlsMove = QStringList() << ""
+        << "update hw_in_op set id_ac=:id_ac where id=:id"
+        << "update hw_ex_op set id_ac=:id_ac where id=:id"
+        << "update hw_receipt set id_ac=:id_ac where id=:id"
+        << "update hw_transfer set id_ac_out=:id_ac where id=:id"
+        << "update hw_transfer set id_ac_in=:id_ac where id=:id"
+        << "update hw_curr_exch set id_ac=:id_ac where id=:id"
+        << "update hw_credit set id_ac=:id_ac where id=:id"
+        << "update hw_credit set id_ac=:id_ac where id=:id"
+        << "update hw_repayment set id_ac=:id_ac where id=:id"
+        << "" // acc_init, if need - merge, not move
+        << "" // acc_hist referense acc_init, not account
+    ;
+    int idNewParent = opposite->getId(oppositeIndex);
+    for (const QModelIndex &index: indices) {
+        if (isOperation(index)) {
+            int opType = getOperationType(index);
+            if (opType<1 || opType>=sqlsMove.count()) {
+                m_lastError = QString("Unknown operation type: ").arg(opType);
+                return false;
+            }
+            QString sql = sqlsMove[opType];
+            if (sql.isEmpty())
+                continue;
+            QSqlQuery qMv(m_db->sqlDbRef());
+            if (!m_db->prepQuery(qMv, sql)) {
+                m_lastError = m_db->lastError();
+                return false;
+            }
+            qMv.bindValue(":id_ac", idNewParent);
+            qMv.bindValue(":id", getId(index));
+            if (!m_db->execQuery(qMv)) {
+                m_lastError = m_db->lastError();
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 bool AccountHierModel::mergeSelectedNodes(HierModelBase* opposite,
@@ -783,6 +816,18 @@ QString AccountHierModel::formatAmount(int amountInLowUnits) const
 {
     double amountInMainUnits = amountInLowUnits / 100.0;
     return QLocale().toString(amountInMainUnits, 'f', 2);
+}
+
+int AccountHierModel::getOperationType(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return -1;
+
+    int itemIndex = index.internalId();
+    if (itemIndex < 0 || itemIndex >= m_items.size())
+        return -1;
+
+    return m_items[itemIndex].operationType;
 }
 
 QString AccountHierModel::getOperationTypeName(int type) const
