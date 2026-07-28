@@ -20,6 +20,15 @@
 
 class HwDatabase;
 
+#define MDB_CHK(action) \
+{ \
+        if (!(action)) \
+    { \
+            m_lastError = m_db->lastError(); \
+            return false; \
+    } \
+}
+
 class HierModelBase : public QAbstractItemModel
 {
     Q_OBJECT

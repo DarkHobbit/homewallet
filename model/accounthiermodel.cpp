@@ -21,6 +21,8 @@
 #include <QDebug>
 #include <QLocale>
 
+#define S_HIST_KILLED QObject::tr("Duplicated history items killed:\n%1")
+
 AccountHierModel::AccountHierModel(HwDatabase* db, QObject *parent)
     : HierModelBase(db, parent)
 {
@@ -764,11 +766,89 @@ bool AccountHierModel::mergeSelectedNodes(HierModelBase* opposite,
                                           QModelIndex& index,
                                           QModelIndex& oppositeIndex)
 {
-    // TODO
-    Q_UNUSED(opposite);
-    Q_UNUSED(index);
-    Q_UNUSED(oppositeIndex);
-    return false;
+    QStringList sqlsMerge = QStringList() << ""
+        << "update hw_in_op set id_ac=:id_ac where id_ac=:id_prev"
+        << "update hw_ex_op set id_ac=:id_ac where id_ac=:id_prev"
+        << "update hw_receipt set id_ac=:id_ac where id_ac=:id_prev"
+        << "update hw_transfer set id_ac_out=:id_ac where id_ac_out=:id_prev"
+        << "update hw_transfer set id_ac_in=:id_ac where id_ac_in=:id_prev"
+        << "update hw_curr_exch set id_ac=:id_ac where id_ac=:id_prev"
+        << "update hw_credit set id_ac=:id_ac where id_ac=:id_prev"
+        << "update hw_credit set id_ac=:id_ac where id_ac=:id_prev"
+        << "update hw_repayment set id_ac=:id_ac where id_ac=:id_prev"
+        << "" // acc_init, if need - merge, not move
+        << "" // acc_hist referense acc_init, not account
+        ;
+    int idSrc = getId(index);
+    int idDest = opposite->getId(oppositeIndex);
+    bool res = false;
+    if (isSubcategory(index)) {
+        for(const QString& sql: sqlsMerge) {
+            QSqlQuery qMg(m_db->sqlDbRef());
+            MDB_CHK(m_db->prepQuery(qMg, sql))
+            qMg.bindValue(":id_ac", idDest);
+            qMg.bindValue(":id_prev", idSrc);
+            MDB_CHK(m_db->execQuery(qMg))
+        }
+        // Merge inits and history
+        QString sqlInits = "select id, id_cur from hw_acc_init where id_ac=:id_ac_src";
+        QSqlQuery qInits(m_db->sqlDbRef());
+        MDB_CHK(m_db->prepQuery(qInits, sqlInits))
+        qInits.bindValue(":id_ac_src", idSrc);
+        MDB_CHK(m_db->execQuery(qInits))
+        qInits.first();
+        QStringList killedHistoryItems;
+        while (qInits.isValid()) {
+            int idInitSrc = qInits.value(0).toInt();
+            int idCur = qInits.value(1).toInt();
+            QString sqlDupInit = "select id from hw_acc_init where id_ac=:id_ac_dest and id_cur=:id_cur";
+            QSqlQuery qDupInit(m_db->sqlDbRef());
+            MDB_CHK(m_db->prepQuery(qDupInit, sqlDupInit))
+            qDupInit.bindValue(":id_ac_dest", idDest);
+            qDupInit.bindValue(":id_cur", idCur);
+            MDB_CHK(m_db->execQuery(qDupInit))
+            if (m_db->queryRecCount(qDupInit)==0) {
+                // Move init
+                MDB_CHK(m_db->execSimpleQuery(
+                    QString("update hw_acc_init set id_ac=%1 where id=%2").arg(idDest).arg(idInitSrc)))
+            }
+            else {
+                // Merge init with dest
+                int idInitDest = qDupInit.value(0).toInt();
+                // Kill dup-history
+                QString sqlDupHist =
+                    "select h1.id as id1, h1.ch_date as d," \
+                    " h1.sum_calc as sc1, h1.sum_fact as sf1, " \
+                    " h2.sum_calc as sc2, h2.sum_fact as sf2 " \
+                    " from hw_acc_hist h1, from hw_acc_hist h2" \
+                    " where h1.ch_date=h2.ch_date" \
+                    " and h1.id_ai=:id_ai_s and h2.id_ai=:id_ai_d";
+                QSqlQuery qDupHist(m_db->sqlDbRef());
+                MDB_CHK(m_db->prepQuery(qDupHist, sqlDupHist))
+                qDupHist.bindValue(":id_ai_s", idInitSrc);
+                qDupHist.bindValue(":id_ai_d", idInitDest);
+                MDB_CHK(m_db->execQuery(qDupHist))
+                qDupHist.first();
+                while (qDupHist.isValid()) {
+
+                    // TODO drop
+                    // TODO log
+                    qDupHist.next();
+                }
+                // Move other history
+                // TODO
+                // Drop init
+                MDB_CHK(m_db->execSimpleQuery(QString("delete from hw_acc_init where id=%1").arg(idInitSrc)))
+            }
+
+            qInits.next();
+        }
+        // Drop account
+        MDB_CHK(m_db->execSimpleQuery(QString("delete from hw_account where id=%1").arg(idSrc)))
+        if (!killedHistoryItems.isEmpty())
+            emit infoForUser(S_HIST_KILLED.arg(killedHistoryItems.join("\n")));
+    }
+    return res;
 }
 
 // Private helper methods
