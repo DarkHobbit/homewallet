@@ -22,6 +22,8 @@
 #include <QLocale>
 
 #define S_HIST_KILLED QObject::tr("Duplicated history items killed:\n%1")
+#define S_HIST_KILLED_ITEM \
+    QObject::tr("\n%1 at %2\n(calc. amount deleted %3, existing %4,\nact. amount deleted %5, existing %6)")
 
 AccountHierModel::AccountHierModel(HwDatabase* db, QObject *parent)
     : HierModelBase(db, parent)
@@ -779,11 +781,14 @@ bool AccountHierModel::mergeSelectedNodes(HierModelBase* opposite,
         << "" // acc_init, if need - merge, not move
         << "" // acc_hist referense acc_init, not account
         ;
+    HwDatabase::RevDictColl collCurrency;
+    MDB_CHK(m_db->collectRevDict(collCurrency, "hw_currency", "abbr"))
     int idSrc = getId(index);
     int idDest = opposite->getId(oppositeIndex);
-    bool res = false;
     if (isSubcategory(index)) {
         for(const QString& sql: sqlsMerge) {
+            if (sql.isEmpty())
+                continue;
             QSqlQuery qMg(m_db->sqlDbRef());
             MDB_CHK(m_db->prepQuery(qMg, sql))
             qMg.bindValue(":id_ac", idDest);
@@ -801,6 +806,7 @@ bool AccountHierModel::mergeSelectedNodes(HierModelBase* opposite,
         while (qInits.isValid()) {
             int idInitSrc = qInits.value(0).toInt();
             int idCur = qInits.value(1).toInt();
+            QString curAbbr = collCurrency[idCur];
             QString sqlDupInit = "select id from hw_acc_init where id_ac=:id_ac_dest and id_cur=:id_cur";
             QSqlQuery qDupInit(m_db->sqlDbRef());
             MDB_CHK(m_db->prepQuery(qDupInit, sqlDupInit))
@@ -820,7 +826,7 @@ bool AccountHierModel::mergeSelectedNodes(HierModelBase* opposite,
                     "select h1.id as id1, h1.ch_date as d," \
                     " h1.sum_calc as sc1, h1.sum_fact as sf1, " \
                     " h2.sum_calc as sc2, h2.sum_fact as sf2 " \
-                    " from hw_acc_hist h1, from hw_acc_hist h2" \
+                    " from hw_acc_hist h1, hw_acc_hist h2" \
                     " where h1.ch_date=h2.ch_date" \
                     " and h1.id_ai=:id_ai_s and h2.id_ai=:id_ai_d";
                 QSqlQuery qDupHist(m_db->sqlDbRef());
@@ -828,15 +834,23 @@ bool AccountHierModel::mergeSelectedNodes(HierModelBase* opposite,
                 qDupHist.bindValue(":id_ai_s", idInitSrc);
                 qDupHist.bindValue(":id_ai_d", idInitDest);
                 MDB_CHK(m_db->execQuery(qDupHist))
+                QList<int> histToDelete;
                 qDupHist.first();
                 while (qDupHist.isValid()) {
-
-                    // TODO drop
-                    // TODO log
+                    histToDelete << qDupHist.value(0).toInt();
+                    killedHistoryItems <<
+                        S_HIST_KILLED_ITEM.arg(curAbbr).arg(qDupHist.value(1).toString())
+                        .arg(formatAmount(qDupHist.value(2).toInt()))
+                        .arg(formatAmount(qDupHist.value(4).toInt()))
+                        .arg(formatAmount(qDupHist.value(3).toInt()))
+                        .arg(formatAmount(qDupHist.value(5).toInt()));
                     qDupHist.next();
                 }
+                for (int idHistSrc : histToDelete) {
+                    MDB_CHK(m_db->execSimpleQuery(QString("delete from hw_acc_hist where id=%1").arg(idHistSrc)))
+                }
                 // Move other history
-                // TODO
+                MDB_CHK(m_db->execSimpleQuery(QString("update hw_acc_hist set id_ai=%1 where id_ai=%2").arg(idInitDest).arg(idInitSrc)))
                 // Drop init
                 MDB_CHK(m_db->execSimpleQuery(QString("delete from hw_acc_init where id=%1").arg(idInitSrc)))
             }
@@ -848,7 +862,7 @@ bool AccountHierModel::mergeSelectedNodes(HierModelBase* opposite,
         if (!killedHistoryItems.isEmpty())
             emit infoForUser(S_HIST_KILLED.arg(killedHistoryItems.join("\n")));
     }
-    return res;
+    return true;
 }
 
 // Private helper methods

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ru_RU">
+<TS version="2.1" language="ru_RU">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -62,51 +62,100 @@
 <context>
     <name>AccountHierModel</name>
     <message>
+        <location filename="../model/accounthiermodel.cpp" line="489"/>
+        <source>History record for currency
+Date: %1
+Amount: %2</source>
+        <translation>Запись истории для валюты
+Дата: %1
+Сумма: %2</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="493"/>
+        <source>%1
+Type: %2
+Amount: %3</source>
+        <translation>%1
+Тип: %2
+Сумма: %3</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="505"/>
         <source>Operations: %1</source>
-        <translation type="obsolete">Операций: %1</translation>
+        <translation>Операций: %1</translation>
     </message>
     <message>
+        <location filename="../model/accounthiermodel.cpp" line="510"/>
+        <source>History records: %1</source>
+        <translation>Записей истории: %1</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="930"/>
         <source>Income</source>
-        <translation type="obsolete">Доход</translation>
+        <translation>Доход</translation>
     </message>
     <message>
+        <location filename="../model/accounthiermodel.cpp" line="931"/>
         <source>Expense</source>
-        <translation type="obsolete">Расход</translation>
+        <translation>Расход</translation>
     </message>
     <message>
+        <location filename="../model/accounthiermodel.cpp" line="932"/>
         <source>Receipt</source>
-        <translation type="obsolete">Чек</translation>
+        <translation>Чек</translation>
     </message>
     <message>
+        <location filename="../model/accounthiermodel.cpp" line="933"/>
         <source>Transfer Out</source>
-        <translation type="obsolete">Перенос исх.</translation>
+        <translation>Перенос исх.</translation>
     </message>
     <message>
+        <location filename="../model/accounthiermodel.cpp" line="934"/>
         <source>Transfer In</source>
-        <translation type="obsolete">Перенос вх.</translation>
+        <translation>Перенос вх.</translation>
     </message>
     <message>
+        <location filename="../model/accounthiermodel.cpp" line="935"/>
         <source>Currency Exchange</source>
-        <translation type="obsolete">Обмен валюты</translation>
+        <translation>Обмен валюты</translation>
     </message>
     <message>
+        <location filename="../model/accounthiermodel.cpp" line="936"/>
         <source>Credit Given</source>
-        <translation type="obsolete">Кредит выдан</translation>
+        <translation>Кредит выдан</translation>
     </message>
     <message>
+        <location filename="../model/accounthiermodel.cpp" line="937"/>
         <source>Credit Taken</source>
-        <translation type="obsolete">Кредит взят</translation>
+        <translation>Кредит взят</translation>
     </message>
     <message>
+        <location filename="../model/accounthiermodel.cpp" line="938"/>
         <source>Repayment</source>
-        <translation type="obsolete">Возврат долга/кредита</translation>
+        <translation>Возврат долга/кредита</translation>
     </message>
     <message>
+        <location filename="../model/accounthiermodel.cpp" line="939"/>
+        <source>Start balance</source>
+        <translation>Начальный баланс</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="940"/>
+        <source>History record</source>
+        <translation>Запись истории</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="941"/>
         <source>Unknown</source>
-        <translation type="obsolete">Неизвестная операция</translation>
+        <translation>Неизвестная операция</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="258"/>
+        <location filename="../model/accounthiermodel.cpp" line="947"/>
+        <source> #%1</source>
+        <translation> №%1</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="262"/>
         <source>History: %1</source>
         <translation>История: %1</translation>
     </message>
@@ -1323,27 +1372,27 @@ or manually add it to %2.</source>
         <translation>Не могу создать путь: </translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="91"/>
+        <location filename="../core/genericdatabase.cpp" line="93"/>
         <source>Driver: %1; database: %2; ICU support: %3</source>
         <translation>Драйвер:%1; БД: %2; поддержка ICU: %3</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="94"/>
+        <location filename="../core/genericdatabase.cpp" line="96"/>
         <source>yes</source>
         <translation>да</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="94"/>
+        <location filename="../core/genericdatabase.cpp" line="96"/>
         <source>no</source>
         <translation>нет</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="394"/>
+        <location filename="../core/genericdatabase.cpp" line="415"/>
         <source>Can&apos;t enable extension load, code: %1</source>
         <translation>Не могу разрешить загрузку расширений, код: %1</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="400"/>
+        <location filename="../core/genericdatabase.cpp" line="421"/>
         <source>Can&apos;t load ICU extension, code %1:
 %2
 Rebuild SQLite with ICU support or provide ICU library as extension</source>
@@ -1352,18 +1401,18 @@ Rebuild SQLite with ICU support or provide ICU library as extension</source>
 Пересоберите SQLite с поддержкой ICU или добавьте библиотеку ICU как расширение</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="408"/>
+        <location filename="../core/genericdatabase.cpp" line="429"/>
         <source>ICU extension load failed</source>
         <translation>Ошибка загрузки расширения ICU</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="427"/>
+        <location filename="../core/genericdatabase.cpp" line="448"/>
         <source>Can&apos;t check ICU presence</source>
         <translation>Не могу проверить наличие ICU</translation>
     </message>
     <message>
-        <location filename="../core/hwdatabase.cpp" line="383"/>
-        <location filename="../core/hwdatabase.cpp" line="487"/>
+        <location filename="../core/hwdatabase.cpp" line="415"/>
+        <location filename="../core/hwdatabase.cpp" line="519"/>
         <source>No subcategory</source>
         <translation>Нет подкатегории</translation>
     </message>
@@ -2186,6 +2235,24 @@ At line %3</source>
         <location filename="../model/categoryhiermodel.cpp" line="23"/>
         <source>Subcategories merged: %1</source>
         <translation>Объединены подкатегории: %1</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="24"/>
+        <source>Duplicated history items killed:
+%1</source>
+        <translation>Удалены записи истории:
+%1</translation>
+    </message>
+    <message>
+        <location filename="../model/accounthiermodel.cpp" line="26"/>
+        <source>
+%1 at %2
+(calc. amount deleted %3, existing %4,
+act. amount deleted %5, existing %6)</source>
+        <translation>
+%1 на %2
+(расч. сум. удалено %3, осталось %4,
+факт. сум. удалено %5, осталось %6)</translation>
     </message>
 </context>
 <context>
