@@ -87,9 +87,9 @@ private:
     QVector<AccountItem> m_items;    // flat list of all items
     QVector<int> m_rootItems;        // indices of root (top-level) items
 
-    void loadData();                 // load data from database
-    void loadAccounts();             // load accounts (level 0)
-    void loadOperations();           // load all operations, currencies, and history (levels 1-2)
+    bool loadData();                 // load data from database
+    bool loadAccounts();             // load accounts (level 0)
+    bool loadOperations();           // load all operations, currencies, and history (levels 1-2)
     void buildHierarchy();           // build parent-child relationships
     QModelIndex indexFromItem(int itemIndex, int column) const;
     int findItemIndex(int id) const; // find account index by ID

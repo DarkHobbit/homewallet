@@ -41,25 +41,24 @@ void AccountHierModel::clearData()
     m_rootItems.clear();
 }
 
-void AccountHierModel::loadData()
+bool AccountHierModel::loadData()
 {
     beginResetModel();
     clearData();
-
-    loadAccounts();
-
+    UP_CHK(loadAccounts())
     if (m_showOperations) {
-        loadOperations();
+        UP_CHK(loadOperations())
     }
-
     buildHierarchy();
-
     endResetModel();
+    return true;
 }
 
-void AccountHierModel::loadAccounts()
+bool AccountHierModel::loadAccounts()
 {
-    QSqlQuery query("SELECT id, name, descr FROM hw_account ORDER BY name");
+    QSqlQuery query(m_db->sqlDbRef());
+    MDB_CHK(m_db->prepQuery(query, "SELECT id, name, descr FROM hw_account ORDER BY name"))
+    MDB_CHK(m_db->execQuery(query))
 
     while (query.next()) {
         AccountItem item;
@@ -72,12 +71,13 @@ void AccountHierModel::loadAccounts()
 
         m_items.append(item);
     }
+    return true;
 }
 
-void AccountHierModel::loadOperations()
+bool AccountHierModel::loadOperations()
 {
-    QSqlQuery query;
-    bool res = query.prepare(R"(
+    QSqlQuery query(m_db->sqlDbRef());
+    bool res = m_db->prepQuery(query, R"(
         SELECT
             id,
             op_date,
@@ -231,17 +231,8 @@ void AccountHierModel::loadOperations()
             CASE WHEN operation_type = 10 THEN 0 ELSE 1 END,  -- Currencies first
             op_date DESC
     )");
-    if (!res) {
-        qDebug() << "Failed to load operations:" << query.lastError().text();
-        m_lastError = query.lastError().text();
-        return;
-    }
-
-    if (!query.exec()) {
-        qDebug() << "Failed to load operations:" << query.lastError().text();
-        m_lastError = query.lastError().text();
-        return;
-    }
+    MDB_CHK(res)
+    MDB_CHK(m_db->execQuery(query))
 
     while (query.next()) {
         AccountItem item;
@@ -274,6 +265,7 @@ void AccountHierModel::loadOperations()
 
         m_items.append(item);
     }
+    return true;
 }
 
 void AccountHierModel::buildHierarchy()
@@ -330,7 +322,8 @@ int AccountHierModel::findItemIndex(int id) const
 
 void AccountHierModel::refresh()
 {
-    loadData();
+    if (!loadData())
+        emit modelError(lastError());
 }
 
 // QAbstractItemModel implementation

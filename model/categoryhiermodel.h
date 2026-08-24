@@ -101,10 +101,10 @@ private:
     QVector<CategoryItem> m_items;  // flat list of all items
     QVector<int> m_rootItems;   // indices of root (top-level) items
     
-    void loadData();            // load data from database
-    void loadCategories();      // load categories (level 0)
-    void loadSubcategories();   // load subcategories (level 1)
-    void loadOperations();      // load operations (level 2)
+    bool loadData();            // load data from database
+    bool loadCategories();      // load categories (level 0)
+    bool loadSubcategories();   // load subcategories (level 1)
+    bool loadOperations();      // load operations (level 2)
     void buildHierarchy();      // build parent-child relationships
     QModelIndex indexFromItem(int itemIndex, int column) const;
     int findItemIndex(int id, bool isCategory, bool isSubcategory = false) const;

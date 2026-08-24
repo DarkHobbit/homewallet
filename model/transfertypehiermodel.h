@@ -92,9 +92,9 @@ private:
     QVector<TransferItem> m_items;    // flat list of all items
     QVector<int> m_rootItems;         // indices of root (top-level) items
 
-    void loadData();                  // load data from database
-    void loadTransferTypes();         // load transfer types (level 0)
-    void loadTransfers();             // load transfers (level 1)
+    bool loadData();                  // load data from database
+    bool loadTransferTypes();         // load transfer types (level 0)
+    bool loadTransfers();             // load transfers (level 1)
     void buildHierarchy();            // build parent-child relationships
     QModelIndex indexFromItem(int itemIndex, int column) const;
     int findItemIndex(int id, bool isTransferType) const;

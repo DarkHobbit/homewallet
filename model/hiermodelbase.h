@@ -29,6 +29,14 @@ class HwDatabase;
     } \
 }
 
+#define UP_CHK(action) \
+{ \
+        if (!(action)) \
+    { \
+            return false; \
+    } \
+}
+
 class HierModelBase : public QAbstractItemModel
 {
     Q_OBJECT
@@ -74,6 +82,7 @@ public:
     QString lastError() const { return m_lastError; }
 
 signals:
+    void modelError(const QString& message);
     void infoForUser(const QString& message);
 
 protected:

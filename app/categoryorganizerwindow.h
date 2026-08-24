@@ -58,6 +58,7 @@ private slots:
     void selectionChanged();
     void on_cbShowOperations_toggled(bool checked);
     void showUserInfo(const QString& message);
+    void showModelError(const QString& message);
 
 private:
     Ui::CategoryOrganizerWindow *ui;

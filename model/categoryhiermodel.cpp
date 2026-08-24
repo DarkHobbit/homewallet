@@ -194,27 +194,28 @@ bool CategoryHierModel::preMergeChildren(int idSrc, int idDest)
     return true;
 }
 
-void CategoryHierModel::loadData()
+bool CategoryHierModel::loadData()
 {
     beginResetModel();
     clearData();
     
-    loadCategories();
-    loadSubcategories();
-    
+    UP_CHK(loadCategories())
+    UP_CHK(loadSubcategories())
     if (m_showOperations) {
-        loadOperations();
+        UP_CHK(loadOperations())
     }
     
-    buildHierarchy();
-    
+    buildHierarchy();    
     endResetModel();
+    return true;
 }
 
-void CategoryHierModel::loadCategories()
+bool CategoryHierModel::loadCategories()
 {
     QString catTable = m_isExpense ? "hw_ex_cat" : "hw_in_cat";
-    QSqlQuery query(QString("SELECT id, name, descr FROM %1 ORDER BY name").arg(catTable));
+    QSqlQuery query(m_db->sqlDbRef());
+    MDB_CHK(m_db->prepQuery(query, QString("SELECT id, name, descr FROM %1 ORDER BY name").arg(catTable)))
+    MDB_CHK(m_db->execQuery(query))
     
     while (query.next()) {
         CategoryItem item;
@@ -228,15 +229,18 @@ void CategoryHierModel::loadCategories()
         
         m_items.append(item);
     }
+    return true;
 }
 
-void CategoryHierModel::loadSubcategories()
+bool CategoryHierModel::loadSubcategories()
 {
     QString subcatTable = m_isExpense ? "hw_ex_subcat" : "hw_in_subcat";
     QString idCategoryField = m_isExpense ? "id_ecat" : "id_icat";
-    QSqlQuery query(QString("SELECT id, %1, name, descr, id_un_default FROM %2 ORDER BY name")
-                    .arg(idCategoryField, subcatTable));
-    
+    QSqlQuery query(m_db->sqlDbRef());
+    MDB_CHK(m_db->prepQuery(query, QString("SELECT id, %1, name, descr, id_un_default FROM %2 ORDER BY name")
+                    .arg(idCategoryField, subcatTable)))
+    MDB_CHK(m_db->execQuery(query))
+
     while (query.next()) {
         CategoryItem item;
         item.id = query.value(0).toInt();
@@ -249,17 +253,20 @@ void CategoryHierModel::loadSubcategories()
         
         m_items.append(item);
     }
+    return true;
 }
 
-void CategoryHierModel::loadOperations()
+bool CategoryHierModel::loadOperations()
 {
     QString opTable = m_isExpense ? "hw_ex_op" : "hw_in_op";
     QString idSubcatField = m_isExpense ? "id_esubcat" : "id_isubcat";
     
-    QSqlQuery query(QString("SELECT id, %1, op_date, quantity, amount, descr "
+    QSqlQuery query(m_db->sqlDbRef());
+    MDB_CHK(m_db->prepQuery(query, QString("SELECT id, %1, op_date, quantity, amount, descr "
                            "FROM %2 ORDER BY op_date DESC")
-                    .arg(idSubcatField, opTable));
-    
+                    .arg(idSubcatField, opTable)))
+    MDB_CHK(m_db->execQuery(query))
+
     while (query.next()) {
         CategoryItem item;
         item.id = query.value(0).toInt();
@@ -276,6 +283,7 @@ void CategoryHierModel::loadOperations()
         
         m_items.append(item);
     }
+    return true;
 }
 
 void CategoryHierModel::buildHierarchy()
@@ -329,7 +337,8 @@ int CategoryHierModel::findItemIndex(int id, bool isCategory, bool isSubcategory
 
 void CategoryHierModel::refresh()
 {
-    loadData();
+    if (!loadData())
+        emit modelError(lastError());
 }
 
 QString CategoryHierModel::formatAmount(int amountInLowUnits) const

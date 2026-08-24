@@ -36,25 +36,24 @@ void TransferTypeHierModel::clearData()
     m_rootItems.clear();
 }
 
-void TransferTypeHierModel::loadData()
+bool TransferTypeHierModel::loadData()
 {
     beginResetModel();
     clearData();
-
-    loadTransferTypes();
-
+    UP_CHK(loadTransferTypes())
     if (m_showOperations) {
-        loadTransfers();
+        UP_CHK(loadTransfers())
     }
-
     buildHierarchy();
-
     endResetModel();
+    return true;
 }
 
-void TransferTypeHierModel::loadTransferTypes()
+bool TransferTypeHierModel::loadTransferTypes()
 {
-    QSqlQuery query("SELECT id, name, descr FROM hw_transfer_type ORDER BY name");
+    QSqlQuery query(m_db->sqlDbRef());
+    MDB_CHK(m_db->prepQuery(query, "SELECT id, name, descr FROM hw_transfer_type ORDER BY name"))
+    MDB_CHK(m_db->execQuery(query))
 
     while (query.next()) {
         TransferItem item;
@@ -66,12 +65,16 @@ void TransferTypeHierModel::loadTransferTypes()
 
         m_items.append(item);
     }
+    return true;
 }
 
-void TransferTypeHierModel::loadTransfers()
+bool TransferTypeHierModel::loadTransfers()
 {
-    QSqlQuery query("SELECT id, id_tt, op_date, amount, descr "
-                    "FROM hw_transfer ORDER BY op_date DESC");
+    QSqlQuery query(m_db->sqlDbRef());
+    MDB_CHK(m_db->prepQuery(query,
+        "SELECT id, id_tt, op_date, amount, descr "
+        "FROM hw_transfer ORDER BY op_date DESC"))
+    MDB_CHK(m_db->execQuery(query))
 
     while (query.next()) {
         TransferItem item;
@@ -87,6 +90,7 @@ void TransferTypeHierModel::loadTransfers()
 
         m_items.append(item);
     }
+    return true;
 }
 
 void TransferTypeHierModel::buildHierarchy()
@@ -127,7 +131,8 @@ int TransferTypeHierModel::findItemIndex(int id, bool isTransferType) const
 
 void TransferTypeHierModel::refresh()
 {
-    loadData();
+    if (!loadData())
+        emit modelError(lastError());
 }
 
 // QAbstractItemModel implementation

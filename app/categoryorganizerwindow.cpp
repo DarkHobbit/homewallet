@@ -398,6 +398,11 @@ void CategoryOrganizerWindow::showUserInfo(const QString &message)
     QMessageBox::information(0, S_INFORM, message);
 }
 
+void CategoryOrganizerWindow::showModelError(const QString &message)
+{
+    QMessageBox::critical(0, S_ERROR, message);
+}
+
 void CategoryOrganizerWindow::prepareModel(HierModelBase *source,
     QSortFilterProxyModel *proxy, QTreeView *tree, const QString &nameForDebug)
 {
@@ -408,5 +413,6 @@ void CategoryOrganizerWindow::prepareModel(HierModelBase *source,
     connect(tree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(selectionChanged()));
     connect(tree, SIGNAL(clicked(QModelIndex)), this, SLOT(selectionChanged()));
     // Model info
+    connect(source, SIGNAL(modelError(QString)), this, SLOT(showModelError(QString)));
     connect(source, SIGNAL(infoForUser(QString)), this, SLOT(showUserInfo(QString)));
 }
