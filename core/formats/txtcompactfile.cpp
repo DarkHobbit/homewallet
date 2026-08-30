@@ -140,15 +140,18 @@ bool TxtCompactFile::importRecords(const QString &path, HwDatabase &db)
                 c.accName.remove('@');
                 c.accToName = reTransfer.cap(5);
                 c.accToName.remove('@');
-                c.descr = reTransfer.cap(6);
-                int colPos  = c.descr.indexOf(":");
-                if (colPos==-1)
-                    c.catName = "";
-                else {
-                    c.catName = c.descr.left(colPos).trimmed();
-                    c.descr = c.descr.mid(colPos+1).trimmed();
+                c.alias = reTransfer.cap(6);
+                int colPos  = c.alias.indexOf(":");
+                if (colPos==-1) {
+                    c.catName = c.alias;
+                    c.descr = "";
                 }
-                c.state = ImpRecCandidate::UnknownCategory;
+                else {
+                    c.catName = c.alias.left(colPos).trimmed();
+                    c.descr = c.alias.mid(colPos+1).trimmed();
+                }
+                c.alias = "";
+                c.state = ImpRecCandidate::UnknownTransType;
             }
         }
         // Expense or income without currency

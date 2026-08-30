@@ -62,7 +62,7 @@
 <context>
     <name>AccountHierModel</name>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="489"/>
+        <location filename="../model/accounthiermodel.cpp" line="482"/>
         <source>History record for currency
 Date: %1
 Amount: %2</source>
@@ -71,7 +71,7 @@ Amount: %2</source>
 Сумма: %2</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="493"/>
+        <location filename="../model/accounthiermodel.cpp" line="486"/>
         <source>%1
 Type: %2
 Amount: %3</source>
@@ -80,82 +80,82 @@ Amount: %3</source>
 Сумма: %3</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="505"/>
+        <location filename="../model/accounthiermodel.cpp" line="498"/>
         <source>Operations: %1</source>
         <translation>Операций: %1</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="510"/>
+        <location filename="../model/accounthiermodel.cpp" line="503"/>
         <source>History records: %1</source>
         <translation>Записей истории: %1</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="930"/>
+        <location filename="../model/accounthiermodel.cpp" line="923"/>
         <source>Income</source>
         <translation>Доход</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="931"/>
+        <location filename="../model/accounthiermodel.cpp" line="924"/>
         <source>Expense</source>
         <translation>Расход</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="932"/>
+        <location filename="../model/accounthiermodel.cpp" line="925"/>
         <source>Receipt</source>
         <translation>Чек</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="933"/>
+        <location filename="../model/accounthiermodel.cpp" line="926"/>
         <source>Transfer Out</source>
         <translation>Перенос исх.</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="934"/>
+        <location filename="../model/accounthiermodel.cpp" line="927"/>
         <source>Transfer In</source>
         <translation>Перенос вх.</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="935"/>
+        <location filename="../model/accounthiermodel.cpp" line="928"/>
         <source>Currency Exchange</source>
         <translation>Обмен валюты</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="936"/>
+        <location filename="../model/accounthiermodel.cpp" line="929"/>
         <source>Credit Given</source>
         <translation>Кредит выдан</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="937"/>
+        <location filename="../model/accounthiermodel.cpp" line="930"/>
         <source>Credit Taken</source>
         <translation>Кредит взят</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="938"/>
+        <location filename="../model/accounthiermodel.cpp" line="931"/>
         <source>Repayment</source>
         <translation>Возврат долга/кредита</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="939"/>
+        <location filename="../model/accounthiermodel.cpp" line="932"/>
         <source>Start balance</source>
         <translation>Начальный баланс</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="940"/>
+        <location filename="../model/accounthiermodel.cpp" line="933"/>
         <source>History record</source>
         <translation>Запись истории</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="941"/>
+        <location filename="../model/accounthiermodel.cpp" line="934"/>
         <source>Unknown</source>
         <translation>Неизвестная операция</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="947"/>
+        <location filename="../model/accounthiermodel.cpp" line="940"/>
         <source> #%1</source>
         <translation> №%1</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="262"/>
+        <location filename="../model/accounthiermodel.cpp" line="253"/>
         <source>History: %1</source>
         <translation>История: %1</translation>
     </message>
@@ -236,6 +236,16 @@ Amount: %3</source>
         <translation>Псевдоним для подкатегории</translation>
     </message>
     <message>
+        <location filename="../app/aliasdialog.cpp" line="128"/>
+        <source>Transfer type alias</source>
+        <translation>Псевдоним для типа переноса</translation>
+    </message>
+    <message>
+        <location filename="../app/aliasdialog.cpp" line="131"/>
+        <source>Transfer type</source>
+        <translation>Тип переноса</translation>
+    </message>
+    <message>
         <location filename="../app/aliasdialog.cpp" line="102"/>
         <location filename="../app/aliasdialog.cpp" line="115"/>
         <source>Category</source>
@@ -254,17 +264,17 @@ Amount: %3</source>
         <translation type="obsolete">Объединены подкатегории: %1</translation>
     </message>
     <message>
-        <location filename="../model/categoryhiermodel.cpp" line="269"/>
+        <location filename="../model/categoryhiermodel.cpp" line="276"/>
         <source>Operation #%1</source>
         <translation>Операция №%1</translation>
     </message>
     <message>
-        <location filename="../model/categoryhiermodel.cpp" line="493"/>
+        <location filename="../model/categoryhiermodel.cpp" line="502"/>
         <source>Subcategories: %1</source>
         <translation>Подкатегорий: %1</translation>
     </message>
     <message>
-        <location filename="../model/categoryhiermodel.cpp" line="495"/>
+        <location filename="../model/categoryhiermodel.cpp" line="504"/>
         <source>Operations: %1</source>
         <translation>Операций: %1</translation>
     </message>
@@ -1106,17 +1116,17 @@ State: %4</source>
         <translation>Кандидаты на категорию:</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="242"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="246"/>
         <source>No unknown aliases in this row</source>
         <translation>В этой строке нет неизвестных псевдонимов</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="326"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="330"/>
         <source>No ambiguous subcategory at this record</source>
         <translation>У этой записи нет неоднозначной подкатегории</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="330"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="334"/>
         <source>Select category</source>
         <translation>Выберите категорию</translation>
     </message>
@@ -1983,7 +1993,7 @@ Found: %1</source>
         <translation>Неверный день для этого месяца: %1. Последняя дата: %2</translation>
     </message>
     <message>
-        <location filename="../core/formats/txtcompactfile.cpp" line="232"/>
+        <location filename="../core/formats/txtcompactfile.cpp" line="235"/>
         <source>Too long money sum fractional part: %1,%2</source>
         <translation>Слишком длинная дробная часть денежной суммы: %1,%2</translation>
     </message>
@@ -2590,12 +2600,12 @@ act. amount deleted %5, existing %6)</source>
 <context>
     <name>TransferTypeHierModel</name>
     <message>
-        <location filename="../model/transfertypehiermodel.cpp" line="82"/>
+        <location filename="../model/transfertypehiermodel.cpp" line="85"/>
         <source>Transfer #%1</source>
         <translation>Перенос №%1</translation>
     </message>
     <message>
-        <location filename="../model/transfertypehiermodel.cpp" line="256"/>
+        <location filename="../model/transfertypehiermodel.cpp" line="261"/>
         <source>Transfers: %1</source>
         <translation>Переносов: %1</translation>
     </message>

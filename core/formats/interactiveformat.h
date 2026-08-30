@@ -89,9 +89,9 @@ struct ImpCandidates: public QList<ImpRecCandidate>
     int idCurDefault, idAccDefault;
     QString accDefault, curDefault;
     GenericDatabase::DictColl collAcc, collCurr, collUnit;
-    GenericDatabase::DictColl collInCat, collInAllSubCat, collExCat, collExAllSubCat;
+    GenericDatabase::DictColl collInCat, collInAllSubCat, collExCat, collExAllSubCat, collTransType;
     GenericDatabase::DictColl collInCatBySubcat, collExCatBySubcat;
-    GenericDatabase::StrColl collInAliasToDescr, collExAliasToDescr;
+    GenericDatabase::StrColl collInAliasToDescr, collExAliasToDescr, collTransTypeAliasToToDescr;
     bool readyToImport();
 };
 

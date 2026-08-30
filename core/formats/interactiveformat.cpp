@@ -84,7 +84,10 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
     int idTransferTypeOther = db.transferTypeId(S_CAT_OTHER);
     if (idTransferTypeOther==-1)
         idTransferTypeOther = db.addTransferType(S_CAT_OTHER, "");
-    // TODO aliases for transfer
+    candidates.collTransType.clear();
+    db.collectDict(candidates.collTransType, "hw_alias", "pattern", "id_tt", "where id_tt is not null");
+    candidates.collTransTypeAliasToToDescr.clear();
+    db.collectAliasDescr(candidates.collTransTypeAliasToToDescr, "id_tt");
 
     // See candidates
     for (ImpRecCandidate& c: candidates) {
@@ -209,23 +212,23 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
                 continue;
             if (!findCurrency(db, c, c.currName, c.idCur))
                 continue;
-            if (c.catName.isEmpty()) {
-                c.catName = S_CAT_OTHER;
-                c.idCat = idTransferTypeOther;
-            }
-            else
-                c.idCat = db.transferTypeId(c.catName);
-            if (c.idCat==-1) {
-                // Alias for transfer type
-                if (0) { // TODO
-                    //c.idCat = collTransType[c.catName];
-                    //completeDescr(c, collTransTypeAliasToToDescr, c.idAlias);
+            c.idCat = db.transferTypeId(c.catName);
+            c.state = ImpRecCandidate::ReadyToImport;
+            if (c.idCat==-1) { // Alias for transfer type
+                if (candidates.collTransType.contains(c.catName)) {
+                    c.idCat = candidates.collTransType[c.catName];
+                    completeDescr(c, candidates.collTransTypeAliasToToDescr, c.catName);
                 }
-                else
-                    c.state = ImpRecCandidate::UnknownTransType;
+                else {
+                    if (c.descr.isEmpty()) { // other
+                        c.descr = c.catName;
+                        c.catName = S_CAT_OTHER;
+                        c.idCat = idTransferTypeOther;
+                    }
+                    else
+                        c.state = ImpRecCandidate::UnknownTransType;
+                }
             }
-            else
-                c.state = ImpRecCandidate::ReadyToImport;
             break;
         default:
             continue;

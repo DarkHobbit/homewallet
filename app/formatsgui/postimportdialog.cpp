@@ -232,6 +232,10 @@ void PostImportDialog::on_btnAddAlias_clicked()
         alS = c->subcatName;
         alHint = c->catName;
         break;
+    case ImpRecCandidate::UnknownTransType:
+        alType = HwDatabase::TransferType;
+        alS = c->catName;
+        break;
     case ImpRecCandidate::UnknownAlias:
         alType = isIncome ? HwDatabase::IncomeSubCat
                           : HwDatabase::ExpenseSubCat;

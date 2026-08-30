@@ -124,6 +124,15 @@ void AliasDialog::setType(HwDatabase::AliasType alType)
         }
         break;
     }
+    case HwDatabase::TransferType: {
+        setWindowTitle(tr("Transfer type alias"));
+        setSubdictEnabled(false);
+        ui->teToDescr->setEnabled(true);
+        ui->lbDict->setText(tr("Transfer type"));
+        ui->lbSubDict->setText(tr(""));
+        db->collectDict(coll, "hw_transfer_type");
+        break;
+    }
     default:
         return;
     }
