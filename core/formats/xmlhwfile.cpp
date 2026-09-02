@@ -551,6 +551,12 @@ bool XmlHwFile::importAliases(const QDomElement &e, HwDatabase &db)
             if (!importAliasesGroup(db, elAliGr, HwDatabase::ExpenseSubCat, S_ERR_SUBCAT_NOT_FOUND, alColl, srcColl))
                 return false;
         }
+        else if (noName=="fortransfertypes") {
+            DB_CHK(db.collectDict(alColl, "hw_alias", "pattern", "id", "where id_tt is not null"));
+            DB_CHK(db.collectDict(srcColl, "hw_transfer_type"));
+            if (!importAliasesGroup(db, elAliGr, HwDatabase::TransferType, S_ERR_CAT_NOT_FOUND, alColl, srcColl))
+                return false;
+        }
         else
             _errors << S_ERR_UNK_ELEM.arg(elAliGr.nodeName());
     }
@@ -639,19 +645,24 @@ bool XmlHwFile::exportAccounts(HwDatabase &db, QDomElement &elRoot)
         " where al.id_esubcat=sc.id and sc.id_ecat=c.id" \
         " order by ref" \
 
+#define Q_SEL_ALIAS_TRANSTYPE \
+    "select al.id, al.pattern, al.to_descr, tt.name as ref" \
+        " from hw_alias al, hw_transfer_type tt" \
+        " where al.id_tt=tt.id" \
+        " order by ref" \
 
 bool XmlHwFile::exportAliases(HwDatabase &db, QDomElement &elRoot)
 {
     QDomElement elList = addElem(elRoot, "aliases");
 
-    DB_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_ACC, elList, "foraccounts", "ali"));
-    DB_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_CUR, elList, "forcurrency", "ali"));
-    DB_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_UN, elList, "forunit", "ali"));
-    DB_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_ICAT, elList, "forincomecategories", "ali"));
-    DB_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_ISUBCAT, elList, "forincomesubcategories", "ali"));
-    DB_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_ECAT, elList, "forexpensecategories", "ali"));
-    DB_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_ESUBCAT, elList, "forexpensesubcategories", "ali"));
-    // TODO transfer type
+    UP_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_ACC, elList, "foraccounts", "ali"));
+    UP_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_CUR, elList, "forcurrency", "ali"));
+    UP_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_UN, elList, "forunit", "ali"));
+    UP_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_ICAT, elList, "forincomecategories", "ali"));
+    UP_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_ISUBCAT, elList, "forincomesubcategories", "ali"));
+    UP_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_ECAT, elList, "forexpensecategories", "ali"));
+    UP_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_ESUBCAT, elList, "forexpensesubcategories", "ali"));
+    UP_CHK(exportDbRecordsGroupWithParent(db, Q_SEL_ALIAS_TRANSTYPE, elList, "fortransfertypes", "ali"));
     return true;
 }
 
