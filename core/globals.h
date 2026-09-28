@@ -136,6 +136,7 @@ struct GlobalConfig {
     bool useTableAlternateColors;
     bool useSystemFontsAndColors;
     QString tableFont, gridColor1, gridColor2;
+    QString style;
     // Locale
     QString dateFormat, timeFormat;
     bool useSystemDateTimeFormat;

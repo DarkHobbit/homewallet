@@ -20,6 +20,7 @@
 #include <QResizeEvent>
 #include <QSpinBox>
 #include <QSqlError>
+#include <QStyleFactory>
 #include <QTime>
 
 #include "aboutdialog.h"
@@ -613,6 +614,15 @@ void MainWindow::updateConfig()
     updateTableConfig(ui->tvLend);
     updateTableConfig(ui->tvBorrow);
     // Here process other tabs
+
+    // Style
+    if (!gd.style.isEmpty()) {
+        QStyle* st = QStyleFactory::create(gd.style);
+        if (st)
+            qApp->setStyle(st);
+        else
+            QMessageBox::critical(0, S_ERROR, tr("Can't create style %1").arg(gd.style));
+    }
 }
 
 void MainWindow::updateTabsAndFilters()

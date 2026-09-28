@@ -71,6 +71,7 @@ void ConfigManager::readConfig()
     gd.tableFont = settings->value("View/TableFont", gd.tableFont).toString();
     gd.gridColor1 = settings->value("View/GridColor1", gd.gridColor1).toString();
     gd.gridColor2 = settings->value("View/GridColor2", gd.gridColor2).toString();
+    gd.style = settings->value("View/Style", gd.style).toString();
     // Locale
     gd.dateFormat = settings->value("Locale/DateFormat", QLocale::system().dateFormat(QLocale::ShortFormat)).toString();
     gd.timeFormat = settings->value("Locale/TimeFormat", QLocale::system().timeFormat(QLocale::LongFormat)).toString();
@@ -99,6 +100,7 @@ void ConfigManager::writeConfig()
     settings->setValue("View/TableFont", gd.tableFont);
     settings->setValue("View/GridColor1", gd.gridColor1);
     settings->setValue("View/GridColor2", gd.gridColor2);
+    settings->setValue("View/Style", gd.style);
     // Locale
     updateFormats();
     settings->setValue("Locale/DateFormat", gd.dateFormat);
