@@ -52,9 +52,9 @@ void ConfigManager::prepare()
 void ConfigManager::setDefaults(const QString& style, const QString &tableFont, const QString &gridColor1, const QString &gridColor2)
 {
     _defaultStyle = style;
-    gd.tableFont = tableFont;
-    gd.gridColor1 = gridColor1;
-    gd.gridColor2 = gridColor2;
+    _defaultTableFont = tableFont;
+    _defaultGridColor1 = gridColor1;
+    _defaultGridColor2 = gridColor2;
 }
 
 void ConfigManager::readConfig()
@@ -70,9 +70,9 @@ void ConfigManager::readConfig()
     gd.useTableAlternateColors = settings->value("View/UseTableAlternateColors", true).toBool();
     gd.useSystemStyle = settings->value("View/UseSystemStyle", false).toBool();
     gd.useSystemFontsAndColors = settings->value("View/UseSystemFontsAndColors", false).toBool();
-    gd.tableFont = settings->value("View/TableFont", gd.tableFont).toString();
-    gd.gridColor1 = settings->value("View/GridColor1", gd.gridColor1).toString();
-    gd.gridColor2 = settings->value("View/GridColor2", gd.gridColor2).toString();
+    gd.tableFont = settings->value("View/TableFont", _defaultTableFont).toString();
+    gd.gridColor1 = settings->value("View/GridColor1", _defaultGridColor1).toString();
+    gd.gridColor2 = settings->value("View/GridColor2", _defaultGridColor2).toString();
     gd.style = settings->value("View/Style", _defaultStyle).toString();
     // Locale
     gd.dateFormat = settings->value("Locale/DateFormat", QLocale::system().dateFormat(QLocale::ShortFormat)).toString();
@@ -253,6 +253,21 @@ QString ConfigManager::defaultDocDir()
 QString ConfigManager::defaultStyle()
 {
     return _defaultStyle;
+}
+
+QString ConfigManager::defaultTableFont()
+{
+    return _defaultTableFont;
+}
+
+QString ConfigManager::defaultGridColor1()
+{
+    return _defaultGridColor1;
+}
+
+QString ConfigManager::defaultGridColor2()
+{
+    return _defaultGridColor2;
 }
 
 void ConfigManager::updateFormats()

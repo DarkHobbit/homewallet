@@ -48,10 +48,13 @@ public:
     void setLocalDatabaseDir(const QString& dir);
     static QString defaultDocDir();
     QString defaultStyle();
+    QString defaultTableFont();
+    QString defaultGridColor1();
+    QString defaultGridColor2();
     void updateFormats();
 private:
     QSettings* settings;
-    QString _defaultStyle;
+    QString _defaultStyle, _defaultTableFont, _defaultGridColor1, _defaultGridColor2;
     QString sectionForModel(FilteredQueryModel* model);
 };
 
