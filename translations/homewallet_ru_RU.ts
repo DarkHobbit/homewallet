@@ -946,68 +946,68 @@ Verified from %1</source>
         <translation>Поиск &amp;дубликатов</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="148"/>
+        <location filename="../app/mainwindow.cpp" line="151"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="152"/>
+        <location filename="../app/mainwindow.cpp" line="155"/>
         <source>Database not empty for testing</source>
         <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="207"/>
+        <location filename="../app/mainwindow.cpp" line="210"/>
         <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="266"/>
+        <location filename="../app/mainwindow.cpp" line="269"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="266"/>
+        <location filename="../app/mainwindow.cpp" line="269"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="277"/>
+        <location filename="../app/mainwindow.cpp" line="280"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="294"/>
+        <location filename="../app/mainwindow.cpp" line="297"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="344"/>
+        <location filename="../app/mainwindow.cpp" line="347"/>
         <source>Format require dialog, but dialog not provided. Contact author</source>
         <translation>Формат требует диалоговое окно, но программа его не обеспечивает.
 Свяжитесь с автором</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="624"/>
+        <location filename="../app/mainwindow.cpp" line="628"/>
         <source>Can&apos;t create style %1</source>
         <translation>Не могу создать стиль %1</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="750"/>
+        <location filename="../app/mainwindow.cpp" line="754"/>
         <source>Repayment history for: </source>
         <translation>История платежей для: </translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="771"/>
+        <location filename="../app/mainwindow.cpp" line="775"/>
         <source>Duplicates search</source>
         <translation>Поиск дубликатов</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="775"/>
+        <location filename="../app/mainwindow.cpp" line="779"/>
         <source>Amount delta</source>
         <translation>Допуск суммы</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="781"/>
+        <location filename="../app/mainwindow.cpp" line="785"/>
         <source>Show source</source>
         <translation>Показывать источник</translation>
     </message>
@@ -1026,7 +1026,7 @@ at record %1 from %2</source>
 в записи %1 из %2</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="398"/>
+        <location filename="../app/mainwindow.cpp" line="401"/>
         <source>Restart program to apply language change</source>
         <translation>Язык сменится после перезапуска программы</translation>
     </message>
@@ -2403,56 +2403,61 @@ act. amount deleted %5, existing %6)</source>
     </message>
     <message>
         <location filename="../app/settingsdialog.ui" line="124"/>
+        <source>Use system style</source>
+        <translation>Использовать системный стиль</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="131"/>
         <source>Use system fonts and colors</source>
         <translation>Использовать системные шрифты и цвета</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="131"/>
+        <location filename="../app/settingsdialog.ui" line="138"/>
         <source>Table font</source>
         <translation>Шрифт таблиц</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="138"/>
+        <location filename="../app/settingsdialog.ui" line="145"/>
         <source>Colors</source>
         <translation>Цвета</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="144"/>
+        <location filename="../app/settingsdialog.ui" line="151"/>
         <source>Grid base</source>
         <translation>Таблицы (основной)</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="151"/>
+        <location filename="../app/settingsdialog.ui" line="158"/>
         <source>Grid alternate</source>
         <translation>Таблицы (дополнит.)</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="162"/>
+        <location filename="../app/settingsdialog.ui" line="169"/>
         <source>Columns</source>
         <translation>Столбцы</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="170"/>
+        <location filename="../app/settingsdialog.ui" line="177"/>
         <source>Table</source>
         <translation>Таблица</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="250"/>
+        <location filename="../app/settingsdialog.ui" line="257"/>
         <source>Visible</source>
         <translation>Видимые</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="274"/>
+        <location filename="../app/settingsdialog.ui" line="281"/>
         <source>Filter&apos;n&apos;Sort</source>
         <translation>Фильтр и сортировка</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="357"/>
+        <location filename="../app/settingsdialog.ui" line="364"/>
         <source>Enable sorting</source>
         <translation>Разрешить сортировку</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="191"/>
+        <location filename="../app/settingsdialog.ui" line="198"/>
         <source>Available</source>
         <translation>Доступные</translation>
     </message>
@@ -2461,47 +2466,47 @@ act. amount deleted %5, existing %6)</source>
         <translation type="obsolete">Фильтр</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="280"/>
+        <location filename="../app/settingsdialog.ui" line="287"/>
         <source>Apply quick filter immediately</source>
         <translation>Применять быстрофильтр немедленно</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="287"/>
+        <location filename="../app/settingsdialog.ui" line="294"/>
         <source>At Startup</source>
         <translation>При запуске</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="293"/>
+        <location filename="../app/settingsdialog.ui" line="300"/>
         <source>Show all records</source>
         <translation>Показывать все записи</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="303"/>
+        <location filename="../app/settingsdialog.ui" line="310"/>
         <source>Restore previous date range</source>
         <translation>Восстанавливать предыдущий период</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="315"/>
+        <location filename="../app/settingsdialog.ui" line="322"/>
         <source>Show last</source>
         <translation>Показывать последние</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="338"/>
+        <location filename="../app/settingsdialog.ui" line="345"/>
         <source>months</source>
         <translation>мес.</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="350"/>
+        <location filename="../app/settingsdialog.ui" line="357"/>
         <source>Save categories in filter</source>
         <translation>Сохранять категории в фильтре</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="266"/>
+        <location filename="../app/settingsdialog.ui" line="273"/>
         <source>Reset to defaults</source>
         <translation>Сбросить к виду по умолчанию</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.cpp" line="209"/>
+        <location filename="../app/settingsdialog.cpp" line="217"/>
         <source>List must contain at least one visible column</source>
         <translation>В списке должен быть хотя бы один видимый столбец</translation>
     </message>

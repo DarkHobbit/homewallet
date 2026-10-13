@@ -56,6 +56,8 @@ bool SettingsDialog::setData(FQMlist* dbModels)
     ui->cbResizeTableRowsToContents->setChecked(gd.resizeTableRowsToContents);
     ui->cbShowSumsWithCurrency->setChecked(gd.showSumsWithCurrency);
     ui->cbUseTableAlternateColors->setChecked(gd.useTableAlternateColors);
+    ui->cbUseSystemStyle->setChecked(gd.useSystemStyle);
+    on_cbUseSystemStyle_clicked(ui->cbUseSystemStyle->isChecked());
     ui->cbUseSystemFontsAndColors->setChecked(gd.useSystemFontsAndColors);
     on_cbUseSystemFontsAndColors_clicked(ui->cbUseSystemFontsAndColors->isChecked());
     // Column view
@@ -93,6 +95,7 @@ bool SettingsDialog::getData()
     gd.resizeTableRowsToContents = ui->cbResizeTableRowsToContents->isChecked();
     gd.showSumsWithCurrency = ui->cbShowSumsWithCurrency->isChecked();
     gd.useTableAlternateColors = ui->cbUseTableAlternateColors->isChecked();
+    gd.useSystemStyle = ui->cbUseSystemStyle->isChecked();
     gd.useSystemFontsAndColors = ui->cbUseSystemFontsAndColors->isChecked();
     // Column view:
     // - from cache
@@ -114,6 +117,11 @@ bool SettingsDialog::getData()
 bool SettingsDialog::langChanged()
 {
     return _langChanged;
+}
+
+void SettingsDialog::on_cbUseSystemStyle_clicked(bool checked)
+{
+    ui->cbStyle->setEnabled(!checked);
 }
 
 void SettingsDialog::on_cbUseSystemDateTimeFormat_clicked(bool checked)

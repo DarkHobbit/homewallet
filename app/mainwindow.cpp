@@ -20,6 +20,7 @@
 #include <QResizeEvent>
 #include <QSpinBox>
 #include <QSqlError>
+#include <QStyle>
 #include <QStyleFactory>
 #include <QTime>
 
@@ -48,7 +49,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     // Configuration
-    configManager.setDefaults(ui->tvExpenses->font().toString(),
+    configManager.setDefaults(
+        qApp->style()->objectName(),
+        ui->tvExpenses->font().toString(),
         ui->tvExpenses->palette().color(QPalette::Base).name(),
         ui->tvExpenses->palette().color(QPalette::AlternateBase).name());
     configManager.readConfig(); // TODO see comment in doublecontact
@@ -616,12 +619,13 @@ void MainWindow::updateConfig()
     // Here process other tabs
 
     // Style
-    if (!gd.style.isEmpty()) {
-        QStyle* st = QStyleFactory::create(gd.style);
+    QString styleName = gd.useSystemStyle ? configManager.defaultStyle() : gd.style;
+    if (!styleName.isEmpty()) {
+        QStyle* st = QStyleFactory::create(styleName);
         if (st)
             qApp->setStyle(st);
         else
-            QMessageBox::critical(0, S_ERROR, tr("Can't create style %1").arg(gd.style));
+            QMessageBox::critical(0, S_ERROR, tr("Can't create style %1").arg(styleName));
     }
 }
 

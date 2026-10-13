@@ -28,7 +28,7 @@ public:
     ~ConfigManager();
     void prepare();
     // Common configuration, managed by config dialog
-    void setDefaults(const QString& tableFont, const QString& gridColor1, const QString& gridColor2);
+    void setDefaults(const QString& style, const QString& tableFont, const QString& gridColor1, const QString& gridColor2);
     void readConfig();
     void writeConfig();
     void readTableConfig(FilteredQueryModel* model);
@@ -47,9 +47,11 @@ public:
     QString localDatabaseDir();
     void setLocalDatabaseDir(const QString& dir);
     static QString defaultDocDir();
+    QString defaultStyle();
     void updateFormats();
 private:
     QSettings* settings;
+    QString _defaultStyle;
     QString sectionForModel(FilteredQueryModel* model);
 };
 

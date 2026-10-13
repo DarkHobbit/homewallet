@@ -134,6 +134,7 @@ struct GlobalConfig {
     bool resizeTableRowsToContents;
     bool showSumsWithCurrency;
     bool useTableAlternateColors;
+    bool useSystemStyle;
     bool useSystemFontsAndColors;
     QString tableFont, gridColor1, gridColor2;
     QString style;

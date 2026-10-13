@@ -20,13 +20,14 @@ public:
     bool setData(FQMlist* dbModels);
     bool getData();
     bool langChanged();
+
 private slots:
     void on_cbUseSystemDateTimeFormat_clicked(bool checked);
+    void on_cbUseSystemStyle_clicked(bool checked);
     void on_cbUseSystemFontsAndColors_clicked(bool checked);
     void on_btnTableFont_clicked();
     void on_btnGridColor1_clicked();
     void on_btnGridColor2_clicked();
-
     void on_cbTableNames_currentIndexChanged(int indexOfModel);
     void on_btnAddCol_clicked();
     void on_btnDelCol_clicked();
@@ -34,7 +35,6 @@ private slots:
     void on_btnDownCol_clicked();
     void on_lwAvailableColumns_itemDoubleClicked(QListWidgetItem *item);
     void on_lwVisibleColumns_itemDoubleClicked(QListWidgetItem *item);
-
     void on_btnResetColumnToDefaults_clicked();
 
 protected:
