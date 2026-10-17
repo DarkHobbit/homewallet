@@ -201,6 +201,8 @@ bool CategoryHierModel::loadData()
     
     UP_CHK(loadCategories())
     UP_CHK(loadSubcategories())
+    UP_CHK(loadAliasesForCategories())
+    UP_CHK(loadAliasesForSubcategories())
     if (m_showOperations) {
         UP_CHK(loadOperations())
     }
@@ -226,6 +228,7 @@ bool CategoryHierModel::loadCategories()
         item.defaultUnitId = -1;
         item.isCategory = true;
         item.isOperation = false;
+        item.isAlias = false;
         
         m_items.append(item);
     }
@@ -250,8 +253,64 @@ bool CategoryHierModel::loadSubcategories()
         item.defaultUnitId = query.value(4).toInt();
         item.isCategory = false;
         item.isOperation = false;
+        item.isAlias = false;
         
         m_items.append(item);
+    }
+    return true;
+}
+
+bool CategoryHierModel::loadAliasesForCategories()
+{
+    QString entityType = m_isExpense ? "id_ecat" : "id_icat";
+    QMap<int, QVector<QPair<int, QString>>> aliases;
+    MDB_CHK(loadAliases(entityType, aliases))
+
+    for (auto it = aliases.begin(); it != aliases.end(); ++it) {
+        int entityId = it.key();
+        for (int i = 0; i < m_items.size(); ++i) {
+            if (m_items[i].isCategory && m_items[i].id == entityId) {
+                for (const auto& aliasPair : it.value()) {
+                    CategoryItem aliasItem;
+                    aliasItem.id = aliasPair.first;
+                    aliasItem.parentId = entityId;
+                    aliasItem.name = aliasPair.second;
+                    aliasItem.isCategory = false;
+                    aliasItem.isOperation = false;
+                    aliasItem.isAlias = true;
+                    m_items.append(aliasItem);
+                }
+                break;
+            }
+        }
+    }
+    return true;
+}
+
+bool CategoryHierModel::loadAliasesForSubcategories()
+{
+    QString entityType = m_isExpense ? "id_esubcat" : "id_isubcat";
+    QMap<int, QVector<QPair<int, QString>>> aliases;
+    MDB_CHK(loadAliases(entityType, aliases))
+
+    for (auto it = aliases.begin(); it != aliases.end(); ++it) {
+        int entityId = it.key();
+        for (int i = 0; i < m_items.size(); ++i) {
+            if (!m_items[i].isCategory && !m_items[i].isOperation
+                && !m_items[i].isAlias && m_items[i].id == entityId) {
+                for (const auto& aliasPair : it.value()) {
+                    CategoryItem aliasItem;
+                    aliasItem.id = aliasPair.first;
+                    aliasItem.parentId = entityId;
+                    aliasItem.name = aliasPair.second;
+                    aliasItem.isCategory = false;
+                    aliasItem.isOperation = false;
+                    aliasItem.isAlias = true;
+                    m_items.append(aliasItem);
+                }
+                break;
+            }
+        }
     }
     return true;
 }
@@ -280,6 +339,7 @@ bool CategoryHierModel::loadOperations()
         item.amount = query.value(4).toInt();
         item.isCategory = false;
         item.isOperation = true;
+        item.isAlias = false;
         
         m_items.append(item);
     }
@@ -302,7 +362,15 @@ void CategoryHierModel::buildHierarchy()
             // Find parent item index
             int parentIndex = -1;
             
-            if (m_items[i].isOperation) {
+            if (m_items[i].isAlias) {
+                // Alias parent is either category or subcategory
+                for (int j = 0; j < m_items.size(); ++j) {
+                    if (m_items[j].id == m_items[i].parentId && !m_items[j].isAlias) {
+                        parentIndex = j;
+                        break;
+                    }
+                }
+            } else if (m_items[i].isOperation) {
                 // Operation's parent is subcategory
                 parentIndex = findItemIndex(m_items[i].parentId, false, true);
             } else {
@@ -320,7 +388,7 @@ void CategoryHierModel::buildHierarchy()
 int CategoryHierModel::findItemIndex(int id, bool isCategory, bool isSubcategory) const
 {
     for (int i = 0; i < m_items.size(); ++i) {
-        if (m_items[i].id == id) {
+        if (m_items[i].id == id && !m_items[i].isAlias) {
             if (isCategory && m_items[i].isCategory && !m_items[i].isOperation) {
                 return i;
             }
@@ -404,7 +472,15 @@ QModelIndex CategoryHierModel::parent(const QModelIndex &child) const
     // Find parent item index
     int parentIndex = -1;
     
-    if (m_items[childIndex].isOperation) {
+    if (m_items[childIndex].isAlias) {
+        // Alias parent is either category or subcategory
+        for (int j = 0; j < m_items.size(); ++j) {
+            if (m_items[j].id == parentId && !m_items[j].isAlias) {
+                parentIndex = j;
+                break;
+            }
+        }
+    } else if (m_items[childIndex].isOperation) {
         // Parent of operation is subcategory
         parentIndex = findItemIndex(parentId, false, true);
     } else {
@@ -468,13 +544,15 @@ QVariant CategoryHierModel::data(const QModelIndex &index, int role) const
         case Qt::EditRole:
             if (column == 0) {
                 // First column: name
-                if (item.isOperation) {
+                if (item.isOperation)
                     return QString("%1 - %2: %3")
                         .arg(item.operationDate.toString("dd.MM.yyyy"))
                         .arg(item.name)
                         .arg(formatAmount(item.amount));
-                }
-                return item.name;
+                else if (item.isAlias)
+                    return S_ALIAS_NAME.arg(item.name);
+                else
+                    return item.name;
             } else if (column == 1) {
                 // Second column: child count
                 int count = getChildCountForDisplay(item);
@@ -518,9 +596,11 @@ QVariant CategoryHierModel::data(const QModelIndex &index, int role) const
             }
             break;
             
-        case Qt::UserRole + 2: // Type (0=category,1=subcategory,2=operation)
+        case Qt::UserRole + 2: // Type (0=category,1=subcategory,2=operation,3=alias)
             if (column == 0) {
-                if (item.isCategory)
+                if (item.isAlias)
+                    return 3;
+                else if (item.isCategory)
                     return 0;
                 else if (item.isOperation)
                     return 2;
@@ -570,7 +650,14 @@ QModelIndex CategoryHierModel::indexFromItem(int itemIndex, int column) const
     } else {
         // Find parent index
         int parentIndex = -1;
-        if (item.isOperation) {
+        if (item.isAlias) {
+            for (int j = 0; j < m_items.size(); ++j) {
+                if (m_items[j].id == item.parentId && !m_items[j].isAlias) {
+                    parentIndex = j;
+                    break;
+                }
+            }
+        } else if (item.isOperation) {
             parentIndex = findItemIndex(item.parentId, false, true);
         } else {
             parentIndex = findItemIndex(item.parentId, true, false);
@@ -615,6 +702,9 @@ bool CategoryHierModel::isCategory(const QModelIndex &index) const
     if (itemIndex < 0 || itemIndex >= m_items.size())
         return false;
     
+    if (m_items[itemIndex].isAlias)
+        return false;
+    
     return m_items[itemIndex].isCategory;
 }
 
@@ -625,6 +715,9 @@ bool CategoryHierModel::isSubcategory(const QModelIndex &index) const
     
     int itemIndex = index.internalId();
     if (itemIndex < 0 || itemIndex >= m_items.size())
+        return false;
+    
+    if (m_items[itemIndex].isAlias)
         return false;
     
     return !m_items[itemIndex].isCategory && !m_items[itemIndex].isOperation;
@@ -639,7 +732,22 @@ bool CategoryHierModel::isOperation(const QModelIndex &index) const
     if (itemIndex < 0 || itemIndex >= m_items.size())
         return false;
     
+    if (m_items[itemIndex].isAlias)
+        return false;
+    
     return m_items[itemIndex].isOperation;
+}
+
+bool CategoryHierModel::isAlias(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return false;
+    
+    int itemIndex = index.internalId();
+    if (itemIndex < 0 || itemIndex >= m_items.size())
+        return false;
+    
+    return m_items[itemIndex].isAlias;
 }
 
 bool CategoryHierModel::isExpense() const
@@ -660,6 +768,11 @@ int CategoryHierModel::getParentCategoryId(const QModelIndex &index) const
     
     if (item.isCategory)
         return -1;
+    
+    if (item.isAlias) {
+        // Alias parent may be category or subcategory
+        return item.parentId;
+    }
     
     if (item.isOperation) {
         // Find parent subcategory, then its parent category

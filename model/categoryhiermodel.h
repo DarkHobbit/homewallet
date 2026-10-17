@@ -33,13 +33,14 @@ struct CategoryItem {
     int defaultUnitId;      // Default unit ID (for subcategories)
     bool isCategory;        // true - category, false - subcategory or operation
     bool isOperation;       // true - operation (income/expense), false - category/subcategory
+    bool isAlias;           // true - alias record
     double quantity;        // Quantity (for operations)
     int amount;             // Amount in low units (cents/kopeks, for operations)
     QDate operationDate;    // Operation date
     QVector<int> children;  // Child item indices in flat list
     
     CategoryItem() : id(-1), parentId(-1), defaultUnitId(-1), 
-                     isCategory(true), isOperation(false), 
+                     isCategory(true), isOperation(false), isAlias(false),
                      quantity(0), amount(0) {}
 };
 
@@ -76,6 +77,7 @@ public:
     bool isCategory(const QModelIndex &index) const override;
     bool isSubcategory(const QModelIndex &index) const override;
     bool isOperation(const QModelIndex &index) const override;
+    bool isAlias(const QModelIndex &index) const override;
 
     // Get parent IDs
     int getParentCategoryId(const QModelIndex &index) const override;
@@ -105,6 +107,8 @@ private:
     bool loadCategories();      // load categories (level 0)
     bool loadSubcategories();   // load subcategories (level 1)
     bool loadOperations();      // load operations (level 2)
+    bool loadAliasesForCategories();    // load aliases for categories
+    bool loadAliasesForSubcategories(); // load aliases for subcategories
     void buildHierarchy();      // build parent-child relationships
     QModelIndex indexFromItem(int itemIndex, int column) const;
     int findItemIndex(int id, bool isCategory, bool isSubcategory = false) const;
@@ -120,9 +124,6 @@ private:
     QString formatAmount(int amountInLowUnits) const;    
     // Get child count for display (categories: subcategories count, subcategories: operations count)
     int getChildCountForDisplay(const CategoryItem &item) const;
-
-signals:
-    void infoForUser(const QString& message);
 };
 
 #endif // CATEGORYHIERMODEL_H

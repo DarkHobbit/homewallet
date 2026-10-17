@@ -14,20 +14,48 @@
 
 #include "hiermodelbase.h"
 #include "hwdatabase.h"
+#include <QSqlQuery>
 
 HierModelBase::HierModelBase(HwDatabase* db, QObject *parent)
     : QAbstractItemModel(parent)
     , m_db(db)
     , m_showOperations(false)
-    , m_lastError()
 {
-    Q_ASSERT(m_db != 0);
+    Q_ASSERT(m_db != nullptr);
 }
 
 void HierModelBase::setOperationShow(bool show)
 {
     if (m_showOperations == show)
         return;
+
     m_showOperations = show;
     refresh();
+}
+
+bool HierModelBase::loadAliases(const QString& entityType,
+                                QMap<int, QVector<QPair<int, QString>>>& aliases)
+{
+    aliases.clear();
+
+    QSqlQuery query(m_db->sqlDbRef());
+    QString sql = QString("SELECT id, %1, pattern FROM hw_alias WHERE %1 IS NOT NULL")
+                  .arg(entityType);
+
+    if (!m_db->prepQuery(query, sql)) {
+        m_lastError = m_db->lastError();
+        return false;
+    }
+    if (!m_db->execQuery(query)) {
+        m_lastError = m_db->lastError();
+        return false;
+    }
+
+    while (query.next()) {
+        int aliasId = query.value(0).toInt();
+        int entityId = query.value(1).toInt();
+        QString pattern = query.value(2).toString();
+        aliases[entityId].append(qMakePair(aliasId, pattern));
+    }
+    return true;
 }

@@ -41,6 +41,7 @@ bool TransferTypeHierModel::loadData()
     beginResetModel();
     clearData();
     UP_CHK(loadTransferTypes())
+    UP_CHK(loadAliasesForTypes())
     if (m_showOperations) {
         UP_CHK(loadTransfers())
     }
@@ -62,8 +63,34 @@ bool TransferTypeHierModel::loadTransferTypes()
         item.name = query.value(1).toString();
         item.description = query.value(2).toString();
         item.isOperation = false;
+        item.isAlias = false;
 
         m_items.append(item);
+    }
+    return true;
+}
+
+bool TransferTypeHierModel::loadAliasesForTypes()
+{
+    QMap<int, QVector<QPair<int, QString>>> aliases;
+    MDB_CHK(loadAliases("id_tt", aliases))
+
+    for (auto it = aliases.begin(); it != aliases.end(); ++it) {
+        int entityId = it.key();
+        for (int i = 0; i < m_items.size(); ++i) {
+            if (!m_items[i].isOperation && !m_items[i].isAlias && m_items[i].id == entityId) {
+                for (const auto& aliasPair : it.value()) {
+                    TransferItem aliasItem;
+                    aliasItem.id = aliasPair.first;
+                    aliasItem.parentId = entityId;
+                    aliasItem.name = aliasPair.second;
+                    aliasItem.isOperation = false;
+                    aliasItem.isAlias = true;
+                    m_items.append(aliasItem);
+                }
+                break;
+            }
+        }
     }
     return true;
 }
@@ -87,6 +114,7 @@ bool TransferTypeHierModel::loadTransfers()
         item.operationDate = query.value(2).toDate();
         item.amount = query.value(3).toInt();
         item.isOperation = true;
+        item.isAlias = false;
 
         m_items.append(item);
     }
@@ -107,7 +135,19 @@ void TransferTypeHierModel::buildHierarchy()
             m_rootItems.append(i);
         } else {
             // Find parent transfer type index
-            int parentIndex = findItemIndex(m_items[i].parentId, true);
+            int parentIndex = -1;
+            if (m_items[i].isAlias) {
+                // Alias parent is a transfer type
+                for (int j = 0; j < m_items.size(); ++j) {
+                    if (m_items[j].id == m_items[i].parentId
+                        && !m_items[j].isOperation && !m_items[j].isAlias) {
+                        parentIndex = j;
+                        break;
+                    }
+                }
+            } else {
+                parentIndex = findItemIndex(m_items[i].parentId, true);
+            }
             if (parentIndex != -1) {
                 m_items[parentIndex].children.append(i);
             }
@@ -118,7 +158,7 @@ void TransferTypeHierModel::buildHierarchy()
 int TransferTypeHierModel::findItemIndex(int id, bool isTransferType) const
 {
     for (int i = 0; i < m_items.size(); ++i) {
-        if (m_items[i].id == id) {
+        if (m_items[i].id == id && !m_items[i].isAlias) {
             if (isTransferType && !m_items[i].isOperation) {
                 return i;
             } else if (!isTransferType && m_items[i].isOperation) {
@@ -175,7 +215,20 @@ QModelIndex TransferTypeHierModel::parent(const QModelIndex &child) const
         return QModelIndex();  // Top-level item has no parent
 
     // Find parent item index
-    int parentIndex = findItemIndex(parentId, true);
+    int parentIndex = -1;
+
+    if (m_items[childIndex].isAlias) {
+        for (int j = 0; j < m_items.size(); ++j) {
+            if (m_items[j].id == parentId
+                && !m_items[j].isOperation && !m_items[j].isAlias) {
+                parentIndex = j;
+                break;
+            }
+        }
+    } else {
+        parentIndex = findItemIndex(parentId, true);
+    }
+
     if (parentIndex == -1)
         return QModelIndex();
 
@@ -223,12 +276,14 @@ QVariant TransferTypeHierModel::data(const QModelIndex &index, int role) const
     case Qt::EditRole:
         if (column == 0) {
             // First column: name
-            if (item.isOperation) {
+            if (item.isOperation)
                 return QString("%1 - %2")
                 .arg(item.operationDate.toString("dd.MM.yyyy"))
                     .arg(item.name);
-            }
-            return item.name;
+            else if (item.isAlias)
+                return S_ALIAS_NAME.arg(item.name);
+            else
+                return item.name;
         } else if (column == 1) {
             // Second column: child count
             if (!item.isOperation) {
@@ -276,9 +331,11 @@ QVariant TransferTypeHierModel::data(const QModelIndex &index, int role) const
         }
         break;
 
-    case Qt::UserRole + 2: // Type (0=category,1=subcategory,2=operation)
+    case Qt::UserRole + 2: // Type (0=category,1=subcategory,2=operation,3=alias)
         if (column == 0) {
-            if (!item.isOperation)
+            if (item.isAlias)
+                return 3;
+            else if (!item.isOperation)
                 return 1;  // Transfer type (like subcategory)
             else
                 return 2;  // Transfer (like operation)
@@ -353,6 +410,9 @@ bool TransferTypeHierModel::isSubcategory(const QModelIndex &index) const
     if (itemIndex < 0 || itemIndex >= m_items.size())
         return false;
 
+    if (m_items[itemIndex].isAlias)
+        return false;
+
     return !m_items[itemIndex].isOperation;  // Transfer types are like subcategories
 }
 
@@ -365,7 +425,22 @@ bool TransferTypeHierModel::isOperation(const QModelIndex &index) const
     if (itemIndex < 0 || itemIndex >= m_items.size())
         return false;
 
+    if (m_items[itemIndex].isAlias)
+        return false;
+
     return m_items[itemIndex].isOperation;
+}
+
+bool TransferTypeHierModel::isAlias(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return false;
+
+    int itemIndex = index.internalId();
+    if (itemIndex < 0 || itemIndex >= m_items.size())
+        return false;
+
+    return m_items[itemIndex].isAlias;
 }
 
 int TransferTypeHierModel::getParentCategoryId(const QModelIndex &index) const
@@ -506,8 +581,19 @@ QModelIndex TransferTypeHierModel::indexFromItem(int itemIndex, int column) cons
         // Root transfer type
         row = m_rootItems.indexOf(itemIndex);
     } else {
-        // Transfer - find parent
-        int parentIndex = findItemIndex(item.parentId, true);
+        // Find parent
+        int parentIndex = -1;
+        if (item.isAlias) {
+            for (int j = 0; j < m_items.size(); ++j) {
+                if (m_items[j].id == item.parentId
+                    && !m_items[j].isOperation && !m_items[j].isAlias) {
+                    parentIndex = j;
+                    break;
+                }
+            }
+        } else {
+            parentIndex = findItemIndex(item.parentId, true);
+        }
         if (parentIndex != -1) {
             row = m_items[parentIndex].children.indexOf(itemIndex);
         }

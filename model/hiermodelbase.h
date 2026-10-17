@@ -17,6 +17,9 @@
 
 #include <QAbstractItemModel>
 #include <QString>
+#include <QMap>
+#include <QVector>
+#include <QPair>
 
 class HwDatabase;
 
@@ -36,6 +39,8 @@ class HwDatabase;
             return false; \
     } \
 }
+
+#define S_ALIAS_NAME QObject::tr("Alias: %1")
 
 class HierModelBase : public QAbstractItemModel
 {
@@ -57,6 +62,7 @@ public:
     virtual bool isCategory(const QModelIndex &index) const = 0;
     virtual bool isSubcategory(const QModelIndex &index) const = 0;
     virtual bool isOperation(const QModelIndex &index) const = 0;
+    virtual bool isAlias(const QModelIndex &index) const = 0;
 
     // Get parent IDs
     virtual int getParentCategoryId(const QModelIndex &index) const = 0;
@@ -82,13 +88,18 @@ public:
     QString lastError() const { return m_lastError; }
 
 signals:
-    void modelError(const QString& message);
     void infoForUser(const QString& message);
+    void modelError(const QString& message);
 
 protected:
     HwDatabase* m_db;           // pointer to database object (not owner)
     bool m_showOperations;      // show third level (operations)
     QString m_lastError;
+
+    // Helper to load aliases for a given entity type
+    // entityType: "id_ac", "id_icat", "id_ecat", "id_isubcat", "id_esubcat", "id_tt"
+    bool loadAliases(const QString& entityType,
+                     QMap<int, QVector<QPair<int, QString>>>& aliases);
 };
 
 #endif // HIERMODELBASE_H

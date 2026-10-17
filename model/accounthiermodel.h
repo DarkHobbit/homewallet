@@ -30,6 +30,7 @@ struct AccountItem {
     QString description;    // Description (for accounts)
     bool isOperation;       // true - operation, false - account
     bool isCurrency;        // true - currency entry (from hw_acc_init), false - regular operation
+    bool isAlias;           // true - alias record
     double quantity;        // Quantity (for operations)
     int amount;             // Amount in low units (for operations)
     QDate operationDate;    // Operation date
@@ -37,7 +38,7 @@ struct AccountItem {
     QVector<int> children;  // Child item indices in flat list
 
     AccountItem() : id(-1), parentId(-1), isOperation(false), isCurrency(false),
-                    quantity(0), amount(0), operationType(0) {}
+                    isAlias(false), quantity(0), amount(0), operationType(0) {}
 };
 
 class AccountHierModel : public HierModelBase
@@ -67,6 +68,7 @@ public:
     bool isCategory(const QModelIndex &index) const override;     // Always false
     bool isSubcategory(const QModelIndex &index) const override; // True for accounts and currencies
     bool isOperation(const QModelIndex &index) const override;   // True for operations (including history)
+    bool isAlias(const QModelIndex &index) const override;       // True for aliases
 
     int getParentCategoryId(const QModelIndex &index) const override; // Not applicable, returns -1
     int getParentSubcategoryId(const QModelIndex &index) const override; // Returns account ID for operations, or hw_acc_init ID for history
@@ -90,6 +92,7 @@ private:
     bool loadData();                 // load data from database
     bool loadAccounts();             // load accounts (level 0)
     bool loadOperations();           // load all operations, currencies, and history (levels 1-2)
+    bool loadAliasesForAccounts();   // load aliases for accounts
     void buildHierarchy();           // build parent-child relationships
     QModelIndex indexFromItem(int itemIndex, int column) const;
     int findItemIndex(int id) const; // find account index by ID

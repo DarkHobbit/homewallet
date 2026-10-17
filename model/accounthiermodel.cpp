@@ -46,6 +46,7 @@ bool AccountHierModel::loadData()
     beginResetModel();
     clearData();
     UP_CHK(loadAccounts())
+    UP_CHK(loadAliasesForAccounts())
     if (m_showOperations) {
         UP_CHK(loadOperations())
     }
@@ -68,8 +69,35 @@ bool AccountHierModel::loadAccounts()
         item.description = query.value(2).toString();
         item.isOperation = false;
         item.isCurrency = false;
+        item.isAlias = false;
 
         m_items.append(item);
+    }
+    return true;
+}
+
+bool AccountHierModel::loadAliasesForAccounts()
+{
+    QMap<int, QVector<QPair<int, QString>>> aliases;
+    MDB_CHK(loadAliases("id_ac", aliases))
+
+    for (auto it = aliases.begin(); it != aliases.end(); ++it) {
+        int entityId = it.key();
+        for (int i = 0; i < m_items.size(); ++i) {
+            if (!m_items[i].isOperation && !m_items[i].isAlias && m_items[i].id == entityId) {
+                for (const auto& aliasPair : it.value()) {
+                    AccountItem aliasItem;
+                    aliasItem.id = aliasPair.first;
+                    aliasItem.parentId = entityId;
+                    aliasItem.name = aliasPair.second;
+                    aliasItem.isOperation = false;
+                    aliasItem.isCurrency = false;
+                    aliasItem.isAlias = true;
+                    m_items.append(aliasItem);
+                }
+                break;
+            }
+        }
     }
     return true;
 }
@@ -241,6 +269,7 @@ bool AccountHierModel::loadOperations()
         item.amount = query.value("amount").toInt();
         item.quantity = query.value("quantity").toDouble();
         item.isOperation = true;
+        item.isAlias = false;
         item.operationType = query.value("operation_type").toInt();
 
         int accountId = query.value("account_id").toInt();
@@ -283,6 +312,21 @@ void AccountHierModel::buildHierarchy()
         if (item.parentId == -1) {
             // Root items (accounts)
             m_rootItems.append(i);
+        } else if (item.isAlias) {
+            // Alias parent is account
+            bool found = false;
+            for (int j = 0; j < m_items.size(); ++j) {
+                if (m_items[j].id == item.parentId && !m_items[j].isOperation
+                    && !m_items[j].isAlias) {
+                    m_items[j].children.append(i);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                qDebug() << "Warning: Alias" << item.id
+                         << "has no parent account" << item.parentId;
+            }
         } else if (item.operationType == 11) {
             // History records (level 2): parent is currency record (operationType == 10)
             bool found = false;
@@ -313,7 +357,7 @@ void AccountHierModel::buildHierarchy()
 int AccountHierModel::findItemIndex(int id) const
 {
     for (int i = 0; i < m_items.size(); ++i) {
-        if (m_items[i].id == id && !m_items[i].isOperation) {
+        if (m_items[i].id == id && !m_items[i].isOperation && !m_items[i].isAlias) {
             return i;
         }
     }
@@ -368,8 +412,17 @@ QModelIndex AccountHierModel::parent(const QModelIndex &child) const
     // Find parent item
     int parentIndex = -1;
 
-    // For history records, parent is currency record (operationType == 10)
-    if (m_items[childIndex].operationType == 11) {
+    if (m_items[childIndex].isAlias) {
+        // Alias parent is account
+        for (int i = 0; i < m_items.size(); ++i) {
+            if (m_items[i].id == parentId && !m_items[i].isOperation
+                && !m_items[i].isAlias) {
+                parentIndex = i;
+                break;
+            }
+        }
+    } else if (m_items[childIndex].operationType == 11) {
+        // For history records, parent is currency record (operationType == 10)
         for (int i = 0; i < m_items.size(); ++i) {
             if (m_items[i].operationType == 10 && m_items[i].id == parentId) {
                 parentIndex = i;
@@ -454,7 +507,10 @@ QVariant AccountHierModel::data(const QModelIndex &index, int role) const
                             .arg(item.name);
                     }
                 }
-                return item.name;
+                else if (item.isAlias)
+                    return S_ALIAS_NAME.arg(item.name);
+                else
+                    return item.name;
             } else if (column == 1) {
                 if (!item.isOperation) {
                     // Account: count of children
@@ -522,9 +578,11 @@ QVariant AccountHierModel::data(const QModelIndex &index, int role) const
             }
             break;
 
-        case Qt::UserRole + 2: // Type (0=category,1=subcategory,2=operation,3=currency/history)
+        case Qt::UserRole + 2: // Type (0=category,1=subcategory,2=operation,3=currency/history/alias)
             if (column == 0) {
-                if (!item.isOperation)
+                if (item.isAlias)
+                    return 4;  // Alias (new special type)
+                else if (!item.isOperation)
                     return 1;  // Account
                 else if (item.operationType == 10 || item.operationType == 11)
                     return 3;  // Currency or history
@@ -601,6 +659,9 @@ bool AccountHierModel::isSubcategory(const QModelIndex &index) const
     if (itemIndex < 0 || itemIndex >= m_items.size())
         return false;
 
+    if (m_items[itemIndex].isAlias)
+        return false;
+
     const AccountItem &item = m_items[itemIndex];
     
     // Accounts and currencies are considered "subcategories"
@@ -616,7 +677,22 @@ bool AccountHierModel::isOperation(const QModelIndex &index) const
     if (itemIndex < 0 || itemIndex >= m_items.size())
         return false;
 
+    if (m_items[itemIndex].isAlias)
+        return false;
+
     return m_items[itemIndex].isOperation;
+}
+
+bool AccountHierModel::isAlias(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return false;
+
+    int itemIndex = index.internalId();
+    if (itemIndex < 0 || itemIndex >= m_items.size())
+        return false;
+
+    return m_items[itemIndex].isAlias;
 }
 
 int AccountHierModel::getParentCategoryId(const QModelIndex &index) const
@@ -875,7 +951,16 @@ QModelIndex AccountHierModel::indexFromItem(int itemIndex, int column) const
         // Child item - find parent
         int parentIndex = -1;
         
-        if (item.operationType == 11) {
+        if (item.isAlias) {
+            // Alias parent is account
+            for (int i = 0; i < m_items.size(); ++i) {
+                if (m_items[i].id == item.parentId && !m_items[i].isOperation
+                    && !m_items[i].isAlias) {
+                    parentIndex = i;
+                    break;
+                }
+            }
+        } else if (item.operationType == 11) {
             // History record: parent is currency record
             for (int i = 0; i < m_items.size(); ++i) {
                 if (m_items[i].operationType == 10 && m_items[i].id == item.parentId) {
@@ -929,13 +1014,13 @@ QString AccountHierModel::getOperationTypeName(int type) const
         case 7: return tr("Credit Given");
         case 8: return tr("Credit Taken");
         case 9: return tr("Repayment");
-        case 10: return tr("Start balance");
-        case 11: return tr("History record");
+        case 10:return tr("Start balance");
+        case 11:return tr("History record");
         default: return tr("Unknown");
     }
 }
 
 QString AccountHierModel::getDefaultOperationName(int type, int id) const
 {
-    return getOperationTypeName(type) + tr(" #%1").arg(id);
+    return getOperationTypeName(type) + QString(" #%1").arg(id);
 }

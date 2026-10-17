@@ -29,12 +29,13 @@ struct TransferItem {
     QString name;           // Display name (type name or transfer description)
     QString description;    // Description (for transfer types)
     bool isOperation;       // true - transfer (operation), false - transfer type
+    bool isAlias;           // true - alias record
     double quantity;        // Quantity (for transfers, not used)
     int amount;             // Amount in low units (for transfers)
     QDate operationDate;    // Transfer date
     QVector<int> children;  // Child item indices in flat list
 
-    TransferItem() : id(-1), parentId(-1), isOperation(false),
+    TransferItem() : id(-1), parentId(-1), isOperation(false), isAlias(false),
                      quantity(0), amount(0) {}
 };
 
@@ -69,6 +70,7 @@ public:
     bool isCategory(const QModelIndex &index) const override;     // Always false
     bool isSubcategory(const QModelIndex &index) const override; // True for transfer types
     bool isOperation(const QModelIndex &index) const override;   // True for transfers
+    bool isAlias(const QModelIndex &index) const override;       // True for aliases
 
     // Get parent IDs
     int getParentCategoryId(const QModelIndex &index) const override; // Not applicable, returns -1
@@ -95,6 +97,7 @@ private:
     bool loadData();                  // load data from database
     bool loadTransferTypes();         // load transfer types (level 0)
     bool loadTransfers();             // load transfers (level 1)
+    bool loadAliasesForTypes();       // load aliases for transfer types
     void buildHierarchy();            // build parent-child relationships
     QModelIndex indexFromItem(int itemIndex, int column) const;
     int findItemIndex(int id, bool isTransferType) const;
