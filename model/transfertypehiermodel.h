@@ -102,11 +102,6 @@ private:
     QModelIndex indexFromItem(int itemIndex, int column) const;
     int findItemIndex(int id, bool isTransferType) const;
     void clearData();
-
-    // Helper methods
-    QString formatAmount(int amountInLowUnits) const;
-    bool removeTransferType(int typeId);
-    bool removeTransfer(int transferId);
 };
 
 #endif // TRANSFERTYPEHIERMODEL_H

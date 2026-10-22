@@ -293,6 +293,9 @@ bool HwDatabase::deleteAccount(int idAcc)
     }
     if (!execSimpleQuery(QString("delete from hw_acc_init where id_ac=%1").arg(idAcc)))
         return false;
+    // Remove aliases
+    if (!execSimpleQuery(QString("delete from hw_alias where id_ac=%1").arg(idAcc)))
+        return false;
     // Remove account
     return execSimpleQuery(QString("delete from hw_account where id=%1").arg(idAcc));
 }
@@ -446,6 +449,7 @@ bool HwDatabase::deleteIncomeCategory(int idCat)
 {
     return deleteRecIfEmpty(idCat,
         "select count(id) from hw_in_subcat where id_icat=:id",
+        "delete from hw_alias where id_icat=:id",
         "delete from hw_in_cat where id=:id");
 }
 
@@ -497,6 +501,7 @@ bool HwDatabase::deleteIncomeSubcategory(int idSubCat)
 {
     return deleteRecIfEmpty(idSubCat,
         "select count(id) from hw_in_op where id_isubcat=:id",
+        "delete from hw_alias where id_isubcat=:id",
         "delete from hw_in_subcat where id=:id");
 }
 
@@ -550,6 +555,7 @@ bool HwDatabase::deleteExpenseCategory(int idCat)
 {
     return deleteRecIfEmpty(idCat,
         "select count(id) from hw_ex_subcat where id_ecat=:id",
+        "delete from hw_alias where id_ecat=:id",
         "delete from hw_ex_cat where id=:id");
 }
 
@@ -601,6 +607,7 @@ bool HwDatabase::deleteExpenseSubcategory(int idSubCat)
 {
     return deleteRecIfEmpty(idSubCat,
         "select count(id) from hw_ex_op where id_esubcat=:id",
+        "delete from hw_alias where id_esubcat=:id",
         "delete from hw_ex_subcat where id=:id");
 }
 
@@ -634,6 +641,14 @@ int HwDatabase::transferTypeId(const QString &name)
         sqlSel.bindValue(":name", name);
     }
     return dictId(sqlSel);
+}
+
+bool HwDatabase::deleteTransferType(int idTT)
+{
+    return deleteRecIfEmpty(idTT,
+        "select count(id) from hw_transfer where id_tt=:id",
+        "delete from hw_alias where id_tt=:id",
+        "delete from hw_transfer_type where id=:id");
 }
 
 int HwDatabase::addCorrespondent(const QString &name, const QString &descr)

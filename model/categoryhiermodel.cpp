@@ -409,15 +409,6 @@ void CategoryHierModel::refresh()
         emit modelError(lastError());
 }
 
-QString CategoryHierModel::formatAmount(int amountInLowUnits) const
-{
-    // Convert from low units (cents/kopeks) to main units
-    double amountInMainUnits = amountInLowUnits / 100.0;
-    
-    // Format with exactly 2 decimal places
-    return QLocale().toString(amountInMainUnits, 'f', 2);
-}
-
 int CategoryHierModel::getChildCountForDisplay(const CategoryItem &item) const
 {
 
@@ -843,15 +834,10 @@ QDate CategoryHierModel::getOperationDate(const QModelIndex &index) const
 bool CategoryHierModel::removeAnyRows(QModelIndexList &indices)
 {
     // Reverse sort
-#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
-    std::sort(indices.rbegin(), indices.rend());
-#else
-#warning Multiple remove don''t work in Qt before 5.6!
-    if (indices.count()>1) {
-        m_lastError = "Multiple remove don't work in Qt before 5.6, select strictly one record";
-        return false;
-    }
-#endif
+    std::sort(indices.begin(), indices.end(),
+              [](const QModelIndex &a, const QModelIndex &b) {
+                  return a.row() > b.row();
+              });
     for (QModelIndex& index: indices) {
         if (!removeByIndex(index)) {
             m_lastError = m_db->lastError();

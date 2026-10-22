@@ -96,7 +96,10 @@ protected:
     bool m_showOperations;      // show third level (operations)
     QString m_lastError;
 
-    // Helper to load aliases for a given entity type
+    // Helper methods
+    // Format amount from low units (cents/kopeks) to main units with 2 decimal places
+    QString formatAmount(int amountInLowUnits) const;
+    // Load aliases for a given entity type
     // entityType: "id_ac", "id_icat", "id_ecat", "id_isubcat", "id_esubcat", "id_tt"
     bool loadAliases(const QString& entityType,
                      QMap<int, QVector<QPair<int, QString>>>& aliases);

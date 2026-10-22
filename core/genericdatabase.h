@@ -51,7 +51,7 @@ public:
     bool prepQuery(QSqlQuery& q, const QString& sql);
     bool execQuery(QSqlQuery& q);
     bool execSimpleQuery(const QString& sql);
-    bool deleteRecIfEmpty(int id, const QString& countSql, const QString& deleteSql);
+    bool deleteRecIfEmpty(int id, const QString& countSql, const QString& deleteSql, const QString& auxDeleteSql);
     bool checkForMultiEmpty(int id, const QStringList& countSqls);
     bool collectDict(DictColl& coll, const QString& tableName,
         const QString& fieldName = "name", const QString& idFieldName = "id",

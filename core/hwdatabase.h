@@ -98,6 +98,7 @@ public:
     bool deleteExpenseSubcategory(int idSubCat);
     int addTransferType(const QString& name, const QString& descr);
     int transferTypeId(const QString& name);
+    bool deleteTransferType(int idTT);
     int addCorrespondent(const QString& name, const QString& descr);
     int correspondentId(const QString& name);
     // Inc/Exp

@@ -773,9 +773,6 @@ bool AccountHierModel::removeAnyRows(QModelIndexList &indices)
     for (const QModelIndex &index : indices) {
         if (!index.isValid())
             continue;
-
-        // For now, we only support removing operations
-        // Account removal would need to handle cascading deletes
         if (isSubcategory(index)) {
             bool success = m_db->deleteAccount(getId(index));
             if (!success) {

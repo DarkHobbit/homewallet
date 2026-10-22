@@ -14,6 +14,8 @@
 
 #include "hiermodelbase.h"
 #include "hwdatabase.h"
+
+#include <QLocale>
 #include <QSqlQuery>
 
 HierModelBase::HierModelBase(HwDatabase* db, QObject *parent)
@@ -33,6 +35,11 @@ void HierModelBase::setOperationShow(bool show)
     refresh();
 }
 
+QString HierModelBase::formatAmount(int amountInLowUnits) const
+{
+    double amountInMainUnits = amountInLowUnits / 100.0;
+    return QLocale().toString(amountInMainUnits, 'f', 2);
+}
 bool HierModelBase::loadAliases(const QString& entityType,
                                 QMap<int, QVector<QPair<int, QString>>>& aliases)
 {

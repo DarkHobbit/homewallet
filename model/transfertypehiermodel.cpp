@@ -18,7 +18,6 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
-#include <QLocale>
 
 TransferTypeHierModel::TransferTypeHierModel(HwDatabase* db, QObject *parent)
     : HierModelBase(db, parent)
@@ -500,7 +499,6 @@ bool TransferTypeHierModel::removeAnyRows(QModelIndexList &indices)
 {
     if (indices.isEmpty())
         return true;
-
     // Remove from bottom to top to avoid index shifting issues
     std::sort(indices.begin(), indices.end(),
               [](const QModelIndex &a, const QModelIndex &b) {
@@ -511,20 +509,13 @@ bool TransferTypeHierModel::removeAnyRows(QModelIndexList &indices)
     for (const QModelIndex &index : indices) {
         if (!index.isValid())
             continue;
-
         if (isSubcategory(index)) {
             // Remove transfer type (and all its transfers)
-            if (!removeTransferType(getId(index))) {
-                success = false;
-            }
-        } else if (isOperation(index)) {
-            // Remove single transfer
-            if (!removeTransfer(getId(index))) {
+            if (!m_db->deleteTransferType(getId(index))) {
                 success = false;
             }
         }
     }
-
     if (success) {
         refresh();
     }
@@ -603,44 +594,4 @@ QModelIndex TransferTypeHierModel::indexFromItem(int itemIndex, int column) cons
         return QModelIndex();
 
     return createIndex(row, column, itemIndex);
-}
-
-QString TransferTypeHierModel::formatAmount(int amountInLowUnits) const
-{
-    double amountInMainUnits = amountInLowUnits / 100.0;
-    return QLocale().toString(amountInMainUnits, 'f', 2);
-}
-
-bool TransferTypeHierModel::removeTransferType(int typeId)
-{
-    QSqlQuery query;
-    // First remove all transfers of this type
-    query.prepare("DELETE FROM hw_transfer WHERE id_tt = :typeId");
-    query.bindValue(":typeId", typeId);
-    if (!query.exec()) {
-        m_lastError = query.lastError().text();
-        return false;
-    }
-
-    // Then remove the type itself
-    query.prepare("DELETE FROM hw_transfer_type WHERE id = :typeId");
-    query.bindValue(":typeId", typeId);
-    if (!query.exec()) {
-        m_lastError = query.lastError().text();
-        return false;
-    }
-
-    return true;
-}
-
-bool TransferTypeHierModel::removeTransfer(int transferId)
-{
-    QSqlQuery query;
-    query.prepare("DELETE FROM hw_transfer WHERE id = :transferId");
-    query.bindValue(":transferId", transferId);
-    if (!query.exec()) {
-        m_lastError = query.lastError().text();
-        return false;
-    }
-    return true;
 }

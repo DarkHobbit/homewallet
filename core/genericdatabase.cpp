@@ -310,7 +310,7 @@ bool GenericDatabase::execSimpleQuery(const QString &sql)
     return execQuery(q);
 }
 
-bool GenericDatabase::deleteRecIfEmpty(int id, const QString &countSql, const QString &deleteSql)
+bool GenericDatabase::deleteRecIfEmpty(int id, const QString &countSql, const QString &deleteSql, const QString& auxDeleteSql)
 {
     QSqlQuery qC(sqlDbRef());
     if (!prepQuery(qC, countSql))
@@ -327,7 +327,13 @@ bool GenericDatabase::deleteRecIfEmpty(int id, const QString &countSql, const QS
     if (!prepQuery(qD, deleteSql))
         return false;
     qD.bindValue(":id", id);
-    return execQuery(qD);
+    if (!execQuery(qD))
+        return false;
+    QSqlQuery qD2(sqlDbRef());
+    if (!prepQuery(qD2, auxDeleteSql))
+        return false;
+    qD2.bindValue(":id", id);
+    return execQuery(qD2);
 }
 
 bool GenericDatabase::checkForMultiEmpty(int id, const QStringList &countSqls)
