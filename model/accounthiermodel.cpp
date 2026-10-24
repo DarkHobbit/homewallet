@@ -801,7 +801,7 @@ bool AccountHierModel::moveSelectedNodes(HierModelBase* opposite,
         << "update hw_credit set id_ac=:id_ac where id=:id"
         << "update hw_repayment set id_ac=:id_ac where id=:id"
         << "" // acc_init, if need - merge, not move
-        << "" // acc_hist referense acc_init, not account
+        << "" // acc_hist reference acc_init, not account
     ;
     int idNewParent = opposite->getId(oppositeIndex);
     for (const QModelIndex &index: indices) {
@@ -844,6 +844,7 @@ bool AccountHierModel::mergeSelectedNodes(HierModelBase* opposite,
         << "update hw_credit set id_ac=:id_ac where id_ac=:id_prev"
         << "update hw_credit set id_ac=:id_ac where id_ac=:id_prev"
         << "update hw_repayment set id_ac=:id_ac where id_ac=:id_prev"
+        << "update hw_alias set id_ac=:id_ac where id_ac=:id_prev"
         << "" // acc_init, if need - merge, not move
         << "" // acc_hist referense acc_init, not account
         ;

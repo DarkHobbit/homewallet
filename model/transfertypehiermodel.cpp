@@ -549,10 +549,13 @@ bool TransferTypeHierModel::mergeSelectedNodes(HierModelBase* opposite,
     int idDest = opposite->getId(oppositeIndex);
     if (!isSubcategory(index))
         return false;
-    QString sqlM = "update hw_transfer set id_tt=%1 where id_tt=%2";
+    QString sqlMA = "update hw_alias set id_tt=%1 where id_tt=%2";
+    QString sqlMT = "update hw_transfer set id_tt=%1 where id_tt=%2";
     QString sqlD = "delete from hw_transfer_type where id=%1";
     // Merge children and delete old parent
-    if (m_db->execSimpleQuery(sqlM.arg(idDest).arg(idSrc)))
+    if (!m_db->execSimpleQuery(sqlMA.arg(idDest).arg(idSrc)))
+        return false;
+    if (m_db->execSimpleQuery(sqlMT.arg(idDest).arg(idSrc)))
         return m_db->execSimpleQuery(sqlD.arg(idSrc));
     else
         return false;

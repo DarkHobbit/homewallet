@@ -134,7 +134,10 @@ bool CategoryHierModel::moveOperation(int idSrc, int idNewParent)
 
 bool CategoryHierModel::mergeCategories(int idSrc, int idDest)
 {
-    QString sqlM = m_isExpense
+    QString sqlMA = m_isExpense
+        ? "update hw_alias set id_ecat=%1 where id_ecat=%2"
+        : "update hw_alias set id_icat=%1 where id_icat=%2";
+    QString sqlMS = m_isExpense
         ? "update hw_ex_subcat set id_ecat=%1 where id_ecat=%2"
         : "update hw_in_subcat set id_icat=%1 where id_icat=%2";
     QString sqlD = m_isExpense
@@ -144,7 +147,9 @@ bool CategoryHierModel::mergeCategories(int idSrc, int idDest)
     if (!preMergeChildren(idSrc, idDest))
         return false;
     // Merge children and delete old parent
-    if (m_db->execSimpleQuery(sqlM.arg(idDest).arg(idSrc)))
+    if (!m_db->execSimpleQuery(sqlMA.arg(idDest).arg(idSrc)))
+        return false;
+    if (m_db->execSimpleQuery(sqlMS.arg(idDest).arg(idSrc)))
         return m_db->execSimpleQuery(sqlD.arg(idSrc));
     else
         return false;
@@ -152,14 +157,19 @@ bool CategoryHierModel::mergeCategories(int idSrc, int idDest)
 
 bool CategoryHierModel::mergeSubcategories(int idSrc, int idDest)
 {
-    QString sqlM = m_isExpense
+    QString sqlMA = m_isExpense
+            ? "update hw_alias set id_esubcat=%1 where id_esubcat=%2"
+            : "update hw_alias set id_isubcat=%1 where id_isubcat=%2";
+    QString sqlMO = m_isExpense
             ? "update hw_ex_op set id_esubcat=%1 where id_esubcat=%2"
             : "update hw_in_op set id_isubcat=%1 where id_isubcat=%2";
     QString sqlD = m_isExpense
         ? "delete from hw_ex_subcat where id=%1"
         : "delete from hw_in_subcat where id=%1";
     // Merge children and delete old parent
-    if (m_db->execSimpleQuery(sqlM.arg(idDest).arg(idSrc)))
+    if (!m_db->execSimpleQuery(sqlMA.arg(idDest).arg(idSrc)))
+        return false;
+    if (m_db->execSimpleQuery(sqlMO.arg(idDest).arg(idSrc)))
         return m_db->execSimpleQuery(sqlD.arg(idSrc));
     else
         return false;
