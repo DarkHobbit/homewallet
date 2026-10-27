@@ -292,6 +292,7 @@ bool InteractiveFormat::findAccount(HwDatabase &db, ImpRecCandidate& c, QString 
         // Try alias
         if (candidates.collAcc.keys().contains(accName)) {
             idAcc = candidates.collAcc[accName];
+            accName = db.accountById(idAcc);
             return true;
         }
         c.state = ImpRecCandidate::UnknownAccount;

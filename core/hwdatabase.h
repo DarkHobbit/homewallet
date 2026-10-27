@@ -69,6 +69,7 @@ public:
     int addAccount(const QString& name, const QString& descr,
                     const QDateTime& foundation=QDateTime(), const MultiCurrById& startBalance=MultiCurrById());
     int accountId(const QString& name, Qt::CaseSensitivity cs = Qt::CaseInsensitive);
+    QString accountById(int idAcc);
     int addUnit(const QString& name, const QString& shortName, const QString& descr);
     bool deleteAccount(int idAcc);
     int unitId(const QString& name);

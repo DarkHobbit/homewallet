@@ -252,6 +252,15 @@ int HwDatabase::accountId(const QString &name, Qt::CaseSensitivity cs)
     return dictId(sqlSel);
 }
 
+QString HwDatabase::accountById(int idAcc)
+{
+    QSqlQuery sqlSel(sqlDb);
+    if (!prepQuery(sqlSel, "select name from hw_account where id=:id"))
+        return "";
+    sqlSel.bindValue(":id", idAcc);
+    return dictName(sqlSel);
+}
+
 int HwDatabase::addUnit(const QString &name, const QString &shortName, const QString &descr)
 {
     QSqlQuery sqlIns(sqlDb);
