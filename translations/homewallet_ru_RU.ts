@@ -90,62 +90,62 @@ Amount: %3</source>
         <translation>Записей истории: %1</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="1008"/>
+        <location filename="../model/accounthiermodel.cpp" line="1006"/>
         <source>Income</source>
         <translation>Доход</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="1009"/>
+        <location filename="../model/accounthiermodel.cpp" line="1007"/>
         <source>Expense</source>
         <translation>Расход</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="1010"/>
+        <location filename="../model/accounthiermodel.cpp" line="1008"/>
         <source>Receipt</source>
         <translation>Чек</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="1011"/>
+        <location filename="../model/accounthiermodel.cpp" line="1009"/>
         <source>Transfer Out</source>
         <translation>Перенос исх.</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="1012"/>
+        <location filename="../model/accounthiermodel.cpp" line="1010"/>
         <source>Transfer In</source>
         <translation>Перенос вх.</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="1013"/>
+        <location filename="../model/accounthiermodel.cpp" line="1011"/>
         <source>Currency Exchange</source>
         <translation>Обмен валюты</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="1014"/>
+        <location filename="../model/accounthiermodel.cpp" line="1012"/>
         <source>Credit Given</source>
         <translation>Кредит выдан</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="1015"/>
+        <location filename="../model/accounthiermodel.cpp" line="1013"/>
         <source>Credit Taken</source>
         <translation>Кредит взят</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="1016"/>
+        <location filename="../model/accounthiermodel.cpp" line="1014"/>
         <source>Repayment</source>
         <translation>Возврат долга/кредита</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="1017"/>
+        <location filename="../model/accounthiermodel.cpp" line="1015"/>
         <source>Start balance</source>
         <translation>Начальный баланс</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="1018"/>
+        <location filename="../model/accounthiermodel.cpp" line="1016"/>
         <source>History record</source>
         <translation>Запись истории</translation>
     </message>
     <message>
-        <location filename="../model/accounthiermodel.cpp" line="1019"/>
+        <location filename="../model/accounthiermodel.cpp" line="1017"/>
         <source>Unknown</source>
         <translation>Неизвестная операция</translation>
     </message>
@@ -263,17 +263,17 @@ Amount: %3</source>
         <translation type="obsolete">Объединены подкатегории: %1</translation>
     </message>
     <message>
-        <location filename="../model/categoryhiermodel.cpp" line="335"/>
+        <location filename="../model/categoryhiermodel.cpp" line="345"/>
         <source>Operation #%1</source>
         <translation>Операция №%1</translation>
     </message>
     <message>
-        <location filename="../model/categoryhiermodel.cpp" line="580"/>
+        <location filename="../model/categoryhiermodel.cpp" line="581"/>
         <source>Subcategories: %1</source>
         <translation>Подкатегорий: %1</translation>
     </message>
     <message>
-        <location filename="../model/categoryhiermodel.cpp" line="582"/>
+        <location filename="../model/categoryhiermodel.cpp" line="583"/>
         <source>Operations: %1</source>
         <translation>Операций: %1</translation>
     </message>
@@ -618,12 +618,12 @@ Amount: %3</source>
         <translation>Ctrl+B</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/exportdialog.cpp" line="184"/>
+        <location filename="../app/formatsgui/exportdialog.cpp" line="186"/>
         <source>Select export directory</source>
         <translation>Выберите каталог для экспорта</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/exportdialog.cpp" line="186"/>
+        <location filename="../app/formatsgui/exportdialog.cpp" line="189"/>
         <source>Select export file</source>
         <translation>Выберите файл для экспорта</translation>
     </message>
@@ -1401,12 +1401,12 @@ or manually add it to %2.</source>
         <translation>нет</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="415"/>
+        <location filename="../core/genericdatabase.cpp" line="421"/>
         <source>Can&apos;t enable extension load, code: %1</source>
         <translation>Не могу разрешить загрузку расширений, код: %1</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="421"/>
+        <location filename="../core/genericdatabase.cpp" line="427"/>
         <source>Can&apos;t load ICU extension, code %1:
 %2
 Rebuild SQLite with ICU support or provide ICU library as extension</source>
@@ -1415,18 +1415,18 @@ Rebuild SQLite with ICU support or provide ICU library as extension</source>
 Пересоберите SQLite с поддержкой ICU или добавьте библиотеку ICU как расширение</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="429"/>
+        <location filename="../core/genericdatabase.cpp" line="435"/>
         <source>ICU extension load failed</source>
         <translation>Ошибка загрузки расширения ICU</translation>
     </message>
     <message>
-        <location filename="../core/genericdatabase.cpp" line="448"/>
+        <location filename="../core/genericdatabase.cpp" line="454"/>
         <source>Can&apos;t check ICU presence</source>
         <translation>Не могу проверить наличие ICU</translation>
     </message>
     <message>
-        <location filename="../core/hwdatabase.cpp" line="415"/>
-        <location filename="../core/hwdatabase.cpp" line="519"/>
+        <location filename="../core/hwdatabase.cpp" line="427"/>
+        <location filename="../core/hwdatabase.cpp" line="533"/>
         <source>No subcategory</source>
         <translation>Нет подкатегории</translation>
     </message>
@@ -2412,56 +2412,61 @@ act. amount deleted %5, existing %6)</source>
     </message>
     <message>
         <location filename="../app/settingsdialog.ui" line="131"/>
+        <source>Use system dialogs</source>
+        <translation>Использовать системные диалоги</translation>
+    </message>
+    <message>
+        <location filename="../app/settingsdialog.ui" line="138"/>
         <source>Use system fonts and colors</source>
         <translation>Использовать системные шрифты и цвета</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="138"/>
+        <location filename="../app/settingsdialog.ui" line="145"/>
         <source>Table font</source>
         <translation>Шрифт таблиц</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="145"/>
+        <location filename="../app/settingsdialog.ui" line="152"/>
         <source>Colors</source>
         <translation>Цвета</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="151"/>
+        <location filename="../app/settingsdialog.ui" line="158"/>
         <source>Grid base</source>
         <translation>Таблицы (основной)</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="158"/>
+        <location filename="../app/settingsdialog.ui" line="165"/>
         <source>Grid alternate</source>
         <translation>Таблицы (дополнит.)</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="169"/>
+        <location filename="../app/settingsdialog.ui" line="176"/>
         <source>Columns</source>
         <translation>Столбцы</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="177"/>
+        <location filename="../app/settingsdialog.ui" line="184"/>
         <source>Table</source>
         <translation>Таблица</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="257"/>
+        <location filename="../app/settingsdialog.ui" line="264"/>
         <source>Visible</source>
         <translation>Видимые</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="281"/>
+        <location filename="../app/settingsdialog.ui" line="288"/>
         <source>Filter&apos;n&apos;Sort</source>
         <translation>Фильтр и сортировка</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="364"/>
+        <location filename="../app/settingsdialog.ui" line="371"/>
         <source>Enable sorting</source>
         <translation>Разрешить сортировку</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="198"/>
+        <location filename="../app/settingsdialog.ui" line="205"/>
         <source>Available</source>
         <translation>Доступные</translation>
     </message>
@@ -2470,47 +2475,47 @@ act. amount deleted %5, existing %6)</source>
         <translation type="obsolete">Фильтр</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="287"/>
+        <location filename="../app/settingsdialog.ui" line="294"/>
         <source>Apply quick filter immediately</source>
         <translation>Применять быстрофильтр немедленно</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="294"/>
+        <location filename="../app/settingsdialog.ui" line="301"/>
         <source>At Startup</source>
         <translation>При запуске</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="300"/>
+        <location filename="../app/settingsdialog.ui" line="307"/>
         <source>Show all records</source>
         <translation>Показывать все записи</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="310"/>
+        <location filename="../app/settingsdialog.ui" line="317"/>
         <source>Restore previous date range</source>
         <translation>Восстанавливать предыдущий период</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="322"/>
+        <location filename="../app/settingsdialog.ui" line="329"/>
         <source>Show last</source>
         <translation>Показывать последние</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="345"/>
+        <location filename="../app/settingsdialog.ui" line="352"/>
         <source>months</source>
         <translation>мес.</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="357"/>
+        <location filename="../app/settingsdialog.ui" line="364"/>
         <source>Save categories in filter</source>
         <translation>Сохранять категории в фильтре</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.ui" line="273"/>
+        <location filename="../app/settingsdialog.ui" line="280"/>
         <source>Reset to defaults</source>
         <translation>Сбросить к виду по умолчанию</translation>
     </message>
     <message>
-        <location filename="../app/settingsdialog.cpp" line="217"/>
+        <location filename="../app/settingsdialog.cpp" line="219"/>
         <source>List must contain at least one visible column</source>
         <translation>В списке должен быть хотя бы один видимый столбец</translation>
     </message>
@@ -2561,7 +2566,7 @@ act. amount deleted %5, existing %6)</source>
         <translation>Дата до</translation>
     </message>
     <message>
-        <location filename="../app/simplereportdialog.cpp" line="78"/>
+        <location filename="../app/simplereportdialog.cpp" line="79"/>
         <source>Select report file</source>
         <translation>Выберите файл отчёта</translation>
     </message>
@@ -2619,12 +2624,12 @@ act. amount deleted %5, existing %6)</source>
 <context>
     <name>TransferTypeHierModel</name>
     <message>
-        <location filename="../model/transfertypehiermodel.cpp" line="112"/>
+        <location filename="../model/transfertypehiermodel.cpp" line="111"/>
         <source>Transfer #%1</source>
         <translation>Перенос №%1</translation>
     </message>
     <message>
-        <location filename="../model/transfertypehiermodel.cpp" line="316"/>
+        <location filename="../model/transfertypehiermodel.cpp" line="315"/>
         <source>Transfers: %1</source>
         <translation>Переносов: %1</translation>
     </message>

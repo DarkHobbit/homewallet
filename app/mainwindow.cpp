@@ -297,7 +297,7 @@ void MainWindow::on_action_Import_triggered()
     QString path = QFileDialog::getOpenFileName(0, tr("Open file for import"),
         configManager.lastImportedFile(),
         factory.supportedFilters(QIODevice::ReadOnly, false).join(";;"),
-        &selectedFilter);
+        &selectedFilter, dontUseNativeDialog());
     if (!path.isEmpty()) {
         configManager.setLastImportedFile(path);
         // If format is unknown...

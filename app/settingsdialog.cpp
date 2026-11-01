@@ -57,6 +57,7 @@ bool SettingsDialog::setData(FQMlist* dbModels)
     ui->cbShowSumsWithCurrency->setChecked(gd.showSumsWithCurrency);
     ui->cbUseTableAlternateColors->setChecked(gd.useTableAlternateColors);
     ui->cbUseSystemStyle->setChecked(gd.useSystemStyle);
+    ui->cbUseSystemDialogs->setChecked(gd.useSystemDialogs);
     on_cbUseSystemStyle_clicked(ui->cbUseSystemStyle->isChecked());
     ui->cbUseSystemFontsAndColors->setChecked(gd.useSystemFontsAndColors);
     on_cbUseSystemFontsAndColors_clicked(ui->cbUseSystemFontsAndColors->isChecked());
@@ -96,6 +97,7 @@ bool SettingsDialog::getData()
     gd.showSumsWithCurrency = ui->cbShowSumsWithCurrency->isChecked();
     gd.useTableAlternateColors = ui->cbUseTableAlternateColors->isChecked();
     gd.useSystemStyle = ui->cbUseSystemStyle->isChecked();
+    gd.useSystemDialogs = ui->cbUseSystemDialogs->isChecked();
     gd.useSystemFontsAndColors = ui->cbUseSystemFontsAndColors->isChecked();
     // Column view:
     // - from cache

@@ -160,3 +160,9 @@ bool SelecTablesPair::checkSelection(bool errorIfNoSelected, bool onlyOneRowAllo
         oppositeSelection << oppositeProxy->mapToSource(index);
     return true;
 }
+
+QFileDialog::Option dontUseNativeDialog()
+{
+    return gd.useSystemDialogs ? QFileDialog::Option()
+                               : QFileDialog::DontUseNativeDialog;
+}

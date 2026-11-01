@@ -18,6 +18,7 @@
 
 #include "configmanager.h"
 #include "globals.h"
+#include "helpers.h"
 #include "exportdialog.h"
 #include "ui_exportdialog.h"
 
@@ -181,10 +182,14 @@ void ExportDialog::on_btnSelectPath_clicked()
 {
     QString path = ui->lePath->text();
     if (ui->rbDirectory->isChecked())
-        path = QFileDialog::getExistingDirectory(0, tr("Select export directory"), path);
+        path = QFileDialog::getExistingDirectory(0,
+            tr("Select export directory"), path,
+            dontUseNativeDialog() | QFileDialog::ShowDirsOnly);
     else
         path = QFileDialog::getSaveFileName(0, tr("Select export file"),
-            path, factory->supportedFilters(QIODevice::WriteOnly, false).join(";;"));
+            path, factory->supportedFilters(QIODevice::WriteOnly, false).join(";;"),
+            0, // TODO selected filter?
+            dontUseNativeDialog());
     ui->lePath->setText(path);
 }
 

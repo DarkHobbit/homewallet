@@ -16,6 +16,7 @@
 
 #include <QAbstractItemModel>
 #include <QComboBox>
+#include <QFileDialog>
 #include <QListWidget>
 #include <QSortFilterProxyModel>
 #include <QSqlQueryModel>
@@ -44,6 +45,7 @@ void setSimilarComboText(QComboBox* combo, const QString& pattern);
 // Set color/font for each table view
 void updateTableConfig(QTableView* table);
 void updateOneView(QTableView* view, bool isDatabaseView);
+QFileDialog::Option dontUseNativeDialog();
 
 // Second base class for widgets with QTableView-s and proxy models
 // Can be used with QMainWindow, QWidget, etc.

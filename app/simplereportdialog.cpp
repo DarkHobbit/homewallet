@@ -16,6 +16,7 @@
 
 #include "configmanager.h"
 #include "globals.h"
+#include "helpers.h"
 #include "reports.h"
 #include "simplereportdialog.h"
 #include "ui_simplereportdialog.h"
@@ -76,7 +77,8 @@ void SimpleReportDialog::on_btnSetPath_clicked()
     QString path = ui->lePath->text();
     QString selectedFilter;
     path = QFileDialog::getSaveFileName(0, tr("Select report file"),
-        path, r.makeDocumentFormatFilters(), &selectedFilter);
+        path, r.makeDocumentFormatFilters(), &selectedFilter, 
+        dontUseNativeDialog());
     ui->lePath->setText(path);
 }
 
