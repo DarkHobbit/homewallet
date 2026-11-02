@@ -45,6 +45,7 @@ void setSimilarComboText(QComboBox* combo, const QString& pattern);
 // Set color/font for each table view
 void updateTableConfig(QTableView* table);
 void updateOneView(QTableView* view, bool isDatabaseView);
+// Unify use native/system dialogs settings
 QFileDialog::Option dontUseNativeDialog();
 
 // Second base class for widgets with QTableView-s and proxy models

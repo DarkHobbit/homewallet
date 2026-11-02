@@ -380,7 +380,7 @@ void MainWindow::on_action_Export_triggered()
         }
     }
     else { // Entire file with multi-info-type
-        // TODO
+        eRes = expFile->exportRecords(path, db, subTypes);
     }
     processImpExErrors(expFile, eRes, path);
     processImpExSuccess(expFile);

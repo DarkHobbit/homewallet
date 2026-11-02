@@ -31,7 +31,6 @@
 * отчёт по дубликатам: ввести исключение отдельных подкатегорий типа маршруток
 
 экспорт/импорт QIF или OFX, или что там подойдёт для залива в HB (м.б. потребуется экспорт CSV)
-экспорт XML в один файл вместо каталога (MainWindow::on_action_Export_triggered(), ветка 2 TODO)
 экспорт в табличные форматы
 импорт ledger и GNUCash
 ввести для вх. файлов bool FileFormat::testDateRange(const QString &path, HwDatabase& db, QDateTime& dtMin, QDateTime& dtMax)
