@@ -694,12 +694,12 @@ int HwDatabase::correspondentId(const QString &name)
 
 bool HwDatabase::addIncomeOp(const QDateTime &opDT, double quantity, int amount, int idAcc, int idCur, int idSubCat, int idUnit,
      bool attention, const QString &descr,
-     int idImp, const QString& uid)
+     int idImp, const QString& uid, const QString& impSource)
 {
     QSqlQuery sqlIns(sqlDb);
      if (!prepQuery(sqlIns,
-      "insert into hw_in_op(op_date, quantity, amount, id_ac, id_cur, id_isubcat, id_un, attention, descr, id_imp, uid_imp) " \
-      "values (:op_date, :quantity, :amount, :id_ac, :id_cur, :id_isubcat, :id_un, :attention, :descr, :id_imp, :uid_imp)"))
+      "insert into hw_in_op(op_date, quantity, amount, id_ac, id_cur, id_isubcat, id_un, attention, descr, id_imp, uid_imp, imp_source) " \
+      "values (:op_date, :quantity, :amount, :id_ac, :id_cur, :id_isubcat, :id_un, :attention, :descr, :id_imp, :uid_imp, :imp_source)"))
          return -1;
     sqlIns.bindValue(":op_date", opDT);
     sqlIns.bindValue(":quantity", quantity);
@@ -712,18 +712,19 @@ bool HwDatabase::addIncomeOp(const QDateTime &opDT, double quantity, int amount,
     sqlIns.bindValue(":descr", strOrNull(descr));
     sqlIns.bindValue(":id_imp", idOrNull(idImp));
     sqlIns.bindValue(":uid_imp", strOrNull(uid));
+    sqlIns.bindValue(":imp_source", strOrNull(impSource));
     return execQuery(sqlIns);
 }
 
 bool HwDatabase::addExpenseOp(const QDateTime &opDT, double quantity, int amount,
     int idAcc, int idCur, int idSubCat, int idUnit,
     int idReceipt, int discount, bool attention, const QString &descr,
-    int idImp, const QString& uid)
+    int idImp, const QString& uid, const QString& impSource)
 {
     QSqlQuery sqlIns(sqlDb);
          if (!prepQuery(sqlIns,
-          "insert into hw_ex_op(op_date, quantity, amount, id_ac, id_cur, id_esubcat, id_un, id_rc, discount, attention, descr, id_imp, uid_imp) " \
-          "values (:op_date, :quantity, :amount, :id_ac, :id_cur, :id_esubcat, :id_un, :id_rc, :discount, :attention, :descr, :id_imp, :uid_imp)"))
+          "insert into hw_ex_op(op_date, quantity, amount, id_ac, id_cur, id_esubcat, id_un, id_rc, discount, attention, descr, id_imp, uid_imp, imp_source) " \
+          "values (:op_date, :quantity, :amount, :id_ac, :id_cur, :id_esubcat, :id_un, :id_rc, :discount, :attention, :descr, :id_imp, :uid_imp, :imp_source)"))
              return -1;
     sqlIns.bindValue(":op_date", opDT);
     sqlIns.bindValue(":quantity", quantity);
@@ -738,16 +739,18 @@ bool HwDatabase::addExpenseOp(const QDateTime &opDT, double quantity, int amount
     sqlIns.bindValue(":descr", strOrNull(descr));
     sqlIns.bindValue(":id_imp", idOrNull(idImp));
     sqlIns.bindValue(":uid_imp", strOrNull(uid));
+    sqlIns.bindValue(":imp_source", strOrNull(impSource));
     return execQuery(sqlIns);
 }
 
 bool HwDatabase::addTransfer(const QDateTime &opDT, int amount, int idCur, int idAccFrom, int idAccTo,
-    int idTransferType, const QString &descr, int idImp, const QString &uid)
+    int idTransferType, const QString &descr,
+    int idImp, const QString &uid, const QString& impSource)
 {
     QSqlQuery sqlIns(sqlDb);
     if (!prepQuery(sqlIns,
-      "insert into hw_transfer(op_date, amount, id_cur, id_ac_out, id_ac_in, id_tt, descr, id_imp, uid_imp) " \
-      "values (:op_date, :amount, :id_cur, :id_ac_out, :id_ac_in, :id_tt, :descr, :id_imp, :uid_imp)"))
+      "insert into hw_transfer(op_date, amount, id_cur, id_ac_out, id_ac_in, id_tt, descr, id_imp, uid_imp, :imp_source) " \
+      "values (:op_date, :amount, :id_cur, :id_ac_out, :id_ac_in, :id_tt, :descr, :id_imp, :uid_imp, :imp_source)"))
         return -1;
     sqlIns.bindValue(":op_date", opDT);
     sqlIns.bindValue(":amount", amount);
@@ -758,18 +761,19 @@ bool HwDatabase::addTransfer(const QDateTime &opDT, int amount, int idCur, int i
     sqlIns.bindValue(":descr", strOrNull(descr));
     sqlIns.bindValue(":id_imp", idOrNull(idImp));
     sqlIns.bindValue(":uid_imp", strOrNull(uid));
+    sqlIns.bindValue(":imp_source", strOrNull(impSource));
     return execQuery(sqlIns);
 }
 
 bool HwDatabase::addCurrencyConv(const QDateTime &opDT, int idAcc,
     int idCurFrom, int amountFrom,
-    int idCurTo, int amountTo,
-    const QString &descr, int idImp, const QString &uid)
+    int idCurTo, int amountTo, const QString &descr,
+    int idImp, const QString &uid, const QString& impSource)
 {
     QSqlQuery sqlIns(sqlDb);
     if (!prepQuery(sqlIns,
-      "insert into hw_curr_exch(op_date, id_ac, id_cur_in, id_cur_out, amount_in, amount_out, descr, id_imp, uid_imp) " \
-      "values (:op_date, :id_ac, :id_cur_in, :id_cur_out, :amount_in, :amount_out, :descr, :id_imp, :uid_imp)"))
+      "insert into hw_curr_exch(op_date, id_ac, id_cur_in, id_cur_out, amount_in, amount_out, descr, id_imp, uid_imp, imp_source) " \
+      "values (:op_date, :id_ac, :id_cur_in, :id_cur_out, :amount_in, :amount_out, :descr, :id_imp, :uid_imp, :imp_source)"))
         return -1;
     sqlIns.bindValue(":op_date", opDT);
     sqlIns.bindValue(":id_ac", idAcc);
@@ -780,6 +784,7 @@ bool HwDatabase::addCurrencyConv(const QDateTime &opDT, int idAcc,
     sqlIns.bindValue(":descr", strOrNull(descr));
     sqlIns.bindValue(":id_imp", idOrNull(idImp));
     sqlIns.bindValue(":uid_imp", strOrNull(uid));
+    sqlIns.bindValue(":imp_source", strOrNull(impSource));
     return execQuery(sqlIns);
 }
 
@@ -789,7 +794,7 @@ bool HwDatabase::addCredit(const QDateTime &opDT, const QDateTime &closeDT, cons
     int idAcc, int idCur, double rate, bool isRateOneTime,
     int period, int periodUnit,
     bool isClosed, const QString &descr,
-    int idImp, const QString &uid)
+    int idImp, const QString &uid, const QString& impSource)
 {
     QSqlQuery sqlIns(sqlDb);
     if (!prepQuery(sqlIns,
@@ -797,12 +802,12 @@ bool HwDatabase::addCredit(const QDateTime &opDT, const QDateTime &closeDT, cons
       " op_date, close_date, remind_date, is_lend, id_crs," \
       " amount, down_pay, money_back, money_remaining_debt, id_ac, id_cur," \
       " rate, is_rate_onetime, period, period_unit, is_closed, descr," \
-      " id_imp, uid_imp" \
+      " id_imp, uid_imp, imp_source" \
       ") values (" \
       " :op_date, :close_date, :remind_date, :is_lend, :id_crs," \
       " :amount, :down_pay, :money_back, :money_remaining_debt, :id_ac, :id_cur," \
       " :rate, :is_rate_onetime, :period, :period_unit, :is_closed, :descr," \
-      " :id_imp, :uid_imp)"))
+      " :id_imp, :uid_imp, :imp_source)"))
         return false;
     sqlIns.bindValue(":op_date", opDT);
     sqlIns.bindValue(":close_date", dateOrNull(closeDT));
@@ -823,19 +828,21 @@ bool HwDatabase::addCredit(const QDateTime &opDT, const QDateTime &closeDT, cons
     sqlIns.bindValue(":descr", strOrNull(descr));
     sqlIns.bindValue(":id_imp", idOrNull(idImp));
     sqlIns.bindValue(":uid_imp", strOrNull(uid));
+    sqlIns.bindValue(":imp_source", strOrNull(impSource));
     return execQuery(sqlIns);
 }
 
-bool HwDatabase::addRepayment(int idCrd, const QDateTime &opDT, int amount, int idAcc, int idCur, const QString &descr, int idImp, const QString &uid)
+bool HwDatabase::addRepayment(int idCrd, const QDateTime &opDT, int amount, int idAcc, int idCur, const QString &descr,
+    int idImp, const QString &uid, const QString& impSource)
 {
     QSqlQuery sqlIns(sqlDb);
     if (!prepQuery(sqlIns,
       "insert into hw_repayment(" \
       " id_crd, op_date, amount, id_ac, id_cur, descr," \
-      " id_imp, uid_imp" \
+      " id_imp, uid_imp, imp_source" \
       ") values (" \
       " :id_crd, :op_date, :amount, :id_ac, :id_cur, :descr," \
-      " :id_imp, :uid_imp)"))
+      " :id_imp, :uid_imp, :imp_source)"))
         return false;
     sqlIns.bindValue(":id_crd", idCrd);
     sqlIns.bindValue(":op_date", opDT);
@@ -845,6 +852,7 @@ bool HwDatabase::addRepayment(int idCrd, const QDateTime &opDT, int amount, int 
     sqlIns.bindValue(":descr", strOrNull(descr));
     sqlIns.bindValue(":id_imp", idOrNull(idImp));
     sqlIns.bindValue(":uid_imp", strOrNull(uid));
+    sqlIns.bindValue(":imp_source", strOrNull(impSource));
     return execQuery(sqlIns);
 }
 

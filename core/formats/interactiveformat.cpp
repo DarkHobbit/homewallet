@@ -252,12 +252,13 @@ bool InteractiveFormat::postImport(HwDatabase& db)
         switch (c.type) {
         case ImpRecCandidate::Expense:
             if (!db.addExpenseOp(c.opDT, c.quantity, c.amount, idAccActual, idCurActual,
-                    c.idSubcat, c.idUnit, -1, 0, false, c.descr, _idImp, c.uid))
+                    c.idSubcat, c.idUnit, -1, 0, false, c.descr,
+                    _idImp, c.uid, c.source))
                 return false;
             break;
         case ImpRecCandidate::Income:
             if (!db.addIncomeOp(c.opDT, c.quantity, c.amount, idAccActual, idCurActual,
-                    c.idSubcat, c.idUnit, false, c.descr, _idImp, c.uid))
+                    c.idSubcat, c.idUnit, false, c.descr, _idImp, c.uid, c.source))
                 return false;
             break;
         case ImpRecCandidate::ReceiptStart:
@@ -268,7 +269,7 @@ bool InteractiveFormat::postImport(HwDatabase& db)
             break;
         case ImpRecCandidate::Transfer:
             if (!db.addTransfer(c.opDT, c.amount, idCurActual, c.idAcc, c.idAccTo,
-                    c.idCat, c.descr,  _idImp, c.uid))
+                    c.idCat, c.descr,  _idImp, c.uid, c.source))
             return false; //===>
             break;
             // TODO other recordtypes

@@ -360,12 +360,12 @@ bool XmlHwFile::importExpenses(const QDomElement &e, HwDatabase &db)
     return importDbRecordsGroup(db, e, "exp", "hw_ex_op",
         QStringList() << "op_date" << "quantity" << "amount"
                       << "id_ac" << "id_cur" << "id_esubcat" << "id_un"
-                      << "discount" << "attention" << "descr"
+                                              << "discount" << "attention" << "descr" << "imp_source"
                       << "id_imp" << "uid_imp" << "id_imp_verify" << "uid_imp_verify",
-        "DFIRRRRIISZSZS", "MOMMMMOOOOOOOO",
+        "DFIRRRRIISSZSZS", "MOMMMMOOOOOOOOO",
         QStringList() << "dt" << "q" << "a"
                       << "ac" << "cu" << "ca" << "u"
-                      << "di" << "at" << "d" << "imp" << "vfy",
+                      << "di" << "at" << "d" << "ims" << "imp" << "vfy",
         tRefs);
 }
 
@@ -381,12 +381,12 @@ bool XmlHwFile::importIncomes(const QDomElement &e, HwDatabase &db)
     return importDbRecordsGroup(db, e, "inc", "hw_in_op",
         QStringList() << "op_date" << "quantity" << "amount"
                       << "id_ac" << "id_cur" << "id_isubcat" << "id_un"
-                      << "attention" << "descr"
+                      << "attention" << "descr" << "imp_source"
                       << "id_imp" << "uid_imp" << "id_imp_verify" << "uid_imp_verify",
-        "DFIRRRRISZSZS", "MOMMMMOOOOOOO",
+        "DFIRRRRISSZSZS", "MOMMMMOOOOOOOO",
         QStringList() << "dt" << "q" << "a"
                       << "ac" << "cu" << "ca" << "u"
-                      << "at" << "d" << "imp" << "vfy",
+                      << "at" << "d" << "ims" << "imp" << "vfy",
         tRefs);
 }
 
@@ -402,11 +402,11 @@ bool XmlHwFile::importTransfer(const QDomElement &e, HwDatabase &db)
 
     return importDbRecordsGroup(db, e, "tr", "hw_transfer",
         QStringList() << "op_date" << "amount" << "id_cur"
-                      << "id_ac_in" << "id_ac_out" << "id_tt" << "descr"
+                      << "id_ac_in" << "id_ac_out" << "id_tt" << "descr" << "imp_source"
                       << "id_imp" << "uid_imp" << "id_imp_verify" << "uid_imp_verify",
-        "DIRRRRSZSZS", "MMMMMMOOOOO",
+        "DIRRRRSSZSZS", "MMMMMMOOOOOO",
         QStringList() << "dt" << "a" << "cu" << "ai" << "ao"
-                      << "t" << "d" << "imp" << "vfy",
+                      << "t" << "d" << "ims" << "imp" << "vfy",
         tRefs);
 }
 
@@ -421,11 +421,11 @@ bool XmlHwFile::importCurrencyConversion(const QDomElement &e, HwDatabase &db)
 
     return importDbRecordsGroup(db, e, "ce", "hw_curr_exch",
         QStringList() << "op_date" << "id_ac" << "id_cur_in" << "id_cur_out"
-            << "amount_in" << "amount_out" << "descr"
+            << "amount_in" << "amount_out" << "descr" << "imp_source"
             << "id_imp" << "uid_imp" << "id_imp_verify" << "uid_imp_verify",
-        "DRRRIISZSZS", "MMMMMMOOOOO",
+        "DRRRIISSZSZS", "MMMMMMOOOOOO",
         QStringList() << "dt" << "ac" << "ci" << "co"
-                      << "ami" << "amo" << "d" << "imp" << "vfy",
+                      << "ami" << "amo" << "d" << "ims" << "imp" << "vfy",
                                 tRefs);
 }
 
@@ -472,14 +472,15 @@ bool XmlHwFile::importCredits(const QDomElement &e, HwDatabase &db, const QStrin
         QStringList() << "op_date" << "close_date" << "remind_date" << "id_crs"
                       << "amount" << "down_pay" << "money_back" << "money_remaining_debt"
                       << "id_ac" << "id_cur" << "rate" << "is_rate_onetime"
-                      << "period" << "period_unit" << "is_closed" << "descr"
+                      << "period" << "period_unit" << "is_closed" << "descr" << "imp_source"
                       << "id_imp" << "uid_imp" << "id_imp_verify" << "uid_imp_verify"
                       << "is_lend",
-        "DDDRIIIIRRFBIRBSZSZSI", "MOOMMOMMMMOMOMMOOOOOM",
+        "DDDRIIIIRRFBIRBSSZSZSI", "MOOMMOMMMMOMOMMOOOOOOM",
         QStringList() << "dt" << "dtc" << "dtr" << "crs"
                       << "a" << "dp" << "mb" << "mrd"
                       << "ac" << "cu" << "r" << "ot"
-                      << "p" << "pu" << "cls" << "d" << "imp" << "vfy",
+                      << "p" << "pu" << "cls" << "d"
+                      << "ims" << "imp" << "vfy",
         tRefs,
         QVariantList() << QVariant(isLendNum),
         &elCreds);
@@ -488,11 +489,11 @@ bool XmlHwFile::importCredits(const QDomElement &e, HwDatabase &db, const QStrin
     {
         // Repayments
         res = importDbRecordsGroup(db, elCreds[idCred], "rep", "hw_repayment",
-             QStringList() << "op_date" << "amount" << "id_ac" << "id_cur" << "descr"
+             QStringList() << "op_date" << "amount" << "id_ac" << "id_cur" << "descr" << "imp_source"
                            << "id_imp" << "uid_imp" << "id_imp_verify" << "uid_imp_verify"
                            << "id_crd",
-             "DIRRSZSZSI", "MMMMOOOOOM",
-             QStringList() << "dt" << "a" << "ac" << "cu" << "d" << "imp" << "vfy",
+             "DIRRSSZSZSI", "MMMMOOOOOOM",
+             QStringList() << "dt" << "a" << "ac" << "cu" << "d" << "ims" << "imp" << "vfy",
              tRefs,
              QVariantList() << QVariant(idCred));
         if (!res)
@@ -776,6 +777,7 @@ bool XmlHwFile::exportCategories(HwDatabase &db, QDomElement &elRoot)
     " ex.discount as di," \
     " case ex.attention when 1 then 'yes' else null end as at," \
     " ex.descr as d," \
+    " ex.imp_source as ims," \
     " fim.filename||'::'||uid_imp as imp," \
     " fvf.filename||'::'||uid_imp_verify as vfy" \
     " from" \
@@ -807,6 +809,7 @@ bool XmlHwFile::exportExpenses(HwDatabase &db, QDomElement &elRoot)
     " cat.name||'::'||scat.name as ca," \
     " case inc.attention when 1 then 'yes' else null end as at," \
     " inc.descr as d," \
+    " inc.imp_source as ims," \
     " fim.filename||'::'||uid_imp as imp," \
     " fvf.filename||'::'||uid_imp_verify as vfy" \
     " from" \
@@ -831,6 +834,7 @@ bool XmlHwFile::exportIncomes(HwDatabase &db, QDomElement &elRoot)
     "select tr.id, tr.op_date as dt, tr.amount as a, cur.abbr as cu," \
     " acci.name as ai, acco.name as ao, tt.name as t," \
     " tr.descr as d," \
+    " tr.imp_source as ims," \
     " fim.filename||'::'||uid_imp as imp," \
     " fvf.filename||'::'||uid_imp_verify as vfy" \
     " from" \
@@ -853,6 +857,7 @@ bool XmlHwFile::exportTransfer(HwDatabase &db, QDomElement &elRoot)
     "select ce.id, ce.op_date as dt, acc.name as ac," \
     " curi.abbr as ci, curo.abbr as co, amount_in as ami, amount_out as amo," \
     " ce.descr as d," \
+    " ce.imp_source as ims," \
     " fim.filename||'::'||uid_imp as imp," \
     " fvf.filename||'::'||uid_imp_verify as vfy" \
     " from" \
@@ -909,6 +914,7 @@ bool XmlHwFile::exportCurrencyRate(HwDatabase &db, QDomElement &elRoot)
     " end as pu," \
     " case is_closed when 1 then 'yes' else 'no' end as cls," \
     " cr.descr as d," \
+    " cr.imp_source as ims," \
     " fim.filename||'::'||uid_imp as imp," \
     " fvf.filename||'::'||uid_imp_verify as vfy" \
     " from" \
@@ -923,6 +929,7 @@ bool XmlHwFile::exportCurrencyRate(HwDatabase &db, QDomElement &elRoot)
 
 #define Q_SEL_CRED_RET \
     "select crp.id, crp.op_date as dt, crp.amount as a, cur.abbr as cu, acc.name as ac, crp.descr as d," \
+    " crp.imp_source as ims," \
     " fim.filename||'::'||uid_imp as imp," \
     " fvf.filename||'::'||uid_imp_verify as vfy" \
     " from hw_repayment crp" \

@@ -167,6 +167,7 @@ create table hw_in_op (
     descr char(256),
     id_imp integer null,
     uid_imp char(64), -- _id for JSON, line after date for TXT...
+    imp_source char(128),
     id_imp_verify integer null,
     uid_imp_verify char(64), -- see uid_imp
     constraint fk_inac foreign key(id_ac) references hw_account(id),
@@ -187,6 +188,7 @@ create table hw_receipt ( -- in shop, rus. чек
     id_cur integer not null,
     id_imp integer null,
     uid_imp char(64), -- _id for JSON, line after date for TXT...
+    imp_source char(128),
     id_imp_verify integer null,
     uid_imp_verify char(64), -- see uid_imp
     constraint fk_rcac foreign key(id_ac) references hw_account(id),
@@ -211,6 +213,7 @@ create table hw_ex_op (
     descr char(256),
     id_imp integer null,
     uid_imp char(64), -- _id for JSON, line after date for TXT...
+    imp_source char(128),
     id_imp_verify integer null,
     uid_imp_verify char(64), -- see uid_imp
     constraint fk_exac foreign key(id_ac) references hw_account(id),
@@ -241,6 +244,7 @@ create table hw_transfer (
     descr char(256),
     id_imp integer null,
     uid_imp char(64), -- _id for JSON, line after date for TXT...
+    imp_source char(128),
     id_imp_verify integer null,
     uid_imp_verify char(64), -- see uid_imp
     constraint fk_trcur foreign key(id_cur) references hw_currency(id),
@@ -262,6 +266,7 @@ create table hw_curr_exch (
     descr char(256),
     id_imp integer null,
     uid_imp char(64), -- _id for JSON, line after date for TXT...
+    imp_source char(128),
     id_imp_verify integer null,
     uid_imp_verify char(64), -- see uid_imp
     constraint fk_ceac foreign key(id_ac) references hw_account(id),
@@ -299,6 +304,7 @@ create table hw_credit ( -- lend or borrow
     descr char(256),
     id_imp integer null,
     uid_imp char(64), -- _id for JSON, line after date for TXT...
+    imp_source char(128),
     id_imp_verify integer null,
     uid_imp_verify char(64), -- see uid_imp
     constraint uk_crd unique(op_date, id_crs),
@@ -322,6 +328,7 @@ create table hw_repayment (
     descr char(256),
     id_imp integer null,
     uid_imp char(64), -- _id for JSON, line after date for TXT...
+    imp_source char(128),
     id_imp_verify integer null,
     uid_imp_verify char(64), -- see uid_imp
     constraint fk_crpcrd foreign key(id_crd) references hw_credit(id),

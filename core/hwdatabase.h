@@ -105,17 +105,20 @@ public:
     // Inc/Exp
     bool addIncomeOp(const QDateTime& opDT, double quantity,
         int amount, int idAcc, int idCur, int idSubcat, int idUnit,
-        bool attention, const QString& descr, int idImp=-1, const QString& uid="");
+        bool attention, const QString& descr,
+        int idImp=-1, const QString& uid="", const QString& impSource="");
     bool addExpenseOp(const QDateTime& opDT, double quantity,
         int amount, int idAcc, int idCur, int idSubcat, int idUnit, int idReceipt,
-        int discount, bool attention, const QString& descr, int idImp=-1, const QString& uid="");
+        int discount, bool attention, const QString& descr,
+        int idImp=-1, const QString& uid="", const QString& impSource="");
     // Transfer, currencyConv
     bool addTransfer(const QDateTime& opDT, int amount, int idCur, int idAccFrom, int idAccTo,
-        int idTransferType, const QString& descr, int idImp=-1, const QString& uid="");
+        int idTransferType, const QString& descr,
+        int idImp=-1, const QString& uid="", const QString& impSource="");
     bool addCurrencyConv(const QDateTime& opDT, int idAcc,
         int idCurFrom, int amountFrom,
-        int idCurTo, int amountTo,
-        const QString& descr, int idImp=-1, const QString& uid="");
+        int idCurTo, int amountTo, const QString& descr,
+        int idImp=-1, const QString& uid="", const QString& impSource="");
     // Debtors, Creditors
     bool addCredit(const QDateTime& opDT, const QDateTime& closeDT, const QDateTime& remindDT,
         bool isLend, int idCrs,
@@ -123,10 +126,10 @@ public:
         int idAcc, int idCur, double rate, bool isRateOneTime,
         int period, int periodUnit,
         bool isClosed, const QString& descr,
-        int idImp=-1, const QString& uid="");
+        int idImp=-1, const QString& uid="", const QString& impSource="");
     bool addRepayment(int idCrd, const QDateTime& opDT, int amount,
         int idAcc, int idCur, const QString& descr,
-        int idImp=-1, const QString& uid="");
+        int idImp=-1, const QString& uid="", const QString& impSource="");
     // Analysis
     bool testDateRange(QDateTime& dtMin, QDateTime& dtMax);
 };
