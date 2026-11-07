@@ -778,7 +778,7 @@ void MainWindow::on_actionDuplicates_Search_triggered()
     QHBoxLayout* layDelta = new QHBoxLayout();
     layDelta->addWidget(new QLabel(tr("Amount delta")));
     QSpinBox* sbDelta = new QSpinBox();
-    sbDelta->setValue(2);
+    sbDelta->setValue(gd_defaultAmountDelta);
     layDelta->addWidget(sbDelta);
     d->mainLayout()->insertLayout(2, layDelta);
     d->setTabOrder(d->lastBaseWidget(), sbDelta);

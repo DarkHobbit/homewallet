@@ -112,7 +112,11 @@ void PostImportDialog::showEvent(QShowEvent*)
 
 void PostImportDialog::updateView()
 {
-    intFile->analyzeCandidates(*db);
+    if (!intFile->analyzeCandidates(*db)) {
+        // TODO move MainWindow::processImpExErrors to (exp-imp?) helpers and call it here
+        // processImpExSuccess also move
+        return;
+    }
     mSet->updateModels();
     updateOneView(ui->tableExpenses, false);
     updateOneView(ui->tableIncomes, false);

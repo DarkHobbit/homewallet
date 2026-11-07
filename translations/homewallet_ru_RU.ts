@@ -1108,29 +1108,29 @@ at record %1 from %2</source>
         <translation type="obsolete">Строка %1: строка исходного файла %2, состояние: %3</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="189"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="193"/>
         <source>Row %1: source line %2%3
 State: %4</source>
         <translation>Запись %1: исходная строка %2%3
 Состояние: %4</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="193"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="197"/>
         <source>Category candidates:</source>
         <translation>Кандидаты на категорию:</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="246"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="250"/>
         <source>No unknown aliases in this row</source>
         <translation>В этой строке нет неизвестных псевдонимов</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="330"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="334"/>
         <source>No ambiguous subcategory at this record</source>
         <translation>У этой записи нет неоднозначной подкатегории</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="334"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="338"/>
         <source>Select category</source>
         <translation>Выберите категорию</translation>
     </message>
@@ -2002,62 +2002,62 @@ Found: %1</source>
         <translation>Слишком длинная дробная часть денежной суммы: %1,%2</translation>
     </message>
     <message>
-        <location filename="../core/formats/interactiveformat.h" line="55"/>
+        <location filename="../core/formats/interactiveformat.h" line="57"/>
         <source>initial</source>
         <translation>начальное</translation>
     </message>
     <message>
-        <location filename="../core/formats/interactiveformat.h" line="56"/>
+        <location filename="../core/formats/interactiveformat.h" line="58"/>
         <source>parse error</source>
         <translation>ошибка разбора</translation>
     </message>
     <message>
-        <location filename="../core/formats/interactiveformat.h" line="57"/>
+        <location filename="../core/formats/interactiveformat.h" line="59"/>
         <source>unknown alias</source>
         <translation>неизвестный псевдоним</translation>
     </message>
     <message>
-        <location filename="../core/formats/interactiveformat.h" line="58"/>
+        <location filename="../core/formats/interactiveformat.h" line="60"/>
         <source>unknown account</source>
         <translation>неизвестный счёт</translation>
     </message>
     <message>
-        <location filename="../core/formats/interactiveformat.h" line="59"/>
+        <location filename="../core/formats/interactiveformat.h" line="61"/>
         <source>unknown currency</source>
         <translation>неизвестная валюта</translation>
     </message>
     <message>
-        <location filename="../core/formats/interactiveformat.h" line="60"/>
+        <location filename="../core/formats/interactiveformat.h" line="62"/>
         <source>unknown unit</source>
         <translation>неизвестная единица измерения</translation>
     </message>
     <message>
-        <location filename="../core/formats/interactiveformat.h" line="61"/>
+        <location filename="../core/formats/interactiveformat.h" line="63"/>
         <source>unknown category</source>
         <translation>неизвестная категория</translation>
     </message>
     <message>
-        <location filename="../core/formats/interactiveformat.h" line="62"/>
+        <location filename="../core/formats/interactiveformat.h" line="64"/>
         <source>unknown subcategory</source>
         <translation>неизвестная подкатегория</translation>
     </message>
     <message>
-        <location filename="../core/formats/interactiveformat.h" line="63"/>
+        <location filename="../core/formats/interactiveformat.h" line="65"/>
         <source>ambiguous subcategory</source>
         <translation>неоднозначная подкатегория</translation>
     </message>
     <message>
-        <location filename="../core/formats/interactiveformat.h" line="64"/>
+        <location filename="../core/formats/interactiveformat.h" line="66"/>
         <source>unknown transfer type</source>
         <translation>неизвестный тип переноса</translation>
     </message>
     <message>
-        <location filename="../core/formats/interactiveformat.h" line="65"/>
+        <location filename="../core/formats/interactiveformat.h" line="67"/>
         <source>possibly duplicate</source>
         <translation>возможно, дубль</translation>
     </message>
     <message>
-        <location filename="../core/formats/interactiveformat.h" line="66"/>
+        <location filename="../core/formats/interactiveformat.h" line="68"/>
         <source>ready to import</source>
         <translation>готово к импорту</translation>
     </message>
@@ -2272,6 +2272,11 @@ act. amount deleted %5, existing %6)</source>
         <location filename="../model/hiermodelbase.h" line="43"/>
         <source>Alias: %1</source>
         <translation>Псевдоним: %1</translation>
+    </message>
+    <message>
+        <location filename="../core/formats/interactiveformat.cpp" line="398"/>
+        <source>Unknown information type (%1) at %2</source>
+        <translation>Неизвестный тип информации (%1) от %2</translation>
     </message>
 </context>
 <context>

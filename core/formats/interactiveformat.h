@@ -46,10 +46,12 @@ struct ImpRecCandidate
         ReceiptStart,
         ReceiptEnd,
         Transfer,
+        // TODO currency exchange
         Debtor,
-        Creditor/*,
-        IncomePlan,
+        Creditor,
+        /*IncomePlan,
         ExpensePlan*/
+        MaxType
     } type;
     QString stateString[MaxState] = {
         QObject::tr("initial"),
@@ -110,6 +112,7 @@ private:
     bool findCurrency(HwDatabase &db, ImpRecCandidate& c, QString &currAbbr, int &idCurr);
     bool findUnit(HwDatabase &db, ImpRecCandidate& c, QString& name, int& idUn);
     void completeDescr(ImpRecCandidate& c, const GenericDatabase::StrColl& collDescr, const QString& alias);
+    bool searchDups(HwDatabase& db, int amountDelta);
 };
 
 #endif // INTERACTIVEFORMAT_H

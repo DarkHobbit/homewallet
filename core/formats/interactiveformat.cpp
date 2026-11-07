@@ -236,7 +236,7 @@ bool InteractiveFormat::analyzeCandidates(HwDatabase &db)
 
         // TODO
     }
-    return true;
+    return searchDups(db, gd_defaultAmountDelta);
 }
 
 bool InteractiveFormat::postImport(HwDatabase& db)
@@ -354,6 +354,60 @@ void InteractiveFormat::completeDescr(ImpRecCandidate &c, const GenericDatabase:
             c.descr += toDescr;
         }
     }
+}
+#include <iostream>
+bool InteractiveFormat::searchDups(HwDatabase &db, int amountDelta)
+{
+    for (ImpRecCandidate& c: candidates) {
+        QDate dc = c.opDT.date();
+        QDate dn = dc.addDays(1);
+        int sumMin = c.amount-amountDelta;
+        int sumMax = c.amount+amountDelta;
+        QSqlQuery qCandDup(db.sqlDbRef());
+        switch (c.type) {
+        case ImpRecCandidate::Unknown:
+            continue;
+        case ImpRecCandidate::Expense:
+            DB_CHK(db.prepQuery(qCandDup, SQL_FIND_EXPENSE_DUP))
+            qCandDup.bindValue(":id_subcat", c.idSubcat);
+            break;
+        case ImpRecCandidate::Income:
+            DB_CHK(db.prepQuery(qCandDup, SQL_FIND_INCOME_DUP))
+            qCandDup.bindValue(":id_subcat", c.idSubcat);
+            break;
+        case ImpRecCandidate::ReceiptStart:
+            // TODO
+            break;
+        case ImpRecCandidate::ReceiptEnd:
+            continue;
+        case ImpRecCandidate::Transfer:
+            std::cerr << "TR DUP " << c.idCat << std::endl;
+            DB_CHK(db.prepQuery(qCandDup, SQL_FIND_TRANSFER_DUP))
+            qCandDup.bindValue(":id_subcat", c.idCat);
+            break;
+        case ImpRecCandidate::Debtor:
+            // TODO
+            break;
+        case ImpRecCandidate::Creditor:
+            // TODO
+            break;
+            // TODO возвраты кредитов
+        /*IncomePlan,
+        ExpensePlan*/
+        default:
+            _fatalError = QObject::tr("Unknown information type (%1) at %2").arg(c.type).arg(dc.toString());
+            return false;
+        }
+        qCandDup.bindValue(":am_min", sumMin);
+        qCandDup.bindValue(":am_max", sumMax);
+        qCandDup.bindValue(":dc", dc);
+        qCandDup.bindValue(":dn", dn);
+        DB_CHK(db.execQuery(qCandDup))
+        if (db.queryRecCount(qCandDup)>0)
+            c.state = ImpRecCandidate::PossiblyDup;
+        // TODO generate dup list for context menu - generalize ReportsData::DupSet?
+    }
+    return true;
 }
 
 ImpRecCandidate::ImpRecCandidate(const QString &_source, const QString &_uid, int _lineNumber, const QDateTime& _opDT)

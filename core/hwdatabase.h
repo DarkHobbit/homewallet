@@ -25,6 +25,20 @@
 #define S_REPEAT_IMPORT \
 QObject::tr("File was already imported:\n%1\n Repeat it?")
 
+// Unified duplicate search queries
+// 1) inside db, 2) db vs db 3) db vs files, 4) db vs import candidates...
+#define SQL_FIND_EXPENSE_DUP \
+ "select id, amount, descr, id_imp, uid_imp from hw_ex_op where op_date>=:dc and op_date<:dn" \
+ " and id_esubcat=:id_subcat and amount>=:am_min and amount<=:am_max"
+
+#define SQL_FIND_INCOME_DUP \
+ "select id, amount, descr, id_imp, uid_imp from hw_in_op where op_date>=:dc and op_date<:dn" \
+ " and id_isubcat=:id_subcat and amount>=:am_min and amount<=:am_max"
+
+#define SQL_FIND_TRANSFER_DUP \
+ "select id, amount, descr, id_imp, uid_imp from hw_transfer where op_date>=:dc and op_date<:dn" \
+ " and id_tt=:id_subcat and amount>=:am_min and amount<=:am_max"
+
 class HwDatabase: public GenericDatabase
 {
 public:

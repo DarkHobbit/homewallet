@@ -126,6 +126,7 @@ struct Account {
     QString name;
 };
 
+const int gd_defaultAmountDelta = 2; //TODO ===vvv
 extern
 struct GlobalConfig {
     // View

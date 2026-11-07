@@ -36,9 +36,7 @@ bool ReportsData::findDuplicates(HwDatabase &db, const QDate &dFrom, const QDate
     DB_CHK(db.collectRevDict(collSubCat, "hw_ex_subcat"))
     if (!findOneDuplicatesKind(db, dFrom, dTo, amountDelta, S_DK_EXPENSES,
         "select id, op_date, amount, id_esubcat from hw_ex_op where op_date>=:dmin and op_date<=:dmax order by op_date",
-        "select id, amount, descr, id_imp, uid_imp from hw_ex_op where op_date>=:dc and op_date<:dn" \
-        " and id_esubcat=:id_subcat and amount>=:am_min and amount<=:am_max",
-        collCat, collSubCat, collImp, duplicates.expenses))
+        SQL_FIND_EXPENSE_DUP, collCat, collSubCat, collImp, duplicates.expenses))
         return false;
 
     // Incomes
@@ -48,9 +46,7 @@ bool ReportsData::findDuplicates(HwDatabase &db, const QDate &dFrom, const QDate
     DB_CHK(db.collectRevDict(collSubCat, "hw_in_subcat"))
     if (!findOneDuplicatesKind(db, dFrom, dTo, amountDelta, S_DK_INCOMES,
         "select id, op_date, amount, id_isubcat from hw_in_op where op_date>=:dmin and op_date<=:dmax order by op_date",
-        "select id, amount, descr, id_imp, uid_imp from hw_in_op where op_date>=:dc and op_date<:dn" \
-        " and id_isubcat=:id_subcat and amount>=:am_min and amount<=:am_max",
-        collCat, collSubCat, collImp, duplicates.incomes))
+        SQL_FIND_INCOME_DUP, collCat, collSubCat, collImp, duplicates.incomes))
         return false;
 
     // Transfer
@@ -59,9 +55,7 @@ bool ReportsData::findDuplicates(HwDatabase &db, const QDate &dFrom, const QDate
     DB_CHK(db.collectRevDict(collCat, "hw_transfer_type"))
     if (!findOneDuplicatesKind(db, dFrom, dTo, amountDelta, S_DK_TRANSFER,
         "select id, op_date, amount, id_tt from hw_transfer where op_date>=:dmin and op_date<=:dmax order by op_date",
-        "select id, amount, descr, id_imp, uid_imp from hw_transfer where op_date>=:dc and op_date<:dn" \
-        " and id_tt=:id_subcat and amount>=:am_min and amount<=:am_max",
-        collCat, collSubCat, collImp, duplicates.transfer))
+        SQL_FIND_TRANSFER_DUP, collCat, collSubCat, collImp, duplicates.transfer))
         return false;
 
     std::cout << "Elapsed " << tmFind.elapsed() << " ms" << std::endl;
