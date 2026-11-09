@@ -59,10 +59,13 @@ PostImportDialog::~PostImportDialog()
     delete ui;
 }
 
-void PostImportDialog::setData(InteractiveFormat* _intFile, HwDatabase* _db)
+void PostImportDialog::setData(InteractiveFormat* _intFile, const QString& _path, HwDatabase* _db)
 {
     intFile = _intFile;
+    path = _path;
     db = _db;
+    if (!path.isEmpty())
+        setWindowTitle(windowTitle() + " - " + path);
 
     mSet = new ImportModelSet(&_intFile->candidates, this);
     ui->tableExpenses->setModel(mSet->proxyExpense);
@@ -113,8 +116,7 @@ void PostImportDialog::showEvent(QShowEvent*)
 void PostImportDialog::updateView()
 {
     if (!intFile->analyzeCandidates(*db)) {
-        // TODO move MainWindow::processImpExErrors to (exp-imp?) helpers and call it here
-        // processImpExSuccess also move
+        processImpExErrors(intFile, false, path);
         return;
     }
     mSet->updateModels();

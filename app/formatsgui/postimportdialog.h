@@ -31,7 +31,7 @@ class PostImportDialog : public QDialog
 public:
     explicit PostImportDialog(QWidget *parent);
     ~PostImportDialog();
-    void setData(InteractiveFormat* _intFile, HwDatabase* _db);
+    void setData(InteractiveFormat* _intFile, const QString& _path, HwDatabase* _db);
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
@@ -39,6 +39,7 @@ protected:
 private:
     Ui::PostImportDialog *ui;
     InteractiveFormat* intFile;
+    QString path;
     HwDatabase* db;
     ImportModelSet* mSet;
     // Potentially unsafe pointers (covered by activeTab() in all changed)

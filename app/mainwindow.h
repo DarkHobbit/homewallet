@@ -79,9 +79,7 @@ private slots:
     void on_actionDelete_triggered();
     void on_actionShowRepaymentHistory_triggered();
     void on_actionCurrencies_triggered();
-
     void on_actionDuplicates_Search_triggered();
-
     void on_actionCategory_Organizer_triggered();
 
 private:
@@ -114,8 +112,6 @@ private:
     void updateConfig();
     void updateTabsAndFilters();
     ActiveTab activeTab();
-    void processImpExErrors(FileFormat* f, bool res, const QString& path);
-    void processImpExSuccess(FileFormat* f);
 };
 
 #endif // MAINWINDOW_H

@@ -29,7 +29,6 @@
 #include "configmanager.h"
 #include "currencywindow.h"
 #include "globals.h"
-#include "logwindow.h"
 #include "mainwindow.h"
 #include "progresswindow.h"
 #include "reportsdata.h"
@@ -337,7 +336,7 @@ void MainWindow::on_action_Import_triggered()
                 InteractiveFormat* intFile = dynamic_cast<InteractiveFormat*>(impFile);
                 if (intFile) {
                     PostImportDialog* d = new PostImportDialog(0);
-                    d->setData(intFile, &db);
+                    d->setData(intFile, fi.fileName(), &db);
                     d->exec();
                     if (d->result()==QDialog::Accepted)
                         impFile->postImport(db);
@@ -670,33 +669,6 @@ void MainWindow::updateTabsAndFilters()
             ui->cbSubcategory->setCurrentIndex(ui->cbSubcategory->findText(subcategory));
     }
     updateViews();
-}
-
-void MainWindow::processImpExErrors(FileFormat *f, bool res, const QString& path)
-{
-    QString fatalError = f->fatalError();
-    QStringList errors = f->errors();
-    if (!errors.isEmpty()) {
-        LogWindow* w = new LogWindow(0);
-        w->setData(path, f->processedRecordsCount(), errors);
-        w->exec();
-        delete w;
-    }
-    if (fatalError.isEmpty() && !res) {
-        fatalError = S_ERR_UNKNOWN_IMP_EX;
-    }
-    if (!fatalError.isEmpty()) {
-        fatalError += S_ERR_REC_NUM
-                          .arg(f->processedRecordsCount())
-                          .arg(f->totalRecordsCount());
-        QMessageBox::critical(0, S_ERROR, fatalError);
-    }
-}
-
-void MainWindow::processImpExSuccess(FileFormat *f)
-{
-    QMessageBox::information(0, S_INFORM,
-        S_INFO_IMP_STAT.arg(f->processedRecordsCount()));
 }
 
 void MainWindow::on_btn_Add_clicked()

@@ -23,6 +23,7 @@
 #include <QStringList>
 #include <QTableView>
 
+#include "formats/fileformat.h"
 #include "filteredquerymodel.h"
 #include "genericdatabase.h"
 
@@ -47,6 +48,10 @@ void updateTableConfig(QTableView* table);
 void updateOneView(QTableView* view, bool isDatabaseView);
 // Unify use native/system dialogs settings
 QFileDialog::Option dontUseNativeDialog();
+
+void processImpExErrors(FileFormat* f, bool res, const QString& path);
+void processImpExSuccess(FileFormat* f);
+
 
 // Second base class for widgets with QTableView-s and proxy models
 // Can be used with QMainWindow, QWidget, etc.

@@ -18,6 +18,7 @@
 #include "configmanager.h"
 #include "globals.h"
 #include "helpers.h"
+#include "logwindow.h"
 
 void fillComboByDict(QComboBox *combo, GenericDatabase::DictColl coll, bool addAllItem)
 {
@@ -94,6 +95,33 @@ void setSimilarComboText(QComboBox *combo, const QString &pattern)
         }
     }
     combo->setCurrentIndex(combo->count()-1);
+}
+
+void processImpExErrors(FileFormat *f, bool res, const QString& path)
+{
+    QString fatalError = f->fatalError();
+    QStringList errors = f->errors();
+    if (!errors.isEmpty()) {
+        LogWindow* w = new LogWindow(0);
+        w->setData(path, f->processedRecordsCount(), errors);
+        w->exec();
+        delete w;
+    }
+    if (fatalError.isEmpty() && !res) {
+        fatalError = S_ERR_UNKNOWN_IMP_EX;
+    }
+    if (!fatalError.isEmpty()) {
+        fatalError += S_ERR_REC_NUM
+                          .arg(f->processedRecordsCount())
+                          .arg(f->totalRecordsCount());
+        QMessageBox::critical(0, S_ERROR, fatalError);
+    }
+}
+
+void processImpExSuccess(FileFormat *f)
+{
+    QMessageBox::information(0, S_INFORM,
+                             S_INFO_IMP_STAT.arg(f->processedRecordsCount()));
 }
 
 bool SelecTables::checkSelection(bool errorIfNoSelected, bool onlyOneRowAllowed)
