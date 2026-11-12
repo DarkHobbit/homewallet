@@ -63,6 +63,7 @@ private slots:
     void on_btnQuickFilter_clicked();
     void on_actFilter_triggered();
     void on_actResolveAmbiguity_triggered();
+    void on_cbShowOnlyProblematic_stateChanged(int);
 };
 
 #endif // POSTIMPORTDIALOG_H

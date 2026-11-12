@@ -316,12 +316,10 @@ void PostImportDialog::on_btnQuickFilter_clicked()
         proxy->setFilterWildcard(filterText);
 }
 
-
 void PostImportDialog::on_actFilter_triggered()
 {
     ui->leQuickFilter->setFocus();
 }
-
 
 void PostImportDialog::on_actResolveAmbiguity_triggered()
 {
@@ -346,3 +344,8 @@ void PostImportDialog::on_actResolveAmbiguity_triggered()
     }
 }
 
+void PostImportDialog::on_cbShowOnlyProblematic_stateChanged(int)
+{
+    mSet->setShowOnlyProblematic(ui->cbShowOnlyProblematic->isChecked());
+    mSet->updateModels();
+}

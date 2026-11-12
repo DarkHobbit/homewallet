@@ -667,17 +667,17 @@ Verified from %1</source>
 <context>
     <name>ImportModelSet</name>
     <message>
-        <location filename="../model/importmodelset.cpp" line="60"/>
+        <location filename="../model/importmodelset.cpp" line="76"/>
         <source>Candidates (all/ready): expenses %1/%2, incomes %3/%4, transfer %5/%6, debit-credit %7/%8, unknown %9</source>
         <translation>Кандидаты (все/готово): расходы %1/%2, доходы %3/%4, переносы %5/%6, долги-кредиты %7/%8, неизвестные %9</translation>
     </message>
     <message>
-        <location filename="../model/importmodelset.cpp" line="67"/>
+        <location filename="../model/importmodelset.cpp" line="83"/>
         <source>Possibly duplicates: expenses %1, incomes %2, transfer %3, debit-credit %4</source>
         <translation>Возможные дубликаты: расходы %1, доходы %2, переносы %3, долги-кредиты %4</translation>
     </message>
     <message>
-        <location filename="../model/importmodelset.cpp" line="71"/>
+        <location filename="../model/importmodelset.cpp" line="87"/>
         <source>Ambiguous subcategories: expenses %1, incomes %2</source>
         <translation>Неоднозначные категории: расходы %1, доходы %2</translation>
     </message>
@@ -945,68 +945,68 @@ Verified from %1</source>
         <translation>Поиск &amp;дубликатов</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="151"/>
+        <location filename="../app/mainwindow.cpp" line="150"/>
         <source>Test data create error</source>
         <translation>Ошибка создания тестовых данных</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="155"/>
+        <location filename="../app/mainwindow.cpp" line="154"/>
         <source>Database not empty for testing</source>
         <translation>Для генерации тестовых записей БД должна быть пуста</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="210"/>
+        <location filename="../app/mainwindow.cpp" line="209"/>
         <source>Expenses: %1 (%2) Incomes: %3 (%4)</source>
         <translation>Расходов %1 (%2) Доходов %3 (%4)</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="269"/>
+        <location filename="../app/mainwindow.cpp" line="268"/>
         <source>DB query</source>
         <translation>Запрос к БД</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="269"/>
+        <location filename="../app/mainwindow.cpp" line="268"/>
         <source>Query text</source>
         <translation>Текст запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="280"/>
+        <location filename="../app/mainwindow.cpp" line="279"/>
         <source>Query result</source>
         <translation>Результат запроса</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="297"/>
+        <location filename="../app/mainwindow.cpp" line="296"/>
         <source>Open file for import</source>
         <translation>Выберите импортируемый файл</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="347"/>
+        <location filename="../app/mainwindow.cpp" line="346"/>
         <source>Format require dialog, but dialog not provided. Contact author</source>
         <translation>Формат требует диалоговое окно, но программа его не обеспечивает.
 Свяжитесь с автором</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="628"/>
+        <location filename="../app/mainwindow.cpp" line="627"/>
         <source>Can&apos;t create style %1</source>
         <translation>Не могу создать стиль %1</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="754"/>
+        <location filename="../app/mainwindow.cpp" line="726"/>
         <source>Repayment history for: </source>
         <translation>История платежей для: </translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="775"/>
+        <location filename="../app/mainwindow.cpp" line="747"/>
         <source>Duplicates search</source>
         <translation>Поиск дубликатов</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="779"/>
+        <location filename="../app/mainwindow.cpp" line="751"/>
         <source>Amount delta</source>
         <translation>Допуск суммы</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="785"/>
+        <location filename="../app/mainwindow.cpp" line="757"/>
         <source>Show source</source>
         <translation>Показывать источник</translation>
     </message>
@@ -1025,7 +1025,7 @@ at record %1 from %2</source>
 в записи %1 из %2</translation>
     </message>
     <message>
-        <location filename="../app/mainwindow.cpp" line="401"/>
+        <location filename="../app/mainwindow.cpp" line="400"/>
         <source>Restart program to apply language change</source>
         <translation>Язык сменится после перезапуска программы</translation>
     </message>
@@ -1069,37 +1069,42 @@ at record %1 from %2</source>
     </message>
     <message>
         <location filename="../app/formatsgui/postimportdialog.ui" line="133"/>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="160"/>
+        <source>Show only problematic</source>
+        <translation>Показывать только проблемные</translation>
+    </message>
+    <message>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="140"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="167"/>
         <source>Add alias</source>
         <translation>Добавить псевдоним</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="152"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="159"/>
         <source>State</source>
         <translation>Состояние</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="168"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="175"/>
         <source>Add subcategory</source>
         <translation>Добавить подкатегорию</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="176"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="183"/>
         <source>Add default unit</source>
         <translation>Добавить единицу измерения по умолчанию</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="184"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="191"/>
         <source>Resolve ambiguity</source>
         <translation>Разрешить неоднозначность</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="192"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="199"/>
         <source>Filter</source>
         <translation>Фильтр</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.ui" line="195"/>
+        <location filename="../app/formatsgui/postimportdialog.ui" line="202"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
@@ -1108,29 +1113,29 @@ at record %1 from %2</source>
         <translation type="obsolete">Строка %1: строка исходного файла %2, состояние: %3</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="193"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="195"/>
         <source>Row %1: source line %2%3
 State: %4</source>
         <translation>Запись %1: исходная строка %2%3
 Состояние: %4</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="197"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="199"/>
         <source>Category candidates:</source>
         <translation>Кандидаты на категорию:</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="250"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="252"/>
         <source>No unknown aliases in this row</source>
         <translation>В этой строке нет неизвестных псевдонимов</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="334"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="336"/>
         <source>No ambiguous subcategory at this record</source>
         <translation>У этой записи нет неоднозначной подкатегории</translation>
     </message>
     <message>
-        <location filename="../app/formatsgui/postimportdialog.cpp" line="338"/>
+        <location filename="../app/formatsgui/postimportdialog.cpp" line="340"/>
         <source>Select category</source>
         <translation>Выберите категорию</translation>
     </message>

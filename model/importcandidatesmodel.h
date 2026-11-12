@@ -25,20 +25,22 @@ class ImportCandidatesModel : public QAbstractTableModel
     Q_OBJECT
 public:
     explicit ImportCandidatesModel(ImpRecCandidate::Type _candType,
-                                    CandRefs& _candRefs,
-                                    QObject *parent = 0);
+        CandRefs& _candRefs, CandRefs& _probCandRefs, QObject *parent = 0);
     // Base model implementation methods
     Qt::ItemFlags flags(const QModelIndex &index) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     QVariant data(const QModelIndex &index, int role) const;
+    // Other
+    void setShowOnlyProblematic(bool value);
     ImpRecCandidate* cand(int index);
     void update();
 
 private:
     ImpRecCandidate::Type candType;
-    CandRefs& candRefs;
+    CandRefs &candRefs, &probCandRefs;
+    bool showOnlyProblematic;
     QString fromLowUnit(int amount) const;
 };
 

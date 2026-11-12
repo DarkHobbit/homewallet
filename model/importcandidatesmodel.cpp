@@ -16,12 +16,13 @@
 #include "importcandidatesmodel.h"
 
 ImportCandidatesModel::ImportCandidatesModel(ImpRecCandidate::Type _candType,
-                                               CandRefs& _candRefs,
-                                               QObject *parent)
+    CandRefs& _candRefs, CandRefs& _probCandRefs, QObject *parent)
     : QAbstractTableModel(parent),
       candType(_candType),
-      candRefs(_candRefs)
-{    
+      candRefs(_candRefs),
+      probCandRefs(_probCandRefs),
+      showOnlyProblematic(false)
+{
 }
 
 Qt::ItemFlags ImportCandidatesModel::flags(const QModelIndex&) const
@@ -33,7 +34,7 @@ Qt::ItemFlags ImportCandidatesModel::flags(const QModelIndex&) const
 
 int ImportCandidatesModel::rowCount(const QModelIndex&) const
 {
-    return candRefs.count();
+    return !showOnlyProblematic ? candRefs.count() : probCandRefs.count();
 }
 
 // Income/Expense:
@@ -101,9 +102,9 @@ QVariant ImportCandidatesModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
-    if (index.row() >= candRefs.count())
+    if (index.row() >= rowCount(QModelIndex()))
         return QVariant();
-    ImpRecCandidate* c = candRefs[index.row()];
+    ImpRecCandidate* c = !showOnlyProblematic ? candRefs[index.row()] : probCandRefs[index.row()];
     if (role==Qt::DisplayRole) {
         switch(candType) {
         case ImpRecCandidate::Expense:
@@ -173,9 +174,14 @@ QVariant ImportCandidatesModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+void ImportCandidatesModel::setShowOnlyProblematic(bool value)
+{
+    showOnlyProblematic = value;
+}
+
 ImpRecCandidate *ImportCandidatesModel::cand(int index)
 {
-    return candRefs[index];
+    return !showOnlyProblematic ? candRefs[index] : probCandRefs[index];
 }
 
 void ImportCandidatesModel::update()

@@ -24,6 +24,7 @@ class ImportModelSet : public QObject
     Q_OBJECT
 public:
     explicit ImportModelSet(ImpCandidates* cands, QObject *parent = 0);
+    void setShowOnlyProblematic(bool value);
     void updateModels();
     QString stat();
     bool canImport();
@@ -37,6 +38,8 @@ public:
 private:
     CandRefs refsIncome, refsExpense, refsTransfer,
         refsDebAndCred, refsUnknown;
+    CandRefs refsProbIncome, refsProbExpense, refsProbTransfer,
+        refsProbDebAndCred;
     int incReadyCount, expReadyCount, trfReadyCount, dncReadyCount;
     int incPossDupCount, expPossDupCount, trfPossDupCount, dncPossDupCount;
     int incAmbigCount, expAmbigCount;

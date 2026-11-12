@@ -18,40 +18,56 @@ ImportModelSet::ImportModelSet(ImpCandidates *cands, QObject *parent)
     :QObject(parent)
 {
     // Categorize all candidates
-    int i=0;
     for (ImpRecCandidate& cand: *cands) {
+        bool notReady = cand.state!=ImpRecCandidate::ReadyToImport;
         switch (cand.type) {
         case ImpRecCandidate::Income:
             refsIncome << &cand;
+            if (notReady)
+                refsProbIncome << &cand;
             break;
         case ImpRecCandidate::Expense:
         case ImpRecCandidate::ReceiptStart:
         case ImpRecCandidate::ReceiptEnd:
             refsExpense << &cand;
+            if (notReady)
+                refsProbExpense << &cand;
             break;
         case ImpRecCandidate::Transfer:
             refsTransfer << &cand;
+            if (notReady)
+                refsProbTransfer << &cand;
             break;
         case ImpRecCandidate::Debtor:
         case ImpRecCandidate::Creditor:
             refsDebAndCred << &cand;
+            if (notReady)
+                refsProbDebAndCred << &cand;
             break;
         default:
             refsUnknown << &cand;
         }
-        i++;
     }
     // Create models
-    mdlIncome = new ImportCandidatesModel(ImpRecCandidate::Income, refsIncome, this);
+    mdlIncome = new ImportCandidatesModel(ImpRecCandidate::Income, refsIncome, refsProbIncome, this);
     proxyIncome = makeProxy(mdlIncome);
-    mdlExpense = new ImportCandidatesModel(ImpRecCandidate::Expense, refsExpense, this);
+    mdlExpense = new ImportCandidatesModel(ImpRecCandidate::Expense, refsExpense, refsProbExpense, this);
     proxyExpense = makeProxy(mdlExpense);
-    mdlTransfer = new ImportCandidatesModel(ImpRecCandidate::Transfer, refsTransfer, this);
+    mdlTransfer = new ImportCandidatesModel(ImpRecCandidate::Transfer, refsTransfer, refsProbTransfer, this);
     proxyTransfer = makeProxy(mdlTransfer);
-    mdlDebAndCred = new ImportCandidatesModel(ImpRecCandidate::Debtor, refsDebAndCred, this);
+    mdlDebAndCred = new ImportCandidatesModel(ImpRecCandidate::Debtor, refsDebAndCred, refsProbDebAndCred, this);
     proxyDebAndCred = makeProxy(mdlDebAndCred);
-    mdlUnknown = new ImportCandidatesModel(ImpRecCandidate::Unknown, refsUnknown, this);
+    mdlUnknown = new ImportCandidatesModel(ImpRecCandidate::Unknown, refsUnknown, refsUnknown, this);
     proxyUnknown = makeProxy(mdlUnknown);
+}
+
+void ImportModelSet::setShowOnlyProblematic(bool value)
+{
+    mdlIncome->setShowOnlyProblematic(value);
+    mdlExpense->setShowOnlyProblematic(value);
+    mdlTransfer->setShowOnlyProblematic(value);
+    mdlDebAndCred->setShowOnlyProblematic(value);
+    // mdlUnknown - not need
 }
 
 QString ImportModelSet::stat()
