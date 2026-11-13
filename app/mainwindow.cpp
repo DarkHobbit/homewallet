@@ -760,7 +760,7 @@ void MainWindow::on_actionDuplicates_Search_triggered()
 
     if (d->exec()==QDialog::Accepted) {
         ReportsData rd;
-        ReportsData::Duplicates duplicates;
+        Duplicates duplicates;
         QString path;
         QDate dMin, dMax;
         d->getData(path, dMin, dMax);

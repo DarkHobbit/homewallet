@@ -11,7 +11,6 @@
  *
  */
 
-#include <iostream>
 #include "globals.h"
 #include "reportsdata.h"
 
@@ -19,12 +18,9 @@ ReportsData::ReportsData()
     :_fatalError("")
 {}
 
-#include <QTime>
 bool ReportsData::findDuplicates(HwDatabase &db, const QDate &dFrom, const QDate &dTo,
     int amountDelta, bool showSrc, Duplicates &duplicates)
 {
-    QTime tmFind;
-    tmFind.start();
     if (dFrom.isNull() || dTo.isNull() || dTo<dFrom)
         return false;
     HwDatabase::RevDictColl collCat, collSubCat, collImp;
@@ -58,7 +54,6 @@ bool ReportsData::findDuplicates(HwDatabase &db, const QDate &dFrom, const QDate
         SQL_FIND_TRANSFER_DUP, collCat, collSubCat, collImp, duplicates.transfer))
         return false;
 
-    std::cout << "Elapsed " << tmFind.elapsed() << " ms" << std::endl;
     return true;
 }
 
@@ -92,7 +87,6 @@ bool ReportsData::findOneDuplicatesKind(HwDatabase &db, const QDate &dFrom, cons
             int sumMax = sum+amountDelta;
             QDate d = qOrig.value(1).toDate();
             if (cnt%200==0) {
-                std::cerr << d.toString().toUtf8().data() << std::endl;
                 emit progressUpdate(cnt*100/origCount, infoKind);
             }
             // Table-specific
@@ -133,24 +127,4 @@ bool ReportsData::findOneDuplicatesKind(HwDatabase &db, const QDate &dFrom, cons
         qOrig.next();
     }
     return true;
-}
-
-int ReportsData::DupVector::totalCount() const
-{
-    int res = 0;
-    for (const DupSet& ds: *this)
-        res += ds.dups.count();
-    return res;
-}
-
-QString ReportsData::Duplicates::stat() const
-{
-    QString s = S_DK_EXPENSES + " %1/%2 "
-              + S_DK_INCOMES  + " %3/%4 "
-              + S_DK_TRANSFER + " %5/%6 "
-        ;
-    return s.arg(expenses.count()).arg(expenses.totalCount())
-            .arg(incomes.count()).arg(incomes.totalCount())
-            .arg(transfer.count()).arg(transfer.totalCount())
-        ;
 }

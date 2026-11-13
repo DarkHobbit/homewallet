@@ -14,6 +14,7 @@
 #include <QSqlError>
 
 #include "commonexpimpdef.h"
+#include "dupdata.h"
 #include "globals.h"
 #include "interactiveformat.h"
 

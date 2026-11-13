@@ -111,7 +111,7 @@ QString Reports::makeDocumentFormatFilters()
     return res.join(";;");
 }
 
-void Reports::findOneDupKind(QTextCursor &c, const QString &header, const ReportsData::DupVector &dupVec)
+void Reports::findOneDupKind(QTextCursor &c, const QString &header, const DupVector &dupVec)
 {
     c.setBlockFormat(fmtHeader);
     if (!dupVec.isEmpty()) {
@@ -141,7 +141,7 @@ void Reports::findOneDupKind(QTextCursor &c, const QString &header, const Report
             addCellText(t, 0, colDesc+1, S_COL_SOURCE, frmCellHdr, fmtHeader);
 
         int row = 1;
-        for (const ReportsData::DupSet& set: dupVec)
+        for (const DupSet& set: dupVec)
         {
             t->mergeCells(row, 0, set.dups.count(), 1);
             t->mergeCells(row, 2, set.dups.count(), 1);
@@ -159,7 +159,7 @@ void Reports::findOneDupKind(QTextCursor &c, const QString &header, const Report
                 if (dupVec.hasSubCat)
                     addCellText(t, row, 3, set.subcatName, frmCell);
             }
-            for (const ReportsData::DupInfo& dup : set.dups)
+            for (const DupInfo& dup : set.dups)
             {
                 addCellText(t, row, 1, fromLowUnit(dup.sum), frmCell);
                 addCellText(t, row, colDesc, dup.descr, frmCell);
@@ -177,7 +177,7 @@ void Reports::findOneDupKind(QTextCursor &c, const QString &header, const Report
 
 bool Reports::findDuplicates(const QString &path,
     const QDate &dFrom, const QDate &dTo,
-    int amountDelta, const ReportsData::Duplicates &duplicates)
+    int amountDelta, const Duplicates &duplicates)
 {
     QTextDocument doc;
     QTextCursor c(&doc);

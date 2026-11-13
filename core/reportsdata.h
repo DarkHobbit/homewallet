@@ -14,11 +14,10 @@
 #ifndef REPORTSDATA_H
 #define REPORTSDATA_H
 
-#include <QDate>
 #include <QObject>
 #include <QString>
-#include <QVector>
 
+#include "dupdata.h"
 #include "hwdatabase.h"
 
 #define DB_CHK(action) \
@@ -34,23 +33,6 @@ class ReportsData : public QObject
 {
     Q_OBJECT
 public:
-    struct DupInfo {
-        int sum;
-        QString descr, src;
-    };
-    struct DupSet {
-        QDate d;
-        QString catName, subcatName;
-        QVector<DupInfo> dups;
-    };
-    struct DupVector: public QVector<DupSet> {
-        bool hasSubCat, showSrc;
-        int totalCount() const;
-    };
-    struct Duplicates {
-        DupVector expenses, incomes, transfer;
-        QString stat() const;
-    };
 
     ReportsData();
     bool findDuplicates(HwDatabase& db, const QDate& dFrom, const QDate& dTo,

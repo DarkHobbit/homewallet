@@ -24,6 +24,7 @@ INCLUDEPATH += $$PWD
 
 HEADERS	+= \
     $$PWD/corehelpers.h \
+    $$PWD/dupdata.h \
     $$PWD/formats/commonexpimpdef.h \
     $$PWD/formats/fileformat.h \
     $$PWD/formats/formatfactory.h \
@@ -44,6 +45,7 @@ HEADERS	+= \
 
 SOURCES	+= \
     $$PWD/corehelpers.cpp \
+    $$PWD/dupdata.cpp \
     $$PWD/formats/commonexpimpdef.cpp \
     $$PWD/formats/fileformat.cpp \
     $$PWD/formats/formatfactory.cpp \

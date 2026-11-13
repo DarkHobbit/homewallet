@@ -29,7 +29,7 @@ public:
     explicit Reports(QObject *parent = nullptr);
     bool findDuplicates(const QString& path,
         const QDate& dFrom, const QDate& dTo,
-        int amountDelta, const ReportsData::Duplicates& duplicates);
+        int amountDelta, const Duplicates& duplicates);
     QString makeDocumentFormatFilters();
     void show(const QString &path);
 protected:
@@ -46,7 +46,7 @@ protected:
         const QTextBlockFormat &blockFormat = QTextBlockFormat());
     QString fromLowUnit(int lowUnitSum);
 
-    void findOneDupKind(QTextCursor& c, const QString& header, const ReportsData::DupVector& dupVec);
+    void findOneDupKind(QTextCursor& c, const QString& header, const DupVector& dupVec);
 signals:
 };
 
